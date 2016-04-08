@@ -1,11 +1,13 @@
 <?php
 namespace Controller;
+use Dframe\Controller;
+use Dframe\Config;
 
-class pageController extends \Dframe\Controller 
+class pageController extends Controller 
 {
 
     public function page(){
-    	$smartyConfig = \Dframe\Config::load('smarty');
+    	$smartyConfig = Config::load('smarty');
     	$view = $this->loadView('index');
 
     	$patchController =  $smartyConfig->get('setTemplateDir', './View/templates').'/page/'.$_GET['action'].$smartyConfig->get('fileExtension', '.html.php');
@@ -18,10 +20,9 @@ class pageController extends \Dframe\Controller
 
     
     public function index() {
-    	$exampleConfig = $this->loadConfig('example')->get('test', ':)'); 
         $view = $this->loadView('index');
 
-        $this->customLoad;
+        //$this->customLoad;
         $view->assign('contents', 'Example assign');
         $view->render('index');
 

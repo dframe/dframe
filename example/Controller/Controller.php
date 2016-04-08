@@ -1,5 +1,5 @@
 <?php
-namespace testapp\Controller;
+namespace Controller;
 
 /**
  * This class includes methods for Controllers.

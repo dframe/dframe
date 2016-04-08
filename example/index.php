@@ -17,12 +17,14 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
+use Dframe\Loader;
+
 include_once 'vendor/autoload.php';
 //include_once 'Core/Functions.php';
 include_once 'Bootstrap.php';
 $bootstrap = new Bootstrap();
 
-$loader = new \Dframe\Loader($bootstrap);
+$loader = new Loader($bootstrap);
 $controller = $loader->CreateController(); # Loading Controller class
 
 if(method_exists($controller, 'init'))
