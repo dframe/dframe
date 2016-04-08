@@ -1,5 +1,6 @@
 <?php
 namespace Dframe;
+use Dframe\config;
 
 /**
  * This class includes methods for models.
@@ -15,7 +16,7 @@ abstract class View extends Core
 
     public function __construct($baseClass){
         parent::__construct($baseClass);
-        $smartyConfig = $this->loadConfig('smarty');
+        $smartyConfig = Config::load('smarty');
 
         $this->baseClass = $baseClass;
         //include_once "Core/View/smarty/libs/Autoloader.php";
@@ -38,7 +39,7 @@ abstract class View extends Core
      * @return void
      */
     public function render($name, $path=null) {
-    	$smartyConfig = $this->loadConfig('smarty');
+    	$smartyConfig = Config::load('smarty');
 		
 		$pathFile = pathFile($name);
         $folder = $pathFile[0];

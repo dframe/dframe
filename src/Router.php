@@ -1,5 +1,7 @@
 <?php
 namespace Dframe;
+use Dframe\Config;
+
 //http://download.hernas.pl/
 
 class Router extends Core
@@ -17,8 +19,9 @@ class Router extends Core
 		array_pop($aURI);
 		$this->sURI = implode('/', $aURI).'/';
 
-		$this->aRouting = $this->loadConfig('router')->get();
-		$this->aRoutingParse = $this->loadConfig('router')->get();
+        $routerConfig = Config::load('router');
+		$this->aRouting = $routerConfig->get();
+		$this->aRoutingParse = $routerConfig->get();
 
 	}
     
@@ -102,6 +105,8 @@ class Router extends Core
 	}
 
 	public function parseGets(){
+		$routerConfig = Config::load('router');
+		
 		if(MOD_REWRITE){
 
 			$sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
@@ -111,9 +116,9 @@ class Router extends Core
 
 			$sGets = $this->parseUrl($sRequest);
 			parse_str($sGets, $aGets);
-			$_GET['task'] = !empty($aGets['task'])?$aGets['task']:$this->loadConfig('router')->get('NAME_CONTROLLER');;	
+			$_GET['task'] = !empty($aGets['task'])?$aGets['task']:$routerConfig->get('NAME_CONTROLLER');;	
 			unset($aGets['task']);
-			$_GET['action'] = !empty($aGets['action'])?$aGets['action']:$this->loadConfig('router')->get('NAME_MODEL');;
+			$_GET['action'] = !empty($aGets['action'])?$aGets['action']:$routerConfig->get('NAME_MODEL');;
 			unset($aGets['action']);
 			$_GET = array_merge($_GET, $aGets);
 
@@ -129,8 +134,8 @@ class Router extends Core
             $sGets = str_replace("index.php?", "", $sGets);
             parse_str($sGets, $output);
 
-			$_GET['task'] = !empty($output['task'])?$output['task']:$this->loadConfig('router')->get('NAME_CONTROLLER');;	
-			$_GET['action'] = !empty($output['action'])?$output['action']:$this->loadConfig('router')->get('NAME_MODEL');;
+			$_GET['task'] = !empty($output['task'])?$output['task']:$routerConfig->get('NAME_CONTROLLER');;	
+			$_GET['action'] = !empty($output['action'])?$output['action']:$routerConfig->get('NAME_MODEL');;
 			
 		}
 	}
