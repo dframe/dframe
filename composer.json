@@ -17,11 +17,9 @@
     ],
     "minimum-stability": "stable",
     "autoload": {
-        "psr-4": {"Dframe\\": "src/"}
-    },
-   
-    "autoload": {
+        "psr-4": {"Dframe\\": "src/"},
         "files": ["src/Functions.php"]
-    }
+    },
+
     
 }
