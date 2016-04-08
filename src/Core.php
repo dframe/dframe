@@ -8,10 +8,6 @@ abstract class Core
     public function __construct($bootstrap){
         $this->baseClass = $bootstrap;
         $this->router = new \Dframe\Router($this->baseClass);
-        
-        // Tworzenie obiektu dostępnego w całym Dframe
-        if(is_file('config/customLoad.php'))
-            $this->customLoad = $this->loadConfig('customLoad')->get();
 
         return $this;
     }
@@ -20,9 +16,11 @@ abstract class Core
      * Metoda do includowania pliku konficuracyjnego
      * 
     */
+    /*
     public function loadConfig($file){
         return \Dframe\Config::load($file);
     }
+    */
 
     /*
      *   Metoda do includowania pliku modelu i wywołanie objektu przez namespace
