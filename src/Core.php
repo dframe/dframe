@@ -7,7 +7,7 @@ abstract class Core
     
     public function __construct($bootstrap){
         $this->baseClass = $bootstrap;
-        $this->router = new \Dframe\Core\Router($this->baseClass);
+        $this->router = new \Dframe\Router($this->baseClass);
         
         // Tworzenie obiektu dostępnego w całym Dframe
         if(is_file('config/customLoad.php'))
@@ -21,7 +21,7 @@ abstract class Core
      * 
     */
     public function loadConfig($file){
-        return \Dframe\Core\Config::load($file);
+        return \Dframe\Config::load($file);
     }
 
     /*
@@ -51,9 +51,9 @@ abstract class Core
         $path = $type.'/'.$folder.$n.'.php';
         
         if(!empty($folder))
-            $name = '\Dframe\\'.$type.'\\'.str_replace(array('\\', '/'), '', $folder).'\\'.$name.$type;   
+            $name = '\\'.$type.'\\'.str_replace(array('\\', '/'), '', $folder).'\\'.$name.$type;   
         else
-        	$name = '\Dframe\\'.$type.'\\'.$name.$type;
+        	$name = '\\'.$type.'\\'.$name.$type;
 
 
         try {

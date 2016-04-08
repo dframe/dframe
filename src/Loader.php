@@ -3,6 +3,7 @@ namespace Dframe;
 /**
 * System Ładowania plików Kontrollera
 */
+include "Functions.php";
 
 class Loader extends Core
 {
@@ -40,7 +41,7 @@ class Loader extends Core
             $path = null;
         }
 
-        if(!class_exists('\Dframe\Controller\\'.$this->controller.'Controller')){
+        if(!class_exists('\Controller\\'.$this->controller.'Controller')){
         	if(ini_get('display_errors') == "on"){
         		echo 'Patch: '.$patchController;
         		echo 'bad controller error';
@@ -50,10 +51,10 @@ class Loader extends Core
             return 1;
         }
             
-        $parents = class_parents('\Dframe\Controller\\'.$this->controller.'Controller');
+        $parents = class_parents('\Controller\\'.$this->controller.'Controller');
         // Does the class extend the controller class?
-        if(!method_exists('\Dframe\Controller\\'.$this->controller.'Controller',$this->action)) {
-            if(!method_exists('\Dframe\Controller\\'.$this->controller.'Controller', 'page')){
+        if(!method_exists('\Controller\\'.$this->controller.'Controller',$this->action)) {
+            if(!method_exists('\Controller\\'.$this->controller.'Controller', 'page')){
 
             	if(ini_get('display_errors') == "on"){
             		echo 'Brak metody';
@@ -70,7 +71,7 @@ class Loader extends Core
 
         }
 
-        $this->controller = '\Dframe\Controller\\'.$this->controller.'Controller';
+        $this->controller = '\Controller\\'.$this->controller.'Controller';
         return new $this->controller($this->baseClass);
     }
 

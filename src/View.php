@@ -18,8 +18,8 @@ abstract class View extends Core
         $smartyConfig = $this->loadConfig('smarty');
 
         $this->baseClass = $baseClass;
-        include_once "Core/View/smarty/libs/Autoloader.php";
-        \Smarty_Autoloader::register(); 
+        //include_once "Core/View/smarty/libs/Autoloader.php";
+        //\Smarty_Autoloader::register(); 
         $smarty = new \Smarty;
         $smarty->debugging = $smartyConfig->get('debugging', false);;
         $smarty->setTemplateDir($smartyConfig->get('setTemplateDir', './View/templates'))
