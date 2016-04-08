@@ -18,6 +18,10 @@
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {"Dframe\\": "src/"}
+    },
+   
+    "autoload": {
+        "files": ["src/Functions.php"]
     }
     
 }
