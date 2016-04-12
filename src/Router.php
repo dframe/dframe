@@ -12,7 +12,7 @@ class Router extends Core
     private $sURI;
     private $parsingArray;
 
-	public function __construct($bootstrap){
+	public function __construct(){
 
 		$aURI = explode('/', $_SERVER['SCRIPT_NAME']);
 		
