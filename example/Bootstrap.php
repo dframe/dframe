@@ -32,7 +32,7 @@ class Bootstrap
                     'username' => DB_USER, 
                     'password' => DB_PASS,
                 );
-                $this->db = new \Dframe\Core\Database\Database($dbConfig);
+                $this->db = new \Dframe\Database\Database($dbConfig);
             }
         }
         catch(DBException $e) {
@@ -41,7 +41,6 @@ class Bootstrap
 
         
         $this->session  = new \Dframe\Session(SALT);
-        $this->msg = new \Dframe\Messages();
         $this->token  = new \Dframe\Token($this->session);
 
         return $this;
