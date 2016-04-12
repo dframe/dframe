@@ -18,7 +18,9 @@ class Token
         $token = $this->session->get('token');
         if(!empty($token))
             $this->token = $token;
+
         $timeToken = $this->session->get('timeToken');
+
         if(!empty($timeToken))
             $this->time = $timeToken;
 	}
@@ -72,3 +74,4 @@ class Token
 		return false;
 	}   
 }
+?>
