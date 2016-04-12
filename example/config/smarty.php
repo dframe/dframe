@@ -5,3 +5,4 @@ return array(
 	'debugging'     => false,        // Default False
  	'fileExtension' => ''              // Default '.html.php'
 	);
+?>
