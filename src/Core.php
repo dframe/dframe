@@ -7,7 +7,7 @@ abstract class Core
     
     public function __construct($bootstrap){
         $this->baseClass = $bootstrap;
-        $this->router = new \Dframe\Router();
+        $this->router = new \Dframe\Router($this->baseClass);
 
         return $this;
     }
