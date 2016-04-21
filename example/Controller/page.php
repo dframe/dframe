@@ -1,9 +1,8 @@
 <?php
 namespace Controller;
-use Dframe\Controller;
 use Dframe\Config;
 
-class pageController extends Controller 
+class pageController extends \Controller\Controller 
 {
 
     public function page(){
