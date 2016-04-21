@@ -48,11 +48,12 @@ abstract class Core
         $n = str_replace($type, '', $name);
         $path = $type.'/'.$folder.$n.'.php';
         
+       
+
         if(!empty($folder))
-            $name = '\\'.$type.'\\'.str_replace(array('\\', '/'), '', $folder).'\\'.$name.$type;   
+            $name = '\\'.$type.'\\'.str_replace(array('\\', '/'), '\\', $folder).$name.$type;   
         else
         	$name = '\\'.$type.'\\'.$name.$type;
-
 
         try {
             if(is_file($path)) {
