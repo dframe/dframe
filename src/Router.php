@@ -12,7 +12,7 @@ class Router extends Core
     private $sURI;
     private $parsingArray;
 
-	public function __construct(){
+	public function __construct($bootstrap){
 
 		$aURI = explode('/', $_SERVER['SCRIPT_NAME']);
 		
@@ -35,10 +35,10 @@ class Router extends Core
                     $task = $oneurl;
                     
                 if(!empty($action)) {
-                    if($task == $this->aRouting['task'] && $action == $this->aRouting['action'])
+                    if($task == $this->aRouting['NAME_CONTROLLER'] && $action == $this->aRouting['NAME_MODEL'])
                         return true;
                 } else {
-                    if($task == $this->aRouting['task'])
+                    if($task == $this->aRouting['NAME_CONTROLLER'])
                         return true;
                 }
             }
@@ -50,9 +50,9 @@ class Router extends Core
                 $task = $url;
                 
             if(!empty($action))
-                return ($task == $this->aRouting['task']) && ($action == $this->aRouting['action']);
+                return ($task == $this->aRouting['NAME_CONTROLLER']) && ($action == $this->aRouting['NAME_MODEL']);
 
-            return ($task == $this->aRouting['task']);
+            return ($task == $this->aRouting['NAME_CONTROLLER']);
         }
     }
     
@@ -116,10 +116,10 @@ class Router extends Core
 
 			$sGets = $this->parseUrl($sRequest);
 			parse_str($sGets, $aGets);
-			$_GET['task'] = !empty($aGets['task'])?$aGets['task']:$routerConfig->get('NAME_CONTROLLER');;	
-			unset($aGets['task']);
-			$_GET['action'] = !empty($aGets['action'])?$aGets['action']:$routerConfig->get('NAME_MODEL');;
-			unset($aGets['action']);
+			$_GET['NAME_CONTROLLER'] = !empty($aGets['NAME_CONTROLLER'])?$aGets['NAME_CONTROLLER']:$routerConfig->get('NAME_CONTROLLER');;	
+			unset($aGets['NAME_CONTROLLER']);
+			$_GET['NAME_MODEL'] = !empty($aGets['NAME_MODEL'])?$aGets['NAME_MODEL']:$routerConfig->get('NAME_MODEL');;
+			unset($aGets['NAME_MODEL']);
 			$_GET = array_merge($_GET, $aGets);
 
 		}else{
@@ -134,8 +134,8 @@ class Router extends Core
             $sGets = str_replace("index.php?", "", $sGets);
             parse_str($sGets, $output);
 
-			$_GET['task'] = !empty($output['task'])?$output['task']:$routerConfig->get('NAME_CONTROLLER');;	
-			$_GET['action'] = !empty($output['action'])?$output['action']:$routerConfig->get('NAME_MODEL');;
+			$_GET['NAME_CONTROLLER'] = !empty($output['NAME_CONTROLLER'])?$output['NAME_CONTROLLER']:$routerConfig->get('NAME_CONTROLLER');;	
+			$_GET['NAME_MODEL'] = !empty($output['NAME_MODEL'])?$output['NAME_MODEL']:$routerConfig->get('NAME_MODEL');;
 			
 		}
 	}
