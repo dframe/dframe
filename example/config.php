@@ -8,6 +8,8 @@ if(in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'))) {
     error_reporting(E_ALL);          # Debug setings
 }   
 
+# Application configuration
+define('appDir', dirname(__FILE__).'/');
 
 # Website configuration
 define('VERSION', "3.x Dframe"); # Version aplication
