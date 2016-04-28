@@ -38,6 +38,10 @@ abstract class Core
     }
 
     private function loadObject($name, $type){
+        $appDir = './';
+        if(defined('appDir'))
+            $appDir = appDir;
+
     	if(!in_array($type, (array('Model', 'View'))))
     		return false;
 
@@ -46,7 +50,7 @@ abstract class Core
         $name = $pathFile[1];
         
         $n = str_replace($type, '', $name);
-        $path = $type.'/'.$folder.$n.'.php';
+        $path = $appDir.$type.'/'.$folder.$n.'.php';
         
        
 
