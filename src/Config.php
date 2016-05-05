@@ -1,12 +1,15 @@
 <?php
 namespace Dframe;
+/* Autor Sławek Kaleta */
 
 class Config{
-
+ 
     protected static $cfg = array();
-	public $path = 'config/';
-
+	public $path;
+    
     public function __construct($file){
+        $this->path = appDir.'Config/'; // appDir zdefiniowany powinien byc w Config.php
+
     	$this->file = $file;
     	if (file_exists($this->path.$this->file.'.php') == false) 
     		return false;
