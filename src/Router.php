@@ -55,9 +55,23 @@ class Router extends Core
             return ($task == $this->aRouting['NAME_CONTROLLER']);
         }
     }
+
+
+    public function publicWeb($sUrl = null, $path = null){
+    	if(is_null($path))
+    		$path = $this->aRouting['publicWeb'];
+
+        $sExpressionUrl = $sUrl;
+		$sUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->sURI.$path;
+		$sUrl .= $sExpressionUrl;
+		
+		return $sUrl;
+    }
+
+
     
-	public function makeUrl($sUrl = null)
-	{
+	public function makeUrl($sUrl = null){
+
 		$aParamsHook = explode('#', $sUrl);
 		$aParams = explode('?', $aParamsHook[0]);
 		$aParams_ = explode('/', $aParams[0]);
@@ -95,6 +109,8 @@ class Router extends Core
 		
 		return $sUrl;
 	}
+
+
 	private function parseParams($sRouting, $aParams){
 		$sReturn = null;
 		foreach($aParams AS $key => $value)
@@ -108,7 +124,6 @@ class Router extends Core
 		$routerConfig = Config::load('router');
 		
 		if(MOD_REWRITE){
-
 			$sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
 			if(substr($sRequest, -1)!='/'){
 				$sRequest .= '/';
@@ -145,7 +160,7 @@ class Router extends Core
 		foreach($this->aRoutingParse AS $k => $v){
 			
 			preg_match_all('!\[(.+?)\]!ie', $v[0], $aExpression_);
-			$sExpression = preg_replace('!\[(.+?)\]!ie', '$this->transformParam(\'$1\', \''.$k.'\')', $v[0]);
+			$sExpression = preg_replace_callback('!\[(.+?)\]!ie', '$this->transformParam(\'$1\', \''.$k.'\')', $v[0]);
 			if(preg_match_all('!'.$sExpression.'!i', $sRequest, $aExpression__))
 			{
 				foreach($aExpression__ AS $k_ => $v_)
@@ -172,7 +187,7 @@ class Router extends Core
 					{
 						if($i>0)
 						{
-							$sVars .= '&'.preg_replace('!\[(.+?)\]!i', '[$1_'.$i.']', $v[1]);
+							$sVars .= '&'.preg_replace_callback('!\[(.+?)\]!i', '[$1_'.$i.']', $v[1]);
 						} else {
 							$sVars = '&'.$v[1];						
 						}
