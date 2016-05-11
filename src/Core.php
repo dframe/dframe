@@ -1,7 +1,7 @@
 <?php
 namespace Dframe;
 
-abstract class Core
+class Core
 {
     public $baseClass = null;
     
