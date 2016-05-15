@@ -1,5 +1,6 @@
 <?php
 namespace Dframe;
+use Dframe\Router;
 
 abstract class Controller extends Core
 {
