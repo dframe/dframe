@@ -1,13 +1,16 @@
 <?php
 namespace Dframe;
+use Dframe\Router;
 
 class Core
 {
     public $baseClass = null;
     
-    public function __construct($bootstrap){
-        $this->baseClass = $bootstrap;
-        $this->router = new \Dframe\Router($this->baseClass);
+    public function __construct($bootstrap =null){
+        if($bootstrap != null){
+            $this->baseClass = $bootstrap;
+            $this->router = new Router();
+        }
 
         return $this;
     }
