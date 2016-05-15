@@ -27,8 +27,21 @@ abstract class View extends Core
                      ->setCompileDir($smartyConfig->get('setCompileDir', './View/templates_c'));
         
         $this->baseClass->smarty = $smarty;
-        $this->assign('router', $this->router);
+        $this->assign('router',  $this->router);
     }
+
+    public function render($data, $type = null){
+
+        if(empty($type) OR $type == 'html')
+            $this->renderHTML($data);
+        
+        elseif($type == 'jsonp')
+            $this->renderJSONP($data);
+
+        else
+            $this->renderJSON($data);
+               
+    } 
 
     /**
      * Przekazuje kod do szablonu Smarty
@@ -38,7 +51,7 @@ abstract class View extends Core
      *
      * @return void
      */
-    public function render($name, $path=null) {
+    public function renderHTML($name, $path=null) {
     	$smartyConfig = Config::load('smarty');
 		
 		$pathFile = pathFile($name);
