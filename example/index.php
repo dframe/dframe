@@ -1,4 +1,4 @@
-<?php
+<?php 
 /*
 Copyright (C) 2015 Sławomir Kaleta
 
@@ -27,9 +27,11 @@ $bootstrap = new Bootstrap();
 $loader = new Loader($bootstrap);
 $controller = $loader->CreateController(); # Loading Controller class
 
+if(method_exists($controller, 'start'))
+    $controller->start();
+
 if(method_exists($controller, 'init'))
     $controller->init();
-
 
 if(method_exists($controller, $_GET['action']))
     $controller->$_GET['action']();
@@ -39,5 +41,4 @@ else
 
 if(method_exists($controller, 'end'))
     $controller->end();
-
 ?>
