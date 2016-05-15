@@ -13,21 +13,20 @@ class Loader extends Core
     private $action;
     private $urlvalues;
     public $bootstrap;
+
+    public function __construct($bootstrap){
+        $this->baseClass = $bootstrap;
+    }
     
     // Establish the requested controller as an object
     public function CreateController(){
-        
-        $this->router->parseGets(); // Prasowanie $_GET
-
+      
         $routerConfig = Config::load('router');
-
         if(empty($_GET['task']))
         	$_GET['task'] = $routerConfig->get('NAME_CONTROLLER');
 
         if(empty($_GET['action']))
         	$_GET['action'] = $routerConfig->get('NAME_MODEL');
-
-
 
         $this->controller = $_GET['task'];
         $this->action = $_GET['action'];
@@ -45,8 +44,6 @@ class Loader extends Core
 
         }else $subControler = null;
 
-
-        
 
        // Does the class exist?
         $patchController = 'Controller/'.$subControler.''.$this->controller.'.php';
