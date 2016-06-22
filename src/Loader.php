@@ -19,17 +19,23 @@ class Loader extends Core
     }
     
     // Establish the requested controller as an object
-    public function CreateController(){
-      
-        $routerConfig = Config::load('router');
-        if(empty($_GET['task']))
-        	$_GET['task'] = $routerConfig->get('NAME_CONTROLLER');
+    public function CreateController($controller = null, $action = null){
+        if(is_null($controller) AND is_null($action)){
 
-        if(empty($_GET['action']))
-        	$_GET['action'] = $routerConfig->get('NAME_MODEL');
+            $routerConfig = Config::load('router');
+            if(empty($_GET['task']))
+            	$_GET['task'] = $routerConfig->get('NAME_CONTROLLER');
+    
+            if(empty($_GET['action']))
+            	$_GET['action'] = $routerConfig->get('NAME_MODEL');
+    
+            $this->controller = $_GET['task'];
+            $this->action = $_GET['action'];
 
-        $this->controller = $_GET['task'];
-        $this->action = $_GET['action'];
+        }else{
+            $this->controller = $controller;
+            $this->action = $action;
+        }
 
 
         if(strstr($this->controller, ",") !== False){
