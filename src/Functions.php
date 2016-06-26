@@ -24,8 +24,7 @@ function validateDate($date, $format = 'Y-m-d H:i:s') {
 
 /* 
  * Sumowanie minut
-*/ 
-
+*/
 
 function convertMinutes($minut) {
 	$godzin = floor($minut/60);  // liczba pełnych godzin
@@ -38,24 +37,30 @@ function convertMinutes($minut) {
 	$rdni = $dni - $miesiecy*30;  // reszta dni
 
 	$wypisz = '';
-	if($miesiecy != 0) $wypisz .= $miesiecy." miesięcy, ";
-	if($dni != 0) $wypisz .= $rdni." dni, ";
-	if($godzin != 0) $wypisz .= $rgod." godziny, ";
+	if($miesiecy != 0) 
+		$wypisz .= $miesiecy." miesięcy, ";
+	if($dni != 0) 
+		$wypisz .= $rdni." dni, ";
+	if($godzin != 0)
+	    $wypisz .= $rgod." godziny, ";
+
 	$wypisz .= $rmin." minuty | Suma Godzin: ".$godzin;
 
 	return $wypisz;
 }
+
 /* 
  * Randomowo generowany string
-*/ 
-
+*/
 function generateRandomString($length = 10) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
+    
+    for($i = 0; $i < $length; $i++) {
         $randomString .= $characters[rand(0, $charactersLength - 1)];
     }
+
     return $randomString;
 }
 
@@ -64,27 +69,28 @@ function generateRandomString($length = 10) {
 */ 
 
 function object_to_array($obj) {
-    if(is_object($obj)) $obj = (array) $obj;
+    if(is_object($obj)) 
+    	$obj = (array) $obj;
+
     if(is_array($obj)) {
         $new = array();
         foreach($obj as $key => $val) {
             $key2 = str_replace("\0", "", $key);
             $new[$key2] = object_to_array($val);
         }
-    }
-    else $new = $obj;
+    }else 
+       $new = $obj;
+
     return $new;       
 }
 
 /* 
  * Wyszukiwanie ciagu zdania za pozmoca wilcardu 
  * ala ma kota -> ala * kota == TRUE
-*/ 
-
+*/
 
 function stringMatchWithWildcard($source,$pattern) {
     $pattern = preg_quote($pattern,'/');        
     $pattern = str_replace( '\*' , '.*', $pattern);   
     return preg_match( '/^' . $pattern . '$/i' , $source );
 }
-?>
