@@ -22,9 +22,9 @@ abstract class View extends Core
         //include_once "Core/View/smarty/libs/Autoloader.php";
         //\Smarty_Autoloader::register(); 
         $smarty = new \Smarty;
-        $smarty->debugging = $smartyConfig->get('debugging', false);;
-        $smarty->setTemplateDir($smartyConfig->get('setTemplateDir', './View/templates'))
-                     ->setCompileDir($smartyConfig->get('setCompileDir', './View/templates_c'));
+        $smarty->debugging = $smartyConfig->get('debugging', false);
+        $smarty->setTemplateDir($smartyConfig->get('setTemplateDir', appDir.'../app/View/templates'))
+                     ->setCompileDir($smartyConfig->get('setCompileDir', appDir.'../app/View/templates_c'));
         
         $this->baseClass->smarty = $smarty;
         $this->assign('router',  $this->router);
@@ -58,13 +58,13 @@ abstract class View extends Core
         $folder = $pathFile[0];
         $name = $pathFile[1];
 		
-        $path= $smartyConfig->get('setTemplateDir', './View/templates').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
+        $path= $smartyConfig->get('setTemplateDir', appDir.'../app/View/templates').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
         try {
-            if(is_file($path)) {
+
+            if(is_file($path))
                 $this->baseClass->smarty->display($path); // Ładowanie widoku
-            } else {
+            else 
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
-            }
         }
         catch(Exception $e) {
             echo $e->getMessage().'<br />
@@ -124,7 +124,7 @@ abstract class View extends Core
         $folder = $pathFile[0];
         $name = $pathFile[1];
         
-        $path= $smartyConfig->get('setTemplateDir', './View/templates').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
+        $path= $smartyConfig->get('setTemplateDir', appDir.'../app/View/templates').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
 
         try {
             if(is_file($path)) {
