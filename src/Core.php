@@ -19,16 +19,6 @@ class Core
     }
 
     /*
-     * Metoda do includowania pliku konficuracyjnego
-     * 
-    */
-    /*
-    public function loadConfig($file){
-        return \Dframe\Config::load($file);
-    }
-    */
-
-    /*
      *   Metoda do includowania pliku modelu i wywołanie objektu przez namespace
     */
     public function loadModel($name){
@@ -65,9 +55,9 @@ class Core
                 include_once $path;
                 $ob = new $name($this->baseClass);
                 $ob->init();
-            }else{
+            }else
                 throw new \Exception('Can not open '.$type.' '.$name.' in: '.$path);
-            }
+           
         }
         catch(\Exception $e) {
             echo $e->getMessage().'<br />
@@ -90,4 +80,3 @@ class Core
     public function end() {}
     
 }
-?>
