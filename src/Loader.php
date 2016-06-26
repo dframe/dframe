@@ -28,7 +28,7 @@ class Loader extends Core
     
             if(empty($_GET['action']))
             	$_GET['action'] = $routerConfig->get('NAME_MODEL');
-    
+            
             $this->controller = $_GET['task'];
             $this->action = $_GET['action'];
 
@@ -52,26 +52,35 @@ class Loader extends Core
 
 
        // Does the class exist?
-        $patchController = 'Controller/'.$subControler.''.$this->controller.'.php';
+        $patchController = '../app/Controller/'.$subControler.''.$this->controller.'.php';
         //var_dump($patchController);
         if(file_exists($patchController)){
-            //echo 'OK 1';
             include_once $patchController;
-            //echo 'OK 2';
             $path = null;
         }
 
         $xsubControler = str_replace("/", "\\", $subControler);
-        
-        if(!class_exists('\Controller\\'.$xsubControler.''.$this->controller.'Controller')){
-        	if(ini_get('display_errors') == "on"){
-        		echo 'Patch: '.'Controller/'.$xsubControler.''.$this->controller.'Controller';
-        		echo '<br>bad controller error<br>';
-        		return 1;
-        	}
-        	header("HTTP/1.0 404 Not Found");
-            return 1;
+        try {
+
+            if(!class_exists('\Controller\\'.$xsubControler.''.$this->controller.'Controller'))
+        	    throw new BaseException('Bad controller error');
+
+        }catch(BaseException $e) {
+
+            if(ini_get('display_errors') == "on"){
+                echo $e->getMessage().'<br />
+                File: '.$e->getFile().'<br />
+                Code line: '.$e->getLine().'<br />
+                Trace: '.$e->getTraceAsString();
+                exit();
+            }else{
+                header("HTTP/1.0 404 Not Found");
+                return 1;
+            }
+
         }
+
+
         //    
         //$parents = class_parents('Scscript\Controller\\'.$this->controller.'Controller');
         //// Does the class extend the controller class?
