@@ -1,5 +1,6 @@
 <?php
 namespace Dframe;
+
 /*
 Copyright (C) 2015  Sławomir Kaleta
 
@@ -18,14 +19,15 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
+
 class Session
 {
 	
-	function __construct($session_name)
-	{
-       if(!isset($_SESSION))
-          session_name($session_name);
-          session_start(); 
+	function __construct($session_name){
+        if(!isset($_SESSION)){
+           session_name($session_name);
+           session_start();
+        }
 	}
 
     public function register($time = 60){
@@ -36,8 +38,10 @@ class Session
     public function authLogin(){
         if(!empty($_SESSION['session_id']))
             return true;
+
         else 
             return false;
+
     }
 
     public function set($key, $value){
