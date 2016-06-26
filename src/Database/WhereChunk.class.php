@@ -1,5 +1,11 @@
 <?php
-// https://github.com/Appsco/component-share/blob/9b29a7579c9bdcf9832b94b05ecebc74d771adf9/src/BWC/Share/Data/Select.php
+/*
+ * Klasa wspomagająca warunki wyszukiwania
+ * new WhereChunk('kolumna', 'test', 'LIKE');
+ * https://github.com/Appsco/component-share/blob/9b29a7579c9bdcf9832b94b05ecebc74d771adf9/src/BWC/Share/Data/Select.php
+ *
+ */
+
 class WhereChunk
 {
     public $key;
@@ -36,5 +42,3 @@ class WhereChunk
         return array($sql, $params);
     }
 }
-
-?>

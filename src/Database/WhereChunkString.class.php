@@ -1,4 +1,10 @@
 <?php
+/*
+ * Klasa wspomagająca warunki wyszukiwania
+ * new WhereStringChunk('`kolumna` LIKE ?', array('test'));
+ *
+ *
+ */
 
 class WhereStringChunk
 {
@@ -14,5 +20,3 @@ class WhereStringChunk
         return array($this->string, $this->bindWhere);
     }
 }
-
-?>
