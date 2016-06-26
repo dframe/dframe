@@ -1,12 +1,26 @@
 <?php
 namespace Dframe;
-use \Dframe\Config;
+use Dframe\Config;
 
 /**
- * This class includes methods for models.
+ * Copyright (C) 2015  
+ * @author Sławomir Kaleta
  *
- * @abstract
- */
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+*/
+
 
 abstract class View extends Core
 {
@@ -24,7 +38,7 @@ abstract class View extends Core
         $smarty = new \Smarty;
         $smarty->debugging = $smartyConfig->get('debugging', false);
         $smarty->setTemplateDir($smartyConfig->get('setTemplateDir', appDir.'../app/View/templates'))
-                     ->setCompileDir($smartyConfig->get('setCompileDir', appDir.'../app/View/templates_c'));
+               ->setCompileDir($smartyConfig->get('setCompileDir', appDir.'../app/View/templates_c'));
         
         $this->baseClass->smarty = $smarty;
         $this->assign('router',  $this->router);
@@ -58,15 +72,15 @@ abstract class View extends Core
         $folder = $pathFile[0];
         $name = $pathFile[1];
 		
-        $path= $smartyConfig->get('setTemplateDir', appDir.'../app/View/templates').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
+        $path = $smartyConfig->get('setTemplateDir', appDir.'../app/View/templates').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
         try {
 
             if(is_file($path))
                 $this->baseClass->smarty->display($path); // Ładowanie widoku
             else 
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
-        }
-        catch(Exception $e) {
+            
+        }catch(Exception $e) {
             echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
                 Code line: '.$e->getLine().'<br />
@@ -102,13 +116,12 @@ abstract class View extends Core
 
     public function assign($name, $value) {
         try {
-            if ($this->baseClass->smarty->getTemplateVars($name) !== null) {
+            if($this->baseClass->smarty->getTemplateVars($name) !== null)
                 throw new \Exception('You can\'t assign "'.$name . '" in Smarty');
-            } else {
+            else
                 return $this->baseClass->smarty->assign($name, $value);
-            }
-        }
-        catch(Exception $e) {
+        
+        }catch(Exception $e) {
             echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
                 Code line: '.$e->getLine().'<br />
@@ -127,13 +140,12 @@ abstract class View extends Core
         $path= $smartyConfig->get('setTemplateDir', appDir.'../app/View/templates').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
 
         try {
-            if(is_file($path)) {
+            if(is_file($path))
                 return $this->baseClass->smarty->fetch($path); // Ładowanie widoku
-            } else {
+            else
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
-            }
-        }
-        catch(Exception $e) {
+            
+        }catch(Exception $e) {
             echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
                 Code line: '.$e->getLine().'<br />
@@ -142,4 +154,3 @@ abstract class View extends Core
         }
     }
 }
-?>
