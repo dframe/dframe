@@ -7,6 +7,9 @@ class Core
     public $baseClass = null;
     
     public function __construct($bootstrap =null){
+        if(!defined('appDir'))
+           throw new \Exception('Please Define appDir in config.php');
+
         if($bootstrap != null){
             $this->baseClass = $bootstrap;
             $this->router = new Router();
@@ -41,9 +44,6 @@ class Core
     }
 
     private function loadObject($name, $type){
-        $appDir = './';
-        if(defined('appDir'))
-            $appDir = appDir;
 
     	if(!in_array($type, (array('Model', 'View'))))
     		return false;
@@ -53,9 +53,7 @@ class Core
         $name = $pathFile[1];
         
         $n = str_replace($type, '', $name);
-        $path = $appDir.$type.'/'.$folder.$n.'.php';
-        
-       
+        $path = appDir.'../app/'.$type.'/'.$folder.$n.'.php';
 
         if(!empty($folder))
             $name = '\\'.$type.'\\'.str_replace(array('\\', '/'), '\\', $folder).$name.$type;   
