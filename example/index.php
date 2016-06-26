@@ -20,7 +20,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 use Dframe\Loader;
 
 include_once 'vendor/autoload.php';
-//include_once 'Core/Functions.php';
 include_once 'Bootstrap.php';
 $bootstrap = new Bootstrap();
 
