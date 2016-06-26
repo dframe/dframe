@@ -1,8 +1,8 @@
 <?php
-use \Dframe\Session;
-use \Dframe\Messages;
-use \Dframe\Token;
-use \Dframe\Database\Database;
+use Dframe\Session;
+use Dframe\Messages;
+use Dframe\Token;
+use Dframe\Database\Database;
 
 include_once 'config.php';
 class Bootstrap
