@@ -4,8 +4,6 @@
     "type": "library",
     "require": {
         "smarty/smarty": "^3.1",
-        "jimmiw/php-time-ago": "^0.4.10",
-        "beatswitch/lock": "^0.2.0",
         "jasongrimes/paginator": "^1.0",
         "respect/validation": "^1.0"
     },
@@ -20,6 +18,5 @@
         "psr-4": {"Dframe\\": "src/"},
         "files": ["src/Functions.php"]
     },
-
     
 }
