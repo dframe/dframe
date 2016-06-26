@@ -10,12 +10,13 @@ class pageController extends Controller
     	$smartyConfig = Config::load('smarty');
     	$view = $this->loadView('index');
 
-    	$patchController =  $smartyConfig->get('setTemplateDir', './View/templates').'/page/'.$_GET['action'].$smartyConfig->get('fileExtension', '.html.php');
-        if(file_exists($patchController)){
+    	$patchController = $smartyConfig->get('setTemplateDir', appDir.'../app/View/templates').'/page/'.$_GET['action'].$smartyConfig->get('fileExtension', '.html.php');
+        
+        if(file_exists($patchController))
         	$view->render('page/'.$_GET['action']);
-        }else{
-        	$this->redirect('page/index');
-        }
+        else
+        	$this->router->redirect('page/index');
+        
     }
 
     
