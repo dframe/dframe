@@ -35,6 +35,7 @@ class Router extends Core
 		
 		array_pop($aURI);
 		$this->sURI = implode('/', $aURI).'/';
+		$this->sURI = str_replace('/web/', '/', $this->sURI);
 
         $routerConfig = Config::load('router');
 		$this->aRouting = $routerConfig->get();
