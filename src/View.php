@@ -1,6 +1,6 @@
 <?php
 namespace Dframe;
-use Dframe\Config;
+use \Dframe\Config;
 
 /**
  * Copyright (C) 2015  
@@ -28,20 +28,12 @@ abstract class View extends Core
     public $msg;
     public $timeAgo;
 
+
     public function __construct($baseClass){
         parent::__construct($baseClass);
-        $smartyConfig = Config::load('smarty');
-
         $this->baseClass = $baseClass;
-        //include_once "Core/View/smarty/libs/Autoloader.php";
-        //\Smarty_Autoloader::register(); 
-        $smarty = new \Smarty;
-        $smarty->debugging = $smartyConfig->get('debugging', false);
-        $smarty->setTemplateDir($smartyConfig->get('setTemplateDir', appDir.'../app/View/templates'))
-               ->setCompileDir($smartyConfig->get('setCompileDir', appDir.'../app/View/templates_c'));
-        
-        $this->baseClass->smarty = $smarty;
-        $this->assign('router',  $this->router);
+        $this->router =  $this->router;
+
     }
 
     public function render($data, $type = null){
@@ -88,7 +80,34 @@ abstract class View extends Core
             exit();
         }
     }
- 
+
+
+    public function renderInclude($name){
+
+        $pathFile = pathFile($name);
+        $folder = $pathFile[0];
+        $name = $pathFile[1];
+        
+        $path = appDir.'../app/View/templates/'.$folder.$name.'.php';
+
+        try {
+            if(is_file($path)) {
+                 include($path);                    
+            } else {
+                throw new \Exception('Can not open template '.$name.' in: '.$path);
+            }
+        }
+        catch(Exception $e) {
+            echo $e->getMessage().'<br />
+                File: '.$e->getFile().'<br />
+                Code line: '.$e->getLine().'<br />
+                Trace: '.$e->getTraceAsString();
+            exit();
+        }
+
+
+    }
+     
      /**
      * Wyświetla dane JSON.
      * @param array $data Dane do wyświetlenia
@@ -114,43 +133,51 @@ abstract class View extends Core
     }
 
 
-    public function assign($name, $value) {
-        try {
-            if($this->baseClass->smarty->getTemplateVars($name) !== null)
-                throw new \Exception('You can\'t assign "'.$name . '" in Smarty');
-            else
-                return $this->baseClass->smarty->assign($name, $value);
-        
-        }catch(Exception $e) {
-            echo $e->getMessage().'<br />
-                File: '.$e->getFile().'<br />
-                Code line: '.$e->getLine().'<br />
-                Trace: '.$e->getTraceAsString();
-            exit();
-        }
+    /**
+     * It sets data.
+     *
+     * @param string $name
+     * @param mixed $value
+     *
+     * @return void
+     */
+    public function set($name, $value) {
+        $this->$name=$value;
+    }
+    /**
+     * It sets data.
+     *
+     * @param string $name
+     * @param mixed $value
+     *
+     * @return void
+     */
+    public function __set($name, $value) {
+        $this->$name=$value;
+    }
+    /**
+     * It gets data.
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function get($name) {
+        return $this->$name;
+    }
+    /**
+     * It gets data.
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function __get($name) {
+        if( isset($this->$name) )
+            return $this->$name;
+        return null;
     }
 
-    public function fetch($name, $path=null) {
-    	$smartyConfig = Config::load('smarty');
 
-		$pathFile = pathFile($name);
-        $folder = $pathFile[0];
-        $name = $pathFile[1];
-        
-        $path= $smartyConfig->get('setTemplateDir', appDir.'../app/View/templates').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
 
-        try {
-            if(is_file($path))
-                return $this->baseClass->smarty->fetch($path); // Ładowanie widoku
-            else
-                throw new \Exception('Can not open template '.$name.' in: '.$path);
-            
-        }catch(Exception $e) {
-            echo $e->getMessage().'<br />
-                File: '.$e->getFile().'<br />
-                Code line: '.$e->getLine().'<br />
-                Trace: '.$e->getTraceAsString();
-            exit();
-        }
-    }
 }
