@@ -98,38 +98,46 @@ class Router extends Core
 		$aParamsHook = explode('#', $sUrl);
 		$aParams = explode('?', $aParamsHook[0]);
 		$aParams_ = explode('/', $aParams[0]);
-		$sAction = $aParams_[0];
-		if (isset($aParams_[1])) 
-			$sModel = $aParams_[1];
-		else
-			$sModel = null;
+		$sTask = $aParams_[0];
 
-		if (isset($aParams[1])) 
+		$sAction = null;
+		if(isset($aParams_[1]) AND !empty($aParams_[1])) 
+			$sAction = $aParams_[1];
+
+		if(isset($aParams[1])) 
 			parse_str($aParams[1], $aParams);
 		else 
 			$aParams = array();
 		
 		if(MOD_REWRITE){
+			$sExpressionUrl = $sTask;
+			if(!empty($sAction))
+                $sExpressionUrl = $sTask.'/'.$sAction;
 
-            $sExpressionUrl = $sAction.'/'.$sModel;
             if(!empty($aParams)) {
                 $sExpressionUrl .= '?';
-                foreach($aParams AS $k => $v)
-                {
+                foreach($aParams AS $k => $v){
                     $test[] = $k.'='.$v;
                 }
                 $sExpressionUrl .= implode('&', $test);
             }
-		} else {
-			$sExpressionUrl = 'index.php?task='.$sAction.'&action='.$sModel;
-			foreach($aParams AS $k => $v){
-				$sExpressionUrl .= '&'.$k.'='.$v;
+
+		}else{
+			$sExpressionUrl = 'index.php?task='.$sTask;
+			if(!empty($sAction))
+				$sExpressionUrl = 'index.php?task='.$sTask.'&action='.$sAction;
+
+
+			if(!empty($aParams)){
+			    foreach($aParams AS $k => $v){
+			    	$sExpressionUrl .= '&'.$k.'='.$v;
+			    }
 			}
 
 		}
 		$sUrl = 'http://' . $_SERVER['HTTP_HOST'] . $this->sURI;
 		$sUrl .= $sExpressionUrl;
-		
+
 		return $sUrl;
 	}
 
