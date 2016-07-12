@@ -3,7 +3,7 @@ namespace Dframe;
 use Dframe\Config;
 
 /**
- * Copyright (C) 2016  Sławomir Kaleta Wzorowane na http://download.hernas.pl
+ * Copyright (C) 2016  Sławomir Kaleta
  * @author Sławomir Kaleta
  *
  * This program is free software; you can redistribute it and/or

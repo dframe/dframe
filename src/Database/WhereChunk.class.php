@@ -39,6 +39,7 @@ class WhereChunk
         } else {
             $sql = $sql = "{$this->key} IS NULL ";
         }
+        
         return array($sql, $params);
     }
 }

@@ -17,6 +17,12 @@ class WhereStringChunk
     }
     
     function build() {
-        return array($this->string, $this->bindWhere);
+    	$paramName = str_replace('.', '_', $this->string);
+    	$column = explode(' ' , $paramName);
+
+        
+        $params[":{$column[0]}"] = $this->bindWhere;
+
+        return array($this->string, $params);
     }
 }
