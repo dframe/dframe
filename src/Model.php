@@ -2,7 +2,7 @@
 namespace Dframe;
 
 /*
-Copyright (C) 2015  Sławomir Kaleta
+Copyright (C) 2016  Sławomir Kaleta
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License

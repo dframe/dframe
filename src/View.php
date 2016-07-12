@@ -2,7 +2,7 @@
 namespace Dframe;
 
 /**
- * Copyright (C) 2015  
+ * Copyright (C) 2016  
  * @author Sławomir Kaleta
  *
  * This program is free software; you can redistribute it and/or
@@ -47,14 +47,13 @@ abstract class View extends Core implements \Dframe\View\interfaceView
                
     } 
 
-
     public function fetch($name, $path=null) {
         return $this->view->fetch($name, $path=null);
 
     } 
 
     /**
-     * Przekazuje kod do szablonu Smarty
+     * Przekazuje kod do szablonu
      *
      * @param string $name Nazwa pliku
      * @param string $path Ścieżka do szablonu

@@ -2,13 +2,35 @@
 namespace Dframe;
 use Dframe\Router;
 
+/*
+Copyright (C) 2016  Sławomir Kaleta
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+*/
+
 class Core
 {
     public $baseClass = null;
     
     public function __construct($bootstrap =null){
         if(!defined('appDir'))
-           throw new \Exception('Please Define appDir in config.php');
+           throw new \Exception('Please Define appDir in Main config.php');
+
+        if(!defined('SALT'))
+           throw new \Exception('Please Define SALT in Main config.php');
 
         if($bootstrap != null){
             $this->baseClass = $bootstrap;
@@ -70,7 +92,11 @@ class Core
         return $ob; 
     }
 
-    public function setView($engine){
+    /**
+     * Ładowanie rodzaju silnika widoku
+     * php/html, smarty, twig
+     */
+    public function setView($engine = 'defaultView'){
         $this->view = $engine;
     }
 

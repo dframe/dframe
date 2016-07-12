@@ -16,15 +16,15 @@ function pathFile($path) {
 }
 
 
-/*PO PRZEJŚCIU NA NOWY FRAMEWORK TRZEBA PRZENIEŚĆ TO DO BIBLIOTEKI LUB ZMIENIĆ */
+/* PO PRZEJŚCIU NA NOWY FRAMEWORK TRZEBA PRZENIEŚĆ TO DO BIBLIOTEKI LUB ZMIENIĆ */
 function validateDate($date, $format = 'Y-m-d H:i:s') {
 	$d = DateTime::createFromFormat($format, $date);
 	return $d && $d->format($format) == $date;
 }
 
-/* 
+/**
  * Sumowanie minut
-*/
+ */
 
 function convertMinutes($minut) {
 	$godzin = floor($minut/60);  // liczba pełnych godzin
@@ -49,9 +49,9 @@ function convertMinutes($minut) {
 	return $wypisz;
 }
 
-/* 
+/**
  * Randomowo generowany string
-*/
+ */
 function generateRandomString($length = 10) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
@@ -64,9 +64,9 @@ function generateRandomString($length = 10) {
     return $randomString;
 }
 
-/* 
+/**
  * Zmiana Obiektu wielowymiaroa na tablice array
-*/ 
+ */ 
 
 function object_to_array($obj) {
     if(is_object($obj)) 
@@ -84,10 +84,10 @@ function object_to_array($obj) {
     return $new;       
 }
 
-/* 
+/**
  * Wyszukiwanie ciagu zdania za pozmoca wilcardu 
  * ala ma kota -> ala * kota == TRUE
-*/
+ */
 
 function stringMatchWithWildcard($source,$pattern) {
     $pattern = preg_quote($pattern,'/');        

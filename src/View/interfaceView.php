@@ -5,7 +5,7 @@ interface interfaceView
 {
 
     /**
-     * Przekazuje kod do szablonu Smarty
+     * Przekazuje kod do szablonu
      *
      * @param string $name Nazwa pliku
      * @param string $path Ścieżka do szablonu
@@ -19,7 +19,7 @@ interface interfaceView
 
     public function renderInclude($name);
      
-     /**
+    /**
      * Wyświetla dane JSON.
      * @param array $data Dane do wyświetlenia
      */

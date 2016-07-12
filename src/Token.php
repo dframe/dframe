@@ -2,7 +2,7 @@
 namespace Dframe;
 
 /**
- * Copyright (C) 2015  
+ * Copyright (C) 2016  
  * @author Paweł Łopyta
  * @author Sławomir Kaleta
  *

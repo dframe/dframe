@@ -4,7 +4,7 @@ use Dframe\Messages;
 use Dframe\Token;
 use Dframe\Database\Database;
 
-include_once 'config.php';
+include_once dirname(__DIR__).'/web/config.php';
 class Bootstrap
 {
     

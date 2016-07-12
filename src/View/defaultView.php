@@ -2,7 +2,7 @@
 namespace Dframe\View;
 
 /**
- * Copyright (C) 2015  
+ * Copyright (C) 2016  
  * @author Sławomir Kaleta
  *
  * This program is free software; you can redistribute it and/or
@@ -23,13 +23,16 @@ namespace Dframe\View;
 
 class defaultView implements \Dframe\View\interfaceView
 {
+    public function __construct(){
+        $templateConfig = Config::load('View/defaultConfig');
+    }
 
     public function assign($name, $value){
         $this->$name = $value;
     }
 
     public function fetch($name, $path=null){
-         $this->$name = $value;
+        throw new \Exception('This module dont have fetch');
     }
 
     /**
@@ -45,15 +48,14 @@ class defaultView implements \Dframe\View\interfaceView
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
         $name = $pathFile[1];
-        
-        $path = '../app/View/templates/'.$folder.$name.'.html.php';
 
+        $path= $templateConfig->get('setTemplateDir').'/'.$folder.$name.$templateConfig->get('fileExtension', '.html.php');
         try {
-            if(is_file($path)) {
+            if(is_file($path))
                  include($path);                    
-            } else {
+            else
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
-            }
+
         }
         catch(Exception $e) {
             echo $e->getMessage().'<br />

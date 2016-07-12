@@ -3,7 +3,7 @@ namespace Dframe;
 use Dframe\Config;
 
 /*
-Copyright (C) 2015  Sławomir Kaleta
+Copyright (C) 2016  Sławomir Kaleta
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -68,7 +68,7 @@ class Loader extends Core
 
 
        // Does the class exist?
-        $patchController = '../app/Controller/'.$subControler.''.$this->controller.'.php';
+        $patchController = appDir.'../app/Controller/'.$subControler.''.$this->controller.'.php';
         //var_dump($patchController);
         if(file_exists($patchController)){
             include_once $patchController;
