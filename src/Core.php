@@ -70,6 +70,10 @@ class Core
         return $ob; 
     }
 
+    public function setView($engine){
+        $this->view = $engine;
+    }
+
     /** 
      * Metoda 
      * init dzialajaca jak __construct wywoływana na poczatku kodu

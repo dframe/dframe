@@ -1,5 +1,5 @@
 <?php
-namespace Dframe;
+namespace Dframe\View;
 
 /**
  * Copyright (C) 2015  
@@ -21,37 +21,16 @@ namespace Dframe;
 */
 
 
-abstract class View extends Core implements \Dframe\View\interfaceView
+class defaultView implements \Dframe\View\interfaceView
 {
-    public function __construct($baseClass){
-        parent::__construct($baseClass);
-        
-        if(!isset($this->view))
-           throw new \Exception('Please Define view');
+
+    public function assign($name, $value){
+        $this->$name = $value;
     }
 
-    public function assign($name, $value) {
-        return $this->view->assign($name, $value);
+    public function fetch($name, $path=null){
+         $this->$name = $value;
     }
-
-    public function render($data, $type = null){
-
-        if(empty($type) OR $type == 'html')
-            $this->view->renderInclude($data);
-        
-        elseif($type == 'jsonp')
-            $this->view->renderJSONP($data);
-
-        else
-            $this->view->renderJSON($data);
-               
-    } 
-
-
-    public function fetch($name, $path=null) {
-        return $this->view->fetch($name, $path=null);
-
-    } 
 
     /**
      * Przekazuje kod do szablonu Smarty
@@ -61,18 +40,40 @@ abstract class View extends Core implements \Dframe\View\interfaceView
      *
      * @return void
      */
-
     public function renderInclude($name){
-        return $this->view->renderInclude($name);
+
+        $pathFile = pathFile($name);
+        $folder = $pathFile[0];
+        $name = $pathFile[1];
+        
+        $path = '../app/View/templates/'.$folder.$name.'.html.php';
+
+        try {
+            if(is_file($path)) {
+                 include($path);                    
+            } else {
+                throw new \Exception('Can not open template '.$name.' in: '.$path);
+            }
+        }
+        catch(Exception $e) {
+            echo $e->getMessage().'<br />
+                File: '.$e->getFile().'<br />
+                Code line: '.$e->getLine().'<br />
+                Trace: '.$e->getTraceAsString();
+            exit();
+        }
+
+
     }
-     
-     /**
+
+    /**
      * Wyświetla dane JSON.
      * @param array $data Dane do wyświetlenia
      */
     public function renderJSON($data) {
-        return $this->view->renderJSON($data);
-
+        header('Content-Type: application/json');
+        echo json_encode($data);
+        exit();
     }
  
     /**
@@ -80,6 +81,13 @@ abstract class View extends Core implements \Dframe\View\interfaceView
      * @param array $data Dane do wyświetlenia
      */
     public function renderJSONP($data) {
-        return $this->view->renderJSONP($data);
+        header('Content-Type: application/json');
+        $callback = null;
+        if(isset($_GET['callback'])) 
+            $callback = $_GET['callback'];
+        
+        echo $callback . '(' . json_encode($data) . ')';
+        exit();
     }
+
 }
