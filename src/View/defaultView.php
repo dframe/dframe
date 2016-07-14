@@ -1,5 +1,6 @@
 <?php
 namespace Dframe\View;
+use Dframe\Config;
 
 /**
  * Copyright (C) 2016  
@@ -24,7 +25,7 @@ namespace Dframe\View;
 class defaultView implements \Dframe\View\interfaceView
 {
     public function __construct(){
-        $templateConfig = Config::load('View/defaultConfig');
+        $this->templateConfig = Config::load('View/defaultConfig');
     }
 
     public function assign($name, $value){
@@ -49,7 +50,7 @@ class defaultView implements \Dframe\View\interfaceView
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
-        $path= $templateConfig->get('setTemplateDir').'/'.$folder.$name.$templateConfig->get('fileExtension', '.html.php');
+        $path= $this->templateConfig->get('setTemplateDir').'/'.$folder.$name.$this->templateConfig->get('fileExtension', '.html.php');
         try {
             if(is_file($path))
                  include($path);                    
