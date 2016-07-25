@@ -11,7 +11,7 @@ use \Dframe\Config;
 class smartyView implements \Dframe\View\interfaceView
 {
     public function __construct(){
-        $smartyConfig = Config::load('View/smarty');
+        $smartyConfig = Config::load('view/smarty');
 
         $smarty = new \Smarty;
         $smarty->debugging = $smartyConfig->get('debugging', false);;
@@ -40,7 +40,7 @@ class smartyView implements \Dframe\View\interfaceView
     }
 
     public function fetch($name, $path=null) {
-        $smartyConfig = Config::load('smarty');
+        $smartyConfig = Config::load('view/smarty');
 
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
@@ -74,7 +74,7 @@ class smartyView implements \Dframe\View\interfaceView
      */
     public function renderInclude($name, $path=null) {
 
-    	$smartyConfig = Config::load('smarty');
+    	$smartyConfig = Config::load('view/smarty');
 		
 		$pathFile = pathFile($name);
         $folder = $pathFile[0];

@@ -25,7 +25,7 @@ use Dframe\Config;
 class defaultView implements \Dframe\View\interfaceView
 {
     public function __construct(){
-        $this->templateConfig = Config::load('View/defaultConfig');
+        $this->templateConfig = Config::load('view/defaultConfig');
     }
 
     public function assign($name, $value){

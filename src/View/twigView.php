@@ -13,7 +13,7 @@ class twigView implements \Dframe\View\interfaceView
 	public $assigns = array();
 
     public function __construct(){
-        $twigConfig = Config::load('View/twig');
+        $twigConfig = Config::load('view/twig');
 
         $loader = new \Twig_Loader_Filesystem($twigConfig->get('setTemplateDir'));
         $twig = new \Twig_Environment($loader, array(
