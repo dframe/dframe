@@ -29,4 +29,3 @@ class pageController extends Controller
 
     }
 }
-?>

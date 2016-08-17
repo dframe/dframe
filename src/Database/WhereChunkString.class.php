@@ -17,12 +17,26 @@ class WhereStringChunk
     }
     
     function build() {
-    	$paramName = str_replace('.', '_', $this->string);
-    	$column = explode(' ' , $paramName);
+        $paramName = str_replace('.', '_', $this->string);
+        $column = explode(' ' , $paramName);
 
         
         $params[":{$column[0]}"] = $this->bindWhere;
+        $params = $this->flatter($params);
 
         return array($this->string, $params);
+    }
+
+    // Bug fix Autor Krzysztof Franek
+    function flatter($array){ 
+        $result = array();
+        foreach($array as $item){
+            if(is_array($item)){
+                $result = array_merge($result, $this->flatter($item));
+            }
+            else
+                $result[] = $item;
+        }
+        return $result;
     }
 }
