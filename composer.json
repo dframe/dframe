@@ -11,6 +11,10 @@
             "email": "slaszka@gmail.com"
         }
     ],
+    "require": {
+        "php": ">=5.5"
+    },
+    
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {"Dframe\\": "src/"},
