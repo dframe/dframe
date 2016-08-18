@@ -24,5 +24,4 @@ define('DB_DATABASE', ""); # Databese Name
 
 # URL configuration
 define('MOD_REWRITE', false); # Mod rewrite (ex. task=page&action=login -> page/login )
-
-?>
+define('HTTP_HOST', ''); # MAIN website

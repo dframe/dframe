@@ -28,6 +28,7 @@ class Router extends Core
     private $aRoutingParse;
     private $sURI;
     private $parsingArray;
+    private $subdomain = false;
 
 	public function __construct(){
 
@@ -85,7 +86,7 @@ class Router extends Core
     		$path = $this->aRouting['publicWeb'];
 
         $sExpressionUrl = $sUrl;
-		$sUrl = 'http://'.$_SERVER['HTTP_HOST'].$this->sURI.$path;
+		$sUrl = 'http://'.HTTP_HOST.$this->sURI.$path;
 		$sUrl .= $sExpressionUrl;
 		
 		return $sUrl;
@@ -123,19 +124,28 @@ class Router extends Core
             }
 
 		}else{
-			$sExpressionUrl = 'index.php?task='.$sTask;
-			if(!empty($sAction))
-				$sExpressionUrl = 'index.php?task='.$sTask.'&action='.$sAction;
+			if(empty($sTask)){
+				$sExpressionUrl = '';
 
-
-			if(!empty($aParams)){
-			    foreach($aParams AS $k => $v){
-			    	$sExpressionUrl .= '&'.$k.'='.$v;
+			}else{
+			    $sExpressionUrl = 'index.php?task='.$sTask;
+			    if(!empty($sAction))
+			    	$sExpressionUrl = 'index.php?task='.$sTask.'&action='.$sAction;
+    
+    
+			    if(!empty($aParams)){
+			        foreach($aParams AS $k => $v){
+			        	$sExpressionUrl .= '&'.$k.'='.$v;
+			        }
 			    }
 			}
 
 		}
-		$sUrl = 'http://' . $_SERVER['HTTP_HOST'] . $this->sURI;
+		if(!empty($this->subdomain))
+			$HTTP_HOST = $this->subdomain.'.'.HTTP_HOST;
+
+		    $sUrl = 'http://' . $HTTP_HOST . $this->sURI;
+
 		$sUrl .= $sExpressionUrl;
 
 		return $sUrl;
@@ -260,5 +270,11 @@ class Router extends Core
 	public function redirect($url = '') {
         header("Location: ".$this->makeUrl($url));
         exit();
+    }
+
+    public function subdomain($subdomain){
+    	$this->subdomain = $subdomain;
+    	return $this;
+    	
     }
 }
