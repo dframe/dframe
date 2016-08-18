@@ -3,9 +3,7 @@
     "description": "Framework Dframe",
     "type": "library",
     "require": {
-        "smarty/smarty": "^3.1",
-        "jasongrimes/paginator": "^1.0",
-        "respect/validation": "^1.0"
+        "smarty/smarty": "^3.1"
     },
     "authors": [
         {
