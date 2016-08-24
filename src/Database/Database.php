@@ -58,8 +58,10 @@ class Database extends \PdoWrapper
                 }
             }
             $this->setWhere = " WHERE ".implode(' AND ', $arr);
-
             $this->setParams = $params;
+        }else{
+            $this->setWhere = null;
+            $this->setParams = null;
         }
 
         if (!empty($order)) {
