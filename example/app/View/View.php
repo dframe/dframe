@@ -1,11 +1,12 @@
 <?php
 namespace View;
 
-abstract class View extends \Dframe\View{
+abstract class View extends \Dframe\View 
+{
 
-	public function init(){
-		$this->baseClass->smarty = new \Dframe\View\Smarty();
-		$this->assign('token', $this->baseClass->token);
-	}
+    public function __construct($baseClass){
+    	$this->setView(new \Dframe\View\smartyView());
+        parent::__construct($baseClass);
+    }
 
 }

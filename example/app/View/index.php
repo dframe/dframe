@@ -3,8 +3,7 @@ namespace View;
 
 class indexView extends \Dframe\View
 {
-    public function __construct($baseClass){
-        parent::__construct($baseClass);
+    public function init(){
 
         /* Domyślne alerty */
         if($this->baseClass->msg->hasMessages('error'))
