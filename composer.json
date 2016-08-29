@@ -2,17 +2,17 @@
     "name": "dframe/dframe",
     "description": "Framework Dframe",
     "type": "library",
-    "require": {
-        "php": ">=5.5",
-        "smarty/smarty": "^3.1"
-    },
+    "license": "MIT",
     "authors": [
         {
             "name": "Slawek Kaleta",
             "email": "slaszka@gmail.com"
         }
     ],
-    
+    "require": {
+        "php": ">=5.5",
+        "smarty/smarty": "^3.1"
+    },
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {"Dframe\\": "src/"},
