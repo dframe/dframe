@@ -32,6 +32,9 @@ class Router extends Core
 
 	public function __construct(){
 
+		if(!defined('HTTP_HOST'))
+			define('HTTP_HOST', $_SERVER['HTTP_HOST']);
+
 		$aURI = explode('/', $_SERVER['SCRIPT_NAME']);
 		
 		array_pop($aURI);
