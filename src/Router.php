@@ -144,6 +144,8 @@ class Router extends Core
 			}
 
 		}
+
+		$HTTP_HOST = HTTP_HOST;
 		if(!empty($this->subdomain))
 			$HTTP_HOST = $this->subdomain.'.'.HTTP_HOST;
 
