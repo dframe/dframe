@@ -24,14 +24,14 @@ use \Dframe\Session;
 
 class Token
 {
-    protected $session;
-    
-    protected $token = array();
-    
+	protected $session;
+	
+	protected $token = array();
+	
     protected $time = array();
     
     // Tylko dla obiektu \Dframe\Session
-    public function __construct(Session $session) {
+	public function __construct(Session $session) {
         $this->session = $session;
         
         $token = $this->session->get('token');
@@ -42,25 +42,25 @@ class Token
 
         if(!empty($timeToken))
             $this->time = $timeToken;
-    }
-    
-    public function generate($name) {
-        $this->setToken($name, md5(uniqid(rand(), true)));
-        $this->setTime($name, time() + 3600);
-        return $this;
-    }
-    
-    public function setToken($name, $token) {
-        $this->token[$name] = $token;
-        $this->session->set('token', $this->token);
-        return $this;
-    }
-    
-    public function getToken($name) {
+	}
+	
+	public function generate($name) {
+		$this->setToken($name, md5(uniqid(rand(), true)));
+		$this->setTime($name, time() + 3600);
+		return $this;
+	}
+	
+	public function setToken($name, $token) {
+		$this->token[$name] = $token;
+		$this->session->set('token', $this->token);
+		return $this;
+	}
+	
+	public function getToken($name) {
         if(isset($this->token[$name]) && $this->getTime($name) >= time())
             return $this->token[$name];
         return $this->generate($name)->token[$name];
-    }
+	}
     
     public function remove($name) {
         if(isset($this->token[$name]))
@@ -84,13 +84,13 @@ class Token
     public function getTime($name) {
         return isset($this->time[$name]) ? $this->time[$name] : null;
     }
-    
+	
     public function isValid($name, $token, $remove = true) {
-        if($this->getToken($name) === $token) {
+		if($this->getToken($name) === $token) {
             if($remove === true)
                 $this->remove($name);
-            return true;
+			return true;
         }
-        return false;
-    }   
+		return false;
+	}   
 }
