@@ -29,9 +29,9 @@ class Loader extends Core
     private $urlvalues;
     public $bootstrap;
 
-    public function __construct($bootstrap){
-        $this->baseClass = $bootstrap;
-    }
+    //public function __construct($bootstrap){
+    //    $this->baseClass = $bootstrap;
+    //}
     
     // Establish the requested controller as an object
     public function CreateController($controller = null, $action = null){
@@ -86,11 +86,13 @@ class Loader extends Core
             if(ini_get('display_errors') == "on"){
                 echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
-                Code line: '.$e->getLine().'<br />
+                Code line: '.$e->getLine().'<br /> 
                 Trace: '.$e->getTraceAsString();
                 exit();
             }else{
+            	$routerConfig = Config::load('router');
                 header("HTTP/1.0 404 Not Found");
+                $this->router->redirect($routerConfig->get('404'));
                 return 1;
             }
 
