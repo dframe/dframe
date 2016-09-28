@@ -1,5 +1,6 @@
 <?php
 namespace Dframe;
+use \Dframe\Session;
 
 /**
  * Copyright (C) 2016  
@@ -29,7 +30,8 @@ class Token
 	
     protected $time = array();
     
-	public function __construct($session) {
+    // Tylko dla obiektu \Dframe\Session
+	public function __construct(Session $session) {
         $this->session = $session;
         
         $token = $this->session->get('token');

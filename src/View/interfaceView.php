@@ -15,8 +15,14 @@ interface interfaceView
 
     public function assign($name, $value);
 
+    /**
+     * Zwraca kod pliku
+     */
     public function fetch($name, $path=null);
 
+    /**
+     * Zwykły include pliku.
+     */
     public function renderInclude($name);
      
     /**
