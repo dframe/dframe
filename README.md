@@ -27,7 +27,7 @@ app/Controller/taskForRouter.php:
 <?php
 namespace Controller;
 
-Class taskForRouterController extends \Dframe\Controller\Controller
+Class taskForRouterController extends \Controller\Controller
 {
     public function ActionForRouter(){
          $view = $this->LoadView('index'); #Ładowanie Widoku
@@ -46,6 +46,7 @@ app/Model/exampleModel.php:
 ```php
 <?php
 namespace Model;
+
 Class exampleModel extends Model\Model
 {
     public function getId($id){
