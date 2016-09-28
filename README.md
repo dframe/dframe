@@ -30,9 +30,9 @@ namespace Controller;
 Class taskForRouterController extends \Controller\Controller
 {
     public function ActionForRouter(){
-         $view = $this->LoadView('index'); #Ładowanie Widoku
-
          $exampleModel = $this->LoadModel('example'); #Załadowanie Modelu
+         $view = $this->LoadView('index'); #Ładowanie Widoku
+         
          $getId = $exampleModel->getId($_GET['id']); #Wywołanie metody 
          $view->assign('varForSmarty', $getId); #Przekazanie zmiennej do view
          $view->render('exampleNameFile'); #Wygenerowanie pliku app/View/templates/exampleNameFile.tpl
