@@ -27,7 +27,7 @@ abstract class View extends Core implements \Dframe\View\interfaceView
         parent::__construct($baseClass);
         
         if(!isset($this->view))
-           throw new \Exception('Please Define view');
+           throw new \Exception('Please Define view engine in app/View.php');
     }
 
     public function assign($name, $value) {
@@ -47,11 +47,6 @@ abstract class View extends Core implements \Dframe\View\interfaceView
                
     } 
 
-    public function fetch($name, $path=null) {
-        return $this->view->fetch($name, $path=null);
-
-    } 
-
     /**
      * Przekazuje kod do szablonu
      *
@@ -61,11 +56,19 @@ abstract class View extends Core implements \Dframe\View\interfaceView
      * @return void
      */
 
+    public function fetch($name, $path=null) {
+        return $this->view->fetch($name, $path=null);
+
+    }
+
+    /**
+     * Include pliku
+     */
     public function renderInclude($name){
         return $this->view->renderInclude($name);
     }
      
-     /**
+    /**
      * Wyświetla dane JSON.
      * @param array $data Dane do wyświetlenia
      */

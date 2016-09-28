@@ -59,6 +59,7 @@ class Token
 	public function getToken($name) {
         if(isset($this->token[$name]) && $this->getTime($name) >= time())
             return $this->token[$name];
+
         return $this->generate($name)->token[$name];
 	}
     
@@ -91,6 +92,7 @@ class Token
                 $this->remove($name);
 			return true;
         }
+        
 		return false;
 	}   
 }

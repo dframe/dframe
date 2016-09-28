@@ -21,9 +21,11 @@ use Dframe\BaseException;
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-class Config{
+class Config
+{
  
     protected static $cfg = array();
+    private $file;
 	public $path;
     
     public function __construct($file){
@@ -40,6 +42,7 @@ class Config{
 
     public static function load($file){
         return new Config($file);
+
     }
 
     public function get($param = null, $or = null){
@@ -50,6 +53,5 @@ class Config{
 
 	    return (isset(self::$cfg[$this->file][$param]) AND !empty(self::$cfg[$this->file][$param]))? self::$cfg[$this->file][$param] : $or;
     }
-
 
 }
