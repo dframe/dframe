@@ -8,7 +8,7 @@ include_once dirname(__DIR__).'/web/config.php';
 class Bootstrap
 {
     
-    public function __construct() {
+    public function __construct(){
         try {
             if(!empty(DB_HOST)){
                 $dbConfig = array(
@@ -18,11 +18,10 @@ class Bootstrap
                     'password' => DB_PASS,
                 );
                 $this->db = new Database($dbConfig);
-                $this->db->setErrorLog(false); // Debugowanie
+                $this->db->setErrorLog(setErrorLog); // Debugowanie
             }
-        }
-        
-        catch(DBException $e) {
+
+        }catch(DBException $e) {
             echo 'The connect can not create: ' . $e->getMessage();
             exit();
         }

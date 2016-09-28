@@ -1,6 +1,5 @@
 <?php
-
-return  array(
+return array(
 	'NAME_CONTROLLER' => 'page',
 	'NAME_MODEL' => 'index',
 	'404' => array('404', 'task=page&action=404'),

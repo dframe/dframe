@@ -1,7 +1,7 @@
 <?php
 namespace View;
 
-class indexView extends \Dframe\View
+class indexView extends \View\View
 {
     public function init(){
 
