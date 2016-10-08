@@ -29,7 +29,7 @@ namespace Controller;
 Class taskForRouterController extends \Controller\Controller
 {
     public function ActionForRouter(){
-         $exampleModel = $this->LoadModel('example'); #Załadowanie Modelu
+         $exampleModel = $this->loadModel('example'); #Załadowanie Modelu
          $view = $this->LoadView('index'); #Ładowanie Widoku
          
          $getId = $exampleModel->getId($_GET['id']); #Wywołanie metody 
