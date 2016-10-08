@@ -30,7 +30,7 @@ Class taskForRouterController extends \Controller\Controller
 {
     public function ActionForRouter(){
          $exampleModel = $this->loadModel('example'); #Załadowanie Modelu
-         $view = $this->LoadView('index'); #Ładowanie Widoku
+         $view = $this->loadView('index'); #Ładowanie Widoku
          
          $getId = $exampleModel->getId($_GET['id']); #Wywołanie metody 
          $view->assign('varForSmarty', $getId); #Przekazanie zmiennej do view
