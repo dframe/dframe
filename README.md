@@ -1,4 +1,4 @@
-# Dframe/Dframe 
+# Dframe - PHP Framework
 
 The basic tools to build simple and complex pages. Used and tested internally for over 2 years. Used in tens of projects.
 
