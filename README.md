@@ -22,9 +22,10 @@ RewriteCond %{REQUEST_URI} !web/
 RewriteRule (.*) web/$1 [L]
 ```
 
+### Overview
 
-
-### Example Usage
+**1. Controller** 
+file it is very important for dynamic routing. If you created file **taskForRouter.php** with class with method **ActionForRouter()** your **\Dframe\Router** url will look like ***yourpage.com/taskForRouter/ActionForRouter***
 
 app/Controller/taskForRouter.php:
 ```php
@@ -46,6 +47,9 @@ Class taskForRouterController extends \Controller\Controller
 
 ```
 
+**2. Model** 
+is not required in project if you are not using any databases
+
 app/Model/exampleModel.php:
 ```php
 <?php
@@ -58,6 +62,9 @@ Class exampleModel extends Model\Model
     }
 }
 ```
+
+**3. View** 
+receiving data from Controller and can display more advanced template. You dont have to use view if you using dframe only for **xml**/**json**/**jsonp** it can do controler without templates files
 
 View/templates/exampleNameFile.hmtl.php:
 ```html
@@ -74,7 +81,9 @@ View/templates/exampleNameFile.hmtl.php:
 </html>
 ```
 
-### Dframe\Config
+# Extensions
+
+## Dframe\Config
 You can fast set and load configs
 
 Create file in app\config\myConfigFile.php
@@ -96,7 +105,7 @@ $config = \Dframe\Core\Config::load('myConfigFile');
 echo $config->get('key1'); // display 'value'
 echo $config->get('keyValid', 'yes'); // display 'yes' ||  if key is not exist then you can replace value
 ```
-### Dframe\Router
+## Dframe\Router
 Methods
 
 
@@ -114,7 +123,7 @@ var_dump($makeUrl); // yourPage.com/page/index
 $router->redirect('page/index'); // To redirect yourPage.com/page/index
 ```
 
-### Dframe\Session
+## Dframe\Session
 Methods
 ```php
 $session  = new Session('HashSaltRandomForSession');
@@ -132,3 +141,4 @@ MIT
 
    [Wrapper PDO]: <https://github.com/neerajsinghsonu/PDO_Class_Wrapper>
    [S.M.A.R.T.Y]: <https://github.com/smarty-php/smarty>
+
