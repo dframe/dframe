@@ -102,16 +102,17 @@ echo $config->get('keyValid', 'yes'); // display 'yes' ||  if key is not exist t
 ## Dframe\Router
 Methods
 
+Router is alredy defined in core dframe so you just use $this->router in controller or view files
 
 ```php
 
-$isActive = $router->isActive('page/index') // For check if you are on page
+$isActive = $this->router->isActive('page/index') // For check if you are on page
 var_dump($isActive); // true/false
 
-$publicWeb = $router->publicWeb('css/style.css') // For load web/* files
+$publicWeb = $this->router->publicWeb('css/style.css') // For load web/* files
 var_dump($publicWeb);  // http://example.com/css/style.css
 
-$makeUrl = $router->makeUrl('page/index') // To create link
+$makeUrl = $this->router->makeUrl('page/index') // To create link
 var_dump($makeUrl); // yourPage.com/page/index
 
 $router->redirect('page/index'); // To redirect yourPage.com/page/index
