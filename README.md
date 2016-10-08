@@ -27,12 +27,12 @@ app/Controller/taskForRouter.php:
 <?php
 namespace Controller;
 
-Class taskForRouterController extends \Dframe\Controller\Controller
+Class taskForRouterController extends \Controller\Controller
 {
     public function ActionForRouter(){
-         $view = $this->LoadView('index'); #Ładowanie Widoku
-
          $exampleModel = $this->LoadModel('example'); #Załadowanie Modelu
+         $view = $this->LoadView('index'); #Ładowanie Widoku
+         
          $getId = $exampleModel->getId($_GET['id']); #Wywołanie metody 
          $view->assign('varForSmarty', $getId); #Przekazanie zmiennej do view
          $view->render('exampleNameFile'); #Wygenerowanie pliku app/View/templates/exampleNameFile.tpl
@@ -46,6 +46,7 @@ app/Model/exampleModel.php:
 ```php
 <?php
 namespace Model;
+
 Class exampleModel extends Model\Model
 {
     public function getId($id){
@@ -69,7 +70,69 @@ View/templates/exampleNameFile.hmtl.php:
 </html>
 ```
 
+### Dframe\Config
+You can fast set and load configs
 
+Create file in app\config\myConfigFile.php
+```php
+<?php
+return array(
+    'key1' => 'value', 
+    'key2' => array('value'),
+    'key3' => array(
+        'key1' => 'value'
+    );
+````
+
+Usage in controller
+```php
+<?php
+$config = \Dframe\Core\Config::load('myConfigFile');
+
+echo $config->get('key1'); // display 'value'
+echo $config->get('keyValid', 'yes'); // display 'yes' ||  if key is not exist then you can replace value
+```
+### Dframe\Router
+Methods
+
+isActive
+```php
+$ifisActice = $router->isActive('page/index') // For check if you are on page
+var_dump($ifisActive);
+```
+
+publicWeb
+```php
+$router->publicWeb('css/style.css') // For load web/* files
+```
+```html
+<link href="<?php echo $router->publicWeb('css/shop-homepage.css'); ?>" rel="stylesheet">
+```
+
+makeUrl
+```php
+$router->makeUrl('page/index') // To create link yourPage.com/page/index
+```
+```html
+<a href="<?php echo $router->makeUrl('page/index'); ?>">Link</a>
+```
+
+redirect
+```php
+$router->redirect('page/index'); // To redirect yourPage.com/page/index
+```
+
+### Dframe\Session
+Methods
+```php
+$session  = new Session('HashSaltRandomForSession');
+$session->register(); // Set session_id and session_time - default 60
+$session->authLogin(); // Return true/false if session is registrer
+$session->set($key, $value); // set $_SESSION[$key] = $value;
+$session->get($key, $or = null); // get $_SESSION[$key]; 
+$session->remove($key) // unset($_SESSION[$key]);
+$session->end(); // session_destroy
+```
 License
 ----
 
