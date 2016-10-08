@@ -1,12 +1,6 @@
-# Dframe/DframeFramework
+# Dframe/Dframe 
 
 The basic tools to build simple and complex pages. Used and tested internally for over 2 years. Used in tens of projects.
-
-### Tech
-
-* [Wrapper PDO] - PHP PDO Class Wrapper ! (Base class - modified)
-* [S.M.A.R.T.Y] - Default Template Engine (available: php, twig)
-
 
 ### Installation
 
@@ -138,6 +132,13 @@ License
 ----
 
 MIT
+
+
+
+### Tech
+
+* [Wrapper PDO] - PHP PDO Class Wrapper ! (Base class - modified)
+* [S.M.A.R.T.Y] - Default Template Engine (available: php, twig)
 
    [Wrapper PDO]: <https://github.com/neerajsinghsonu/PDO_Class_Wrapper>
    [S.M.A.R.T.Y]: <https://github.com/smarty-php/smarty>
