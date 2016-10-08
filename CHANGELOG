@@ -1,0 +1,23 @@
+v3.23.2
+[example] Aktualizacja
+[src] Optymalizacja kodu
+
+v3.23.1
+[Session] Dodanie ograniczenia obiektu \Dframe\Session
+[Token] Obsługa tylko obiektu Dframe\Session, poprawa komentarza inferface'su
+[Loader] Usunięcie problemu braku przekierowania po wpisaniu błednej nazwy kontrollera
+
+v3.23.0
+[Database/database] Wydzielenie database do osobnego repozytorium
+[Example] poprawa example
+[Router] poprawa routera
+
+v3.22.1
+[View] Poprawa widoku oraz ścieżek <br>
+[Vendor] Usuniecie zbędnych paczek używanych wewnetrzenie <br>
+Dodanie readme.md
+
+v3.22
+v3.21
+v3.1
+First tag version
