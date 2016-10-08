@@ -10,6 +10,10 @@ The basic tools to build simple and complex pages. Used and tested internally fo
 
 ### Installation
 
+```sh
+$ composer require dframe/dframe
+```
+
 Before run add to .htaccess 
 
 ```sh
@@ -95,30 +99,18 @@ echo $config->get('keyValid', 'yes'); // display 'yes' ||  if key is not exist t
 ### Dframe\Router
 Methods
 
-isActive
-```php
-$ifisActice = $router->isActive('page/index') // For check if you are on page
-var_dump($ifisActive);
-```
 
-publicWeb
 ```php
-$router->publicWeb('css/style.css') // For load web/* files
-```
-```html
-<link href="<?php echo $router->publicWeb('css/shop-homepage.css'); ?>" rel="stylesheet">
-```
 
-makeUrl
-```php
-$router->makeUrl('page/index') // To create link yourPage.com/page/index
-```
-```html
-<a href="<?php echo $router->makeUrl('page/index'); ?>">Link</a>
-```
+$isActive = $router->isActive('page/index') // For check if you are on page
+var_dump($isActive); // true/false
 
-redirect
-```php
+$publicWeb = $router->publicWeb('css/style.css') // For load web/* files
+var_dump($publicWeb);  // http://example.com/css/style.css
+
+$makeUrl = $router->makeUrl('page/index') // To create link
+var_dump($makeUrl); // yourPage.com/page/index
+
 $router->redirect('page/index'); // To redirect yourPage.com/page/index
 ```
 
