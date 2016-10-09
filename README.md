@@ -1,12 +1,6 @@
-# Dframe/DframeFramework
+# Dframe - PHP Framework
 
-The basic tools to build simple and complex pages. Used and tested internally for over 2 years. Used in tens of projects.
-
-### Tech
-
-* [Wrapper PDO] - PHP PDO Class Wrapper ! (Base class - modified)
-* [S.M.A.R.T.Y] - Default Template Engine (available: php, twig)
-
+The basic tools to build simple and complex pages. Used and tested internally for over 2 years in tens of projects.
 
 ### Installation
 
@@ -22,9 +16,10 @@ RewriteCond %{REQUEST_URI} !web/
 RewriteRule (.*) web/$1 [L]
 ```
 
+### Overview
 
-
-### Example Usage
+**1. Controller** 
+file it is very important for dynamic routing. If you created file **taskForRouter.php** with class with method **ActionForRouter()** your **\Dframe\Router** url will look like ***yourpage.com/taskForRouter/ActionForRouter***
 
 app/Controller/taskForRouter.php:
 ```php
@@ -34,17 +29,20 @@ namespace Controller;
 Class taskForRouterController extends \Controller\Controller
 {
     public function ActionForRouter(){
-         $exampleModel = $this->LoadModel('example'); #Załadowanie Modelu
-         $view = $this->LoadView('index'); #Ładowanie Widoku
+         $exampleModel = $this->loadModel('example'); #Load model
+         $view = $this->loadView('index'); #Load view
          
-         $getId = $exampleModel->getId($_GET['id']); #Wywołanie metody 
-         $view->assign('varForSmarty', $getId); #Przekazanie zmiennej do view
-         $view->render('exampleNameFile'); #Wygenerowanie pliku app/View/templates/exampleNameFile.tpl
+         $getId = $exampleModel->getId($_GET['id']); #Call method
+         $view->assign('varForSmarty', $getId); #Set variable to view
+         $view->render('exampleNameFile'); #Generate view app/View/templates/exampleNameFile.tpl
         }
     }
 
 
 ```
+
+**2. Model** 
+is not required in project if you are not using any databases
 
 app/Model/exampleModel.php:
 ```php
@@ -54,10 +52,16 @@ namespace Model;
 Class exampleModel extends Model\Model
 {
     public function getId($id){
+        /* getId(int)
+	 * return array();
+	 */
         return $this->baseClass->db->pdoQuery('SELECT * FROM table WHERE id=? LIMIT 1', array($id))->results();
     }
 }
 ```
+
+**3. View** 
+receiving data from Controller and can display more advanced template. You dont have to use view if you using dframe only for **xml**/**json**/**jsonp** it can do controler without templates files
 
 View/templates/exampleNameFile.hmtl.php:
 ```html
@@ -74,7 +78,9 @@ View/templates/exampleNameFile.hmtl.php:
 </html>
 ```
 
-### Dframe\Config
+# Extensions
+
+## Dframe\Config
 You can fast set and load configs
 
 Create file in app\config\myConfigFile.php
@@ -96,25 +102,26 @@ $config = \Dframe\Core\Config::load('myConfigFile');
 echo $config->get('key1'); // display 'value'
 echo $config->get('keyValid', 'yes'); // display 'yes' ||  if key is not exist then you can replace value
 ```
-### Dframe\Router
+## Dframe\Router
 Methods
 
+Router is alredy defined in core dframe so you just use $this->router in controller or view files. If you want use only router component use $router = new Dframe\Router();
 
 ```php
 
-$isActive = $router->isActive('page/index') // For check if you are on page
+$isActive = $this->router->isActive('page/index') // For check if you are on page
 var_dump($isActive); // true/false
 
-$publicWeb = $router->publicWeb('css/style.css') // For load web/* files
+$publicWeb = $this->router->publicWeb('css/style.css') // For load web/* files
 var_dump($publicWeb);  // http://example.com/css/style.css
 
-$makeUrl = $router->makeUrl('page/index') // To create link
+$makeUrl = $this->router->makeUrl('page/index') // To create link
 var_dump($makeUrl); // yourPage.com/page/index
 
 $router->redirect('page/index'); // To redirect yourPage.com/page/index
 ```
 
-### Dframe\Session
+## Dframe\Session
 Methods
 ```php
 $session  = new Session('HashSaltRandomForSession');
@@ -130,5 +137,13 @@ License
 
 MIT
 
+
+
+### Tech
+
+* [Wrapper PDO] - PHP PDO Class Wrapper ! (Base class - modified)
+* [S.M.A.R.T.Y] - Default Template Engine (available: php, twig)
+
    [Wrapper PDO]: <https://github.com/neerajsinghsonu/PDO_Class_Wrapper>
    [S.M.A.R.T.Y]: <https://github.com/smarty-php/smarty>
+
