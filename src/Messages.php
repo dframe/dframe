@@ -1,5 +1,6 @@
 <?php
 namespace Dframe;
+use Dframe\BaseException;
 use Dframe\Session;
 use Dframe\Router;
 
@@ -46,17 +47,27 @@ class Messages
             return false;
 
         // Replace any shorthand codes with their full version
-        if( strlen(trim($type)) == 1 ) {
+        if( strlen(trim($type)) == 1 )
             $type = str_replace(array('h', 'i', 'w', 'e', 's'), array('help', 'info', 'warning', 'error', 'success'), $type);
         
-        // Backwards compatibility...
-        }elseif($type == 'information')
-            $type = 'info'; 
-        
-        
-        // Make sure it's a valid message type
-        if(!in_array($type, $this->msgTypes)) 
-            die('"' . strip_tags($type) . '" is not a valid message type!' );
+        try {
+            if(!in_array($type, $this->msgTypes))  // Make sure it's a valid message type
+                throw new BaseException('"' . strip_tags($type) . '" is not a valid message type!' , 501);
+
+        } catch(BaseException $e) {
+            if(ini_get('display_errors') == "on"){
+                echo $e->getMessage().'<br />
+                File: '.$e->getFile().'<br />
+                Code line: '.$e->getLine().'<br /> 
+                Trace: '.$e->getTraceAsString();
+                exit();
+            }
+
+            $routerConfig = Config::load('router');
+            header("HTTP/1.0 501 Not Implemented");
+            echo $e->getMessage();
+            exit();
+        }
 
         $get = $this->session->get('flash_messages');
         $get[$type][] = $message;
