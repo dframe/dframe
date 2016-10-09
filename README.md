@@ -114,7 +114,7 @@ interface interfaceView
  
     /**
      * Display JSONP.
-     * @param array $data Dane do wyświetlenia
+     * @param array $data
      */
     public function renderJSONP($data);
 
