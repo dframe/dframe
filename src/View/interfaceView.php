@@ -5,10 +5,10 @@ interface interfaceView
 {
 
     /**
-     * Przekazuje kod do szablonu
+     * Set the var to the template
      *
-     * @param string $name Nazwa pliku
-     * @param string $path Ścieżka do szablonu
+     * @param string $name 
+     * @param string $value
      *
      * @return void
      */
@@ -16,23 +16,29 @@ interface interfaceView
     public function assign($name, $value);
 
     /**
-     * Zwraca kod pliku
+     * Return code
+     *
+     * @param string $name - Filename
+     * @param string $path - Alternative Path
+     *
+     * @return void
+     */
      */
     public function fetch($name, $path=null);
 
     /**
-     * Zwykły include pliku.
+     * Include File
      */
-    public function renderInclude($name);
+    public function renderInclude($path);
      
     /**
-     * Wyświetla dane JSON.
-     * @param array $data Dane do wyświetlenia
+     * Display JSON.
+     * @param array $data
      */
     public function renderJSON($data);
  
     /**
-     * Wyświetla dane JSONP.
+     * Display JSONP.
      * @param array $data Dane do wyświetlenia
      */
     public function renderJSONP($data);
