@@ -1,3 +1,7 @@
+[Master]
+[Message] Wdrorzenie Dframe\Session dodanie obsługi przekierowania Dframe\Router
+[Session] Dodanie metody array_key_exists
+
 v3.23.2
 [example] Aktualizacja
 [src] Optymalizacja kodu
