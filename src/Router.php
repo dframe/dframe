@@ -30,22 +30,22 @@ class Router extends Core
     private $parsingArray;
     private $subdomain = false;
 
-	public function __construct(){
+    public function __construct(){
 
-		if(!defined('HTTP_HOST'))
-			define('HTTP_HOST', $_SERVER['HTTP_HOST']);
+        if(!defined('HTTP_HOST'))
+            define('HTTP_HOST', $_SERVER['HTTP_HOST']);
 
-		$aURI = explode('/', $_SERVER['SCRIPT_NAME']);
-		
-		array_pop($aURI);
-		$this->sURI = implode('/', $aURI).'/';
-		$this->sURI = str_replace('/web/', '/', $this->sURI);
+        $aURI = explode('/', $_SERVER['SCRIPT_NAME']);
+        
+        array_pop($aURI);
+        $this->sURI = implode('/', $aURI).'/';
+        $this->sURI = str_replace('/web/', '/', $this->sURI);
 
         $routerConfig = Config::load('router');
-		$this->aRouting = $routerConfig->get();
-		$this->aRoutingParse = $routerConfig->get();
+        $this->aRouting = $routerConfig->get();
+        $this->aRoutingParse = $routerConfig->get();
 
-	}
+    }
     
     // string||array (folder,)controller/action 
     // Sprawdzanie czy to jest aktualnie wybrana zakładka
@@ -85,37 +85,37 @@ class Router extends Core
 
 
     public function publicWeb($sUrl = null, $path = null){
-    	if(is_null($path))
-    		$path = $this->aRouting['publicWeb'];
+        if(is_null($path))
+            $path = $this->aRouting['publicWeb'];
 
         $sExpressionUrl = $sUrl;
-		$sUrl = 'http://'.HTTP_HOST.$this->sURI.$path;
-		$sUrl .= $sExpressionUrl;
-		
-		return $sUrl;
+        $sUrl = 'http://'.HTTP_HOST.$this->sURI.$path;
+        $sUrl .= $sExpressionUrl;
+        
+        return $sUrl;
     }
 
 
     
-	public function makeUrl($sUrl = null){
+    public function makeUrl($sUrl = null){
 
-		$aParamsHook = explode('#', $sUrl);
-		$aParams = explode('?', $aParamsHook[0]);
-		$aParams_ = explode('/', $aParams[0]);
-		$sTask = $aParams_[0];
+        $aParamsHook = explode('#', $sUrl);
+        $aParams = explode('?', $aParamsHook[0]);
+        $aParams_ = explode('/', $aParams[0]);
+        $sTask = $aParams_[0];
 
-		$sAction = null;
-		if(isset($aParams_[1]) AND !empty($aParams_[1])) 
-			$sAction = $aParams_[1];
+        $sAction = null;
+        if(isset($aParams_[1]) AND !empty($aParams_[1])) 
+            $sAction = $aParams_[1];
 
-		if(isset($aParams[1])) 
-			parse_str($aParams[1], $aParams);
-		else 
-			$aParams = array();
-		
-		if(MOD_REWRITE){
-			$sExpressionUrl = $sTask;
-			if(!empty($sAction))
+        if(isset($aParams[1])) 
+            parse_str($aParams[1], $aParams);
+        else 
+            $aParams = array();
+        
+        if(MOD_REWRITE){
+            $sExpressionUrl = $sTask;
+            if(!empty($sAction))
                 $sExpressionUrl = $sTask.'/'.$sAction;
 
             if(!empty($aParams)) {
@@ -126,143 +126,143 @@ class Router extends Core
                 $sExpressionUrl .= implode('&', $test);
             }
 
-		}else{
-			if(empty($sTask)){
-				$sExpressionUrl = '';
+        }else{
+            if(empty($sTask)){
+                $sExpressionUrl = '';
 
-			}else{
-			    $sExpressionUrl = 'index.php?task='.$sTask;
-			    if(!empty($sAction))
-			    	$sExpressionUrl = 'index.php?task='.$sTask.'&action='.$sAction;
+            }else{
+                $sExpressionUrl = 'index.php?task='.$sTask;
+                if(!empty($sAction))
+                    $sExpressionUrl = 'index.php?task='.$sTask.'&action='.$sAction;
     
     
-			    if(!empty($aParams)){
-			        foreach($aParams AS $k => $v){
-			        	$sExpressionUrl .= '&'.$k.'='.$v;
-			        }
-			    }
-			}
+                if(!empty($aParams)){
+                    foreach($aParams AS $k => $v){
+                        $sExpressionUrl .= '&'.$k.'='.$v;
+                    }
+                }
+            }
 
-		}
+        }
 
-		$HTTP_HOST = HTTP_HOST;
-		if(!empty($this->subdomain))
-			$HTTP_HOST = $this->subdomain.'.'.HTTP_HOST;
+        $HTTP_HOST = HTTP_HOST;
+        if(!empty($this->subdomain))
+            $HTTP_HOST = $this->subdomain.'.'.HTTP_HOST;
 
-		    $sUrl = 'http://' . $HTTP_HOST . $this->sURI;
+            $sUrl = 'http://' . $HTTP_HOST . $this->sURI;
 
-		$sUrl .= $sExpressionUrl;
+        $sUrl .= $sExpressionUrl;
 
-		return $sUrl;
-	}
+        return $sUrl;
+    }
 
 
-	private function parseParams($sRouting, $aParams){
-		$sReturn = null;
-		foreach($aParams AS $key => $value){
-			$sReturn .= str_replace(array('[name]', '[value]'), array($key, $value), $sRouting);
-		}
-		return $sReturn;
-	}
+    private function parseParams($sRouting, $aParams){
+        $sReturn = null;
+        foreach($aParams AS $key => $value){
+            $sReturn .= str_replace(array('[name]', '[value]'), array($key, $value), $sRouting);
+        }
+        return $sReturn;
+    }
 
-	public function parseGets(){
-		$routerConfig = Config::load('router');
-		
-		if(MOD_REWRITE){
+    public function parseGets(){
+        $routerConfig = Config::load('router');
+        
+        if(MOD_REWRITE){
 
-			$sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
-			if(substr($sRequest, -1)!='/')
-				$sRequest .= '/';
-			
+            $sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
+            if(substr($sRequest, -1)!='/')
+                $sRequest .= '/';
+            
 
-			$sGets = $this->parseUrl($sRequest);
-			parse_str($sGets, $aGets);
+            $sGets = $this->parseUrl($sRequest);
+            parse_str($sGets, $aGets);
 
-			$_GET['NAME_CONTROLLER'] = !empty($aGets['NAME_CONTROLLER'])?$aGets['NAME_CONTROLLER']:$routerConfig->get('NAME_CONTROLLER');
-			unset($aGets['NAME_CONTROLLER']);
+            $_GET['NAME_CONTROLLER'] = !empty($aGets['NAME_CONTROLLER'])?$aGets['NAME_CONTROLLER']:$routerConfig->get('NAME_CONTROLLER');
+            unset($aGets['NAME_CONTROLLER']);
 
-			$_GET['NAME_MODEL'] = !empty($aGets['NAME_MODEL'])?$aGets['NAME_MODEL']:$routerConfig->get('NAME_MODEL');;
-			unset($aGets['NAME_MODEL']);
+            $_GET['NAME_MODEL'] = !empty($aGets['NAME_MODEL'])?$aGets['NAME_MODEL']:$routerConfig->get('NAME_MODEL');;
+            unset($aGets['NAME_MODEL']);
 
-			$_GET = array_merge($_GET, $aGets);
+            $_GET = array_merge($_GET, $aGets);
 
-		}else{
+        }else{
 
-			$sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
-			if(substr($sRequest, 0, 1)=='?')
-				$sRequest = substr($sRequest, 1);
-			
-			$sGets = $sRequest;
+            $sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
+            if(substr($sRequest, 0, 1)=='?')
+                $sRequest = substr($sRequest, 1);
+            
+            $sGets = $sRequest;
 
             $sGets = str_replace("index.php?", "", $sGets);
             parse_str($sGets, $output);
 
-			$_GET['NAME_CONTROLLER'] = !empty($output['NAME_CONTROLLER'])?$output['NAME_CONTROLLER']:$routerConfig->get('NAME_CONTROLLER');;	
-			$_GET['NAME_MODEL'] = !empty($output['NAME_MODEL'])?$output['NAME_MODEL']:$routerConfig->get('NAME_MODEL');;
-			
-		}
-	}
+            $_GET['NAME_CONTROLLER'] = !empty($output['NAME_CONTROLLER'])?$output['NAME_CONTROLLER']:$routerConfig->get('NAME_CONTROLLER');;    
+            $_GET['NAME_MODEL'] = !empty($output['NAME_MODEL'])?$output['NAME_MODEL']:$routerConfig->get('NAME_MODEL');;
+            
+        }
+    }
 
-	private function parseUrl($sRequest){   
-		$sVars = null;
-		foreach($this->aRoutingParse AS $k => $v){
-			
-			preg_match_all('!\[(.+?)\]!ie', $v[0], $aExpression_);
-			$sExpression = preg_replace_callback('!\[(.+?)\]!ie', '$this->transformParam(\'$1\', \''.$k.'\')', $v[0]);
-			if(preg_match_all('!'.$sExpression.'!i', $sRequest, $aExpression__)){
+    private function parseUrl($sRequest){   
+        $sVars = null;
+        foreach($this->aRoutingParse AS $k => $v){
+            
+            preg_match_all('!\[(.+?)\]!ie', $v[0], $aExpression_);
+            $sExpression = preg_replace_callback('!\[(.+?)\]!ie', '$this->transformParam(\'$1\', \''.$k.'\')', $v[0]);
+            if(preg_match_all('!'.$sExpression.'!i', $sRequest, $aExpression__)){
 
-				foreach($aExpression__ AS $k_ => $v_){
-					foreach($v_ AS $kkk => $vvv){
+                foreach($aExpression__ AS $k_ => $v_){
+                    foreach($v_ AS $kkk => $vvv){
 
-						if(!isset($aExpression_[1][$k_-1]))
-							$aExpression_[1][$k_-1] = null;
-						
-						if($kkk>0)
-							$aExpression[] = array($aExpression_[1][$k_-1].'_'.$kkk, $vvv);
-						else
-							$aExpression[] = array($aExpression_[1][$k_-1], $vvv);
-					
-					}
-				}
-				unset($aExpression[0]);
-				$iCount = count($aExpression__[0]);
-				if($iCount>1){
-					for($i=0;$i<$iCount;$i++){
-						if($i>0)
-							$sVars .= '&'.preg_replace_callback('!\[(.+?)\]!i', '[$1_'.$i.']', $v[1]);
-						else
-							$sVars = '&'.$v[1];						
-					}
+                        if(!isset($aExpression_[1][$k_-1]))
+                            $aExpression_[1][$k_-1] = null;
+                        
+                        if($kkk>0)
+                            $aExpression[] = array($aExpression_[1][$k_-1].'_'.$kkk, $vvv);
+                        else
+                            $aExpression[] = array($aExpression_[1][$k_-1], $vvv);
+                    
+                    }
+                }
+                unset($aExpression[0]);
+                $iCount = count($aExpression__[0]);
+                if($iCount>1){
+                    for($i=0;$i<$iCount;$i++){
+                        if($i>0)
+                            $sVars .= '&'.preg_replace_callback('!\[(.+?)\]!i', '[$1_'.$i.']', $v[1]);
+                        else
+                            $sVars = '&'.$v[1];                        
+                    }
 
-				}else				
-					$sVars = '&'.$v[1];
-			
-				foreach($aExpression AS $k => $v_){
-					if(!isset($v['_'.$v_[0]]))
-						$v['_'.$v_[0]] = null;
-					
-					if(!is_array($v['_'.$v_[0]]))
-						$sVars = str_replace('['.$v_[0].']', $v_[1], $sVars);
-						
-					else {
-						$this->aRoutingParse = array($v['_'.$v_[0]]);
-						$sVars = $sVars.$this->parseUrl($v_[1]);
+                }else                
+                    $sVars = '&'.$v[1];
+            
+                foreach($aExpression AS $k => $v_){
+                    if(!isset($v['_'.$v_[0]]))
+                        $v['_'.$v_[0]] = null;
+                    
+                    if(!is_array($v['_'.$v_[0]]))
+                        $sVars = str_replace('['.$v_[0].']', $v_[1], $sVars);
+                        
+                    else {
+                        $this->aRoutingParse = array($v['_'.$v_[0]]);
+                        $sVars = $sVars.$this->parseUrl($v_[1]);
 
-					}
-				}				
-				break;
-			}
-		}	
+                    }
+                }                
+                break;
+            }
+        }    
 
-		return $sVars;
-	}
-	private function transformParam($sParam, $k){
-		if(isset($this->aRouting[$k][$sParam]) AND !is_array($this->aRouting[$k][$sParam]))
-			return $this->aRouting[$k][$sParam];
-		else 
-		    return '(.+?)';
-		
-	}
+        return $sVars;
+    }
+    private function transformParam($sParam, $k){
+        if(isset($this->aRouting[$k][$sParam]) AND !is_array($this->aRouting[$k][$sParam]))
+            return $this->aRouting[$k][$sParam];
+        else 
+            return '(.+?)';
+        
+    }
 
     /**
      * Przekierowanie adresu 
@@ -272,14 +272,14 @@ class Router extends Core
      * @return void
      */
     
-	public function redirect($url = '') {
+    public function redirect($url = '') {
         header("Location: ".$this->makeUrl($url));
         exit();
     }
 
     public function subdomain($subdomain){
-    	$this->subdomain = $subdomain;
-    	return $this;
-    	
+        $this->subdomain = $subdomain;
+        return $this;
+        
     }
 }

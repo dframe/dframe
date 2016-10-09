@@ -37,7 +37,7 @@ abstract class Model extends Core
         if(!is_array($errors))
             $errors = array($errors);
         
-    	return $this->methodResult(false, array('errors' => $errors));
+        return $this->methodResult(false, array('errors' => $errors));
     }
       
     public function init() {}

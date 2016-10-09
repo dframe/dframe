@@ -44,21 +44,21 @@ class Core
      *   Metoda do includowania pliku modelu i wywołanie objektu przez namespace
     */
     public function loadModel($name){
-    	return $this->loadObject($name, 'Model');
+        return $this->loadObject($name, 'Model');
     }
 
     /*
      *   Metoda do includowania pliku widoku i wywołanie objektu przez namespace
     */
     public function loadView($name){
-    	return $this->loadObject($name, 'View');
+        return $this->loadObject($name, 'View');
 
     }
 
     private function loadObject($name, $type){
 
-    	if(!in_array($type, (array('Model', 'View'))))
-    		return false;
+        if(!in_array($type, (array('Model', 'View'))))
+            return false;
 
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
@@ -70,7 +70,7 @@ class Core
         if(!empty($folder))
             $name = '\\'.$type.'\\'.str_replace(array('\\', '/'), '\\', $folder).$name.$type;   
         else
-        	$name = '\\'.$type.'\\'.$name.$type;
+            $name = '\\'.$type.'\\'.$name.$type;
 
         try {
             if(is_file($path)) {

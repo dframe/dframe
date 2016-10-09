@@ -22,13 +22,13 @@ namespace Dframe;
 
 class Session
 {
-	
-	function __construct($session_name){
+    
+    function __construct($session_name){
         if(!isset($_SESSION)){
            session_name($session_name);
            session_start();
         }
-	}
+    }
 
     public function register($time = 60){
         $_SESSION['session_id'] = session_id();

@@ -74,12 +74,12 @@ class smartyView implements \Dframe\View\interfaceView
      */
     public function renderInclude($name, $path=null) {
 
-    	$smartyConfig = Config::load('view/smarty');
-		
-		$pathFile = pathFile($name);
+        $smartyConfig = Config::load('view/smarty');
+        
+        $pathFile = pathFile($name);
         $folder = $pathFile[0];
         $name = $pathFile[1];
-		
+        
         $path= $smartyConfig->get('setTemplateDir').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
         try {
             if(is_file($path))

@@ -39,10 +39,10 @@ class Loader extends Core
 
             $routerConfig = Config::load('router');
             if(empty($_GET['task']))
-            	$_GET['task'] = $routerConfig->get('NAME_CONTROLLER');
+                $_GET['task'] = $routerConfig->get('NAME_CONTROLLER');
     
             if(empty($_GET['action']))
-            	$_GET['action'] = $routerConfig->get('NAME_MODEL');
+                $_GET['action'] = $routerConfig->get('NAME_MODEL');
             
             $this->controller = $_GET['task'];
             $this->action = $_GET['action'];
@@ -79,7 +79,7 @@ class Loader extends Core
         try {
 
             if(!class_exists('\Controller\\'.$xsubControler.''.$this->controller.'Controller'))
-        	    throw new BaseException('Bad controller error');
+                throw new BaseException('Bad controller error');
 
         }catch(BaseException $e) {
 
@@ -90,7 +90,7 @@ class Loader extends Core
                 Trace: '.$e->getTraceAsString();
                 exit();
             }else{
-            	$routerConfig = Config::load('router');
+                $routerConfig = Config::load('router');
                 header("HTTP/1.0 404 Not Found");
                 $this->router->redirect($routerConfig->get('404'));
                 return 1;

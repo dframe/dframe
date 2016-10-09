@@ -10,14 +10,14 @@ use \Dframe\Config;
 
 class twigView implements \Dframe\View\interfaceView
 {
-	public $assigns = array();
+    public $assigns = array();
 
     public function __construct(){
         $twigConfig = Config::load('view/twig');
 
         $loader = new \Twig_Loader_Filesystem($twigConfig->get('setTemplateDir'));
         $twig = new \Twig_Environment($loader, array(
-        	'cache' => $twigConfig->get('setCompileDir'),
+            'cache' => $twigConfig->get('setCompileDir'),
         ));
 
         $this->twig = $twig;
@@ -42,7 +42,7 @@ class twigView implements \Dframe\View\interfaceView
     }
 
     public function fetch($name, $path=null) {
-    	throw new \Exception('This module dont have fetch');
+        throw new \Exception('This module dont have fetch');
     } 
 
     /**
@@ -55,7 +55,7 @@ class twigView implements \Dframe\View\interfaceView
      */
     public function renderInclude($name, $path=null) {
 
-    	$twigConfig = Config::load('twig');
+        $twigConfig = Config::load('twig');
 
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
