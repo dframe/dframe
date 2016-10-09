@@ -132,6 +132,27 @@ $session->get($key, $or = null); // get $_SESSION[$key];
 $session->remove($key) // unset($_SESSION[$key]);
 $session->end(); // session_destroy
 ```
+
+## Dframe\Messages
+Is a helpful class It helps to quickly add to the session messages that may display user
+message Type: error, success, warning, info
+
+Methods
+```php
+$msg = new Messages(new Session('HashSaltRandomForSession')); // Join the current session
+$msg->add('s', 'Success Message!');
+
+$msg->hasMessages('success'): // Will return array['success']
+$msg->hasMessages(): // Will return all array
+
+$msg->clear('success'); // remove success msg
+$msg->clear(); // remove all msg
+
+
+var_dump($msg->display('success'));
+```
+
+
 License
 ----
 
