@@ -45,8 +45,8 @@ Class taskForRouterController extends \Controller\Controller
          $getId = $exampleModel->getId($_GET['id']); #Call method
          $view->assign('varForSmarty', $getId); #Set variable to view
          $view->render('exampleNameFile'); #Generate view app/View/templates/exampleNameFile.tpl
-        }
     }
+}
 
 
 ```
@@ -124,14 +124,13 @@ S.M.A.R.T.Y example
 View/templates/exampleNameFile.hmtl.php:
 ```html
 <html>
-	<head>
-		<title>SmartyNews!</title>
-</head>
+    <head>
+        <title>SmartyNews!</title>
+    </head>
 <body>
-	<h3>{$varForSmarty.title}</h3>
- 	<p>Napisał {$varForSmarty.autor} dnia {$varForSmarty.data}</p>
-	<p>{$varForSmarty.description|truncate:200:"..."}</p> 
-
+    <h3>{$varForSmarty.title}</h3>
+    <p>Napisał {$varForSmarty.autor} dnia {$varForSmarty.data}</p>
+    <p>{$varForSmarty.description|truncate:200:"..."}</p>
 </body>
 </html>
 ```
