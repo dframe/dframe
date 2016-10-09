@@ -23,6 +23,7 @@ Before run add to .htaccess
 RewriteEngine On
 RewriteCond %{REQUEST_URI} !web/
 RewriteRule (.*) web/$1 [L]
+RewriteRule ^web/([^/]*)/([^/]*)$ web/index.php?task=$1&action=$2 [L]
 ```
 
 ### Overview
