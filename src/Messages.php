@@ -1,7 +1,7 @@
 <?php
 namespace Dframe;
-use \Dframe\Session;
-use \Dframe\Router;
+use Dframe\Session;
+use Dframe\Router;
 
 /**
  * Session-Based Flash Messages

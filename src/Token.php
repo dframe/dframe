@@ -1,6 +1,6 @@
 <?php
 namespace Dframe;
-use \Dframe\Session;
+use Dframe\Session;
 
 /**
  * Copyright (C) 2016  
