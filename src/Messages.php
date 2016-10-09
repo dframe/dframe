@@ -1,6 +1,7 @@
 <?php
 namespace Dframe;
 use \Dframe\Session;
+use \Dframe\Router;
 
 /**
  * Session-Based Flash Messages
@@ -34,12 +35,12 @@ class Messages
      * 
      * @param  string   $type           The type of message to add
      * @param  string   $message        The message
-     * @param  string   $redirect_to    (optional) If set, the user will be redirected to this URL
+     * @param  string   $redirect    (optional) If set, the user will be redirected to this URL
      * @return  bool 
      * 
      */
 
-    public function add($type, $message, $redirect_to=null) {
+    public function add($type, $message, $redirect=null) {
 
         if(!isset($type) OR !isset($message[0])) 
             return false;
@@ -61,8 +62,9 @@ class Messages
         $get[$type][] = $message;
         $this->session->set('flash_messages', $get);
 
-        if(!is_null($redirect_to)) {
-            header("Location: $redirect_to");
+        if(!is_null($redirect)) {
+            $router = new Router();
+            $router->redirect($redirect);
             exit();
         }
         
