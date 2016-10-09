@@ -38,7 +38,7 @@ if(method_exists($controller, $_GET['action']))
     $controller->$_GET['action']();
 else 
     if(method_exists($controller, 'page'))
-	    $controller->page();
+        $controller->page();
 
 if(method_exists($controller, 'end'))
     $controller->end();

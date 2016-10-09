@@ -18,6 +18,6 @@ class indexView extends \View\View
         if($this->baseClass->msg->hasMessages('info')) 
             $this->assign('msgInfo', $this->baseClass->msg->display('info'));
 
-	}
+    }
 
 }
