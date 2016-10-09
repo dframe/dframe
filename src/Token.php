@@ -57,7 +57,7 @@ class Token
 	}
 	
 	public function getToken($name) {
-        if(isset($this->token[$name]) && $this->getTime($name) >= time())
+        if(isset($this->token[$name]) AND $this->getTime($name) >= time())
             return $this->token[$name];
 
         return $this->generate($name)->token[$name];

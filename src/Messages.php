@@ -1,239 +1,197 @@
 <?php
 namespace Dframe;
-//--------------------------------------------------------------------------------------------------
-// Session-Based Flash Messages v1.0
-// Copyright 2012 Mike Everhart (http://mikeeverhart.net)
-// Edit by Sławomir Kaleta
-//
-//   Licensed under the Apache License, Version 2.0 (the "License");
-//   you may not use this file except in compliance with the License.
-//   You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-//   Unless required by applicable law or agreed to in writing, software
-//   distributed under the License is distributed on an "AS IS" BASIS,
-//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//   See the License for the specific language governing permissions and
-//	 limitations under the License.
-//	 
-//------------------------------------------------------------------------------
-// Description:
-//------------------------------------------------------------------------------
-//
-//	Stores messages in Session data to be easily retrieved later on.
-// 	This class includes four different types of messages:
-//  - Success
-//  - Error
-//  - Warning
-//  - Information
-// 
-//  See README for basic usage instructions, or see samples/index.php for more advanced samples
-//
-//--------------------------------------------------------------------------------------------------
-// Changelog
-//--------------------------------------------------------------------------------------------------
-// 
-//	2011-05-15 - v1.0 - Initial Version
-//  2016-06-26 - v2.0 - Poprawa i optymalizacja kodu
-//
-//--------------------------------------------------------------------------------------------------
+use \Dframe\Session;
+
+/**
+ * Session-Based Flash Messages
+ * 
+ * Original @author Mike Everhart
+ * @author Sławomir Kaleta
+ *
+ */
 
 class Messages 
 {
-	
-	//-----------------------------------------------------------------------------------------------
-	// Class Variables
-	//-----------------------------------------------------------------------------------------------	
-	public $msgId;
-	public $msgTypes = array( 'help', 'info', 'warning', 'success', 'error' );
 
-	
-	/**
-	 * Constructor
-	 * @author Mike Everhart
-	 */
-	public function __construct() {
-	
-		// Generate a unique ID for this user and session
-		$this->msgId = md5(uniqid());
-		
-		// Create the session array if it doesnt already exist
-		if( !array_key_exists('flash_messages', $_SESSION) ) 
-			$_SESSION['flash_messages'] = array();
-		
-	}
-	
-	/**
-	 * Add a message to the queue
-	 * 
-	 * @author Mike Everhart
-	 * 
-	 * @param  string   $type        	The type of message to add
-	 * @param  string   $message     	The message
-	 * @param  string   $redirect_to 	(optional) If set, the user will be redirected to this URL
-	 * @return  bool 
-	 * 
-	 */
-	public function add($type, $message, $redirect_to=null) {
-		
-		if(!isset($_SESSION['flash_messages'])) 
-			return false;
-		
-		if(!isset($type) OR !isset($message[0])) 
-			return false;
+    public $msgId;
+    public $msgTypes = array('help', 'info', 'warning', 'success', 'error');
 
-		// Replace any shorthand codes with their full version
-		if( strlen(trim($type)) == 1 ) {
-			$type = str_replace( array('h', 'i', 'w', 'e', 's'), array('help', 'info', 'warning', 'error', 'success'), $type );
-		
-		// Backwards compatibility...
-		}elseif($type == 'information')
-			$type = 'info';	
-		
-		
-		// Make sure it's a valid message type
-		if(!in_array($type, $this->msgTypes)) 
-			die('"' . strip_tags($type) . '" is not a valid message type!' );
-		
-		// If the session array doesn't exist, create it
-		if(!array_key_exists( $type, $_SESSION['flash_messages'])) 
-			$_SESSION['flash_messages'][$type] = array();
-		
-		$_SESSION['flash_messages'][$type][] = $message;
+    
+    public function __construct(Session $session) {
+        $this->session = $session;
 
-		if(!is_null($redirect_to)) {
-			header("Location: $redirect_to");
-			exit();
-		}
-		
-		return true;
-	}
-	
-	//-----------------------------------------------------------------------------------------------
-	// display()
-	// print queued messages to the screen
-	//-----------------------------------------------------------------------------------------------
-	/**
-	 * Display the queued messages
-	 * 
-	 * @author Mike Everhart
-	 * 
-	 * @param  string   $type     Which messages to display
-	 * @param  bool  	$print    True  = print the messages on the screen
-	 * @return mixed              
-	 * 
-	 */
-	public function display($type='all', $print=false) {
-		$messages = '';
-		$data = '';
-		
-		if(!isset($_SESSION['flash_messages'])) 
-			return false;
-		
-		if($type == 'g' OR $type == 'growl'){
-			$this->displayGrowlMessages();
-			return true;
-		}
-		
-		// Print a certain type of message?
-		if(in_array($type, $this->msgTypes)){
-			foreach( $_SESSION['flash_messages'][$type] as $msg ){
-				$messages .= $msg;
-			}
+        // Generate a unique ID for this user and session
+        $this->msgId = md5(uniqid());
 
-			$data .= $messages;
-			
-			// Clear the viewed messages
-			$this->clear($type);
-		
-		// Print ALL queued messages
-		}elseif( $type == 'all' ){
-			foreach( $_SESSION['flash_messages'] as $type => $msgArray ){
-				$messages = '';
-				foreach( $msgArray as $msg ) {
-					$messages .= $msg;	
-				}
-				$data .= $messages;
-			}
-			
-			// Clear ALL of the messages
-			$this->clear();
-		
-		// Invalid Message Type?
-		}else 
-			return false;
-		
-		// Print everything to the screen or return the data
-		if($print)
-			echo $data; 
-		else
-			return $data;
-	}
-	
-	
-	/**
-	 * Check to  see if there are any queued error messages
-	 * 
-	 * @author Mike Everhart
-	 * 
-	 * @return bool  true  = There ARE error messages
-	 *               false = There are NOT any error messages
-	 * 
-	 */
-	public function hasErrors() { 
-		return empty($_SESSION['flash_messages']['error']) ? false : true;	
-	}
-	
-	/**
-	 * Check to see if there are any ($type) messages queued
-	 * 
-	 * @author Mike Everhart
-	 * 
-	 * @param  string   $type     The type of messages to check for
-	 * @return bool            	  
-	 * 
-	 */
-	public function hasMessages($type=null) {
-		if(!is_null($type)){
-			if(!empty($_SESSION['flash_messages'][$type])) 
-				return $_SESSION['flash_messages'][$type];	
+        $keyExists = $this->session->keyExists('flash_messages');
+        if($keyExists == false)
+            $this->session->set('flash_messages', array());
+    
+    }
+    
+    /**
+     * Add a message to the queue
+     * 
+     * @param  string   $type           The type of message to add
+     * @param  string   $message        The message
+     * @param  string   $redirect_to    (optional) If set, the user will be redirected to this URL
+     * @return  bool 
+     * 
+     */
 
-		}else {
-			foreach($this->msgTypes as $type){
-				if(!empty($_SESSION['flash_messages'][$type])) 
-					return true;	
-			}
-		}
+    public function add($type, $message, $redirect_to=null) {
 
-		return false;
-	}
-	
-	/**
-	 * Clear messages from the session data
-	 * 
-	 * @author Mike Everhart
-	 * 
-	 * @param  string   $type     The type of messages to clear
-	 * @return bool 
-	 * 
-	 */
-	public function clear($type='all') { 
-		if( $type == 'all')
-			unset($_SESSION['flash_messages']); 
-		else
-			unset($_SESSION['flash_messages'][$type]);
-		
-		return true;
-	}
-	
-	public function __toString() { 
-		return $this->hasMessages();	
-	}
+        if(!isset($type) OR !isset($message[0])) 
+            return false;
 
-	public function __destruct() {
-		//$this->clear();
-	}
+        // Replace any shorthand codes with their full version
+        if( strlen(trim($type)) == 1 ) {
+            $type = str_replace(array('h', 'i', 'w', 'e', 's'), array('help', 'info', 'warning', 'error', 'success'), $type);
+        
+        // Backwards compatibility...
+        }elseif($type == 'information')
+            $type = 'info'; 
+        
+        
+        // Make sure it's a valid message type
+        if(!in_array($type, $this->msgTypes)) 
+            die('"' . strip_tags($type) . '" is not a valid message type!' );
 
+        $get = $this->session->get('flash_messages');
+        $get[$type][] = $message;
+        $this->session->set('flash_messages', $get);
 
-} // end class
+        if(!is_null($redirect_to)) {
+            header("Location: $redirect_to");
+            exit();
+        }
+        
+        return true;
+    }
+    
+    //-----------------------------------------------------------------------------------------------
+    // display()
+    // print queued messages to the screen
+    //-----------------------------------------------------------------------------------------------
+    /**
+     * Display the queued messages
+     * 
+     * @param  string   $type     Which messages to display
+     * @param  bool     $print    True  = print the messages on the screen
+     * @return mixed              
+     * 
+     */
+
+    public function display($type='all', $print=false) {
+        $messages = '';
+        $data = '';
+        
+        if($type == 'g' OR $type == 'growl'){
+            $this->displayGrowlMessages();
+            return true;
+        }
+        
+        // Print a certain type of message?
+        if(in_array($type, $this->msgTypes)){
+
+            $flashMessages = $this->session->get('flash_messages');
+            foreach($flashMessages[$type] as $msg ){
+                $messages .= $msg;
+            }
+
+            $data .= $messages;
+            
+            // Clear the viewed messages
+            $this->clear($type);
+        
+        // Print ALL queued messages
+        }elseif( $type == 'all' ){
+            $flashMessages = $this->session->get('flash_messages');
+            foreach($flashMessages as $type => $msgArray ){
+                $messages = '';
+                foreach( $msgArray as $msg ) {
+                    $messages .= $msg;  
+                }
+                $data .= $messages;
+            }
+            
+            // Clear ALL of the messages
+            $this->clear();
+        
+        // Invalid Message Type?
+        }else 
+            return false;
+        
+        // Print everything to the screen or return the data
+        if($print)
+            echo $data; 
+        else
+            return $data;
+    }
+    
+    
+    /**
+     * Check to  see if there are any queued error messages
+     * 
+     * @return bool  true  = There ARE error messages
+     *               false = There are NOT any error messages
+     * 
+     */
+
+    public function hasErrors() {
+        $flashMessages = $this->session->get('flash_messages');
+        return empty($flashMessages['error']) ? false : true;   
+    }
+    
+    /**
+     * Check to see if there are any ($type) messages queued
+     * 
+     * @param  string   $type     The type of messages to check for
+     * @return bool               
+     * 
+     */
+    public function hasMessages($type=null) {
+        if(!is_null($type)){
+            $flashMessages = $this->session->get('flash_messages');
+            if(!empty($flashMessages[$type])) 
+                return $flashMessages[$type];   
+
+        }else {
+            $flashMessages = $this->session->get('flash_messages');
+            foreach($this->msgTypes as $type){
+                if(!empty($flashMessages[$type])) 
+                    return true;    
+            }
+        }
+
+        return false;
+    }
+    
+    /**
+     * Clear messages from the session data
+     * 
+     * @param  string   $type     The type of messages to clear
+     * @return bool 
+     * 
+     */
+    public function clear($type='all') { 
+        if($type == 'all')
+            $this->session->remove('flash_messages');
+        else{
+            $flashMessages = $this->session->get('flash_messages');
+            unset($flashMessages[$type]);
+            $this->session->set('flash_messages', $flashMessages);
+        }
+        
+        return true;
+    }
+    
+    public function __toString() { 
+        return $this->hasMessages();    
+    }
+
+    public function __destruct() {
+        $this->clear();
+    }
+
+}
