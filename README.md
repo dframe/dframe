@@ -73,6 +73,57 @@ Class exampleModel extends Model\Model
 **3. View** 
 receiving data from Controller and can display more advanced template. You dont have to use view if you using dframe only for **xml**/**json**/**jsonp** it can do controler without templates files
 
+You can use **php**, **twig**, **smarty* or write own View engine 
+
+```php
+<?php
+namespace Dframe\View;
+
+interface interfaceView
+{
+
+    /**
+     * Set the var to the template
+     *
+     * @param string $name 
+     * @param string $value
+     *
+     * @return void
+     */
+
+    public function assign($name, $value);
+
+    /**
+     * Return code
+     *
+     * @param string $name - Filename
+     * @param string $path - Alternative Path
+     *
+     * @return void
+     */
+     */
+    public function fetch($name, $path=null);
+
+    /**
+     * Include File
+     */
+    public function renderInclude($path);
+     
+    /**
+     * Display JSON.
+     * @param array $data
+     */
+    public function renderJSON($data);
+ 
+    /**
+     * Display JSONP.
+     * @param array $data Dane do wyświetlenia
+     */
+    public function renderJSONP($data);
+
+}
+```
+S.M.A.R.T.Y example
 View/templates/exampleNameFile.hmtl.php:
 ```html
 <html>
