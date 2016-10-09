@@ -1,5 +1,6 @@
 <?php
 namespace Dframe;
+use Dframe\BaseException;
 
 /**
  * Copyright (C) 2016  
@@ -27,7 +28,7 @@ abstract class View extends Core implements \Dframe\View\interfaceView
         parent::__construct($baseClass);
         
         if(!isset($this->view))
-           throw new \Exception('Please Define view engine in app/View.php');
+           throw new BaseException('Please Define view engine in app/View.php', 500);
     }
 
     public function assign($name, $value) {

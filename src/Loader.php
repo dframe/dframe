@@ -1,5 +1,6 @@
 <?php
 namespace Dframe;
+use Dframe\BaseException;
 use Dframe\Config;
 
 /**
@@ -82,20 +83,18 @@ class Loader extends Core
                 throw new BaseException('Bad controller error');
 
         }catch(BaseException $e) {
-
             if(ini_get('display_errors') == "on"){
                 echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
                 Code line: '.$e->getLine().'<br /> 
                 Trace: '.$e->getTraceAsString();
                 exit();
-            }else{
-                $routerConfig = Config::load('router');
-                header("HTTP/1.0 404 Not Found");
-                $this->router->redirect($routerConfig->get('404'));
-                return 1;
             }
 
+            $routerConfig = Config::load('router');
+            header("HTTP/1.0 404 Not Found");
+            $this->router->redirect($routerConfig->get('404'));
+            exit();
         }
         
         

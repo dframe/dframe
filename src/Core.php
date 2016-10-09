@@ -1,5 +1,6 @@
 <?php
 namespace Dframe;
+use Dframe\BaseException;
 use Dframe\Router;
 
 /**
@@ -27,10 +28,10 @@ class Core
     
     public function __construct($bootstrap =null){
         if(!defined('appDir'))
-           throw new \Exception('Please Define appDir in Main config.php');
+           throw new BaseException('Please Define appDir in Main config.php', 500);
 
         if(!defined('SALT'))
-           throw new \Exception('Please Define SALT in Main config.php');
+           throw new BaseException('Please Define SALT in Main config.php', 500);
 
         if($bootstrap != null){
             $this->baseClass = $bootstrap;
@@ -78,14 +79,21 @@ class Core
                 $ob = new $name($this->baseClass);
                 $ob->init();
             }else
-                throw new \Exception('Can not open '.$type.' '.$name.' in: '.$path);
+                throw new BaseException('Can not open '.$type.' '.$name.' in: '.$path);
            
         }
-        catch(\Exception $e) {
-            echo $e->getMessage().'<br />
+        catch(BaseException $e) {
+            if(ini_get('display_errors') == "on"){
+                echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
-                Code line: '.$e->getLine().'<br />
+                Code line: '.$e->getLine().'<br /> 
                 Trace: '.$e->getTraceAsString();
+                exit();
+            }
+
+            $routerConfig = Config::load('router');
+            header("HTTP/1.0 400 Bad Request");
+            echo $e->getMessage();
             exit();
         }
 
