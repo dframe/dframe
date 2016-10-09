@@ -63,8 +63,8 @@ Class exampleModel extends Model\Model
 {
     public function getId($id){
         /* getId(int)
-	 * return array();
-	 */
+         * return array();
+         */
         return $this->baseClass->db->pdoQuery('SELECT * FROM table WHERE id=? LIMIT 1', array($id))->results();
     }
 }
