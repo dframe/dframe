@@ -29,12 +29,12 @@ namespace Controller;
 Class taskForRouterController extends \Controller\Controller
 {
     public function ActionForRouter(){
-         $exampleModel = $this->loadModel('example'); #Załadowanie Modelu
-         $view = $this->loadView('index'); #Ładowanie Widoku
+         $exampleModel = $this->loadModel('example'); #Load model
+         $view = $this->loadView('index'); #Load view
          
-         $getId = $exampleModel->getId($_GET['id']); #Wywołanie metody 
-         $view->assign('varForSmarty', $getId); #Przekazanie zmiennej do view
-         $view->render('exampleNameFile'); #Wygenerowanie pliku app/View/templates/exampleNameFile.tpl
+         $getId = $exampleModel->getId($_GET['id']); #Call method
+         $view->assign('varForSmarty', $getId); #Set variable to view
+         $view->render('exampleNameFile'); #Generate view app/View/templates/exampleNameFile.tpl
         }
     }
 
@@ -52,6 +52,9 @@ namespace Model;
 Class exampleModel extends Model\Model
 {
     public function getId($id){
+        /* getId(int)
+	 * return array();
+	 */
         return $this->baseClass->db->pdoQuery('SELECT * FROM table WHERE id=? LIMIT 1', array($id))->results();
     }
 }
