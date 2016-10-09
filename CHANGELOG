@@ -1,6 +1,7 @@
 [Master]
 [Message] Wdrorzenie Dframe\Session dodanie obsługi przekierowania Dframe\Router
 [Session] Dodanie metody array_key_exists
+[Config, Core,View, Loader, Message] implementacja BaseException 
 [src] Zamiana tabulatorów na spacje
 
 v3.23.2
