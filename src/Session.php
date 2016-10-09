@@ -38,7 +38,6 @@ class Session
     public function authLogin(){
         if(!empty($_SESSION['session_id']))
             return true;
-
         else 
             return false;
 

@@ -39,10 +39,8 @@ abstract class View extends Core implements \Dframe\View\interfaceView
 
         if(empty($type) OR $type == 'html')
             $this->view->renderInclude($data);
-        
         elseif($type == 'jsonp')
             $this->view->renderJSONP($data);
-
         else
             $this->view->renderJSON($data);
                

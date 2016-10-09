@@ -83,7 +83,6 @@ class Router extends Core
         return false;
     }
 
-
     public function publicWeb($sUrl = null, $path = null){
         if(is_null($path))
             $path = $this->aRouting['publicWeb'];
@@ -95,8 +94,6 @@ class Router extends Core
         return $sUrl;
     }
 
-
-    
     public function makeUrl($sUrl = null){
 
         $aParamsHook = explode('#', $sUrl);
@@ -156,7 +153,6 @@ class Router extends Core
         return $sUrl;
     }
 
-
     private function parseParams($sRouting, $aParams){
         $sReturn = null;
         foreach($aParams AS $key => $value){
@@ -201,6 +197,7 @@ class Router extends Core
             $_GET['NAME_MODEL'] = !empty($output['NAME_MODEL'])?$output['NAME_MODEL']:$routerConfig->get('NAME_MODEL');;
             
         }
+
     }
 
     private function parseUrl($sRequest){   
@@ -256,12 +253,13 @@ class Router extends Core
 
         return $sVars;
     }
+
     private function transformParam($sParam, $k){
         if(isset($this->aRouting[$k][$sParam]) AND !is_array($this->aRouting[$k][$sParam]))
             return $this->aRouting[$k][$sParam];
         else 
             return '(.+?)';
-        
+
     }
 
     /**
@@ -271,7 +269,7 @@ class Router extends Core
      *
      * @return void
      */
-    
+
     public function redirect($url = '') {
         header("Location: ".$this->makeUrl($url));
         exit();

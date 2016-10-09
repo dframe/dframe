@@ -30,10 +30,6 @@ class Loader extends Core
     private $urlvalues;
     public $bootstrap;
 
-    //public function __construct($bootstrap){
-    //    $this->baseClass = $bootstrap;
-    //}
-    
     // Establish the requested controller as an object
     public function CreateController($controller = null, $action = null){
         if(is_null($controller) AND is_null($action)){
@@ -51,8 +47,8 @@ class Loader extends Core
         }else{
             $this->controller = $controller;
             $this->action = $action;
-        }
 
+        }
 
         if(strstr($this->controller, ",") !== False){
 

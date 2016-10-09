@@ -24,12 +24,11 @@ use Dframe\Session;
 
 class Token
 {
+
     protected $session;
-    
     protected $token = array();
-    
     protected $time = array();
-    
+
     // Tylko dla obiektu \Dframe\Session
     public function __construct(Session $session) {
         $this->session = $session;
@@ -90,6 +89,7 @@ class Token
         if($this->getToken($name) === $token) {
             if($remove === true)
                 $this->remove($name);
+            
             return true;
         }
         

@@ -99,11 +99,6 @@ class Messages
         $messages = '';
         $data = '';
         
-        if($type == 'g' OR $type == 'growl'){
-            $this->displayGrowlMessages();
-            return true;
-        }
-        
         // Print a certain type of message?
         if(in_array($type, $this->msgTypes)){
 

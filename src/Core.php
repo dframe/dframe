@@ -81,8 +81,7 @@ class Core
             }else
                 throw new BaseException('Can not open '.$type.' '.$name.' in: '.$path);
            
-        }
-        catch(BaseException $e) {
+        }catch(BaseException $e) {
             if(ini_get('display_errors') == "on"){
                 echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
