@@ -23,7 +23,6 @@ interface interfaceView
      *
      * @return void
      */
-     */
     public function fetch($name, $path=null);
 
     /**
