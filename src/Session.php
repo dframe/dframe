@@ -46,9 +46,11 @@ class Session
     public function keyExists($key, $in = false){
         if(isset($in))
             $in = $_SESSION;
+
+        if(array_key_exists($key, $in) == true)
+            return true;
         
-        if(!array_key_exists($key, $in))    
-            return false;
+        return false;
     }
     
     public function set($key, $value){
