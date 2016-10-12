@@ -74,10 +74,11 @@ class Token
     }
     
     public function setTime($name, $time) {
-        if(isset($this->token[$name])) {
+        if(isset($this->token[$name])){
             $this->time[$name] = intval($time);
             $this->session->set('timeToken', $this->time);
         }
+
         return $this;
     }
     
@@ -85,9 +86,9 @@ class Token
         return isset($this->time[$name]) ? $this->time[$name] : null;
     }
     
-    public function isValid($name, $token, $remove = true) {
-        if($this->getToken($name) === $token) {
-            if($remove === true)
+    public function isValid($name, $token, $remove = false) {
+        if($this->getToken($name) == $token) {
+            if($remove == true)
                 $this->remove($name);
             
             return true;
