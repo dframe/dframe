@@ -4,12 +4,10 @@ The basic tools to build simple and complex pages. Used and tested internally fo
 
 1. [Installation](#installation)
 2. [Overview](#overview)
-3. [Extensions](#extensions) 
-	- [Router](#dframerouter)	
-	- [Session](#dframesession)
-	- [Messages](#dframemessages)
-	
-
+3. Extensions
+	- [Router](docs/Router.md)
+	- [Session](docs/Session.md)
+	- [Messages](docs/Messages.md)
 
 ### Installation
 
@@ -135,80 +133,6 @@ View/templates/exampleNameFile.hmtl.php:
 </html>
 ```
 
-# Extensions
-
-## Dframe\Config
-You can fast set and load configs
-
-Create file in app\config\myConfigFile.php
-```php
-<?php
-return array(
-    'key1' => 'value', 
-    'key2' => array('value'),
-    'key3' => array(
-        'key1' => 'value'
-    );
-````
-
-Usage in controller
-```php
-<?php
-$config = \Dframe\Core\Config::load('myConfigFile');
-
-echo $config->get('key1'); // display 'value'
-echo $config->get('keyValid', 'yes'); // display 'yes' ||  if key is not exist then you can replace value
-```
-## Dframe\Router
-Methods
-
-Router is alredy defined in core dframe so you just use $this->router in controller or view files. If you want use only router component use $router = new Dframe\Router();
-
-```php
-
-$isActive = $this->router->isActive('page/index') // For check if you are on page
-var_dump($isActive); // true/false
-
-$publicWeb = $this->router->publicWeb('css/style.css') // For load web/* files
-var_dump($publicWeb);  // http://example.com/css/style.css
-
-$makeUrl = $this->router->makeUrl('page/index') // To create link
-var_dump($makeUrl); // yourPage.com/page/index
-
-$router->redirect('page/index'); // To redirect yourPage.com/page/index
-```
-
-## Dframe\Session
-Methods
-```php
-$session  = new Session('HashSaltRandomForSession');
-$session->register(); // Set session_id and session_time - default 60
-$session->authLogin(); // Return true/false if session is registrer
-$session->set($key, $value); // set $_SESSION[$key] = $value;
-$session->get($key, $or = null); // get $_SESSION[$key]; 
-$session->remove($key) // unset($_SESSION[$key]);
-$session->end(); // session_destroy
-```
-
-## Dframe\Messages
-Is a helpful class It helps to quickly add to the session messages that may display user
-message Type: error, success, warning, info
-
-Methods
-```php
-$msg = new Messages(new Session('HashSaltRandomForSession')); // Join the current session
-$msg->add('s', 'Success Message!');
-$msg->add('s', 'Success Message!', 'page/index'); // You can add redirect by Dframe\Router
-
-$msg->hasMessages('success'): // Will return array['success']
-$msg->hasMessages(): // Will return all array
-
-$msg->clear('success'); // remove success msg
-$msg->clear(); // remove all msg
-
-
-var_dump($msg->display('success'));
-```
 
 
 License
