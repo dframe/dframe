@@ -27,7 +27,7 @@ If you have some validation access code try to do like this
 <?php
 
 public function myProcetedMethod(){
-    if($haveAccess != true){
+    if($this->haveAccess != true){
         $this->router->reditect('page/index');
         return;
     }
@@ -45,7 +45,7 @@ If you have some validation $_POST, $_GET with msg code try to do like this
 <?php
 
 public function myProcetedAndPostMethod(){
-    if($haveAccess != true){
+    if($this->haveAccess != true){
         $this->router->reditect('page/index');
         return;
     }
@@ -67,7 +67,7 @@ But if you use json try to use like this
 <?php
 
 public function myProcetedAndPostMethod(){
-    if($haveAccess != true){
+    if($this->haveAccess != true){
         $this->router->reditect('page/index');
         return;
     }
@@ -82,3 +82,41 @@ public function myProcetedAndPostMethod(){
 }
 ```
 
+
+**View**
+
+In view not a lot is happend. In standard View/index.php should be assign should for front-developer.
+
+```php
+<?php
+namespace View;
+use Dframe\Config;
+
+class IndexView extends \View\View
+{
+
+	public function init(){
+
+        $this->assign('router', $this->router);
+```
+
+
+If you use [Dframe\Message](../extensions/Messages.md) add
+```php
+            if($this->baseClass->msg->hasMessages('error'))
+                $this->assign('msgError', $this->baseClass->msg->display('error'));
+            elseif($this->baseClass->msg->hasMessages('success'))
+                $this->assign('msgSuccess', $this->baseClass->msg->display('success'));
+             elseif($this->baseClass->msg->hasMessages('warning'))
+    $this->assign('msgWarning', $this->baseClass->msg->display('warning'));
+             elseif($this->baseClass->msg->hasMessages('info'))
+                 $this->assign('msgInfo', $this->baseClass->msg->display('info'));
+```
+
+If you use [Dframe\Session](../extensions/Session.md) add
+
+```php
+            $this->assign('authLogin', $this->baseClass->session->authLogin());
+```
+
+Yes you can assign to View Model class for example generate url links or to set isset for permission user etc.
