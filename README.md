@@ -4,10 +4,12 @@ The basic tools to build simple and complex pages. Used and tested internally fo
 
 1. [Installation](#installation)
 2. [Overview](#overview)
+	- [Good Practice](docs/overview/GoodPractice.md)
+
 3. Extensions
-	- [Router](docs/Router.md)
-	- [Session](docs/Session.md)
-	- [Messages](docs/Messages.md)
+	- [Router](docs/extensions/Router.md)
+	- [Session](docs/extensions/Session.md)
+	- [Messages](docs/extensions/Messages.md)
 
 ### Installation
 
@@ -134,7 +136,6 @@ View/templates/exampleNameFile.hmtl.php:
 ```
 
 
-
 License
 ----
 
@@ -143,10 +144,5 @@ MIT
 
 
 ### Tech
-
-* [Wrapper PDO] - PHP PDO Class Wrapper ! (Base class - modified)
-* [S.M.A.R.T.Y] - Default Template Engine (available: php, twig)
-
-   [Wrapper PDO]: <https://github.com/neerajsinghsonu/PDO_Class_Wrapper>
-   [S.M.A.R.T.Y]: <https://github.com/smarty-php/smarty>
-
+[Dframe\Database](https://github.com/dusta/Database)- PHP PDO Class Wrapper
+[S.M.A.R.T.Y](https://github.com/smarty-php/smarty) - Default Template Engine (available: php, twig)
