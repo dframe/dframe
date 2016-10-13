@@ -17,6 +17,7 @@ public function myMethod(){
     $firstModel = $this->loadModel('first');
     $secondModel = $this->loadModel('second');
     $view = $this->loadView('index');
+
 }
 ```
 
@@ -30,7 +31,7 @@ public function myProcetedMethod(){
         $this->router->reditect('page/index');
         return;
     }
-    
+
     $firstModel = $this->loadModel('first');
     $secondModel = $this->loadModel('second');
     $view = $this->loadView('index');
@@ -58,8 +59,6 @@ public function myProcetedAndPostMethod(){
     $secondModel = $this->loadModel('second');
     $view = $this->loadView('index');
 
-
-
 }
 ```
 
@@ -72,17 +71,13 @@ public function myProcetedAndPostMethod(){
         $this->router->reditect('page/index');
         return;
     }
-    
+
     $firstModel = $this->loadModel('first');
     $secondModel = $this->loadModel('second');
     $view = $this->loadView('index');
 
     if(!$_POST['someValue'])
         $view->renderJSON(array('return' => '1', 'response' => 'empty someVlue Post');
-    
-
-
-
 
 }
 ```
