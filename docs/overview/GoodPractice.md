@@ -107,9 +107,9 @@ If you use [Dframe\Message](../extensions/Messages.md) add
                 $this->assign('msgError', $this->baseClass->msg->display('error'));
             elseif($this->baseClass->msg->hasMessages('success'))
                 $this->assign('msgSuccess', $this->baseClass->msg->display('success'));
-             elseif($this->baseClass->msg->hasMessages('warning'))
+            elseif($this->baseClass->msg->hasMessages('warning'))
     $this->assign('msgWarning', $this->baseClass->msg->display('warning'));
-             elseif($this->baseClass->msg->hasMessages('info'))
+            elseif($this->baseClass->msg->hasMessages('info'))
                  $this->assign('msgInfo', $this->baseClass->msg->display('info'));
 ```
 
