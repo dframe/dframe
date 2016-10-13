@@ -38,7 +38,7 @@ include_once 'vendor/autoload.php';
 $router = new Router();
 $msg = new Messages(new Session('HashSaltRandomForSession')); // Join the current session
 
-if(isset($msg->hasMessages())){
+if(!empty($msg->hasMessages())){
    var_dump($msg->display('success'));
    var_dump($msg->display('error'));
    var_dump($msg->display('info'));
