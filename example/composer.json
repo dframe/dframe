@@ -1,0 +1,9 @@
+{
+    "autoload": {
+        "psr-4": {"": "app/"},
+    }
+    "require": {
+        "dframe/dframe": "^3.23.3",
+
+    }, 
+}
