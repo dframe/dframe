@@ -8,7 +8,7 @@ class pageController extends Controller
     /* 
      * Dynamiczny loader stron wykrywa akcje jako plik i stara sie go za ładować
      */
-    public function init(){
+    public function page(){
         $smartyConfig = Config::load('smarty');
         $view = $this->loadView('index');
 
