@@ -95,9 +95,9 @@ use Dframe\Config;
 class IndexView extends \View\View
 {
 
-	public function init(){
+    public function init(){
 
-            $this->assign('router', $this->router);
+        $this->assign('router', $this->router);
 ```
 If you use [Dframe\Message](../extensions/Messages.md) add
 ```php
