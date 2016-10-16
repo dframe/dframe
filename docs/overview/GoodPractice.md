@@ -67,7 +67,7 @@ But if you use json try to use like this
 <?php
 
 public function myProcetedAndPostMethod(){
-    if($this->haveAccess != true){
+    if($this->baseClass->session->authLogin() != true){
         $this->router->reditect('page/index');
         return;
     }
@@ -76,7 +76,7 @@ public function myProcetedAndPostMethod(){
     $secondModel = $this->loadModel('second');
     $view = $this->loadView('index');
 
-    if(!$_POST['someValue'])
+    if(!isset($_POST['someValue']) AND !empty($_POST['someValue']))
         $view->renderJSON(array('return' => '1', 'response' => 'empty someVlue Post');
 
 }
@@ -97,7 +97,7 @@ class IndexView extends \View\View
 
 	public function init(){
 
-        $this->assign('router', $this->router);
+            $this->assign('router', $this->router);
 ```
 If you use [Dframe\Message](../extensions/Messages.md) add
 ```php
