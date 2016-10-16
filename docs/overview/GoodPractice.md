@@ -99,8 +99,6 @@ class IndexView extends \View\View
 
         $this->assign('router', $this->router);
 ```
-
-
 If you use [Dframe\Message](../extensions/Messages.md) add
 ```php
             if($this->baseClass->msg->hasMessages('error'))
@@ -108,13 +106,11 @@ If you use [Dframe\Message](../extensions/Messages.md) add
             elseif($this->baseClass->msg->hasMessages('success'))
                 $this->assign('msgSuccess', $this->baseClass->msg->display('success'));
             elseif($this->baseClass->msg->hasMessages('warning'))
-    $this->assign('msgWarning', $this->baseClass->msg->display('warning'));
+                $this->assign('msgWarning', $this->baseClass->msg->display('warning'));
             elseif($this->baseClass->msg->hasMessages('info'))
-                 $this->assign('msgInfo', $this->baseClass->msg->display('info'));
+                $this->assign('msgInfo', $this->baseClass->msg->display('info'));
 ```
-
 If you use [Dframe\Session](../extensions/Session.md) add
-
 ```php
             $this->assign('authLogin', $this->baseClass->session->authLogin());
 ```
