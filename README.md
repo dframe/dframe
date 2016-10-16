@@ -5,6 +5,7 @@ The basic tools to build simple and complex pages. Used and tested internally fo
 1. [Installation](#installation)
 2. [Overview](#overview)
 	- [Good Practice](docs/overview/GoodPractice.md)
+	- [Project Tree](docs/overview/ProjectTree.md)
 
 3. Extensions
 	- [Router](docs/extensions/Router.md)
