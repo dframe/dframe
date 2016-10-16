@@ -27,7 +27,7 @@ If you have some validation access code try to do like this
 <?php
 
 public function myProcetedMethod(){
-    if($this->haveAccess != true){
+    if($this->baseClass->session->authLogin() != true){
         $this->router->reditect('page/index');
         return;
     }
@@ -45,7 +45,7 @@ If you have some validation $_POST, $_GET with msg code try to do like this
 <?php
 
 public function myProcetedAndPostMethod(){
-    if($this->haveAccess != true){
+    if($this->baseClass->session->authLogin() != true){
         $this->router->reditect('page/index');
         return;
     }
