@@ -34,11 +34,12 @@ if(method_exists($controller, 'start'))
 if(method_exists($controller, 'init'))
     $controller->init();
 
-if(method_exists($controller, $_GET['action']))
-    $controller->$_GET['action']();
-else 
+if(method_exists($controller, $_GET['action'])){
+	$action = (string)$_GET['action'];
+    $controller->$action();
+}else 
     if(method_exists($controller, 'page'))
-        $controller->page();
+	    $controller->page();
 
 if(method_exists($controller, 'end'))
     $controller->end();
