@@ -4,6 +4,7 @@ namespace View;
 class indexView extends \View\View
 {
     public function init(){
+        $this->assign('router', $this->router);
 
         /* Domyślne alerty */
         if($this->baseClass->msg->hasMessages('error'))
