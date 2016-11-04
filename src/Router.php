@@ -34,7 +34,7 @@ class Router extends Core
 
         if(!defined('HTTP_HOST') AND isset($_SERVER['HTTP_HOST']))
             define('HTTP_HOST', $_SERVER['HTTP_HOST']);
-        else
+        elseif(!defined('HTTP_HOST'))
         	define('HTTP_HOST', '');
 
         $aURI = explode('/', $_SERVER['SCRIPT_NAME']);
