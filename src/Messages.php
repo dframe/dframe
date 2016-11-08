@@ -198,8 +198,4 @@ class Messages
         return $this->hasMessages();    
     }
 
-    public function __destruct() {
-        $this->clear();
-    }
-
 }
