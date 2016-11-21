@@ -35,7 +35,7 @@ class Router extends Core
         if(!defined('HTTP_HOST') AND isset($_SERVER['HTTP_HOST']))
             define('HTTP_HOST', $_SERVER['HTTP_HOST']);
         elseif(!defined('HTTP_HOST'))
-        	define('HTTP_HOST', '');
+            define('HTTP_HOST', '');
 
         $aURI = explode('/', $_SERVER['SCRIPT_NAME']);
         
@@ -171,15 +171,14 @@ class Router extends Core
             $sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
             if(substr($sRequest, -1)!='/')
                 $sRequest .= '/';
-            
-
             $sGets = $this->parseUrl($sRequest);
+
             parse_str($sGets, $aGets);
 
-            $_GET['NAME_CONTROLLER'] = !empty($aGets['NAME_CONTROLLER'])?$aGets['NAME_CONTROLLER']:$routerConfig->get('NAME_CONTROLLER');
+            $_GET['task'] = !empty($aGets['task'])?$aGets['task']:$routerConfig->get('NAME_CONTROLLER');
             unset($aGets['NAME_CONTROLLER']);
 
-            $_GET['NAME_MODEL'] = !empty($aGets['NAME_MODEL'])?$aGets['NAME_MODEL']:$routerConfig->get('NAME_MODEL');;
+            $_GET['action'] = !empty($aGets['action'])?$aGets['action']:$routerConfig->get('NAME_MODEL');;
             unset($aGets['NAME_MODEL']);
 
             $_GET = array_merge($_GET, $aGets);
@@ -206,9 +205,17 @@ class Router extends Core
         $sVars = null;
         foreach($this->aRoutingParse AS $k => $v){
             
-            preg_match_all('!\[(.+?)\]!ie', $v[0], $aExpression_);
-            $sExpression = preg_replace_callback('!\[(.+?)\]!ie', '$this->transformParam(\'$1\', \''.$k.'\')', $v[0]);
+            if(!is_array($v))
+                continue;
+
+            preg_match_all('!\[(.+?)\]!i', $v[0], $aExpression_);
+            $sExpression = preg_replace_callback('!\[(.+?)\]!i', function($m) use ($k){ 
+                return $this->transformParam($m[1], $k);
+            }, $v[0]);
+
+
             if(preg_match_all('!'.$sExpression.'!i', $sRequest, $aExpression__)){
+
 
                 foreach($aExpression__ AS $k_ => $v_){
                     foreach($v_ AS $kkk => $vvv){
@@ -223,6 +230,7 @@ class Router extends Core
                     
                     }
                 }
+
                 unset($aExpression[0]);
                 $iCount = count($aExpression__[0]);
                 if($iCount>1){
