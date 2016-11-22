@@ -23,12 +23,15 @@ Before run add to .htaccess
 
 ```sh
 RewriteEngine On
-RewriteCond %{REQUEST_URI} !web/
 
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 
-# redirect to our front web controller
+RewriteCond %{REQUEST_URI} !^.*\.(jpg|css|js|gif|png)$ [NC]
 RewriteRule ^(.*)$ web/index.php [QSA,L]
+
+RewriteCond %{REQUEST_URI} !web/
+RewriteRule (.*) web/$1 [L]
 ```
 
 ### Overview
