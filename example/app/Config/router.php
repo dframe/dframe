@@ -1,5 +1,6 @@
 <?php
 return array(
+	'https' => false,
     'NAME_CONTROLLER' => 'page',
     'NAME_MODEL' => 'index',
     '404' => array('404', 'task=page&action=404'),
@@ -13,4 +14,4 @@ return array(
             '[name]=[value]'
             )
         ),       
-    );
+);

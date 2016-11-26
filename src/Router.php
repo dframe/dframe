@@ -44,11 +44,20 @@ class Router extends Core
         $this->sURI = str_replace('/web/', '/', $this->sURI);
 
         $routerConfig = Config::load('router');
+        $this->setHttps($routerConfig->get('https', false));
+
         $this->aRouting = $routerConfig->get();
         $this->aRoutingParse = $routerConfig->get();
 
     }
-    
+ 
+    public function setHttps($option = false){
+        if(!in_array($option, array(true, false)))
+            throw new \Exception("Incorect option", 403);
+
+        $this->https = $option;
+    }
+
     // string||array (folder,)controller/action 
     // Sprawdzanie czy to jest aktualnie wybrana zakładka
     public function isActive($url) {
@@ -89,8 +98,10 @@ class Router extends Core
         if(is_null($path))
             $path = $this->aRouting['publicWeb'];
 
+        $prefix = ($this->https == true ? 'https://' : 'http://');
+
         $sExpressionUrl = $sUrl;
-        $sUrl = 'http://'.HTTP_HOST.$this->sURI.$path;
+        $sUrl = $prefix.HTTP_HOST.$this->sURI.$path;
         $sUrl .= $sExpressionUrl;
         
         return $sUrl;
@@ -143,12 +154,13 @@ class Router extends Core
             }
 
         }
+        $prefix = ($this->https == true ? 'https://' : 'http://');
 
         $HTTP_HOST = HTTP_HOST;
         if(!empty($this->subdomain))
             $HTTP_HOST = $this->subdomain.'.'.HTTP_HOST;
 
-            $sUrl = 'http://' . $HTTP_HOST . $this->sURI;
+            $sUrl = $prefix.$HTTP_HOST.$this->sURI;
 
         $sUrl .= $sExpressionUrl;
 
