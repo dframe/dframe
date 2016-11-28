@@ -87,13 +87,14 @@ class Token
     }
     
     public function isValid($name, $token, $remove = false) {
-        if($this->getToken($name) == $token) {
-            if($remove == true)
-                $this->remove($name);
-            
+    	$getToken = $this->getToken($name);
+
+        if($remove == true)
+            $this->remove($name);
+
+        if($getToken == $token)
             return true;
-        }
         
         return false;
-    }   
+    }  
 }
