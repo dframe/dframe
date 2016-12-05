@@ -26,7 +26,7 @@ class Bootstrap
             exit();
         }
 
-        $this->session  = new Session(SALT);
+        $this->session  = new Session('session_name');
         $this->msg = new Messages($this->session);
         $this->token  = new Token($this->session);
 
