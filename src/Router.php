@@ -62,36 +62,44 @@ class Router extends Core
     // Sprawdzanie czy to jest aktualnie wybrana zakładka
     public function isActive($url) {
 
-        if(is_array($url)) {
-            foreach($url as $oneurl) {
-                if(strpos($oneurl, '/'))
-                    list($task, $action) = explode('/', $oneurl);
-                else
-                    $task = $oneurl;
-                    
-                if(!empty($action)) {
-                    if($task == $this->aRouting['NAME_CONTROLLER'] AND $action == $this->aRouting['NAME_MODEL'])
-                        return true;
-                } else {
-                    if($task == $this->aRouting['NAME_CONTROLLER'])
-                        return true;
-                }
-            }
-            return false;
+        if(empty($url) OR $url == false)
+            return false; 
+
+        $sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
+
+        if(strpos($url, '/'))
+            list($task, $action) = explode('/', $url);
+        else
+            $task = $url;
+
+        if(MOD_REWRITE){
+        
+            if(substr($sRequest, -1)!='/')
+                $sRequest .= '/';
+
+            $sGets = $this->parseUrl($sRequest);
 
         }else{
-            if(strpos($url, '/'))
-                list($task, $action) = explode('/', $url);
-            else
-                $task = $url;
-                
-            if(!empty($action))
-                return ($task == $this->aRouting['NAME_CONTROLLER']) AND ($action == $this->aRouting['NAME_MODEL']);
 
-            return ($task == $this->aRouting['NAME_CONTROLLER']);
+            if(substr($sRequest, 0, 1)=='?')
+                $sRequest = substr($sRequest, 1);
+            
+            $sGets = $sRequest;
+            $sGets = str_replace("index.php?", "", $sGets);
+            
         }
 
-        return false;
+        parse_str($sGets, $aGets);
+
+        $aTask = !empty($aGets['task'])?$aGets['task']:$routerConfig->get('NAME_CONTROLLER');
+        $gAction = !empty($aGets['action'])?$aGets['action']:$routerConfig->get('NAME_MODEL');
+
+
+        if(!empty($action))
+            return ($task == $aTask) AND ($action == $gAction);
+
+        return ($task == $aTask);
+
     }
 
     public function publicWeb($sUrl = null, $path = null){
@@ -178,9 +186,10 @@ class Router extends Core
     public function parseGets(){
         $routerConfig = Config::load('router');
         
+        $sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
+        
         if(MOD_REWRITE){
 
-            $sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
             if(substr($sRequest, -1)!='/')
                 $sRequest .= '/';
             $sGets = $this->parseUrl($sRequest);
@@ -188,31 +197,30 @@ class Router extends Core
             parse_str($sGets, $aGets);
 
             $_GET['task'] = !empty($aGets['task'])?$aGets['task']:$routerConfig->get('NAME_CONTROLLER');
-            unset($aGets['NAME_CONTROLLER']);
+            unset($aGets['task']);
 
             $_GET['action'] = !empty($aGets['action'])?$aGets['action']:$routerConfig->get('NAME_MODEL');;
-            unset($aGets['NAME_MODEL']);
+            unset($aGets['action']);
 
             $_GET = array_merge($_GET, $aGets);
 
         }else{
 
-            $sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
             if(substr($sRequest, 0, 1)=='?')
                 $sRequest = substr($sRequest, 1);
             
             $sGets = $sRequest;
 
             $sGets = str_replace("index.php?", "", $sGets);
-            parse_str($sGets, $output);
+            parse_str($sGets, $aGets);
 
-            $_GET['task'] = !empty($output['task'])?$output['task']:$routerConfig->get('NAME_CONTROLLER');;    
-            $_GET['action'] = !empty($output['action'])?$output['action']:$routerConfig->get('NAME_MODEL');;
+            $_GET['task'] = !empty($aGets['task'])?$aGets['task']:$routerConfig->get('NAME_CONTROLLER');;    
+            $_GET['action'] = !empty($aGets['action'])?$aGets['action']:$routerConfig->get('NAME_MODEL');;
             
         }
 
     }
-    
+
     private function parseUrl($sRequest){   
         $sVars = null;
         foreach($this->aRoutingParse AS $k => $v){
