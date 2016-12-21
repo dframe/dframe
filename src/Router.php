@@ -206,13 +206,13 @@ class Router extends Core
             $sGets = str_replace("index.php?", "", $sGets);
             parse_str($sGets, $output);
 
-            $_GET['NAME_CONTROLLER'] = !empty($output['NAME_CONTROLLER'])?$output['NAME_CONTROLLER']:$routerConfig->get('NAME_CONTROLLER');;    
-            $_GET['NAME_MODEL'] = !empty($output['NAME_MODEL'])?$output['NAME_MODEL']:$routerConfig->get('NAME_MODEL');;
+            $_GET['task'] = !empty($output['task'])?$output['task']:$routerConfig->get('NAME_CONTROLLER');;    
+            $_GET['action'] = !empty($output['action'])?$output['action']:$routerConfig->get('NAME_MODEL');;
             
         }
 
     }
-
+    
     private function parseUrl($sRequest){   
         $sVars = null;
         foreach($this->aRoutingParse AS $k => $v){
