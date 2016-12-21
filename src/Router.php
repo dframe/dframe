@@ -61,6 +61,7 @@ class Router extends Core
     // string||array (folder,)controller/action 
     // Sprawdzanie czy to jest aktualnie wybrana zakładka
     public function isActive($url) {
+    	$routerConfig = Config::load('router');
 
         if(empty($url) OR $url == false)
             return false; 
