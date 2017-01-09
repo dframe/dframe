@@ -66,40 +66,48 @@ class Router extends Core
         if(empty($url) OR $url == false)
             return false; 
 
-        $sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
+        if(!is_array($url))
+        	$url = array($url);
 
-        if(strpos($url, '/'))
-            list($task, $action) = explode('/', $url);
-        else
-            $task = $url;
-
-        if(MOD_REWRITE){
-        
-            if(substr($sRequest, -1)!='/')
-                $sRequest .= '/';
-
-            $sGets = $this->parseUrl($sRequest);
-
-        }else{
-
-            if(substr($sRequest, 0, 1)=='?')
-                $sRequest = substr($sRequest, 1);
+        foreach($url as $oneurl) {
+    
+            $sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
+    
+            if(strpos($oneurl, '/'))
+                list($task, $action) = explode('/', $oneurl);
+            else
+                $task = $oneurl;
+    
+            if(MOD_REWRITE){
             
-            $sGets = $sRequest;
-            $sGets = str_replace("index.php?", "", $sGets);
-            
+                if(substr($sRequest, -1)!='/')
+                    $sRequest .= '/';
+    
+                $sGets = $this->parseUrl($sRequest);
+    
+            }else{
+    
+                if(substr($sRequest, 0, 1)=='?')
+                    $sRequest = substr($sRequest, 1);
+                
+                $sGets = $sRequest;
+                $sGets = str_replace("index.php?", "", $sGets);
+                
+            }
+    
+            parse_str($sGets, $aGets);
+    
+            $aTask = !empty($aGets['task'])?$aGets['task']:$routerConfig->get('NAME_CONTROLLER');
+            $gAction = !empty($aGets['action'])?$aGets['action']:$routerConfig->get('NAME_MODEL');
+    
+    
+            if(!empty($action))
+                return ($task == $aTask) AND ($action == $gAction);
+    
+            return ($task == $aTask);
         }
 
-        parse_str($sGets, $aGets);
-
-        $aTask = !empty($aGets['task'])?$aGets['task']:$routerConfig->get('NAME_CONTROLLER');
-        $gAction = !empty($aGets['action'])?$aGets['action']:$routerConfig->get('NAME_MODEL');
-
-
-        if(!empty($action))
-            return ($task == $aTask) AND ($action == $gAction);
-
-        return ($task == $aTask);
+        return false;
 
     }
 
@@ -110,7 +118,7 @@ class Router extends Core
         $prefix = ($this->https == true ? 'https://' : 'http://');
 
         $sExpressionUrl = $sUrl;
-        $sUrl = $prefix.HTTP_HOST.$this->sURI.$path;
+        $sUrl = $prefix.HTTP_HOST.'/'.$path;
         $sUrl .= $sExpressionUrl;
         
         return $sUrl;
