@@ -215,16 +215,8 @@ class Router extends Core
 
         }else{
 
-            if(substr($sRequest, 0, 1)=='?')
-                $sRequest = substr($sRequest, 1);
-            
-            $sGets = $sRequest;
-
-            $sGets = str_replace("index.php?", "", $sGets);
-            parse_str($sGets, $aGets);
-
-            $_GET['task'] = !empty($aGets['task'])?$aGets['task']:$routerConfig->get('NAME_CONTROLLER');;    
-            $_GET['action'] = !empty($aGets['action'])?$aGets['action']:$routerConfig->get('NAME_MODEL');;
+            $_GET['task'] = !empty($_GET['task'])?$_GET['task']:$routerConfig->get('NAME_CONTROLLER');;    
+            $_GET['action'] = !empty($_GET['action'])?$_GET['action']:$routerConfig->get('NAME_MODEL');;
             
         }
 
