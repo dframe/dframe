@@ -21,7 +21,7 @@ if(isset($_SERVER['REMOTE_ADDR']) AND in_array($_SERVER['REMOTE_ADDR'], $debugAl
 
 # Application configuration
 define('appDir', dirname(__FILE__).'/');
-define('HTTP_HOST', ''); # MAIN website
+define('HTTP_HOST', $_SERVER['HTTP_HOST']); # MAIN website
 
 # Website configuration
 define('VERSION', "Dframe"); # Version aplication

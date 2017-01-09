@@ -61,13 +61,13 @@ class Router extends Core
     // string||array (folder,)controller/action 
     // Sprawdzanie czy to jest aktualnie wybrana zakładka
     public function isActive($url) {
-    	$routerConfig = Config::load('router');
+        $routerConfig = Config::load('router');
 
         if(empty($url) OR $url == false)
             return false; 
 
         if(!is_array($url))
-        	$url = array($url);
+            $url = array($url);
 
         foreach($url as $oneurl) {
     
@@ -177,7 +177,7 @@ class Router extends Core
         if(!empty($this->subdomain))
             $HTTP_HOST = $this->subdomain.'.'.HTTP_HOST;
 
-            $sUrl = $prefix.$HTTP_HOST.$this->sURI;
+            $sUrl = $prefix.$HTTP_HOST.'/';
 
         $sUrl .= $sExpressionUrl;
 
