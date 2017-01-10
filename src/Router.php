@@ -29,6 +29,7 @@ class Router extends Core
     private $sURI;
     private $parsingArray;
     private $subdomain = false;
+    private $routerConfig;
 
     public function __construct(){
 
@@ -43,11 +44,11 @@ class Router extends Core
         $this->sURI = implode('/', $aURI).'/';
         $this->sURI = str_replace('/web/', '/', $this->sURI);
 
-        $routerConfig = Config::load('router');
-        $this->setHttps($routerConfig->get('https', false));
+        $this->routerConfig = Config::load('router');
+        $this->setHttps($this->routerConfig->get('https', false));
 
-        $this->aRouting = $routerConfig->get();
-        $this->aRoutingParse = $routerConfig->get();
+        $this->aRouting = $this->routerConfig->get();
+        $this->aRoutingParse = $this->routerConfig->get();
 
     }
  
@@ -61,7 +62,6 @@ class Router extends Core
     // string||array (folder,)controller/action 
     // Sprawdzanie czy to jest aktualnie wybrana zakładka
     public function isActive($url) {
-        $routerConfig = Config::load('router');
 
         if(empty($url) OR $url == false)
             return false; 
@@ -97,8 +97,8 @@ class Router extends Core
     
             parse_str($sGets, $aGets);
     
-            $aTask = !empty($aGets['task'])?$aGets['task']:$routerConfig->get('NAME_CONTROLLER');
-            $gAction = !empty($aGets['action'])?$aGets['action']:$routerConfig->get('NAME_MODEL');
+            $aTask = !empty($aGets['task'])?$aGets['task']:$this->routerConfig->get('NAME_CONTROLLER');
+            $gAction = !empty($aGets['action'])?$aGets['action']:$this->routerConfig->get('NAME_MODEL');
     
     
             if(!empty($action))
@@ -193,7 +193,6 @@ class Router extends Core
     }
 
     public function parseGets(){
-        $routerConfig = Config::load('router');
         
         $sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
         
@@ -205,18 +204,18 @@ class Router extends Core
 
             parse_str($sGets, $aGets);
 
-            $_GET['task'] = !empty($aGets['task'])?$aGets['task']:$routerConfig->get('NAME_CONTROLLER');
+            $_GET['task'] = !empty($aGets['task'])?$aGets['task']:$this->routerConfig->get('NAME_CONTROLLER');
             unset($aGets['task']);
 
-            $_GET['action'] = !empty($aGets['action'])?$aGets['action']:$routerConfig->get('NAME_MODEL');;
+            $_GET['action'] = !empty($aGets['action'])?$aGets['action']:$this->routerConfig->get('NAME_MODEL');;
             unset($aGets['action']);
 
             $_GET = array_merge($_GET, $aGets);
 
         }else{
 
-            $_GET['task'] = !empty($_GET['task'])?$_GET['task']:$routerConfig->get('NAME_CONTROLLER');;    
-            $_GET['action'] = !empty($_GET['action'])?$_GET['action']:$routerConfig->get('NAME_MODEL');;
+            $_GET['task'] = !empty($_GET['task'])?$_GET['task']:$this->routerConfig->get('NAME_CONTROLLER');;    
+            $_GET['action'] = !empty($_GET['action'])?$_GET['action']:$this->routerConfig->get('NAME_MODEL');;
             
         }
 
