@@ -310,4 +310,62 @@ class Router extends Core
         
     }
 
+    /**
+     * Metoda kopiujaca i udostepniajaca pliki w katalogu assets 
+     *
+     * @param string|NULL
+     * @param string|NULL
+     *
+     * @return void
+     */
+    public function asset($sUrl = null, $path = null){
+
+        if(is_null($path)){
+            if(isset($this->aRouting['assetsPath'])){
+                $path = $this->aRouting['assetsPath'];
+            }
+            else{
+                $path = 'assets';
+            }
+        }
+
+        //Podstawowe sciezki
+        $srcPath = appDir.'/../app/View/'.$sUrl;
+        $dstPath = appDir.$path.'/'.$sUrl;
+
+        //Kopiowanie pliku jezeli nie istnieje
+        if(!file_exists($dstPath)){
+            if(!file_exists($srcPath))
+                return '';
+
+            //Rekonstruujemy sciezki
+            $relDir = explode('/', $sUrl);
+            array_pop($relDir);
+            $subDir = "";
+            foreach ($relDir as $dir) {
+                $subDir .= "/".$dir;
+                if(!is_dir(appDir.$path.$subDir)){
+                    if(!mkdir(appDir.$path.$subDir)){
+                        throw new BaseException('Unable to create new directory');
+                    }
+                }
+            }
+
+            if(!is_writable(appDir.$path))
+                return $dstPath;
+
+            if(!copy($srcPath, $dstPath))
+                throw new BaseException('Unable to copy an asset');
+        }
+
+        //Zwrocenie linku do kopii
+
+        $prefix = ($this->https == true ? 'https://' : 'http://');
+        $sExpressionUrl = $sUrl;
+        $sUrl = $prefix.HTTP_HOST.'/web/'.$path.'/';
+        $sUrl .= $sExpressionUrl;
+        
+        return $sUrl;
+    }
+
 }
