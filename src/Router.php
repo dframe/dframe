@@ -61,7 +61,6 @@ class Router extends Core
     // string||array (folder,)controller/action 
     // Sprawdzanie czy to jest aktualnie wybrana zakładka
     public function isActive($url) {
-        $routerConfig = Config::load('router');
 
         if(empty($url) OR $url == false)
             return false; 
@@ -97,8 +96,8 @@ class Router extends Core
     
             parse_str($sGets, $aGets);
     
-            $aTask = !empty($aGets['task'])?$aGets['task']:$routerConfig->get('NAME_CONTROLLER');
-            $gAction = !empty($aGets['action'])?$aGets['action']:$routerConfig->get('NAME_MODEL');
+            $aTask = !empty($aGets['task'])?$aGets['task']:$this->aRouting['NAME_CONTROLLER'];
+            $gAction = !empty($aGets['action'])?$aGets['action']:$this->aRouting['NAME_MODEL'];
     
     
             if(!empty($action))
@@ -193,7 +192,6 @@ class Router extends Core
     }
 
     public function parseGets(){
-        $routerConfig = Config::load('router');
         
         $sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
         
@@ -205,18 +203,18 @@ class Router extends Core
 
             parse_str($sGets, $aGets);
 
-            $_GET['task'] = !empty($aGets['task'])?$aGets['task']:$routerConfig->get('NAME_CONTROLLER');
+            $_GET['task'] = !empty($aGets['task'])?$aGets['task']:$this->aRouting['NAME_CONTROLLER'];
             unset($aGets['task']);
 
-            $_GET['action'] = !empty($aGets['action'])?$aGets['action']:$routerConfig->get('NAME_MODEL');;
+            $_GET['action'] = !empty($aGets['action'])?$aGets['action']:$this->aRouting['NAME_MODEL'];
             unset($aGets['action']);
 
             $_GET = array_merge($_GET, $aGets);
 
         }else{
 
-            $_GET['task'] = !empty($_GET['task'])?$_GET['task']:$routerConfig->get('NAME_CONTROLLER');;    
-            $_GET['action'] = !empty($_GET['action'])?$_GET['action']:$routerConfig->get('NAME_MODEL');;
+            $_GET['task'] = !empty($_GET['task'])?$_GET['task']:$this->aRouting['NAME_CONTROLLER'];
+            $_GET['action'] = !empty($_GET['action'])?$_GET['action']:$this->aRouting['NAME_MODEL'];
             
         }
 
@@ -311,4 +309,63 @@ class Router extends Core
         return $this;
         
     }
+
+    /**
+     * Metoda kopiujaca i udostepniajaca pliki w katalogu assets 
+     *
+     * @param string|NULL
+     * @param string|NULL
+     *
+     * @return void
+     */
+    public function asset($sUrl = null, $path = null){
+
+        if(is_null($path)){
+            if(isset($this->aRouting['assetsPath'])){
+                $path = $this->aRouting['assetsPath'];
+            }
+            else{
+                $path = 'assets';
+            }
+        }
+
+        //Podstawowe sciezki
+        $srcPath = appDir.'/../app/View/'.$sUrl;
+        $dstPath = appDir.$path.'/'.$sUrl;
+
+        //Kopiowanie pliku jezeli nie istnieje
+        if(!file_exists($dstPath)){
+            if(!file_exists($srcPath))
+                return '';
+
+            //Rekonstruujemy sciezki
+            $relDir = explode('/', $sUrl);
+            array_pop($relDir);
+            $subDir = "";
+            foreach ($relDir as $dir) {
+                $subDir .= "/".$dir;
+                if(!is_dir(appDir.$path.$subDir)){
+                    if(!mkdir(appDir.$path.$subDir)){
+                        throw new BaseException('Unable to create new directory');
+                    }
+                }
+            }
+
+            if(!is_writable(appDir.$path))
+                return $dstPath;
+
+            if(!copy($srcPath, $dstPath))
+                throw new BaseException('Unable to copy an asset');
+        }
+
+        //Zwrocenie linku do kopii
+
+        $prefix = ($this->https == true ? 'https://' : 'http://');
+        $sExpressionUrl = $sUrl;
+        $sUrl = $prefix.HTTP_HOST.'/web/'.$path.'/';
+        $sUrl .= $sExpressionUrl;
+        
+        return $sUrl;
+    }
+
 }
