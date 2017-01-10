@@ -140,31 +140,55 @@ class Router extends Core
             $aParams = array();
         
         if(MOD_REWRITE){
-            $sExpressionUrl = $sTask;
-            if(!empty($sAction))
-                $sExpressionUrl = $sTask.'/'.$sAction;
 
-            if(!empty($aParams)) {
-                $sExpressionUrl .= '?';
-                foreach($aParams AS $k => $v){
-                    $test[] = $k.'='.$v;
+            if(isset($this->aRouting[$sTask.'/'.$sAction])){
+    
+                $sExpressionUrl = $this->aRouting[$sTask.'/'.$sAction][0];
+                foreach($aParams AS $key => $value) {
+                    $sExpressionUrl = str_replace('['.$key.']', $value, $sExpressionUrl);
                 }
-                $sExpressionUrl .= implode('&', $test);
+
+            }else{
+
+                $sExpressionUrl = $sTask;
+                if(!empty($sAction))
+                    $sExpressionUrl = $sTask.'/'.$sAction;
+    
+                if(!empty($aParams)) {
+                    $sExpressionUrl .= '?';
+                    foreach($aParams AS $k => $v){
+                        $test[] = $k.'='.$v;
+                    }
+                    $sExpressionUrl .= implode('&', $test);
+                }
             }
 
         }else{
+
             if(empty($sTask)){
                 $sExpressionUrl = '';
 
             }else{
-                $sExpressionUrl = 'index.php?task='.$sTask;
-                if(!empty($sAction))
-                    $sExpressionUrl = 'index.php?task='.$sTask.'&action='.$sAction;
+
+                if(isset($this->aRouting[$sTask.'/'.$sAction])){
     
-    
-                if(!empty($aParams)){
-                    foreach($aParams AS $k => $v){
-                        $sExpressionUrl .= '&'.$k.'='.$v;
+                    $sExpressionUrl0 = $this->aRouting[$sTask.'/'.$sAction][1];
+                    foreach($aParams AS $key => $value) {
+                        $sExpressionUrl0 = str_replace('['.$key.']', $value, $sExpressionUrl0);
+                    }
+
+                    $sExpressionUrl = 'index.php?'.$sExpressionUrl0;
+          
+                }else{
+
+                    $sExpressionUrl = 'index.php?task='.$sTask;
+                    if(!empty($sAction))
+                        $sExpressionUrl = 'index.php?task='.$sTask.'&action='.$sAction;
+        
+                    if(!empty($aParams)){
+                        foreach($aParams AS $k => $v){
+                            $sExpressionUrl .= '&'.$k.'='.$v;
+                        }
                     }
                 }
             }
