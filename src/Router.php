@@ -29,7 +29,6 @@ class Router extends Core
     private $sURI;
     private $parsingArray;
     private $subdomain = false;
-    private $routerConfig;
 
     public function __construct(){
 
@@ -44,11 +43,11 @@ class Router extends Core
         $this->sURI = implode('/', $aURI).'/';
         $this->sURI = str_replace('/web/', '/', $this->sURI);
 
-        $this->routerConfig = Config::load('router');
-        $this->setHttps($this->routerConfig->get('https', false));
+        $routerConfig = Config::load('router');
+        $this->setHttps($routerConfig->get('https', false));
 
-        $this->aRouting = $this->routerConfig->get();
-        $this->aRoutingParse = $this->routerConfig->get();
+        $this->aRouting = $routerConfig->get();
+        $this->aRoutingParse = $routerConfig->get();
 
     }
  
@@ -97,8 +96,8 @@ class Router extends Core
     
             parse_str($sGets, $aGets);
     
-            $aTask = !empty($aGets['task'])?$aGets['task']:$this->routerConfig->get('NAME_CONTROLLER');
-            $gAction = !empty($aGets['action'])?$aGets['action']:$this->routerConfig->get('NAME_MODEL');
+            $aTask = !empty($aGets['task'])?$aGets['task']:$this->aRouting['NAME_CONTROLLER'];
+            $gAction = !empty($aGets['action'])?$aGets['action']:$this->aRouting['NAME_MODEL'];
     
     
             if(!empty($action))
@@ -204,18 +203,18 @@ class Router extends Core
 
             parse_str($sGets, $aGets);
 
-            $_GET['task'] = !empty($aGets['task'])?$aGets['task']:$this->routerConfig->get('NAME_CONTROLLER');
+            $_GET['task'] = !empty($aGets['task'])?$aGets['task']:$this->aRouting['NAME_CONTROLLER'];
             unset($aGets['task']);
 
-            $_GET['action'] = !empty($aGets['action'])?$aGets['action']:$this->routerConfig->get('NAME_MODEL');;
+            $_GET['action'] = !empty($aGets['action'])?$aGets['action']:$this->aRouting['NAME_MODEL'];
             unset($aGets['action']);
 
             $_GET = array_merge($_GET, $aGets);
 
         }else{
 
-            $_GET['task'] = !empty($_GET['task'])?$_GET['task']:$this->routerConfig->get('NAME_CONTROLLER');;    
-            $_GET['action'] = !empty($_GET['action'])?$_GET['action']:$this->routerConfig->get('NAME_MODEL');;
+            $_GET['task'] = !empty($_GET['task'])?$_GET['task']:$this->aRouting['NAME_CONTROLLER'];
+            $_GET['action'] = !empty($_GET['action'])?$_GET['action']:$this->aRouting['NAME_MODEL'];
             
         }
 
@@ -310,4 +309,5 @@ class Router extends Core
         return $this;
         
     }
+
 }
