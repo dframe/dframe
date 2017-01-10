@@ -342,15 +342,12 @@ class Router extends Core
      *
      * @return void
      */
-    public function asset($sUrl = null, $path = null){
+    public function assets($sUrl = null, $path = null){
 
         if(is_null($path)){
-            if(isset($this->aRouting['assetsPath'])){
+            $path = 'assets';
+            if(isset($this->aRouting['assetsPath']))
                 $path = $this->aRouting['assetsPath'];
-            }
-            else{
-                $path = 'assets';
-            }
         }
 
         //Podstawowe sciezki
@@ -386,7 +383,7 @@ class Router extends Core
 
         $prefix = ($this->https == true ? 'https://' : 'http://');
         $sExpressionUrl = $sUrl;
-        $sUrl = $prefix.HTTP_HOST.'/web/'.$path.'/';
+        $sUrl = $prefix.HTTP_HOST.'/'.$path;
         $sUrl .= $sExpressionUrl;
         
         return $sUrl;
