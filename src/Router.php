@@ -49,19 +49,18 @@ class Router extends Core
         $this->aRouting = $routerConfig->get();
         $this->aRoutingParse = $routerConfig->get();
 
-
         // Check forced Https
         if($this->https == true){
-        	$this->requestPrefix = 'https://';
+            $this->requestPrefix = 'https://';
 
-        	// If forced than redirect
-        	if(isset($_SERVER['REQUEST_SCHEME']) AND ((!empty($_SERVER['REQUEST_SCHEME']) AND $_SERVER['REQUEST_SCHEME'] == 'http'))){
-        		$this->redirect('');
-        		return;
-        	}
-
+            // If forced than redirect
+            if(isset($_SERVER['REQUEST_SCHEME']) AND ((!empty($_SERVER['REQUEST_SCHEME']) AND $_SERVER['REQUEST_SCHEME'] == 'http'))){
+                header('Location: '.$this->requestPrefix.HTTP_HOST.'/'.$_SERVER['REQUEST_URI']);
+                return;
+            }
+            
         }else{
-        	$this->requestPrefix = 'http://';
+            $this->requestPrefix = 'http://';
             if(isset($_SERVER['REQUEST_SCHEME']) AND ((!empty($_SERVER['REQUEST_SCHEME']) AND $_SERVER['REQUEST_SCHEME'] == 'https') OR (! empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') OR (! empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443'))) {
                 $this->requestPrefix = 'https://';
             }
