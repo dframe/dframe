@@ -131,10 +131,8 @@ class Router extends Core
         if(is_null($path))
             $path = $this->aRouting['publicWeb'];
 
-        $prefix = ($this->https == true ? 'https://' : 'http://');
-
         $sExpressionUrl = $sUrl;
-        $sUrl = $prefix.HTTP_HOST.'/'.$path;
+        $sUrl = $this->requestPrefix.HTTP_HOST.'/'.$path;
         $sUrl .= $sExpressionUrl;
         
         return $sUrl;
@@ -211,13 +209,12 @@ class Router extends Core
             }
 
         }
-        $prefix = ($this->https == true ? 'https://' : 'http://');
 
         $HTTP_HOST = HTTP_HOST;
         if(!empty($this->subdomain))
             $HTTP_HOST = $this->subdomain.'.'.HTTP_HOST;
 
-            $sUrl = $prefix.$HTTP_HOST.'/';
+            $sUrl = $this->requestPrefix.$HTTP_HOST.'/';
 
         $sUrl .= $sExpressionUrl;
 
@@ -406,10 +403,8 @@ class Router extends Core
         }
 
         //Zwrocenie linku do kopii
-
-        $prefix = ($this->https == true ? 'https://' : 'http://');
         $sExpressionUrl = $sUrl;
-        $sUrl = $prefix.HTTP_HOST.'/'.$path.'/';
+        $sUrl = $this->requestPrefix.HTTP_HOST.'/'.$path.'/';
         $sUrl .= $sExpressionUrl;
         
         return $sUrl;
