@@ -344,16 +344,22 @@ class Router extends Core
      */
     public function assets($sUrl = null, $path = null){
 
+
         if(is_null($path)){
             $path = 'assets';
-            if(isset($this->aRouting['assetsPath']))
+            if(isset($this->aRouting['assetsPath']) AND !empty($this->aRouting['assetsPath'])){
                 $path = $this->aRouting['assetsPath'];
+
+                if(!is_dir(appDir.$path)){
+                    if(!mkdir(appDir.$path))
+                        throw new BaseException('Unable to create'.appDir.$path);
+                }
+            }
         }
 
         //Podstawowe sciezki
-        $srcPath = appDir.'/../app/View/'.$sUrl;
+        $srcPath = appDir.'../app/View/assets/'.$sUrl;
         $dstPath = appDir.$path.'/'.$sUrl;
-
         //Kopiowanie pliku jezeli nie istnieje
         if(!file_exists($dstPath)){
             if(!file_exists($srcPath))
@@ -365,15 +371,18 @@ class Router extends Core
             $subDir = "";
             foreach ($relDir as $dir) {
                 $subDir .= "/".$dir;
-                if(!is_dir(appDir.$path.$subDir)){
-                    if(!mkdir(appDir.$path.$subDir)){
+                $fileDst = appDir.$path.$subDir;
+
+                if(!is_dir($fileDst)){
+                    if(!mkdir($fileDst)){
                         throw new BaseException('Unable to create new directory');
                     }
                 }
             }
 
+
             if(!is_writable(appDir.$path))
-                return $dstPath;
+                throw new BaseException('Unable to get an app/view/'.$path);
 
             if(!copy($srcPath, $dstPath))
                 throw new BaseException('Unable to copy an asset');
@@ -383,7 +392,7 @@ class Router extends Core
 
         $prefix = ($this->https == true ? 'https://' : 'http://');
         $sExpressionUrl = $sUrl;
-        $sUrl = $prefix.HTTP_HOST.'/'.$path;
+        $sUrl = $prefix.HTTP_HOST.'/'.$path.'/';
         $sUrl .= $sExpressionUrl;
         
         return $sUrl;
