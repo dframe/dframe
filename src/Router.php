@@ -156,12 +156,21 @@ class Router extends Core
         
         if(MOD_REWRITE){
 
+
             if(isset($this->aRouting[$sTask.'/'.$sAction])){
-    
+
                 $sExpressionUrl = $this->aRouting[$sTask.'/'.$sAction][0];
                 foreach($aParams AS $key => $value) {
-                    $sExpressionUrl = str_replace('['.$key.']', $value, $sExpressionUrl);
+                    $sExpressionUrl = str_replace('['.$key.']', $value, $sExpressionUrl, $count);
+                    if ($count > 0) {
+                        unset($aParams[$key]);
+                    }
+
                 }
+
+                if(isset($aParams))
+                    $sExpressionUrl = str_replace('[params]', $this->parseParams($this->aRouting['default']['_params'][0], $aParams), $sExpressionUrl);
+            
 
             }else{
 
@@ -230,6 +239,8 @@ class Router extends Core
     }
 
     public function parseGets(){
+
+
         
         $sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
         
@@ -259,6 +270,8 @@ class Router extends Core
     }
 
     private function parseUrl($sRequest){   
+
+
         $sVars = null;
         foreach($this->aRoutingParse AS $k => $v){
             
@@ -272,7 +285,6 @@ class Router extends Core
 
 
             if(preg_match_all('!'.$sExpression.'!i', $sRequest, $aExpression__)){
-
 
                 foreach($aExpression__ AS $k_ => $v_){
                     foreach($v_ AS $kkk => $vvv){
@@ -293,7 +305,7 @@ class Router extends Core
                 if($iCount>1){
                     for($i=0;$i<$iCount;$i++){
                         if($i>0)
-                            $sVars .= '&'.preg_replace_callback('!\[(.+?)\]!i', '[$1_'.$i.']', $v[1]);
+                            $sVars .= '&'.preg_replace('!\[(.+?)\]!i', '[$1_'.$i.']', $v[1]);
                         else
                             $sVars = '&'.$v[1];                        
                     }
