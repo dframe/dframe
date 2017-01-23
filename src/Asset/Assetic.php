@@ -1,5 +1,5 @@
 <?php
-namespace Dframe\Router;
+namespace Dframe\Asset;
 
 use Dframe\BaseException;
 use Dframe\Router;
@@ -16,7 +16,7 @@ use Assetic\Filter\GoogleClosure;
 * Slawek Kaleta
 */
 
-class assetic extends Router
+class Assetic extends Router
 {
 
     private function checkDir($path){
