@@ -7,6 +7,7 @@ use Dframe\Router;
 use Assetic\Asset\FileAsset;
 use Assetic\Filter\CssImportFilter;
 use Assetic\Filter\CssRewriteFilter;
+use Assetic\Filter\PhpCssEmbedFilter;
 use Assetic\Filter;
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetReference;
@@ -132,6 +133,7 @@ class Assetic extends Router
                     //new Yui\CssCompressorFilter('C:\yuicompressor-2.4.7\build\yuicompressor-2.4.7.jar', 'java'),
                     new CssImportFilter(),
                     new CssRewriteFilter(),
+                    new PhpCssEmbedFilter(),
                 ));
 
                 file_put_contents($dstPath, $css->dump());
