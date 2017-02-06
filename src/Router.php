@@ -249,6 +249,7 @@ class Router
             if(substr($sRequest, -1)!='/')
                 $sRequest .= '/';
             $sGets = $this->parseUrl($sRequest);
+            $sGets = str_replace('?', '&', $sGets);
 
             parse_str($sGets, $aGets);
 
