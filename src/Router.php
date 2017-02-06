@@ -174,6 +174,17 @@ class Router
 
             }else{
 
+				$sExpressionUrl = $this->aRouting['default'][0];
+
+				$sExpressionUrl = str_replace('[task]', $sTask, $sExpressionUrl);
+				$sExpressionUrl = str_replace('[action]', $sAction, $sExpressionUrl);
+				if(isset($aParams))
+				{
+					$sExpressionUrl = str_replace('[params]', $this->parseParams($this->aRouting['default']['_params'][0], $aParams), $sExpressionUrl);
+				}
+
+				/*
+
                 $sExpressionUrl = $sTask;
                 if(!empty($sAction))
                     $sExpressionUrl = $sTask.'/'.$sAction;
@@ -185,6 +196,8 @@ class Router
                     }
                     $sExpressionUrl .= implode('&', $test);
                 }
+
+                */
             }
 
         }else{
@@ -249,7 +262,7 @@ class Router
             if(substr($sRequest, -1)!='/')
                 $sRequest .= '/';
             $sGets = $this->parseUrl($sRequest);
-            $sGets = str_replace('?', '&', $sGets);
+            //$sGets = str_replace('?', '&', $sGets);
 
             parse_str($sGets, $aGets);
 
