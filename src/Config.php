@@ -28,8 +28,12 @@ class Config
     private $file;
     public $path;
     
-    public function __construct($file){
+    public function __construct($file, $path = ''){
         $this->path = appDir.'../app/Config/'; // appDir zdefiniowany powinien byc w Config.php
+        
+        if(isset($path) AND !empty($path))
+            $this->path = appDir.'../'.$path.'/';
+
 
         $this->file = $file;
         if (file_exists($this->path.$this->file.'.php') != true)
@@ -40,8 +44,8 @@ class Config
 
     }
 
-    public static function load($file){
-        return new Config($file);
+    public static function load($file, $path = null){
+        return new Config($file, $path);
 
     }    
 
