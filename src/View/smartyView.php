@@ -46,7 +46,8 @@ class smartyView implements \Dframe\View\interfaceView
         $folder = $pathFile[0];
         $name = $pathFile[1];
         
-        $path= $smartyConfig->get('setTemplateDir').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
+        if($path == null)
+            $path = $smartyConfig->get('setTemplateDir').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
 
         try {
             if(is_file($path))
@@ -72,15 +73,17 @@ class smartyView implements \Dframe\View\interfaceView
      *
      * @return void
      */
-    public function renderInclude($name, $path=null) {
+    public function renderInclude($name, $path = null) {
 
         $smartyConfig = Config::load('view/smarty');
         
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
         $name = $pathFile[1];
+
+        if($path == null)
+           $path= $smartyConfig->get('setTemplateDir').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
         
-        $path= $smartyConfig->get('setTemplateDir').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
         try {
             if(is_file($path))
                 $this->smarty->display($path); // Ładowanie widoku

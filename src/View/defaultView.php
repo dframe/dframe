@@ -50,7 +50,9 @@ class defaultView implements \Dframe\View\interfaceView
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
-        $path= $this->templateConfig->get('setTemplateDir').'/'.$folder.$name.$this->templateConfig->get('fileExtension', '.html.php');
+        if($path == null)
+            $path= $this->templateConfig->get('setTemplateDir').'/'.$folder.$name.$this->templateConfig->get('fileExtension', '.html.php');
+        
         try {
             if(is_file($path))
                  include($path);                    

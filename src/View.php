@@ -55,16 +55,16 @@ abstract class View extends Core implements \Dframe\View\interfaceView
      * @return void
      */
 
-    public function fetch($name, $path=null) {
-        return $this->view->fetch($name, $path=null);
+    public function fetch($name, $path = null) {
+        return $this->view->fetch($name, $path);
 
     }
 
     /**
      * Include pliku
      */
-    public function renderInclude($name){
-        return $this->view->renderInclude($name);
+    public function renderInclude($name, $path = null){
+        return $this->view->renderInclude($name, $path);
     }
      
     /**
