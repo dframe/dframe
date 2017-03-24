@@ -154,11 +154,12 @@ class Router
         else 
             $aParams = array();
         
-        if(MOD_REWRITE){
+        $findKey = explode('?', $sUrl);
+        if(isset($findKey[0]))
+            $findKey = $findKey[0];
 
-            $findKey = explode('?', $sUrl);
-            if(isset($findKey[0]))
-                $findKey = $findKey[0];
+
+        if(MOD_REWRITE){
 
             if(isset($this->aRouting[$findKey])){
 
@@ -177,16 +178,16 @@ class Router
 
             }else{
 
-                $sExpressionUrl = $this->aRouting['default'][0];
+				$sExpressionUrl = $this->aRouting['default'][0];
 
-                $sExpressionUrl = str_replace('[task]', $sTask, $sExpressionUrl);
-                $sExpressionUrl = str_replace('[action]', $sAction, $sExpressionUrl);
-                if(isset($aParams))
-                {
-                    $sExpressionUrl = str_replace('[params]', $this->parseParams($this->aRouting['default']['_params'][0], $aParams), $sExpressionUrl);
-                }
+				$sExpressionUrl = str_replace('[task]', $sTask, $sExpressionUrl);
+				$sExpressionUrl = str_replace('[action]', $sAction, $sExpressionUrl);
+				if(isset($aParams))
+				{
+					$sExpressionUrl = str_replace('[params]', $this->parseParams($this->aRouting['default']['_params'][0], $aParams), $sExpressionUrl);
+				}
 
-                /*
+				/*
 
                 $sExpressionUrl = $sTask;
                 if(!empty($sAction))
@@ -210,9 +211,9 @@ class Router
 
             }else{
 
-                if(isset($this->aRouting[$sTask.'/'.$sAction])){
+                if(isset($this->aRouting[$findKey])){
     
-                    $sExpressionUrl0 = $this->aRouting[$sTask.'/'.$sAction][1];
+                    $sExpressionUrl0 = $this->aRouting[$findKey][1];
                     foreach($aParams AS $key => $value) {
                         $sExpressionUrl0 = str_replace('['.$key.']', $value, $sExpressionUrl0);
                     }
