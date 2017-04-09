@@ -1,6 +1,7 @@
 {
     "name": "dframe/dframe",
     "description": "Framework Dframe",
+    "keywords": ["framework", "dframe"],
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -10,7 +11,7 @@
         }
     ],
     "require": {
-        "php": ">=5.5",
+        "php": ">=5.6",
         "smarty/smarty": "^3.1",
         "kriswallsmith/assetic": "^1.4",
         "ptachoire/cssembed": "^1.0"
