@@ -172,36 +172,23 @@ class Router
 
                 }
 
-                if(isset($aParams))
-                    $sExpressionUrl = str_replace('[params]', $this->parseParams($this->aRouting['default']['_params'][0], $aParams), $sExpressionUrl);
-            
+                if(isset($aParams) AND !empty($aParams)){
+                    if(isset($this->aRouting[$findKey]['_params']))
+                        $sExpressionUrl = str_replace('[params]', $this->parseParams($this->aRouting[$findKey]['_params'][0], $aParams), $sExpressionUrl);
+                    else
+                        $sExpressionUrl = $sExpressionUrl . "?" . http_build_query($aParams);
+                }
 
             }else{
 
-				$sExpressionUrl = $this->aRouting['default'][0];
+                $sExpressionUrl = $this->aRouting['default'][0];
 
-				$sExpressionUrl = str_replace('[task]', $sTask, $sExpressionUrl);
-				$sExpressionUrl = str_replace('[action]', $sAction, $sExpressionUrl);
-				if(isset($aParams))
-				{
-					$sExpressionUrl = str_replace('[params]', $this->parseParams($this->aRouting['default']['_params'][0], $aParams), $sExpressionUrl);
-				}
-
-				/*
-
-                $sExpressionUrl = $sTask;
-                if(!empty($sAction))
-                    $sExpressionUrl = $sTask.'/'.$sAction;
-    
-                if(!empty($aParams)) {
-                    $sExpressionUrl .= '?';
-                    foreach($aParams AS $k => $v){
-                        $test[] = $k.'='.$v;
-                    }
-                    $sExpressionUrl .= implode('&', $test);
+                $sExpressionUrl = str_replace('[task]', $sTask, $sExpressionUrl);
+                $sExpressionUrl = str_replace('[action]', $sAction, $sExpressionUrl);
+                if(isset($aParams)){
+                    $sExpressionUrl = str_replace('[params]', $this->parseParams($this->aRouting['default']['_params'][0], $aParams), $sExpressionUrl);
                 }
 
-                */
             }
 
         }else{
@@ -226,12 +213,10 @@ class Router
                     if(!empty($sAction))
                         $sExpressionUrl = 'index.php?task='.$sTask.'&action='.$sAction;
         
-                    if(!empty($aParams)){
-                        foreach($aParams AS $k => $v){
-                            $sExpressionUrl .= '&'.$k.'='.$v;
-                        }
-                    }
                 }
+
+                if(!empty($aParams))
+                    $sExpressionUrl = $sExpressionUrl . "?" . http_build_query($aParams);
             }
 
         }
