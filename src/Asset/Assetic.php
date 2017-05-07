@@ -12,6 +12,7 @@ use Assetic\Filter;
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetReference;
 use Assetic\Filter\GoogleClosure;
+use Patchwork\JSqueeze;
 
 /**
 * Slawek Kaleta
@@ -22,9 +23,9 @@ class Assetic extends Router
 
     private function checkDir($path){
         if(!is_dir(appDir.$path)){
-            if(!mkdir(appDir.$path)){
+            if(!mkdir(appDir.$path))
                 throw new BaseException('Unable to create'.appDir.$path);
-            }
+            
         }
 
     }
@@ -67,19 +68,16 @@ class Assetic extends Router
             if(!is_writable(appDir.$path))
                 throw new BaseException('Unable to get an app/view/'.$path);
 
-                $css = new AssetCollection(array(
-                    new FileAsset($srcPath),
-                ), array(
-                    new GoogleClosure\CompilerApiFilter(),
-                    //new DartFilter(),
-                ));
+                $js = file_get_contents($srcPath);
+                if(ini_get('display_errors') == "off"){
+                    $jSqueeze = new JSqueeze();
+                    $js = $jSqueeze->squeeze($js, true, true, false);
+                }
 
-                file_put_contents($dstPath, $css->dump());
+                if(!file_put_contents($dstPath, $js))
+                    throw new BaseException('Unable to copy an asset');
 
-                //if(!file_put_contents($dstPath, $css->dump()));
-                //    throw new BaseException('Unable to copy an asset');
-
-            }
+        }
            
         //Zwrocenie linku do kopii
         $sExpressionUrl = $sUrl;
