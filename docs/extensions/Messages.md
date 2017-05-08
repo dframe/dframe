@@ -15,7 +15,7 @@ include_once 'vendor/autoload.php';
 
 $msg = new Messages(new Session('HashSaltRandomForSession')); // Join the current session
 $msg->add('s', 'Success Message!');
-
+//$msg->add('s', 'Success Message!', 'page/index'); // with redirect 
 $msg->hasMessages('success'): // Will return array['success']
 $msg->hasMessages(): // Will return all array
 
