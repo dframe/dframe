@@ -1,6 +1,13 @@
 <?php
 namespace Dframe\View;
 
+/**
+ * DframeFramework
+ * Copyright (c) Sławomir Kaleta
+ * @license https://github.com/dusta/Dframe/blob/master/LICENCE
+ *
+ */
+
 interface interfaceView
 {
 
