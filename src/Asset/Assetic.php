@@ -1,6 +1,5 @@
 <?php
 namespace Dframe\Asset;
-
 use Dframe\BaseException;
 use Dframe\Router;
 
@@ -15,8 +14,11 @@ use Assetic\Filter\GoogleClosure;
 use Patchwork\JSqueeze;
 
 /**
-* Slawek Kaleta
-*/
+ * DframeFramework
+ * Copyright (c) Sławomir Kaleta
+ * @license https://github.com/dusta/Dframe/blob/master/LICENCE
+ *
+ */
 
 class Assetic extends Router
 {

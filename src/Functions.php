@@ -1,4 +1,12 @@
 <?php
+
+/**
+ * DframeFramework
+ * Copyright (c) Sławomir Kaleta
+ * @license https://github.com/dusta/Dframe/blob/master/LICENCE
+ *
+ */
+
 function pathFile($path) {
     $folder = '';
     $name = $path;

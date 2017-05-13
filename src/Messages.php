@@ -5,10 +5,10 @@ use Dframe\Session;
 use Dframe\Router;
 
 /**
- * Session-Based Flash Messages
- * 
+ * DframeFramework
+ * Copyright (c) Sławomir Kaleta
+ * @license https://github.com/dusta/Dframe/blob/master/LICENCE
  * Original @author Mike Everhart
- * @author Sławomir Kaleta
  *
  */
 
