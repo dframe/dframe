@@ -3,6 +3,13 @@ namespace Dframe\View;
 use \Dframe\Config;
 
 /**
+ * DframeFramework
+ * Copyright (c) Sławomir Kaleta
+ * @license https://github.com/dusta/Dframe/blob/master/LICENCE
+ *
+ */
+
+/**
  * This class includes methods for models.
  *
  * @abstract
@@ -25,14 +32,14 @@ class twigView implements \Dframe\View\interfaceView
 
 
     public function assign($name, $value) {
-        try {
+        
+        try{
             if (isset($this->assigns[$name])) {
                 throw new \Exception('You can\'t assign "'.$name . '" in Twig');
             } else {
                 return $this->assigns[$name] = $value;
             }
-        }
-        catch(Exception $e) {
+        }catch(Exception $e) {
             echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
                 Code line: '.$e->getLine().'<br />
@@ -62,14 +69,14 @@ class twigView implements \Dframe\View\interfaceView
         $name = $pathFile[1];
 
         $path= $twigConfig->get('setTemplateDir').'/'.$folder.$name.$twigConfig->get('fileExtension', '.twig');
-        try {
+
+        try{
             if(is_file($path)) {
                 $this->twig->render($name, $this->assign);
             } else {
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
             }
-        }
-        catch(Exception $e) {
+        }catch(\Exception $e) {
             echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
                 Code line: '.$e->getLine().'<br />

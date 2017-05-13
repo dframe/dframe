@@ -3,9 +3,10 @@ namespace Dframe\View;
 use \Dframe\Config;
 
 /**
- * This class includes methods for models.
+ * DframeFramework
+ * Copyright (c) Sławomir Kaleta
+ * @license https://github.com/dusta/Dframe/blob/master/LICENCE
  *
- * @abstract
  */
 
 class smartyView implements \Dframe\View\interfaceView
@@ -21,7 +22,6 @@ class smartyView implements \Dframe\View\interfaceView
         $this->smarty = $smarty;
     }
 
-
     public function assign($name, $value) {
         try {
             if($this->smarty->getTemplateVars($name) !== null)
@@ -29,8 +29,7 @@ class smartyView implements \Dframe\View\interfaceView
             else
                 return $this->smarty->assign($name, $value);
 
-        }
-        catch(Exception $e) {
+        }catch(Exception $e) {
             echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
                 Code line: '.$e->getLine().'<br />
@@ -55,8 +54,7 @@ class smartyView implements \Dframe\View\interfaceView
             else
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
 
-        }
-        catch(Exception $e) {
+        }catch(Exception $e) {
             echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
                 Code line: '.$e->getLine().'<br />
@@ -84,14 +82,13 @@ class smartyView implements \Dframe\View\interfaceView
         if($path == null)
            $path= $smartyConfig->get('setTemplateDir').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
         
-        try {
+        try{
             if(is_file($path))
                 $this->smarty->display($path); // Ładowanie widoku
             else
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
 
-        }
-        catch(Exception $e) {
+        }catch(Exception $e) {
             echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
                 Code line: '.$e->getLine().'<br />
