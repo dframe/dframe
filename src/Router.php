@@ -197,10 +197,7 @@ class Router
                     }
 
                     $sExpressionUrl = 'index.php?'.$sExpressionUrl0;
-          
-
-
-          
+                    
                 }else{
 
                     $sExpressionUrl = 'index.php?task='.$sTask;
