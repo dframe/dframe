@@ -55,10 +55,11 @@ class Messages
                 throw new BaseException('"' . strip_tags($type) . '" is not a valid message type!' , 501);
 
         } catch(BaseException $e) {
-            if(ini_get('display_errors') == "on"){
-                echo $e->getMessage().'<br />
-                File: '.$e->getFile().'<br />
-                Code line: '.$e->getLine().'<br /> 
+
+            if(ini_get('display_errors') == 'on'){
+                echo $e->getMessage().'<br><br>
+                File: '.$e->getFile().'<br>
+                Code line: '.$e->getLine().'<br> 
                 Trace: '.$e->getTraceAsString();
                 exit();
             }

@@ -61,17 +61,18 @@ class Loader extends Core
                 throw new BaseException('Bad controller error');
 
         }catch(BaseException $e) {
-            if(ini_get('display_errors') == "on"){
-                echo $e->getMessage().'<br />
-                File: '.$e->getFile().'<br />
-                Code line: '.$e->getLine().'<br /> 
+            
+            if(ini_get('display_errors') == 'on'){
+                echo $e->getMessage().'<br><br>
+                File: '.$e->getFile().'<br>
+                Code line: '.$e->getLine().'<br> 
                 Trace: '.$e->getTraceAsString();
                 exit();
             }
 
             $routerConfig = Config::load('router');
             header("HTTP/1.0 404 Not Found");
-            $this->router->redirect($routerConfig->get('404'));
+            $this->router->redirect($routerConfig->get('error/404'));
             exit();
         }
         
