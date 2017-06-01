@@ -11,20 +11,20 @@ namespace Dframe;
 class Session
 {
     
-    function __construct($session_name){
+    function __construct($name){
         if(!isset($_SESSION)){
-           session_name($session_name);
+           session_name($name);
            session_start();
         }
     }
 
     public function register($time = 60){
-        $_SESSION['session_id'] = session_id();
-        $_SESSION['session_time'] = intval($time);
+        $_SESSION['sessionId'] = session_id();
+        $_SESSION['sessionTime'] = intval($time);
     }
 
     public function authLogin(){
-        if(!empty($_SESSION['session_id']))
+        if(!empty($_SESSION['sessionId']))
             return true;
         else 
             return false;
