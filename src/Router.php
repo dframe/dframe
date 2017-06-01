@@ -102,7 +102,7 @@ class Router
             parse_str($sGets, $aGets);
     
             $aTask = !empty($aGets['task'])?$aGets['task']:$this->aRouting['NAME_CONTROLLER'];
-            $gAction = !empty($aGets['action'])?$aGets['action']:$this->aRouting['NAME_MODEL'];
+            $gAction = !empty($aGets['action'])?$aGets['action']:$this->aRouting['NAME_METHOD'];
     
     
             if(!empty($action))
@@ -246,7 +246,7 @@ class Router
             $_GET['task'] = !empty($aGets['task'])?$aGets['task']:$this->aRouting['NAME_CONTROLLER'];
             unset($aGets['task']);
 
-            $_GET['action'] = !empty($aGets['action'])?$aGets['action']:$this->aRouting['NAME_MODEL'];
+            $_GET['action'] = !empty($aGets['action'])?$aGets['action']:$this->aRouting['NAME_METHOD'];
             unset($aGets['action']);
 
             $_GET = array_merge($_GET, $aGets);
@@ -254,7 +254,7 @@ class Router
         }else{
 
             $_GET['task'] = !empty($_GET['task'])?$_GET['task']:$this->aRouting['NAME_CONTROLLER'];
-            $_GET['action'] = !empty($_GET['action'])?$_GET['action']:$this->aRouting['NAME_MODEL'];
+            $_GET['action'] = !empty($_GET['action'])?$_GET['action']:$this->aRouting['NAME_METHOD'];
             
         }
 
