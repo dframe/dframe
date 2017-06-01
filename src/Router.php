@@ -190,10 +190,16 @@ class Router
     
                     $sExpressionUrl0 = $this->aRouting[$findKey][1];
                     foreach($aParams AS $key => $value) {
-                        $sExpressionUrl0 = str_replace('['.$key.']', $value, $sExpressionUrl0);
+                        $sExpressionUrl0 = str_replace('['.$key.']', $value, $sExpressionUrl0, $count);
+                        if ($count > 0) {
+                            unset($aParams[$key]);
+                        }
                     }
 
                     $sExpressionUrl = 'index.php?'.$sExpressionUrl0;
+          
+
+
           
                 }else{
 
