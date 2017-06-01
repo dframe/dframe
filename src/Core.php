@@ -70,17 +70,19 @@ class Core
                 throw new BaseException('Can not open '.$type.' '.$name.' in: '.$path);
            
         }catch(BaseException $e) {
+            
             if(ini_get('display_errors') == "on"){
-                echo $e->getMessage().'<br />
-                File: '.$e->getFile().'<br />
-                Code line: '.$e->getLine().'<br /> 
+                echo $e->getMessage().'<br><br>
+                File: '.$e->getFile().'<br>
+                Code line: '.$e->getLine().'<br> 
                 Trace: '.$e->getTraceAsString();
                 exit();
             }
 
             $routerConfig = Config::load('router');
             header("HTTP/1.0 400 Bad Request");
-            echo $e->getMessage();
+            $this->router->redirect($routerConfig->get('error/404'));
+
             exit();
         }
 
