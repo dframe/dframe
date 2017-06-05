@@ -7,6 +7,7 @@ use Assetic\Asset\FileAsset;
 use Assetic\Filter\CssImportFilter;
 use Assetic\Filter\CssRewriteFilter;
 use Assetic\Filter\PhpCssEmbedFilter;
+use Assetic\Filter\CssMinFilter;
 use Assetic\Filter;
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetReference;
@@ -134,6 +135,7 @@ class Assetic extends Router
                     new CssImportFilter(),
                     new CssRewriteFilter(),
                     new PhpCssEmbedFilter(),
+                    new CssMinFilter(),
                 ));
 
                 file_put_contents($dstPath, $css->dump());
