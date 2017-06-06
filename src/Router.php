@@ -13,7 +13,6 @@ class Router
 {
 
     public $aRouting;
-    private $aRoutingParse;
     private $sURI;
     private $parsingArray;
     private $subdomain = false;
@@ -35,7 +34,6 @@ class Router
         $this->setHttps($routerConfig->get('https', false));
 
         $this->aRouting = $routerConfig->get();
-        $this->aRoutingParse = $routerConfig->get();
 
         // Check forced Https
         if($this->https == true){
@@ -267,7 +265,7 @@ class Router
 
 
         $sVars = null;
-        foreach($this->aRoutingParse AS $k => $v){
+        foreach($this->aRouting AS $k => $v){
             
             if(!is_array($v))
                 continue;
@@ -315,7 +313,7 @@ class Router
                         $sVars = str_replace('['.$v_[0].']', $v_[1], $sVars);
                         
                     else {
-                        $this->aRoutingParse = array($v['_'.$v_[0]]);
+                        $this->aRouting = array($v['_'.$v_[0]]);
                         $sVars = $sVars.$this->parseUrl($v_[1]);
 
                     }
@@ -414,6 +412,10 @@ class Router
         $sUrl .= $sExpressionUrl;
         
         return $sUrl;
+    }
+
+    public function addRoute($newRoute){
+        $this->aRouting = array_merge($this->aRouting, $newRoute);
     }
 
 }
