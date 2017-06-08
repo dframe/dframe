@@ -72,7 +72,7 @@ class Loader extends Core
 
             $routerConfig = Config::load('router');
             header("HTTP/1.0 404 Not Found");
-            $this->router->redirect($routerConfig->get('error/404'));
+            $this->router->redirect($routerConfig->get('error/404')[0]);
             exit();
         }
         
