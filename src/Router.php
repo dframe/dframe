@@ -13,6 +13,7 @@ class Router
 {
 
     public $aRouting;
+    private $aRoutingParse;
     private $sURI;
     private $parsingArray;
     private $subdomain = false;
@@ -33,7 +34,8 @@ class Router
         $routerConfig = Config::load('router');
         $this->setHttps($routerConfig->get('https', false));
 
-        $this->aRouting = $routerConfig->get();
+        $this->aRouting = $routerConfig->get(); // For url
+        $this->aRoutingParse = $routerConfig->get(); // For parsing array
 
         // Check forced Https
         if($this->https == true){
@@ -265,7 +267,7 @@ class Router
 
 
         $sVars = null;
-        foreach($this->aRouting AS $k => $v){
+        foreach($this->aRoutingParse AS $k => $v){
             
             if(!is_array($v))
                 continue;
@@ -313,7 +315,7 @@ class Router
                         $sVars = str_replace('['.$v_[0].']', $v_[1], $sVars);
                         
                     else {
-                        $this->aRouting = array($v['_'.$v_[0]]);
+                        $this->aRoutingParse = array($v['_'.$v_[0]]);
                         $sVars = $sVars.$this->parseUrl($v_[1]);
 
                     }
