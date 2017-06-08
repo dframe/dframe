@@ -21,19 +21,22 @@ use Patchwork\JSqueeze;
  *
  */
 
+set_time_limit(120);
+
 class Assetic extends Router
 {
 
     private function checkDir($path){
-        if(!is_dir(appDir.$path)){
-            if(!mkdir(appDir.$path))
-                throw new BaseException('Unable to create'.appDir.$path);
+        if(!is_dir($path)){
+            if(!mkdir($path))
+                throw new BaseException('Unable to create'.$path);
 
         }
 
     }
 
-    public function assetJs($sUrl = null, $path = null){
+    public function assetJs($sUrl = null, $path = null, $compress = true){
+
 
         if(is_null($path)){
             $path = 'assets';
@@ -65,13 +68,18 @@ class Assetic extends Router
                 throw new BaseException('Unable to get an app/View/'.$path);
 
             $js = file_get_contents($srcPath);
+
             if(ini_get('display_errors') == "off"){
-                $jSqueeze = new JSqueeze();
-                $js = $jSqueeze->squeeze($js, true, true, false);
+                if($compress === true){
+                   $jSqueeze = new JSqueeze();
+                   $js = $jSqueeze->squeeze($js, true, true, false);
+                }
             }
 
-            if(!file_put_contents($dstPath, $js))
-                throw new BaseException('Unable to copy an asset');
+            if(!file_put_contents($dstPath, $js)){
+                $msg = 'Unable to copy an asset From: '.$srcPath.' TO '.$dstPath;
+                file_put_contents(appDir.'../app/View/logs/router.txt', date( 'Y-m-d h:m:s' ) . ' :: ' . $msg . "\n", FILE_APPEND);
+            }
 
         }
 
@@ -146,22 +154,29 @@ class Assetic extends Router
 
                         $subDir .= "/".$dir;
                         $fileDst = appDir.$path.$subDir;
-                        $fileDst = $this->getAbsolutePath($fileDst);
-        
-                        $this->checkDir($this->getAbsolutePath($path.$subDir));
+                        $this->checkDir($path.$subDir);
 
                     }
 
-                    $sourceCopyFile = $this->getAbsolutePath(appDir.'../app/View/assets/'.$subDir.'/'.$url);
+                    $sourceCopyFile = appDir.'../app/View/assets/'.$subDir.'/'.$url;
                     // var_dump($sourceCopyFile);
                     $file = file_get_contents($sourceCopyFile);
-                    file_put_contents($fileDst.'/'.$endFile, $file);
+                    if(!file_put_contents(appDir.$fileDst.'/'.$endFile, $file)){
+                        $msg = 'Unable to copy an asset From: '.$srcPath.' TO '.$dstPath;
+                        file_put_contents(appDir.'../app/View/logs/router.txt', date( 'Y-m-d h:m:s' ) . ' :: ' . $msg . "\n", FILE_APPEND);
+            
+                    }
                 }
 
 
             }
             //file_put_contents($dstPath, $css->dump());
-            file_put_contents($dstPath, $css->dump());
+            if(!file_put_contents($dstPath, $css->dump())){
+                $msg = 'Unable to copy an asset From: '.$srcPath.' TO '.$dstPath;
+                file_put_contents(appDir.'../app/View/logs/router.txt', date( 'Y-m-d h:m:s' ) . ' :: ' . $msg . "\n", FILE_APPEND);
+            }
+
+
             //if($copy === false);
             //   throw new BaseException('Unable to copy an asset'. $dstPath);
         }
@@ -172,21 +187,5 @@ class Assetic extends Router
         $sUrl .= $sExpressionUrl;
 
         return $sUrl;
-    }
-
-
-    function getAbsolutePath($path) {
-        $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
-        $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
-        $absolutes = array();
-        foreach ($parts as $part) {
-            if ('.' == $part) continue;
-            if ('..' == $part) {
-                array_pop($absolutes);
-            } else {
-                $absolutes[] = $part;
-            }
-        }
-        return implode(DIRECTORY_SEPARATOR, $absolutes);
     }
 }
