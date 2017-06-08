@@ -161,7 +161,7 @@ class Assetic extends Router
                     $sourceCopyFile = appDir.'../app/View/assets/'.$subDir.'/'.$url;
                     // var_dump($sourceCopyFile);
                     $file = file_get_contents($sourceCopyFile);
-                    if(!file_put_contents(appDir.$fileDst.'/'.$endFile, $file)){
+                    if(!file_put_contents($fileDst.'/'.$endFile, $file)){
                         $msg = 'Unable to copy an asset From: '.$srcPath.' TO '.$dstPath;
                         file_put_contents(appDir.'../app/View/logs/router.txt', date( 'Y-m-d h:m:s' ) . ' :: ' . $msg . "\n", FILE_APPEND);
             
