@@ -28,7 +28,7 @@ class Assetic extends Router
         if(!is_dir(appDir.$path)){
             if(!mkdir(appDir.$path))
                 throw new BaseException('Unable to create'.appDir.$path);
-            
+
         }
 
     }
@@ -39,10 +39,10 @@ class Assetic extends Router
             $path = 'assets';
             if(isset($this->aRouting['assetsPath']) AND !empty($this->aRouting['assetsPath'])){
                 $path = $this->aRouting['assetsPath'];
-                $this->checkDir($path);
+                $this->checkDir($path); // Create Dir if not exist
             }
         }
-    	
+
 
         //Podstawowe sciezki
         $srcPath = appDir.'../app/View/assets/'.$sUrl;
@@ -58,35 +58,28 @@ class Assetic extends Router
             $subDir = "";
             foreach ($relDir as $dir) {
                 $subDir .= "/".$dir;
-                $fileDst = appDir.$path.$subDir;
-
-                if(!is_dir($fileDst)){
-                    if(!mkdir($fileDst)){
-                        throw new BaseException('Unable to create new directory');
-                    }
-                }
+                $this->checkDir($path.$subDir); // Create Dir if not exist
             }
 
-
             if(!is_writable(appDir.$path))
-                throw new BaseException('Unable to get an app/view/'.$path);
+                throw new BaseException('Unable to get an app/View/'.$path);
 
-                $js = file_get_contents($srcPath);
-                if(ini_get('display_errors') == "off"){
-                    $jSqueeze = new JSqueeze();
-                    $js = $jSqueeze->squeeze($js, true, true, false);
-                }
+            $js = file_get_contents($srcPath);
+            if(ini_get('display_errors') == "off"){
+                $jSqueeze = new JSqueeze();
+                $js = $jSqueeze->squeeze($js, true, true, false);
+            }
 
-                if(!file_put_contents($dstPath, $js))
-                    throw new BaseException('Unable to copy an asset');
+            if(!file_put_contents($dstPath, $js))
+                throw new BaseException('Unable to copy an asset');
 
         }
-           
+
         //Zwrocenie linku do kopii
         $sExpressionUrl = $sUrl;
         $sUrl = $this->requestPrefix.HTTP_HOST.'/'.$path.'/';
         $sUrl .= $sExpressionUrl;
-        
+
         return $sUrl;
     }
 
@@ -114,42 +107,86 @@ class Assetic extends Router
             $subDir = "";
             foreach ($relDir as $dir) {
                 $subDir .= "/".$dir;
-                $fileDst = appDir.$path.$subDir;
-
-                if(!is_dir($fileDst)){
-                    if(!mkdir($fileDst)){
-                        throw new BaseException('Unable to create new directory');
-                    }
-                }
+                $this->checkDir($path.$subDir); // Create Dir if not exist
             }
-
 
             if(!is_writable(appDir.$path))
-                throw new BaseException('Unable to get an app/view/'.$path);
+                throw new BaseException('Unable to get an app/View/'.$path);
 
-                $css = new AssetCollection(array(
-                    new FileAsset($srcPath),
-                ), array(
-                    // Windows Java
-                    //new Yui\CssCompressorFilter('C:\yuicompressor-2.4.7\build\yuicompressor-2.4.7.jar', 'java'),
-                    new CssImportFilter(),
-                    new CssRewriteFilter(),
-                    new PhpCssEmbedFilter(),
-                    new CssMinFilter(),
-                ));
+            $css = new AssetCollection(array(
+                new FileAsset($srcPath),
+            ), array(
+                // Windows Java
+                //new Yui\CssCompressorFilter('C:\yuicompressor-2.4.7\build\yuicompressor-2.4.7.jar', 'java'),
+                new CssImportFilter(),
+                new CssRewriteFilter(),
+                new PhpCssEmbedFilter(),
+                new CssMinFilter(),
+            ));
 
-                file_put_contents($dstPath, $css->dump());
+            preg_match_all("/url\('([^\)]+?\.(woff2|woff|eot|ttf|svg))/", $css->dump(), $m);
 
-                //if(!file_put_contents($dstPath, $css->dump()));
-                //    throw new BaseException('Unable to copy an asset');
+            foreach ($m['1'] as $key => $url) {
+
+                if(file_exists(appDir.'../app/View/assets/'.$subDir.'/'.$url)){
+
+                    //var_dump(appDir.'../app/View/assets/'.$subDir.'/'.$url);
+
+                    //Rekonstruujemy sciezki
+                    $relDir = explode('/',$subDir.'/'.$url);
+                    $endFile = end($relDir);
+
+                    array_pop($relDir);
+                    $subDir = "";
+                    $i = 0;
+                    foreach ($relDir as $key => $dir) {
+                        $i++;
+                        if($i < 2)
+                            continue;
+
+                        $subDir .= "/".$dir;
+                        $fileDst = appDir.$path.$subDir;
+                        $fileDst = $this->getAbsolutePath($fileDst);
+        
+                        $this->checkDir($this->getAbsolutePath($path.$subDir));
+
+                    }
+
+                    $sourceCopyFile = $this->getAbsolutePath(appDir.'../app/View/assets/'.$subDir.'/'.$url);
+                    // var_dump($sourceCopyFile);
+                    $file = file_get_contents($sourceCopyFile);
+                    file_put_contents($fileDst.'/'.$endFile, $file);
+                }
+
 
             }
-           
+            //file_put_contents($dstPath, $css->dump());
+            file_put_contents($dstPath, $css->dump());
+            //if($copy === false);
+            //   throw new BaseException('Unable to copy an asset'. $dstPath);
+        }
+
         //Zwrocenie linku do kopii
         $sExpressionUrl = $sUrl;
         $sUrl = $this->requestPrefix.HTTP_HOST.'/'.$path.'/';
         $sUrl .= $sExpressionUrl;
-        
+
         return $sUrl;
+    }
+
+
+    function getAbsolutePath($path) {
+        $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
+        $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
+        $absolutes = array();
+        foreach ($parts as $part) {
+            if ('.' == $part) continue;
+            if ('..' == $part) {
+                array_pop($absolutes);
+            } else {
+                $absolutes[] = $part;
+            }
+        }
+        return implode(DIRECTORY_SEPARATOR, $absolutes);
     }
 }
