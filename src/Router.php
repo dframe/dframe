@@ -126,7 +126,7 @@ class Router
         return $sUrl;
     }
 
-    public function makeUrl($sUrl = null){
+    public function makeUrl(string $sUrl = null){
 
         $aParamsHook = explode('#', $sUrl);
         $aParams = explode('?', $aParamsHook[0]);
