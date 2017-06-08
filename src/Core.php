@@ -81,7 +81,7 @@ class Core
 
             $routerConfig = Config::load('router');
             header("HTTP/1.0 400 Bad Request");
-            $this->router->redirect($routerConfig->get('error/404'));
+            $this->router->redirect($routerConfig->get('error/404')[0]);
 
             exit();
         }
