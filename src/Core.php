@@ -14,7 +14,7 @@ class Core
 {
     public $baseClass = null;
     
-    public function __construct($bootstrap =null){
+    public function __construct($bootstrap = null){
         if(!defined('appDir'))
            throw new BaseException('Please Define appDir in Main config.php', 500);
 
@@ -61,13 +61,16 @@ class Core
         else
             $name = '\\'.$type.'\\'.$name.$type;
 
+
         try {
-            if(is_file($path)) {
-                include_once $path;
-                $ob = new $name($this->baseClass);
-                $ob->init();
-            }else
-                throw new BaseException('Can not open '.$type.' '.$name.' in: '.$path);
+
+            if(!is_file($path))
+            	throw new BaseException('Can not open '.$type.' '.$name.' in: '.$path);
+
+            include_once $path;
+            $ob = new $name($this->baseClass);
+            $ob->init();
+
            
         }catch(BaseException $e) {
             
@@ -81,7 +84,9 @@ class Core
 
             $routerConfig = Config::load('router');
             header("HTTP/1.0 400 Bad Request");
-            $this->router->redirect($routerConfig->get('error/404')[0]);
+
+            if(isset($routerConfig->get('error/404')[0]))
+                $this->router->redirect($routerConfig->get('error/404')[0]);
 
             exit();
         }

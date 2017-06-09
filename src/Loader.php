@@ -20,33 +20,33 @@ class Loader extends Core
 
     // Establish the requested controller as an object
     public function CreateController($controller = null, $action = null){
-        if(is_null($controller) AND is_null($action)){
+
+        $this->controller = $controller;
+        $this->action = $action;
+        
+        if(is_null($this->controller) AND is_null($this->action)){
             $this->router->parseGets();
-            
             $this->controller = $_GET['task'];
             $this->action = $_GET['action'];
 
-        }else{
-            $this->controller = $controller;
-            $this->action = $action;
-
         }
 
+        $subControler = null;
         if(strstr($this->controller, ",") !== False){
 
             $url = explode(',', $this->controller);
             $urlCount = count($url)-1;
             $subControler = '';
+            
             for ($i=0; $i < $urlCount; $i++) { 
                 $subControler .= $url[$i].'/';
             }
+
             $this->controller = $url[$urlCount];
 
-        }else 
-            $subControler = null;
+        }
 
-
-       // Does the class exist?
+        // Does the class exist?
         $patchController = appDir.'../app/Controller/'.$subControler.''.$this->controller.'.php';
         //var_dump($patchController);
         if(file_exists($patchController)){
@@ -60,6 +60,9 @@ class Loader extends Core
             if(!class_exists('\Controller\\'.$xsubControler.''.$this->controller.'Controller'))
                 throw new BaseException('Bad controller error');
 
+            $this->controller = '\Controller\\'.$xsubControler.''.$this->controller.'Controller';
+            $returnController = new $this->controller($this->baseClass);
+
         }catch(BaseException $e) {
             
             if(ini_get('display_errors') == 'on'){
@@ -72,13 +75,14 @@ class Loader extends Core
 
             $routerConfig = Config::load('router');
             header("HTTP/1.0 404 Not Found");
-            $this->router->redirect($routerConfig->get('error/404')[0]);
+
+            if(isset($routerConfig->get('error/404')[0]))
+                $this->router->redirect($routerConfig->get('error/404')[0]);
+
             exit();
         }
         
-        
-        $this->controller = '\Controller\\'.$xsubControler.''.$this->controller.'Controller';
-        return new $this->controller($this->baseClass);
+        return $returnController;
     }
 
 }

@@ -26,8 +26,8 @@ class smartyView implements \Dframe\View\interfaceView
         try {
             if($this->smarty->getTemplateVars($name) !== null)
                 throw new \Exception('You can\'t assign "'.$name . '" in Smarty');
-            else
-                return $this->smarty->assign($name, $value);
+            
+            $assign = $this->smarty->assign($name, $value);
 
         }catch(Exception $e) {
             echo $e->getMessage().'<br />
@@ -36,6 +36,8 @@ class smartyView implements \Dframe\View\interfaceView
                 Trace: '.$e->getTraceAsString();
             exit();
         }
+
+        return $assign;
     }
 
     public function fetch($name, $path=null) {
@@ -49,10 +51,11 @@ class smartyView implements \Dframe\View\interfaceView
             $path = $smartyConfig->get('setTemplateDir').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
 
         try {
-            if(is_file($path))
-                return $this->smarty->fetch($path); // Ładowanie widoku
-            else
-                throw new \Exception('Can not open template '.$name.' in: '.$path);
+        	
+            if(!is_file($path))
+            	throw new \Exception('Can not open template '.$name.' in: '.$path);
+
+            $fetch = $this->smarty->fetch($path); // Ładowanie widoku
 
         }catch(Exception $e) {
             echo $e->getMessage().'<br />
@@ -61,6 +64,8 @@ class smartyView implements \Dframe\View\interfaceView
                 Trace: '.$e->getTraceAsString();
             exit();
         }
+
+        return $fetch;
     } 
 
     /**
