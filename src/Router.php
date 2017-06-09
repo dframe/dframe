@@ -22,6 +22,7 @@ class Router
 
         if(!defined('HTTP_HOST') AND isset($_SERVER['HTTP_HOST']))
             define('HTTP_HOST', $_SERVER['HTTP_HOST']);
+
         elseif(!defined('HTTP_HOST'))
             define('HTTP_HOST', '');
 
@@ -233,14 +234,13 @@ class Router
 
     public function parseGets(){
 
-
-        
         $sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
         
         if(MOD_REWRITE){
 
             if(substr($sRequest, -1)!='/')
                 $sRequest .= '/';
+
             $sGets = $this->parseUrl($sRequest);
             //$sGets = str_replace('?', '&', $sGets);
 
@@ -352,68 +352,6 @@ class Router
         $this->subdomain = $subdomain;
         return $this;
         
-    }
-
-    /**
-     * Metoda kopiujaca i udostepniajaca pliki w katalogu assets 
-     *
-     * @param string|NULL
-     * @param string|NULL
-     *
-     * @return void
-     */
-    public function assets($sUrl = null, $path = null){
-
-
-        if(is_null($path)){
-            $path = 'assets';
-            if(isset($this->aRouting['assetsPath']) AND !empty($this->aRouting['assetsPath'])){
-                $path = $this->aRouting['assetsPath'];
-
-                if(!is_dir(appDir.$path)){
-                    if(!mkdir(appDir.$path))
-                        throw new BaseException('Unable to create'.appDir.$path);
-                }
-            }
-        }
-
-        //Podstawowe sciezki
-        $srcPath = appDir.'../app/View/assets/'.$sUrl;
-        $dstPath = appDir.$path.'/'.$sUrl;
-        //Kopiowanie pliku jezeli nie istnieje
-        if(!file_exists($dstPath)){
-            if(!file_exists($srcPath))
-                return '';
-
-            //Rekonstruujemy sciezki
-            $relDir = explode('/', $sUrl);
-            array_pop($relDir);
-            $subDir = "";
-            foreach ($relDir as $dir) {
-                $subDir .= "/".$dir;
-                $fileDst = appDir.$path.$subDir;
-
-                if(!is_dir($fileDst)){
-                    if(!mkdir($fileDst)){
-                        throw new BaseException('Unable to create new directory');
-                    }
-                }
-            }
-
-
-            if(!is_writable(appDir.$path))
-                throw new BaseException('Unable to get an app/view/'.$path);
-
-            if(!copy($srcPath, $dstPath))
-                throw new BaseException('Unable to copy an asset');
-        }
-
-        //Zwrocenie linku do kopii
-        $sExpressionUrl = $sUrl;
-        $sUrl = $this->requestPrefix.HTTP_HOST.'/'.$path.'/';
-        $sUrl .= $sExpressionUrl;
-        
-        return $sUrl;
     }
 
     public function addRoute($newRoute){
