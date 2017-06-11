@@ -1,6 +1,7 @@
 <?php
 namespace Dframe;
 use Dframe\Config;
+use Dframe\Router\Response;
 
 /**
  * DframeFramework
@@ -17,6 +18,7 @@ class Router
     private $sURI;
     private $parsingArray;
     private $subdomain = false;
+    public $delay = null;
 
     public function __construct(){
 
@@ -344,8 +346,18 @@ class Router
      */
 
     public function redirect($url = '') {
+        if($this->delay != null){
+            header( "Refresh:".$this->delay."; url=".$this->makeUrl($url));
+            exit();
+        }
+
         header("Location: ".$this->makeUrl($url));
         exit();
+    }
+
+    public function delay(int $delay){
+        $this->delay = $delay;
+        return $this;
     }
 
     public function subdomain($subdomain){
@@ -356,6 +368,11 @@ class Router
 
     public function addRoute($newRoute){
         $this->aRouting = array_merge($this->aRouting, $newRoute);
+    }
+
+    public function response(){
+        return new Response();
+
     }
 
 }
