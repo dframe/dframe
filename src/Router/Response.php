@@ -9,14 +9,14 @@ use Dframe\Config;
  *
  */
 
-class Response
+class Response extends \Dframe\Router
 {
 
     public $status = 200;
 
     public $headers = array();
 
-    public function code = array(
+    public static $code = array(
         100 => 'Continue',
         101 => 'Switching Protocols',
         102 => 'Processing',
@@ -76,11 +76,12 @@ class Response
 
     public function status($code){
         $this->status = $code;
+        return $this;
     }
 
     public function header($header = false){
         $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1');
-        $status = (!empty($this->status) ? $this->status : 200;
+        $status = (!empty($this->status) ? $this->status : 200);
         $string = sprintf('%s %d %s', $protocol, $status, self::$code[$status]);
 
         header($string, true, $status); // Default header
