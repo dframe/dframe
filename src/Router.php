@@ -348,11 +348,11 @@ class Router
     public function redirect($url = '') {
         if($this->delay != null){
             header( "Refresh:".$this->delay."; url=".$this->makeUrl($url));
-            exit();
+            return;
         }
 
         header("Location: ".$this->makeUrl($url));
-        exit();
+        return;
     }
 
     public function delay(int $delay){
