@@ -10,7 +10,7 @@ use Dframe\Config;
  *
  */
 
-class Loader extends Core
+class Loader
 {
 
     private $controller;
@@ -18,23 +18,94 @@ class Loader extends Core
     private $urlvalues;
     public $bootstrap;
 
-    // Establish the requested controller as an object
-    public function CreateController($controller = null, $action = null){
+    public function __construct($bootstrap){
 
-        $this->controller = $controller;
-        $this->action = $action;
+        if(!defined('appDir'))
+           throw new BaseException('Please Define appDir in Main config.php', 500);
+
+        if(!defined('SALT'))
+           throw new BaseException('Please Define SALT in Main config.php', 500);
+
+        $this->baseClass = $bootstrap;
+        if(isset($this->baseClass->router))
+            $this->router = $this->baseClass->router;
         
-        if(is_null($this->controller) AND is_null($this->action)){
-            $this->router->parseGets();
-            $this->controller = $_GET['task'];
-            $this->action = $_GET['action'];
+        return $this;
+    }
 
+
+    /*
+     *   Metoda do includowania pliku modelu i wywołanie objektu przez namespace
+    */
+    public function loadModel($name){
+        return $this->loadObject($name, 'Model');
+    }
+
+    /*
+     *   Metoda do includowania pliku widoku i wywołanie objektu przez namespace
+    */
+    public function loadView($name){
+        return $this->loadObject($name, 'View');
+
+    }
+
+    private function loadObject($name, $type){
+
+        if(!in_array($type, (array('Model', 'View'))))
+            return false;
+
+        $pathFile = pathFile($name);
+        $folder = $pathFile[0];
+        $name = $pathFile[1];
+        
+        $n = str_replace($type, '', $name);
+        $path = appDir.'../app/'.$type.'/'.$folder.$n.'.php';
+
+        if(!empty($folder))
+            $name = '\\'.$type.'\\'.str_replace(array('\\', '/'), '\\', $folder).$name.$type;   
+        else
+            $name = '\\'.$type.'\\'.$name.$type;
+
+
+        try {
+
+            if(!is_file($path))
+                throw new BaseException('Can not open '.$type.' '.$name.' in: '.$path);
+
+            include_once $path;
+            $ob = new $name($this->baseClass);
+            $ob->init();
+           
+        }catch(BaseException $e) {
+            
+            if(ini_get('display_errors') == "on"){
+                echo $e->getMessage().'<br><br>
+                File: '.$e->getFile().'<br>
+                Code line: '.$e->getLine().'<br> 
+                Trace: '.$e->getTraceAsString();
+                exit();
+            }
+
+            $routerConfig = Config::load('router');
+            header("HTTP/1.0 400 Bad Request");
+
+            if(isset($routerConfig->get('error/404')[0]))
+                $this->router->redirect($routerConfig->get('error/404')[0]);
+
+            exit();
         }
 
-        $subControler = null;
-        if(strstr($this->controller, ",") !== False){
+        return $ob; 
+    }
 
-            $url = explode(',', $this->controller);
+
+    // Establish the requested controller as an object
+    public function loadController($controller){
+
+        $subControler = null;
+        if(strstr($controller, ",") !== False){
+
+            $url = explode(',', $controller);
             $urlCount = count($url)-1;
             $subControler = '';
             
@@ -42,12 +113,12 @@ class Loader extends Core
                 $subControler .= $url[$i].'/';
             }
 
-            $this->controller = $url[$urlCount];
+            $controller = $url[$urlCount];
 
         }
 
         // Does the class exist?
-        $patchController = appDir.'../app/Controller/'.$subControler.''.$this->controller.'.php';
+        $patchController = appDir.'../app/Controller/'.$subControler.''.$controller.'.php';
         //var_dump($patchController);
         if(file_exists($patchController)){
             include_once $patchController;
@@ -57,11 +128,11 @@ class Loader extends Core
         $xsubControler = str_replace("/", "\\", $subControler);
         try {
 
-            if(!class_exists('\Controller\\'.$xsubControler.''.$this->controller.'Controller'))
+            if(!class_exists('\Controller\\'.$xsubControler.''.$controller.'Controller'))
                 throw new BaseException('Bad controller error');
 
-            $this->controller = '\Controller\\'.$xsubControler.''.$this->controller.'Controller';
-            $returnController = new $this->controller($this->baseClass);
+            $controller = '\Controller\\'.$xsubControler.''.$controller.'Controller';
+            $returnController = new $controller($this->baseClass);
 
         }catch(BaseException $e) {
             
@@ -84,5 +155,16 @@ class Loader extends Core
         
         return $returnController;
     }
+
+
+
+    /** 
+     * Metoda 
+     * init dzialajaca jak __construct wywoływana na poczatku kodu
+     * end identycznie tyle ze na końcu
+     */
+
+    public function init() {}
+    public function end() {}
 
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Dframe;
 use Dframe\Config;
+use Dframe\Loader;
 use Dframe\Router\Response;
 
 /**
@@ -19,6 +20,7 @@ class Router
     private $parsingArray;
     private $subdomain = false;
     public $delay = null;
+    public $parseArgs = array();
 
     public function __construct(){
 
@@ -56,7 +58,39 @@ class Router
                 $this->requestPrefix = 'https://';
             }
         }
+    }
 
+    public function run($controller = null, $action = null, $arg = array()){
+
+        if(is_null($controller) AND is_null($action)){
+            $this->parseGets();
+            $controller = $_GET['task'];
+            $action = $_GET['action'];
+
+        }
+        $arg = $this->parseArgs;
+
+        $baseClass = new \Bootstrap();
+        $baseClass->router = $this;
+
+        $loader = new Loader($baseClass);
+        $controller = $loader->loadController($controller); # Loading Controller class
+        
+        if(method_exists($controller, 'start'))
+            $controller->start();
+        
+        if(method_exists($controller, 'init'))
+            call_user_func_array(array($controller, 'init'), $arg);
+
+
+        if(method_exists($controller, $action) AND is_callable(array($controller, $action))){
+            call_user_func_array(array($controller, (string)$action), $arg);
+        }
+        
+        if(method_exists($controller, 'end'))
+            $controller->end();
+
+        return;
     }
  
     private function setHttps($option = false){
@@ -280,7 +314,14 @@ class Router
             }, $v[0]);
 
 
+
+
             if(preg_match_all('!'.$sExpression.'!i', $sRequest, $aExpression__)){
+
+                $args = array();
+                if(isset($v['args']))
+                    $args = $v['args'];
+
 
                 foreach($aExpression__ AS $k_ => $v_){
                     foreach($v_ AS $kkk => $vvv){
@@ -300,30 +341,42 @@ class Router
                 $iCount = count($aExpression__[0]);
                 if($iCount>1){
                     for($i=0;$i<$iCount;$i++){
-                        if($i>0)
+                        if($i>0){
                             $sVars .= '&'.preg_replace('!\[(.+?)\]!i', '[$1_'.$i.']', $v[1]);
-                        else
+                        }else
                             $sVars = '&'.$v[1];                        
                     }
 
                 }else                
                     $sVars = '&'.$v[1];
-            
+
+
                 foreach($aExpression AS $k => $v_){
+
                     if(!isset($v['_'.$v_[0]]))
                         $v['_'.$v_[0]] = null;
                     
-                    if(!is_array($v['_'.$v_[0]]))
-                        $sVars = str_replace('['.$v_[0].']', $v_[1], $sVars);
-                        
-                    else {
-                        $this->aRoutingParse = array($v['_'.$v_[0]]);
-                        $sVars = $sVars.$this->parseUrl($v_[1]);
+                    if(!is_array($v['_'.$v_[0]])){
+                        foreach ($args as $key => $value) {
+                            $args[$key] = str_replace('['.$v_[0].']', $v_[1], $args[$key]);
+                        }
 
-                    }
-                }                
-                break;
+                        $sVars = str_replace('['.$v_[0].']', $v_[1], $sVars);
+                    
+                    }else {
+                       $this->aRoutingParse = array($v['_'.$v_[0]]);
+                       $sVars = $sVars.$this->parseUrl($v_[1]);
+
+                   }
+                }   
+                // 
+                $this->parseArgs = $args;  
+                break;                
+
             }
+
+
+
         }    
 
         return $sVars;

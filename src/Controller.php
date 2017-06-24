@@ -8,5 +8,5 @@ namespace Dframe;
  *
  */
 
-abstract class Controller extends Core{
+abstract class Controller extends Loader {
 }

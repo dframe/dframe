@@ -8,7 +8,7 @@ namespace Dframe;
  *
  */
 
-abstract class Model extends Core
+abstract class Model extends Loader
 {
     
     public function methodResult($type, $array = null){

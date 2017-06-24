@@ -9,13 +9,14 @@ use Dframe\BaseException;
  *
  */
 
-abstract class View extends Core implements \Dframe\View\interfaceView
+abstract class View extends Loader implements \Dframe\View\interfaceView
 {
     public function __construct($baseClass){
         parent::__construct($baseClass);
         
         if(!isset($this->view))
            throw new BaseException('Please Define view engine in app/View.php', 500);
+
     }
 
     public function assign($name, $value) {
