@@ -14,9 +14,7 @@ class Core
     public function run(){
 
         $router = new Router();
-        $router->run();
-
-        return;
+        return $router->run();
 
     }
 
