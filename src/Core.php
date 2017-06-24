@@ -18,4 +18,8 @@ class Core
 
     }
 
+    public function setView($view){
+    	$this->view = $view;
+    }
+
 }

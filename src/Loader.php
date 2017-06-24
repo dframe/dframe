@@ -2,6 +2,7 @@
 namespace Dframe;
 use Dframe\BaseException;
 use Dframe\Config;
+use Dframe\Core;
 
 /**
  * DframeFramework
@@ -10,7 +11,7 @@ use Dframe\Config;
  *
  */
 
-class Loader
+class Loader extends Core
 {
 
     private $controller;
