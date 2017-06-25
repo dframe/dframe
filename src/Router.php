@@ -108,49 +108,8 @@ class Router
     // Sprawdzanie czy to jest aktualnie wybrana zakładka
     public function isActive($url) {
 
-        if(empty($url) OR $url == false)
-            return false; 
-
-        if(!is_array($url))
-            $url = array($url);
-
-        foreach($url as $oneurl) {
-    
-            $sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
-    
-            if(strpos($oneurl, '/'))
-                list($task, $action) = explode('/', $oneurl);
-            else
-                $task = $oneurl;
-    
-            if(MOD_REWRITE){
-            
-                if(substr($sRequest, -1)!='/')
-                    $sRequest .= '/';
-    
-                $sGets = $this->parseUrl($sRequest);
-    
-            }else{
-    
-                if(substr($sRequest, 0, 1)=='?')
-                    $sRequest = substr($sRequest, 1);
-                
-                $sGets = $sRequest;
-                $sGets = str_replace("index.php?", "", $sGets);
-                
-            }
-    
-            parse_str($sGets, $aGets);
-    
-            $aTask = !empty($aGets['task'])?$aGets['task']:$this->aRouting['NAME_CONTROLLER'];
-            $gAction = !empty($aGets['action'])?$aGets['action']:$this->aRouting['NAME_METHOD'];
-    
-    
-            if(!empty($action))
-                return ($task == $aTask) AND ($action == $gAction);
-    
-            return ($task == $aTask);
-        }
+        if($this->makeUrl($url, true) == str_replace($this->sURI, '', $_SERVER['REQUEST_URI']))
+            return true;
 
         return false;
 
@@ -167,7 +126,7 @@ class Router
         return $sUrl;
     }
 
-    public function makeUrl(string $sUrl = null){
+    public function makeUrl(string $sUrl = null, $onlyExt = false){
 
         $aParamsHook = explode('#', $sUrl);
         $aParams = explode('?', $aParamsHook[0]);
@@ -265,6 +224,8 @@ class Router
         if(!empty($this->subdomain))
             $HTTP_HOST = $this->subdomain.'.'.$this->domain;
 
+        $sUrl = '';
+        if($onlyExt === false)
             $sUrl = $this->requestPrefix.$HTTP_HOST.'/';
 
         $sUrl .= $sExpressionUrl;
