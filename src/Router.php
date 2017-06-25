@@ -86,10 +86,8 @@ class Router
         if(method_exists($controller, 'init'))
             call_user_func_array(array($controller, 'init'), $arg);
 
-
-        if(method_exists($controller, $action) AND is_callable(array($controller, $action))){
+        if(method_exists($controller, $action) AND is_callable(array($controller, $action)))
             call_user_func_array(array($controller, (string)$action), $arg);
-        }
         
         if(method_exists($controller, 'end'))
             $controller->end();
