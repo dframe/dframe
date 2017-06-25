@@ -30,6 +30,9 @@ class Router
         elseif(!defined('HTTP_HOST'))
             define('HTTP_HOST', '');
 
+
+        $this->domain = HTTP_HOST;
+
         $aURI = explode('/', $_SERVER['SCRIPT_NAME']);
         
         array_pop($aURI);
@@ -48,12 +51,13 @@ class Router
 
             // If forced than redirect
             if(isset($_SERVER['REQUEST_SCHEME']) AND ((!empty($_SERVER['REQUEST_SCHEME']) AND $_SERVER['REQUEST_SCHEME'] == 'http'))){
-                header('Location: '.$this->requestPrefix.HTTP_HOST.'/'.$_SERVER['REQUEST_URI']);
+                header('Location: '.$this->requestPrefix.$this->domain.'/'.$_SERVER['REQUEST_URI']);
                 return;
             }
             
         }else{
             $this->requestPrefix = 'http://';
+            
             if(isset($_SERVER['REQUEST_SCHEME']) AND ((!empty($_SERVER['REQUEST_SCHEME']) AND $_SERVER['REQUEST_SCHEME'] == 'https') OR (! empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') OR (! empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443'))) {
                 $this->requestPrefix = 'https://';
             }
@@ -157,7 +161,7 @@ class Router
             $path = $this->aRouting['publicWeb'];
 
         $sExpressionUrl = $sUrl;
-        $sUrl = $this->requestPrefix.HTTP_HOST.'/'.$path;
+        $sUrl = $this->requestPrefix.$this->domain.'/'.$path;
         $sUrl .= $sExpressionUrl;
         
         return $sUrl;
@@ -200,6 +204,7 @@ class Router
                 if(isset($aParams) AND !empty($aParams)){
                     if(isset($this->aRouting[$findKey]['_params']))
                         $sExpressionUrl = str_replace('[params]', $this->parseParams($this->aRouting[$findKey]['_params'][0], $aParams), $sExpressionUrl);
+                   
                     else
                         $sExpressionUrl = $sExpressionUrl . "?" . http_build_query($aParams);
                 }
@@ -213,6 +218,7 @@ class Router
                 if(isset($aParams)){
                     $sExpressionUrl = str_replace('[params]', $this->parseParams($this->aRouting['default']['_params'][0], $aParams), $sExpressionUrl);
                 }
+
 
             }
 
@@ -249,14 +255,21 @@ class Router
 
         }
 
-        $HTTP_HOST = HTTP_HOST;
+        $parsedUrl = \parse_url($this->domain);
+        if(isset($parsedUrl['scheme'])){
+            $this->requestPrefix = $parsedUrl['scheme'] . '://';
+            $this->domain = ltrim($this->domain, $parsedUrl['scheme'] . '://');
+        }
+
+        $HTTP_HOST = $this->domain;
         if(!empty($this->subdomain))
-            $HTTP_HOST = $this->subdomain.'.'.HTTP_HOST;
+            $HTTP_HOST = $this->subdomain.'.'.$this->domain;
 
             $sUrl = $this->requestPrefix.$HTTP_HOST.'/';
 
         $sUrl .= $sExpressionUrl;
 
+        $sUrl = rtrim($sUrl, '/');
         return $sUrl;
     }
 
@@ -278,7 +291,7 @@ class Router
                 $sRequest .= '/';
 
             $sGets = $this->parseUrl($sRequest);
-            //$sGets = str_replace('?', '&', $sGets);
+            $sGets = str_replace('?', '&', $sGets);
 
             parse_str($sGets, $aGets);
 
@@ -314,14 +327,11 @@ class Router
             }, $v[0]);
 
 
-
-
             if(preg_match_all('!'.$sExpression.'!i', $sRequest, $aExpression__)){
 
                 $args = array();
                 if(isset($v['args']))
                     $args = $v['args'];
-
 
                 foreach($aExpression__ AS $k_ => $v_){
                     foreach($v_ AS $kkk => $vvv){
@@ -350,7 +360,6 @@ class Router
                 }else                
                     $sVars = '&'.$v[1];
 
-
                 foreach($aExpression AS $k => $v_){
 
                     if(!isset($v['_'.$v_[0]]))
@@ -363,19 +372,16 @@ class Router
 
                         $sVars = str_replace('['.$v_[0].']', $v_[1], $sVars);
                     
-                    }else {
+                    }else{
                        $this->aRoutingParse = array($v['_'.$v_[0]]);
                        $sVars = $sVars.$this->parseUrl($v_[1]);
 
                    }
-                }   
-                // 
+                }
                 $this->parseArgs = $args;  
                 break;                
 
             }
-
-
 
         }    
 
@@ -415,6 +421,12 @@ class Router
 
     public function subdomain($subdomain){
         $this->subdomain = $subdomain;
+        return $this;
+        
+    }
+
+    public function domain($domain){
+        $this->domain = $domain;
         return $this;
         
     }

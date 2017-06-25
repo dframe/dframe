@@ -26,12 +26,10 @@ RewriteEngine On
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ web/$1
 
-RewriteCond %{REQUEST_URI} !^.*\.(jpg|css|js|gif|png)$ [NC]
+RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ web/index.php [QSA,L]
-
-RewriteCond %{REQUEST_URI} !web/
-RewriteRule (.*) web/$1 [L]
 ```
 
 ### Overview
