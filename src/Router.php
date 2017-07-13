@@ -196,18 +196,25 @@ class Router
                         }
                     }
 
-                    $sExpressionUrl = 'index.php?'.$sExpressionUrl0;
+                    $sExpressionUrl = $sExpressionUrl0;
                     
                 }else{
 
-                    $sExpressionUrl = 'index.php?task='.$sTask;
+                    $sExpressionUrl = 'task='.$sTask;
                     if(!empty($sAction))
-                        $sExpressionUrl = 'index.php?task='.$sTask.'&action='.$sAction;
+                        $sExpressionUrl = 'task='.$sTask.'&action='.$sAction;
         
                 }
 
-                if(!empty($aParams))
-                    $sExpressionUrl = $sExpressionUrl . "?" . http_build_query($aParams);
+                if(!empty($aParams)){
+                    if(!empty($sExpressionUrl)){
+                        $sExpressionUrl .= '&';
+                    }
+
+                    $sExpressionUrl = $sExpressionUrl.http_build_query($aParams);
+                }
+
+                $sExpressionUrl = 'index.php?'.$sExpressionUrl;
             }
 
         }
