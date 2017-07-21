@@ -41,7 +41,7 @@ interface interfaceView
      * Display JSON.
      * @param array $data
      */
-    public function renderJSON($data);
+    public function renderJSON($data, $status);
  
     /**
      * Display JSONP.
