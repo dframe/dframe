@@ -1,7 +1,7 @@
 <?php
 namespace Dframe\View;
 use Dframe\Config;
-use Dframe\Router\Response;
+use Dframe\Router;
 
 /**
  * DframeFramework

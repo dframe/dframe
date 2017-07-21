@@ -61,7 +61,7 @@ abstract class View extends Loader implements \Dframe\View\interfaceView
      * Wyświetla dane JSON.
      * @param array $data Dane do wyświetlenia
      */
-    public function renderJSON($data, $status) {
+    public function renderJSON($data, $status = false) {
         return $this->view->renderJSON($data, $status);
 
     }
