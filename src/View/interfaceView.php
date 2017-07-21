@@ -30,7 +30,7 @@ interface interfaceView
      *
      * @return void
      */
-    public function fetch($name, $path=null);
+    public function fetch($name, $path = null);
 
     /**
      * Include File
