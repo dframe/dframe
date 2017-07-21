@@ -1,6 +1,7 @@
 <?php
 namespace Dframe\View;
-use \Dframe\Config;
+use Dframe\Config;
+use Dframe\Router\Response;
 
 /**
  * DframeFramework
@@ -106,10 +107,11 @@ class smartyView implements \Dframe\View\interfaceView
      * Wyświetla dane JSON.
      * @param array $data Dane do wyświetlenia
      */
-    public function renderJSON($data) {
-        header('Content-Type: application/json');
-        echo json_encode($data);
-        exit();
+
+    public function renderJSON($data, $status = false) {
+        $router = new Router();
+        $router->response()->status($status)->header(array('Content-Type' => 'application/json'));
+        return json_encode($data);
     }
  
     /**
