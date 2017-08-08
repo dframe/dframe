@@ -162,7 +162,7 @@ class Router
                     if(isset($this->aRouting[$findKey]['_params']))
                         $sExpressionUrl = str_replace('[params]', $this->parseParams($this->aRouting[$findKey]['_params'][0], $aParams), $sExpressionUrl);
                    
-                    else
+                    elseif(!empty($aParams))
                         $sExpressionUrl = $sExpressionUrl . "?" . http_build_query($aParams);
                 }
 
