@@ -67,7 +67,6 @@ class Loader extends Core
         else
             $name = '\\'.$type.'\\'.$name.$type;
 
-
         try {
 
             if(!is_file($path))
@@ -75,7 +74,8 @@ class Loader extends Core
 
             include_once $path;
             $ob = new $name($this->baseClass);
-            $ob->init();
+            if(method_exists($ob, 'init'))
+                $ob->init();
            
         }catch(BaseException $e) {
             
@@ -88,9 +88,12 @@ class Loader extends Core
             }
 
             $routerConfig = Config::load('router');
-            header("HTTP/1.0 400 Bad Request");
+            $router->response()->status('400');
 
-            if(isset($routerConfig->get('error/404')[0]))
+            if(isset($routerConfig->get('error/400')[0]))
+                $this->router->redirect($routerConfig->get('error/400')[0]);
+
+            elseif(isset($routerConfig->get('error/404')[0]))
                 $this->router->redirect($routerConfig->get('error/404')[0]);
 
             exit();

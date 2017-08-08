@@ -45,11 +45,12 @@ class Messages
 
         if(!isset($type) OR !isset($message[0])) 
             return false;
-
         // Replace any shorthand codes with their full version
         if( strlen(trim($type)) == 1 )
             $type = str_replace(array('h', 'i', 'w', 'e', 's'), array('help', 'info', 'warning', 'error', 'success'), $type);
         
+        $router = new Router();
+
         try {
             if(!in_array($type, $this->msgTypes))  // Make sure it's a valid message type
                 throw new BaseException('"' . strip_tags($type) . '" is not a valid message type!' , 501);
@@ -64,8 +65,7 @@ class Messages
                 exit();
             }
 
-            $routerConfig = Config::load('router');
-            header("HTTP/1.0 501 Not Implemented");
+            $router->response()->status('501');
             echo $e->getMessage();
             exit();
         }
@@ -75,7 +75,8 @@ class Messages
         $this->session->set('flash_messages', $get);
 
         if(!is_null($redirect)) {
-            $router = new Router();
+            
+            $router->response()->status('301');
             $router->redirect($redirect);
             exit();
         }
