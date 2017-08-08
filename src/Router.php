@@ -158,7 +158,7 @@ class Router
 
                 }
 
-                if(isset($aParams) AND !empty($aParams)){
+                if(isset($aParams)){
                     if(isset($this->aRouting[$findKey]['_params']))
                         $sExpressionUrl = str_replace('[params]', $this->parseParams($this->aRouting[$findKey]['_params'][0], $aParams), $sExpressionUrl);
                    
@@ -280,8 +280,9 @@ class Router
 
     private function parseUrl($sRequest){   
 
-
         $sVars = null;
+        $sRequest = str_replace('?', '/?', $sRequest);
+        
         foreach($this->aRoutingParse AS $k => $v){
             
             if(!is_array($v))
