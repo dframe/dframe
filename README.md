@@ -15,7 +15,7 @@ The basic tools to build simple and complex pages. Used and tested internally fo
 
 ### Website [dframeframework.com](http://dframeframework.com/pl/page/index)   
 Language
-[Polish](http://dframeframework.com/pl/page/index) | [English](http://dframeframework.com/en/page/index)
+[Polish](http://dframeframework.com/pl/page/index) | [English](http://dframeframework.com/en/page/index) - coming soon
 
 ### Installation
 
