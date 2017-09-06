@@ -1,7 +1,7 @@
 {
     "name": "dframe/dframe",
     "description": "Framework Dframe",
-    "keywords": ["framework", "dframe"],
+    "keywords": ["framework", "dframe", "mvc"],
     "type": "library",
     "license": "MIT",
     "authors": [
