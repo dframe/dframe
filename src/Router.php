@@ -58,9 +58,11 @@ class Router
         }else{
             $this->requestPrefix = 'http://';
             
-            if(isset($_SERVER['REQUEST_SCHEME']) AND ((!empty($_SERVER['REQUEST_SCHEME']) AND $_SERVER['REQUEST_SCHEME'] == 'https') OR (! empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') OR (! empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443'))) {
+            if((isset($_SERVER['REQUEST_SCHEME']) AND (!empty($_SERVER['REQUEST_SCHEME']) AND ($_SERVER['REQUEST_SCHEME'] == 'https') OR !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') OR (! empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == '443'))) {
                 $this->requestPrefix = 'https://';
             }
+
+
         }
     }
 
