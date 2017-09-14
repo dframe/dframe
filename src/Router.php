@@ -160,11 +160,11 @@ class Router
 
                 }
 
-                if(isset($aParams) AND !empty($aParams)){
+                if(isset($aParams)){
                     if(isset($this->aRouting[$findKey]['_params']))
                         $sExpressionUrl = str_replace('[params]', $this->parseParams($this->aRouting[$findKey]['_params'][0], $aParams), $sExpressionUrl);
                    
-                    else
+                    elseif(!empty($aParams))
                         $sExpressionUrl = $sExpressionUrl . "?" . http_build_query($aParams);
                 }
 
@@ -198,18 +198,25 @@ class Router
                         }
                     }
 
-                    $sExpressionUrl = 'index.php?'.$sExpressionUrl0;
+                    $sExpressionUrl = $sExpressionUrl0;
                     
                 }else{
 
-                    $sExpressionUrl = 'index.php?task='.$sTask;
+                    $sExpressionUrl = 'task='.$sTask;
                     if(!empty($sAction))
-                        $sExpressionUrl = 'index.php?task='.$sTask.'&action='.$sAction;
+                        $sExpressionUrl = 'task='.$sTask.'&action='.$sAction;
         
                 }
 
-                if(!empty($aParams))
-                    $sExpressionUrl = $sExpressionUrl . "?" . http_build_query($aParams);
+                if(!empty($aParams)){
+                    if(!empty($sExpressionUrl)){
+                        $sExpressionUrl .= '&';
+                    }
+
+                    $sExpressionUrl = $sExpressionUrl.http_build_query($aParams);
+                }
+
+                $sExpressionUrl = 'index.php?'.$sExpressionUrl;
             }
 
         }
@@ -275,8 +282,9 @@ class Router
 
     private function parseUrl($sRequest){   
 
-
         $sVars = null;
+        $sRequest = str_replace('?', '/?', $sRequest);
+        
         foreach($this->aRoutingParse AS $k => $v){
             
             if(!is_array($v))

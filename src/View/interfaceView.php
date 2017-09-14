@@ -30,7 +30,7 @@ interface interfaceView
      *
      * @return void
      */
-    public function fetch($name, $path=null);
+    public function fetch($name, $path = null);
 
     /**
      * Include File
@@ -41,7 +41,7 @@ interface interfaceView
      * Display JSON.
      * @param array $data
      */
-    public function renderJSON($data);
+    public function renderJSON($data, $status);
  
     /**
      * Display JSONP.
