@@ -12,14 +12,16 @@ use Dframe\Router;
 
 class smartyView implements \Dframe\View\interfaceView
 {
+	
     public function __construct(){
         $smartyConfig = Config::load('view/smarty');
 
         $smarty = new \Smarty;
-        $smarty->debugging = $smartyConfig->get('debugging', false);;
+        $smarty->debugging = $smartyConfig->get('debugging', false);
         $smarty->setTemplateDir($smartyConfig->get('setTemplateDir'))
-                ->setCompileDir($smartyConfig->get('setCompileDir'));
-        
+                ->setCompileDir($smartyConfig->get('setCompileDir'))
+                ->addPluginsDir($smartyConfig->get('addPluginsDir'));
+
         $this->smarty = $smarty;
     }
 
