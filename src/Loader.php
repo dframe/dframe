@@ -62,13 +62,16 @@ class Loader extends Core
         $n = str_replace($type, '', $name);
         $path = appDir.'../app/'.$type.'/'.$folder.$n.'.php';
 
-        if(!empty($folder))
-            $name = '\\'.$type.'\\'.str_replace(array('\\', '/'), '\\', $folder).$name.$type;   
-        else
-            $name = '\\'.$type.'\\'.$name.$type;
-
         try {
 
+            if(!$this->isCamelCaps($name))
+            	 throw new BaseException('Camel Sensitive is on. Can not use '.$type.' '.$name.' try to use camelCaseName');
+    
+            if(!empty($folder))
+                $name = '\\'.$type.'\\'.str_replace(array('\\', '/'), '\\', $folder).$name.$type;   
+            else
+                $name = '\\'.$type.'\\'.$name.$type;
+    
             if(!is_file($path))
                 throw new BaseException('Can not open '.$type.' '.$name.' in: '.$path);
 
@@ -80,10 +83,17 @@ class Loader extends Core
         }catch(BaseException $e) {
             
             if(ini_get('display_errors') == "on"){
-                echo $e->getMessage().'<br><br>
-                File: '.$e->getFile().'<br>
-                Code line: '.$e->getLine().'<br> 
-                Trace: '.$e->getTraceAsString();
+                echo '<pre>';
+                echo 'Accept: '.$_SERVER['HTTP_ACCEPT'].'<br>';
+                echo 'Referer: '.$_SERVER['HTTP_REFERER'].'<br><br>';
+                echo 'Request Method: '.$_SERVER['REQUEST_METHOD'].'<br><br>';
+
+                echo 'Current file Path: <b>'.$this->router->currentPath().'</b><br>';
+
+                echo 'Message: <b>'.$e->getMessage().'</b><br><br>';
+                echo 'File Exception: '.$e->getFile().':'.$e->getLine().'<br><br>';
+                echo 'Trace: <br>'.$e->getTraceAsString().'<br>';
+                echo '</pre>';
                 exit();
             }
 
@@ -99,7 +109,7 @@ class Loader extends Core
             exit();
         }
 
-        return $ob; 
+        return $ob;
     }
 
 
@@ -160,6 +170,67 @@ class Loader extends Core
         return $returnController;
     }
 
+    public static function isCamelCaps($string, $classFormat=false, $public=true, $strict=true) {
+
+        // Check the first character first.
+        if ($classFormat === false) {
+            $legalFirstChar = '';
+            if ($public === false) {
+                $legalFirstChar = '[_]';
+            }
+
+            if ($strict === false) {
+                // Can either start with a lowercase letter, 
+                // or multiple uppercase
+                // in a row, representing an acronym.
+                $legalFirstChar .= '([A-Z]{2,}|[a-z])';
+            } else {
+                $legalFirstChar .= '[a-z]';
+            }
+        } else {
+            $legalFirstChar = '[A-Z]';
+        }
+
+        if (preg_match("/^$legalFirstChar/", $string) === 0) {
+            return false;
+        }
+
+        // Check that the name only contains legal characters.
+        $legalChars = 'a-zA-Z0-9';
+        if (preg_match("|[^$legalChars]|", substr($string, 1)) > 0) {
+            return false;
+        }
+
+        if ($strict === true) {
+            // Check that there are not two capital letters 
+            // next to each other.
+            $length          = strlen($string);
+            $lastCharWasCaps = $classFormat;
+
+            for ($i = 1; $i < $length; $i++) {
+                $ascii = ord($string{$i});
+                if ($ascii >= 48 && $ascii <= 57) {
+                    // The character is a number, so it cant be a capital.
+                    $isCaps = false;
+                } else {
+                    if (strtoupper($string{$i}) === $string{$i}) {
+                        $isCaps = true;
+                    } else {
+                        $isCaps = false;
+                    }
+                }
+
+                if ($isCaps === true && $lastCharWasCaps === true) {
+                    return false;
+                }
+
+                $lastCharWasCaps = $isCaps;
+            }
+        }//end if
+
+        return true;
+
+    }//end isCamelCaps()
 
 
     /** 

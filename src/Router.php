@@ -74,6 +74,7 @@ class Router
             $action = $_GET['action'];
 
         }
+        
         $arg = $this->parseArgs;
 
         $baseClass = new \Bootstrap();
@@ -277,6 +278,28 @@ class Router
             $_GET['action'] = !empty($_GET['action'])?$_GET['action']:$this->aRouting['NAME_METHOD'];
             
         }
+
+    }
+
+    public function currentPath(){
+
+        $sRequest = preg_replace('!'.$this->sURI.'(.*)$!i',  '$1', $_SERVER['REQUEST_URI']);
+        
+        if(MOD_REWRITE){
+
+            if(substr($sRequest, -1)!='/')
+                $sRequest .= '/';
+
+            $sGets = $this->parseUrl($sRequest);
+            $sGets = str_replace('?', '&', $sGets);
+            
+        }else{
+
+        	$sGets = $_SERVER['QUERY_STRING'];
+        }
+
+
+        return $sGets;
 
     }
 
