@@ -126,8 +126,7 @@ class smartyView implements \Dframe\View\interfaceView
         if(isset($_GET['callback'])) 
             $callback = $_GET['callback'];
         
-        echo $callback . '(' . json_encode($data) . ')';
-        exit();
+        return $callback . '(' . json_encode($data) . ')';
     }
 
 }

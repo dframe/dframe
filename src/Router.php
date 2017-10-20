@@ -74,7 +74,6 @@ class Router
             $action = $_GET['action'];
 
         }
-        
         $arg = $this->parseArgs;
 
         $baseClass = new \Bootstrap();
@@ -82,20 +81,22 @@ class Router
 
         $loader = new Loader($baseClass);
         $controller = $loader->loadController($controller); # Loading Controller class
-        
+
+        $response = null;
+
         if(method_exists($controller, 'start'))
-            $controller->start();
+            $response = $controller->start();
         
         if(method_exists($controller, 'init'))
-            call_user_func_array(array($controller, 'init'), $arg);
+            $response .= call_user_func_array(array($controller, 'init'), $arg);
 
         if(method_exists($controller, $action) AND is_callable(array($controller, $action)))
-            call_user_func_array(array($controller, (string)$action), $arg);
+            $response .= call_user_func_array(array($controller, (string)$action), $arg);
         
         if(method_exists($controller, 'end'))
-            $controller->end();
+            $response .= $controller->end();
 
-        return;
+        return $response;
     }
  
     private function setHttps($option = false){

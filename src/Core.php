@@ -14,8 +14,12 @@ class Core
     public function run(){
 
         $router = new Router();
-        return $router->run();
+        return $this->response($router->run());
 
+    }
+    
+    public function response($data){
+    	echo $data;
     }
 
     public function setView($view){
