@@ -11,7 +11,7 @@ if (!class_exists('\PHPUnit\Framework\TestCase') &&
     class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
 }
 
-class RunTest extends \PHPUnit_Framework_TestCase
+class RunTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testCreateController(){
