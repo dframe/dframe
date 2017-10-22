@@ -19,15 +19,22 @@ class Loader extends Core
     private $urlvalues;
     public $bootstrap;
 
-    public function __construct($bootstrap){
+    public function __construct($bootstrap = null){
 
-        if(!defined('appDir'))
+        if(!defined('appDir') AND !defined('APP_DIR'))
            throw new BaseException('Please Define appDir in Main config.php', 500);
-
+        
+        /* Backward compatibility */
+        if(defined('appDir') AND !defined('APP_DIR'))
+            define('APP_DIR', appDir);
+        
         if(!defined('SALT'))
            throw new BaseException('Please Define SALT in Main config.php', 500);
 
         $this->baseClass = $bootstrap;
+        if(empty($this->baseClass))
+            $this->baseClass = new \Bootstrap();
+
         if(isset($this->baseClass->router))
             $this->router = $this->baseClass->router;
         
@@ -60,7 +67,7 @@ class Loader extends Core
         $name = $pathFile[1];
         
         $n = str_replace($type, '', $name);
-        $path = appDir.'../app/'.$type.'/'.$folder.$n.'.php';
+        $path = APP_DIR.$type.'/'.$folder.$n.'.php';
 
         try {
 
@@ -132,7 +139,7 @@ class Loader extends Core
         }
 
         // Does the class exist?
-        $patchController = appDir.'../app/Controller/'.$subControler.''.$controller.'.php';
+        $patchController = APP_DIR.'Controller/'.$subControler.''.$controller.'.php';
         //var_dump($patchController);
         if(file_exists($patchController)){
             include_once $patchController;
