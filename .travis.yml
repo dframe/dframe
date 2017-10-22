@@ -12,4 +12,4 @@ sudo: false
 branches:
 only: master
 
-script: phpunit
+script: phpunit tests
