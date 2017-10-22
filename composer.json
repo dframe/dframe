@@ -20,8 +20,14 @@
     },
     "minimum-stability": "stable",
     "autoload": {
-        "psr-4": {"Dframe\\": "src/"},
+        "psr-4": {"Dframe\\": "src"},
         "files": ["src/Functions.php"]
-    }
+    },
     
+    "scripts": {
+        "test": [
+            "@phpunit"
+        ],
+        "phpunit": "php vendor/bin/phpunit"
+    }    
 }

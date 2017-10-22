@@ -1,0 +1,15 @@
+language: php
+php:
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+
+# We don't want to run linux commands as super user
+sudo: false
+
+# Tell Travis CI to monitor only 'master' branch
+branches:
+only: master
+
+script: phpunit
