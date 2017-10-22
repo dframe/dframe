@@ -8,7 +8,7 @@ namespace Dframe\View;
  *
  */
 
-interface interfaceView
+interface ViewInterface
 {
 
     /**
