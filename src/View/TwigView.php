@@ -16,7 +16,7 @@ use Dframe\Router;
  * @abstract
  */
 
-class twigView implements \Dframe\View\interfaceView
+class TwigView implements \Dframe\View\ViewInterface
 {
     public $assigns = array();
 
@@ -35,11 +35,11 @@ class twigView implements \Dframe\View\interfaceView
     public function assign($name, $value) {
         
         try{
-            if (isset($this->assigns[$name])) {
+            if(isset($this->assigns[$name]))
                 throw new \Exception('You can\'t assign "'.$name . '" in Twig');
-            } else {
-                return $this->assigns[$name] = $value;
-            }
+             
+            $assign = $this->assigns[$name] = $value;
+            
         }catch(Exception $e) {
             echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
@@ -47,6 +47,8 @@ class twigView implements \Dframe\View\interfaceView
                 Trace: '.$e->getTraceAsString();
             exit();
         }
+        
+        return $assign;
     }
 
     public function fetch($name, $path=null) {
@@ -69,14 +71,15 @@ class twigView implements \Dframe\View\interfaceView
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
-        $path= $twigConfig->get('setTemplateDir').'/'.$folder.$name.$twigConfig->get('fileExtension', '.twig');
+        $path = $twigConfig->get('setTemplateDir').'/'.$folder.$name.$twigConfig->get('fileExtension', '.twig');
 
         try{
-            if(is_file($path)) {
-                $this->twig->render($name, $this->assign);
-            } else {
+            if(!is_file($path)) {
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
-            }
+               
+            
+            $renderInclude = $this->twig->render($name, $this->assign);
+            
         }catch(\Exception $e) {
             echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
@@ -84,6 +87,8 @@ class twigView implements \Dframe\View\interfaceView
                 Trace: '.$e->getTraceAsString();
             exit();
         }
+            
+        return $renderInclude;
     }
      
     /**
