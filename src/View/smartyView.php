@@ -91,10 +91,11 @@ class smartyView implements \Dframe\View\interfaceView
            $path= $smartyConfig->get('setTemplateDir').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
         
         try{
-            if(is_file($path))
-                $this->smarty->display($path); // Ładowanie widoku
-            else
+
+        	if(!is_file($path))
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
+
+            $display = $this->smarty->display($path); // Ładowanie widoku
 
         }catch(Exception $e) {
             echo $e->getMessage().'<br />
@@ -103,6 +104,8 @@ class smartyView implements \Dframe\View\interfaceView
                 Trace: '.$e->getTraceAsString();
             exit();
         }
+
+        return $display;
     }
      
     /**
