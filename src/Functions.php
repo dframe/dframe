@@ -3,11 +3,12 @@
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
- * @license https://github.com/dusta/Dframe/blob/master/LICENCE
  *
+ * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
  */
 
-function pathFile($path) {
+function pathFile($path)
+{
     $folder = '';
     $name = $path;
     if(strpos($path, '/')) {
@@ -25,7 +26,8 @@ function pathFile($path) {
 
 
 /* PO PRZEJŚCIU NA NOWY FRAMEWORK TRZEBA PRZENIEŚĆ TO DO BIBLIOTEKI LUB ZMIENIĆ */
-function validateDate($date, $format = 'Y-m-d H:i:s') {
+function validateDate($date, $format = 'Y-m-d H:i:s')
+{
     $d = DateTime::createFromFormat($format, $date);
     return $d && $d->format($format) == $date;
 }
@@ -34,7 +36,8 @@ function validateDate($date, $format = 'Y-m-d H:i:s') {
  * Sumowanie minut
  */
 
-function convertMinutes($minut) {
+function convertMinutes($minut)
+{
     $godzin = floor($minut/60);  // liczba pełnych godzin
     $rmin = $minut - $godzin*60;  // reszta minut
 
@@ -45,12 +48,16 @@ function convertMinutes($minut) {
     $rdni = $dni - $miesiecy*30;  // reszta dni
 
     $wypisz = '';
-    if($miesiecy != 0) 
+
+    if ($miesiecy != 0) {
         $wypisz .= $miesiecy." miesięcy, ";
-    if($dni != 0) 
+    }
+    if ($dni != 0) {
         $wypisz .= $rdni." dni, ";
-    if($godzin != 0)
+    }
+    if ($godzin != 0) {
         $wypisz .= $rgod." godziny, ";
+    }
 
     $wypisz .= $rmin." minuty | Suma Godzin: ".$godzin;
 
@@ -60,7 +67,8 @@ function convertMinutes($minut) {
 /**
  * Randomowo generowany string
  */
-function generateRandomString($length = 10) {
+function generateRandomString($length = 10)
+{
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomString = '';
@@ -76,18 +84,20 @@ function generateRandomString($length = 10) {
  * Zmiana Obiektu wielowymiaroa na tablice array
  */ 
 
-function object_to_array($obj) {
-    if(is_object($obj)) 
-        $obj = (array) $obj;
+function object_to_array($obj)
+{
 
-    if(is_array($obj)) {
+    $obj = is_object($obj) ? (array) $obj : $obj;
+
+    if (is_array($obj)) {
         $new = array();
         foreach($obj as $key => $val) {
             $key2 = str_replace("\0", "", $key);
             $new[$key2] = object_to_array($val);
         }
-    }else 
-       $new = $obj;
+    } else {
+        $new = $obj;
+    }
 
     return $new;       
 }
@@ -97,8 +107,9 @@ function object_to_array($obj) {
  * ala ma kota -> ala * kota == TRUE
  */
 
-function stringMatchWithWildcard($source,$pattern) {
-    $pattern = preg_quote($pattern,'/');        
-    $pattern = str_replace( '\*' , '.*', $pattern);   
-    return preg_match( '/^' . $pattern . '$/i' , $source );
+function stringMatchWithWildcard($source,$pattern)
+{
+    $pattern = preg_quote($pattern, '/'); 
+    $pattern = str_replace('\*', '.*', $pattern); 
+    return preg_match('/^'.$pattern.'$/i', $source); 
 }

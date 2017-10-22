@@ -7,8 +7,8 @@ use Dframe\Router\Response;
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
- * @license https://github.com/dusta/Dframe/blob/master/LICENCE
  *
+ * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
  */
 
 class Router

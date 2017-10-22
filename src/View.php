@@ -5,11 +5,11 @@ use Dframe\BaseException;
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
- * @license https://github.com/dusta/Dframe/blob/master/LICENCE
  *
+ * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
  */
 
-abstract class View extends Loader implements \Dframe\View\interfaceView
+abstract class View extends Loader implements \Dframe\View\ViewInterface
 {
     public function __construct($baseClass){
         parent::__construct($baseClass);

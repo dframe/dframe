@@ -7,8 +7,8 @@ use Dframe\Core;
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
- * @license https://github.com/dusta/Dframe/blob/master/LICENCE
  *
+ * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
  */
 
 class Loader extends Core
@@ -19,48 +19,57 @@ class Loader extends Core
     private $urlvalues;
     public $bootstrap;
 
-    public function __construct($bootstrap = null){
+    public function __construct($bootstrap = null)
+    {
 
-        if(!defined('appDir') AND !defined('APP_DIR'))
-           throw new BaseException('Please Define appDir in Main config.php', 500);
+        if (!defined('appDir') AND !defined('APP_DIR')) {
+            throw new BaseException('Please Define appDir in Main config.php', 500);
+        }
         
         /* Backward compatibility */
-        if(defined('appDir') AND !defined('APP_DIR'))
+        if (defined('appDir') AND !defined('APP_DIR')) {
             define('APP_DIR', appDir);
+        }
         
-        if(!defined('SALT'))
-           throw new BaseException('Please Define SALT in Main config.php', 500);
+        if (!defined('SALT')) {
+            throw new BaseException('Please Define SALT in Main config.php', 500);
+        }
 
-        $this->baseClass = $bootstrap;
-        if(empty($this->baseClass))
-            $this->baseClass = new \Bootstrap();
+        $this->baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
 
-        if(isset($this->baseClass->router))
+        if (isset($this->baseClass->router)) { 
             $this->router = $this->baseClass->router;
+        }
         
         return $this;
     }
 
 
-    /*
+    /**
      *   Metoda do includowania pliku modelu i wywołanie objektu przez namespace
-    */
-    public function loadModel($name){
+     */
+
+    public function loadModel($name)
+    {
         return $this->loadObject($name, 'Model');
     }
 
-    /*
+    /**
      *   Metoda do includowania pliku widoku i wywołanie objektu przez namespace
-    */
-    public function loadView($name){
+     */
+
+    public function loadView($name)
+    {
         return $this->loadObject($name, 'View');
 
     }
 
-    private function loadObject($name, $type){
+    private function loadObject($name, $type)
+    {
 
-        if(!in_array($type, (array('Model', 'View'))))
+        if (!in_array($type, (array('Model', 'View')))) {
             return false;
+        }
 
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
@@ -68,28 +77,27 @@ class Loader extends Core
         
         $n = str_replace($type, '', $name);
         $path = APP_DIR.$type.'/'.$folder.$n.'.php';
-
         try {
 
-            if(!$this->isCamelCaps($name))
-            	 throw new BaseException('Camel Sensitive is on. Can not use '.$type.' '.$name.' try to use camelCaseName');
+            if (!$this->isCamelCaps($name)) {
+                 throw new BaseException('Camel Sensitive is on. Can not use '.$type.' '.$name.' try to use camelCaseName');
+            }
+            
+            $name = !empty($folder) ? '\\'.$type.'\\'.str_replace(array('\\', '/'), '\\', $folder).$name.$type : '\\'.$type.'\\'.$name.$type;;   
     
-            if(!empty($folder))
-                $name = '\\'.$type.'\\'.str_replace(array('\\', '/'), '\\', $folder).$name.$type;   
-            else
-                $name = '\\'.$type.'\\'.$name.$type;
-    
-            if(!is_file($path))
+            if (!is_file($path)) {
                 throw new BaseException('Can not open '.$type.' '.$name.' in: '.$path);
+            }
 
             include_once $path;
             $ob = new $name($this->baseClass);
-            if(method_exists($ob, 'init'))
-                $ob->init();
+            if (method_exists($ob, 'init')) {
+                $ob->init(); 
+            }
            
         }catch(BaseException $e) {
             
-            if(ini_get('display_errors') == "on"){
+            if (ini_get('display_errors') == "on") {
                 echo '<pre>';
                 echo 'Accept: '.$_SERVER['HTTP_ACCEPT'].'<br>';
                 echo 'Referer: '.$_SERVER['HTTP_REFERER'].'<br><br>';
@@ -107,11 +115,13 @@ class Loader extends Core
             $routerConfig = Config::load('router');
             $router->response()->status('400');
 
-            if(isset($routerConfig->get('error/400')[0]))
+            if (isset($routerConfig->get('error/400')[0])) {
                 $this->router->redirect($routerConfig->get('error/400')[0]);
 
-            elseif(isset($routerConfig->get('error/404')[0]))
+            } elseif (isset($routerConfig->get('error/404')[0])) {
                 $this->router->redirect($routerConfig->get('error/404')[0]);
+
+            }
 
             exit();
         }
@@ -121,10 +131,11 @@ class Loader extends Core
 
 
     // Establish the requested controller as an object
-    public function loadController($controller){
+    public function loadController($controller)
+    {
 
         $subControler = null;
-        if(strstr($controller, ",") !== False){
+        if (strstr($controller, ",") !== false) {
 
             $url = explode(',', $controller);
             $urlCount = count($url)-1;
@@ -135,13 +146,11 @@ class Loader extends Core
             }
 
             $controller = $url[$urlCount];
-
         }
-
         // Does the class exist?
-        $patchController = APP_DIR.'Controller/'.$subControler.''.$controller.'.php';
+        $patchController = APP_DIR.'Controller/'.$subControler.$controller.'.php'; 
         //var_dump($patchController);
-        if(file_exists($patchController)){
+        if (file_exists($patchController)) {
             include_once $patchController;
             $path = null;
         }
@@ -149,15 +158,16 @@ class Loader extends Core
         $xsubControler = str_replace("/", "\\", $subControler);
         try {
 
-            if(!class_exists('\Controller\\'.$xsubControler.''.$controller.'Controller'))
+            if (!class_exists('\Controller\\'.$xsubControler.''.$controller.'Controller')) {
                 throw new BaseException('Bad controller error');
+            }
 
             $controller = '\Controller\\'.$xsubControler.''.$controller.'Controller';
             $returnController = new $controller($this->baseClass);
 
         }catch(BaseException $e) {
             
-            if(ini_get('display_errors') == 'on'){
+            if (ini_get('display_errors') == 'on') {
                 echo $e->getMessage().'<br><br>
                 File: '.$e->getFile().'<br>
                 Code line: '.$e->getLine().'<br> 
@@ -168,8 +178,9 @@ class Loader extends Core
             $routerConfig = Config::load('router');
             header("HTTP/1.0 404 Not Found");
 
-            if(isset($routerConfig->get('error/404')[0]))
+            if (isset($routerConfig->get('error/404')[0])) {
                 $this->router->redirect($routerConfig->get('error/404')[0]);
+            }
 
             exit();
         }
@@ -177,7 +188,8 @@ class Loader extends Core
         return $returnController;
     }
 
-    public static function isCamelCaps($string, $classFormat=false, $public=true, $strict=true) {
+    public static function isCamelCaps($string, $classFormat=false, $public=true, $strict=true)
+    {
 
         // Check the first character first.
         if ($classFormat === false) {
@@ -246,7 +258,14 @@ class Loader extends Core
      * end identycznie tyle ze na końcu
      */
 
-    public function init() {}
-    public function end() {}
+    public function init()
+    {
+
+    }
+
+    public function end()
+    {
+
+    }
 
 }

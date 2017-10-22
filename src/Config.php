@@ -5,44 +5,43 @@ use Dframe\BaseException;
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
- * @license https://github.com/dusta/Dframe/blob/master/LICENCE
  *
+ * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
  */
 
 class Config
 {
  
     protected static $cfg = array();
-    private $file;
+    private $_file;
     public $path;
     
-    public function __construct($file, $path = ''){
-        $this->path = APP_DIR.'Config/'; // appDir zdefiniowany powinien byc w Config.php
-        
-        if(isset($path) AND !empty($path))
-            $this->path = APP_DIR.$path.'/';
+    public function __construct($file, $path = '')
+    {
 
+        $this->path = (isset($path) AND !empty($path)) ? $path :  APP_DIR.$path.'/Config/';
 
-        $this->file = $file;
-        if (file_exists($this->path.$this->file.'.php') != true)
-            throw new BaseException('Not Found Config '. $this->path.$this->file.'.php');
+        $this->_file = $file;
+        if (file_exists($this->path.$this->_file.'.php') != true) {
+            throw new BaseException('Not Found Config '. $this->path.$this->_file.'.php');
+        }
     
-        if(!isset(self::$cfg[$file]))
-            self::$cfg[$file] = include($this->path.$this->file.'.php');
+        self::$cfg[$file] = isset(self::$cfg[$file]) ? self::$cfg[$file] : include $this->path.$this->_file.'.php';
 
     }
 
-    public static function load($file, $path = null){
+    public static function load($file, $path = null)
+    {
         return new Config($file, $path);
-
     }    
 
-    public function get($param = null, $or = null){
+    public function get($param = null, $or = null)
+    {
+        if ($param == null) {
+            return (isset(self::$cfg[$this->_file]))? self::$cfg[$this->_file] : null;
+        }
 
-        if($param == null)
-            return (isset(self::$cfg[$this->file]))? self::$cfg[$this->file] : null;
-
-        return (isset(self::$cfg[$this->file][$param]) AND !empty(self::$cfg[$this->file][$param]))? self::$cfg[$this->file][$param] : $or;
+        return (isset(self::$cfg[$this->_file][$param]) AND !empty(self::$cfg[$this->_file][$param]))? self::$cfg[$this->_file][$param] : $or;
     }
 
 }

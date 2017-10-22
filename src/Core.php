@@ -1,29 +1,31 @@
 <?php
 namespace Dframe;
 use Dframe\Router;
+
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
- * @license https://github.com/dusta/Dframe/blob/master/LICENCE
  *
+ * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
  */
 
 class Core
 {
     
-    public function run(){
-
+    public function run()
+    {
         $router = new Router();
         return $this->response($router->run());
-
     }
     
-    public function response($data){
-    	echo $data;
+    public function response($data)
+    {
+        echo $data;
     }
 
-    public function setView($view){
-    	$this->view = $view;
+    public function setView($view)
+    {
+        $this->view = $view;
     }
 
 }
