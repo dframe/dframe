@@ -10,7 +10,7 @@ use Dframe\Router;
  *
  */
 
-class smartyView implements \Dframe\View\interfaceView
+class SmartyView implements \Dframe\View\ViewInterface
 {
 	
     public function __construct(){
@@ -27,6 +27,7 @@ class smartyView implements \Dframe\View\interfaceView
 
     public function assign($name, $value) {
         try {
+	
             if($this->smarty->getTemplateVars($name) !== null)
                 throw new \Exception('You can\'t assign "'.$name . '" in Smarty');
             
@@ -91,8 +92,7 @@ class smartyView implements \Dframe\View\interfaceView
            $path= $smartyConfig->get('setTemplateDir').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
         
         try{
-
-        	if(!is_file($path))
+	    if(!is_file($path))
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
 
             $display = $this->smarty->display($path); // Ładowanie widoku
