@@ -10,7 +10,7 @@ use Dframe\Router;
  *
  */
 
-class defaultView implements \Dframe\View\interfaceView
+class DefaultView implements \Dframe\View\ViewInterface
 {
     public function __construct(){
         $this->templateConfig = Config::load('view/defaultConfig');
@@ -39,13 +39,13 @@ class defaultView implements \Dframe\View\interfaceView
         $name = $pathFile[1];
 
         if($path == null)
-            $path= $this->templateConfig->get('setTemplateDir').'/'.$folder.$name.$this->templateConfig->get('fileExtension', '.html.php');
+            $path = $this->templateConfig->get('setTemplateDir').'/'.$folder.$name.$this->templateConfig->get('fileExtension', '.html.php');
         
         try{
-            if(is_file($path))
-                 include($path);                    
-            else
+            if(!is_file($path))
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
+            
+            $renderInclude = include($path);           
 
         }catch(Exception $e) {
             echo $e->getMessage().'<br />
@@ -54,8 +54,8 @@ class defaultView implements \Dframe\View\interfaceView
                 Trace: '.$e->getTraceAsString();
             exit();
         }
-
-
+        
+        return $renderInclude;
     }
 
     /**
@@ -78,8 +78,7 @@ class defaultView implements \Dframe\View\interfaceView
         if(isset($_GET['callback'])) 
             $callback = $_GET['callback'];
         
-        echo $callback . '(' . json_encode($data) . ')';
-        exit();
+        return $callback . '(' . json_encode($data) . ')';
     }
 
 }
