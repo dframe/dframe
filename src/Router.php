@@ -76,10 +76,10 @@ class Router
         }
         $arg = $this->parseArgs;
 
-        $baseClass = new \Bootstrap();
-        $baseClass->router = $this;
+        $bootstrap = new \Bootstrap();
+        $bootstrap->router = $this;
 
-        $loader = new Loader($baseClass);
+        $loader = new Loader($bootstrap);
         $controller = $loader->loadController($controller); # Loading Controller class
 
         $response = null;
