@@ -17,10 +17,10 @@ class Config
     public $path;
     
     public function __construct($file, $path = ''){
-        $this->path = appDir.'../app/Config/'; // appDir zdefiniowany powinien byc w Config.php
+        $this->path = APP_DIR.'Config/'; // appDir zdefiniowany powinien byc w Config.php
         
         if(isset($path) AND !empty($path))
-            $this->path = appDir.'../'.$path.'/';
+            $this->path = APP_DIR.$path.'/';
 
 
         $this->file = $file;
