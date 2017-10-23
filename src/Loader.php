@@ -30,7 +30,12 @@ class Loader extends Core
         if (defined('appDir') AND !defined('APP_DIR')) {
             define('APP_DIR', appDir);
         }
-        
+
+        /* Backward compatibility */
+        if (!defined('appDir') AND defined('APP_DIR')) {
+            define('appDir', APP_DIR);
+        }
+
         if (!defined('SALT')) {
             throw new BaseException('Please Define SALT in Main config.php', 500);
         }

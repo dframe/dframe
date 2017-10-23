@@ -11,51 +11,62 @@ namespace Dframe;
 class Session
 {
     
-    function __construct($name){
-        if(!isset($_SESSION)){
-           session_name($name);
-           session_start();
+    function __construct($name)
+    {
+        if (!isset($_SESSION)) {
+            session_name($name);
+            session_start();
         }
     }
 
-    public function register($time = 60){
+    public function register($time = 60)
+    {
         $_SESSION['sessionId'] = session_id();
         $_SESSION['sessionTime'] = intval($time);
     }
 
-    public function authLogin(){
-        if(!empty($_SESSION['sessionId']))
+    public function authLogin()
+    {
+        if (!empty($_SESSION['sessionId'])) {
             return true;
-        else 
+        } else { 
             return false;
+        }
 
     }
 
-    public function keyExists($key, $in = false){
-        if(isset($in))
+    public function keyExists($key, $in = false)
+    {
+        if (isset($in)) {
             $in = $_SESSION;
+        }
 
-        if(array_key_exists($key, $in) == true)
+        if (array_key_exists($key, $in) == true) {
             return true;
+        }
         
         return false;
     }
     
-    public function set($key, $value){
+    public function set($key, $value)
+    {
         $_SESSION[$key] = $value;
     }
 
-    public function get($key, $or = null){
+    public function get($key, $or = null)
+    {
         return isset($_SESSION[$key]) ? $_SESSION[$key] : $or;
     }
     
-    public function remove($key) {
-        if(isset($_SESSION[$key])) {
+    public function remove($key) 
+    {
+        if (isset($_SESSION[$key])) {
             unset($_SESSION[$key]);
         }
     }
 
-    public function end(){
+    public function end()
+    {
         session_destroy();
         $_SESSION = array();
     }

@@ -8,20 +8,22 @@ use Dframe\Router;
  * Copyright (c) Sławomir Kaleta
  *
  * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
- *
  */
 
 class DefaultView implements \Dframe\View\ViewInterface
 {
-    public function __construct(){
+    public function __construct()
+    {
         $this->templateConfig = Config::load('view/defaultConfig');
     }
 
-    public function assign($name, $value){
+    public function assign($name, $value)
+    {
         $this->$name = $value;
     }
 
-    public function fetch($name, $path=null){
+    public function fetch($name, $path=null)
+    {
         throw new \Exception('This module dont have fetch');
     }
 
@@ -33,20 +35,23 @@ class DefaultView implements \Dframe\View\ViewInterface
      *
      * @return void
      */
-    public function renderInclude($name){
+    public function renderInclude($name)
+    {
 
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
-        if($path == null)
+        if ($path == null) {
             $path = $this->templateConfig->get('setTemplateDir').'/'.$folder.$name.$this->templateConfig->get('fileExtension', '.html.php');
+        }
         
         try{
-            if(!is_file($path))
+            if (!is_file($path)) {
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
+            }
             
-            $renderInclude = include($path);           
+            $renderInclude = include $path;           
 
         }catch(Exception $e) {
             echo $e->getMessage().'<br />
@@ -61,9 +66,11 @@ class DefaultView implements \Dframe\View\ViewInterface
 
     /**
      * Wyświetla dane JSON.
+     *
      * @param array $data Dane do wyświetlenia
      */
-    public function renderJSON($data, $status = false) {
+    public function renderJSON($data, $status = false) 
+    {
         $router = new Router();
         $router->response()->status($status)->header(array('Content-Type' => 'application/json'));
         return json_encode($data);
@@ -71,13 +78,16 @@ class DefaultView implements \Dframe\View\ViewInterface
  
     /**
      * Wyświetla dane JSONP.
+     *
      * @param array $data Dane do wyświetlenia
      */
-    public function renderJSONP($data) {
+    public function renderJSONP($data) 
+    {
         header('Content-Type: application/json');
         $callback = null;
-        if(isset($_GET['callback'])) 
+        if (isset($_GET['callback'])) { 
             $callback = $_GET['callback'];
+        }
         
         return $callback . '(' . json_encode($data) . ')';
     }

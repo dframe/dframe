@@ -19,7 +19,7 @@ class Config
     public function __construct($file, $path = '')
     {
 
-        $this->path = (isset($path) AND !empty($path)) ? $path :  APP_DIR.$path.'/Config/';
+        $this->path = (isset($path) AND !empty($path)) ? $path :  APP_DIR.$path.'Config/';
 
         $this->_file = $file;
         if (file_exists($this->path.$this->_file.'.php') != true) {

@@ -11,23 +11,30 @@ namespace Dframe;
 abstract class Model extends Loader
 {
     
-    public function methodResult($type, $array = null){
-        if(!is_null($array))
+    public function methodResult($type, $array = null)
+    {
+        if (!is_null($array)) {
             return array_merge(array('return' => $type), $array);
+        }
  
         return array('return' => $type);
     }
 
-    public function methodFail($errors = null){
-        if($errors === null)
+    public function methodFail($errors = null)
+    {
+        if ($errors === null) {
             return $this->methodResult(false);
+        }
 
-        if(!is_array($errors))
+        if (!is_array($errors)) {
             $errors = array($errors);
+        }
         
         return $this->methodResult(false, array('errors' => $errors));
     }
       
-    public function init() {}
+    public function init() 
+    {
+    }
     
 }

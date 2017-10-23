@@ -8,29 +8,31 @@ use Dframe\Router;
  * Copyright (c) Sławomir Kaleta
  *
  * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
- *
  */
 
 class SmartyView implements \Dframe\View\ViewInterface
 {
-	
-    public function __construct(){
+    
+    public function __construct()
+    {
         $smartyConfig = Config::load('view/smarty');
 
         $smarty = new \Smarty;
         $smarty->debugging = $smartyConfig->get('debugging', false);
         $smarty->setTemplateDir($smartyConfig->get('setTemplateDir'))
-                ->setCompileDir($smartyConfig->get('setCompileDir'))
-                ->addPluginsDir($smartyConfig->get('addPluginsDir'));
+            ->setCompileDir($smartyConfig->get('setCompileDir'))
+            ->addPluginsDir($smartyConfig->get('addPluginsDir'));
 
         $this->smarty = $smarty;
     }
 
-    public function assign($name, $value) {
+    public function assign($name, $value) 
+    {
         try {
-	
-            if($this->smarty->getTemplateVars($name) !== null)
+    
+            if ($this->smarty->getTemplateVars($name) !== null) {
                 throw new \Exception('You can\'t assign "'.$name . '" in Smarty');
+            }
             
             $assign = $this->smarty->assign($name, $value);
 
@@ -45,20 +47,23 @@ class SmartyView implements \Dframe\View\ViewInterface
         return $assign;
     }
 
-    public function fetch($name, $path=null) {
+    public function fetch($name, $path=null) 
+    {
         $smartyConfig = Config::load('view/smarty');
 
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
         $name = $pathFile[1];
         
-        if($path == null)
+        if ($path == null) {
             $path = $smartyConfig->get('setTemplateDir').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
+        }
 
         try {
-        	
-            if(!is_file($path))
-            	throw new \Exception('Can not open template '.$name.' in: '.$path);
+            
+            if (!is_file($path)) {
+                throw new \Exception('Can not open template '.$name.' in: '.$path);
+            }
 
             $fetch = $this->smarty->fetch($path); // Ładowanie widoku
 
@@ -81,7 +86,8 @@ class SmartyView implements \Dframe\View\ViewInterface
      *
      * @return void
      */
-    public function renderInclude($name, $path = null) {
+    public function renderInclude($name, $path = null) 
+    {
 
         $smartyConfig = Config::load('view/smarty');
         
@@ -89,12 +95,15 @@ class SmartyView implements \Dframe\View\ViewInterface
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
-        if($path == null)
-           $path= $smartyConfig->get('setTemplateDir').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
+        if ($path == null) {
+            $path= $smartyConfig->get('setTemplateDir').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
+        }
         
         try{
-	    if(!is_file($path))
+
+            if (!is_file($path)) {
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
+            }
 
             $display = $this->smarty->display($path); // Ładowanie widoku
 
@@ -111,10 +120,12 @@ class SmartyView implements \Dframe\View\ViewInterface
      
     /**
      * Wyświetla dane JSON.
+     *
      * @param array $data Dane do wyświetlenia
      */
 
-    public function renderJSON($data, $status = false) {
+    public function renderJSON($data, $status = false) 
+    {
         $router = new Router();
         $router->response()->status($status)->header(array('Content-Type' => 'application/json'));
         return json_encode($data);
@@ -122,13 +133,16 @@ class SmartyView implements \Dframe\View\ViewInterface
  
     /**
      * Wyświetla dane JSONP.
+     *
      * @param array $data Dane do wyświetlenia
      */
-    public function renderJSONP($data) {
+    public function renderJSONP($data) 
+    {
         header('Content-Type: application/json');
         $callback = null;
-        if(isset($_GET['callback'])) 
+        if (isset($_GET['callback'])) { 
             $callback = $_GET['callback'];
+        }
         
         return $callback . '(' . json_encode($data) . ')';
     }

@@ -11,7 +11,7 @@ function pathFile($path)
 {
     $folder = '';
     $name = $path;
-    if(strpos($path, '/')) {
+    if (strpos($path, '/')) {
         $path = explode('/', $path);
         
         $pathCount = count($path)-1;

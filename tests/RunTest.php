@@ -6,15 +6,15 @@ define('APP_DIR', '');
 define('SALT', 'RaNdOmTeSt');
 
 // backward compatibility
-if (!class_exists('\PHPUnit\Framework\TestCase') &&
-    class_exists('\PHPUnit_Framework_TestCase')) {
+if (!class_exists('\PHPUnit\Framework\TestCase') AND class_exists('\PHPUnit_Framework_TestCase')) {
     class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
 }
 
 class RunTest extends \PHPUnit\Framework\TestCase
 {
 
-    public function testCreateController(){
+    public function testCreateController()
+    {
 
         $testController = new TestController();
         $this->assertEquals('Hello World', $testController->testHelloWorld());
@@ -22,9 +22,11 @@ class RunTest extends \PHPUnit\Framework\TestCase
 
 }
 
-class TestController extends \Dframe\Controller {
+class TestController extends \Dframe\Controller
+{
 
-	public function testHelloWorld(){
-		return 'Hello World';
-	}
+    public function testHelloWorld()
+    {
+        return 'Hello World';
+    }
 }

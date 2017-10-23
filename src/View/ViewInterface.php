@@ -6,7 +6,6 @@ namespace Dframe\View;
  * Copyright (c) Sławomir Kaleta
  *
  * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
- *
  */
 
 interface ViewInterface
@@ -40,12 +39,14 @@ interface ViewInterface
      
     /**
      * Display JSON.
+     *
      * @param array $data
      */
     public function renderJSON($data, $status);
  
     /**
      * Display JSONP.
+     *
      * @param array $data Dane do wyświetlenia
      */
     public function renderJSONP($data);

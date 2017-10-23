@@ -7,7 +7,6 @@ use Dframe\Config;
  * Copyright (c) Sławomir Kaleta
  *
  * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
- *
  */
 
 class Response extends \Dframe\Router
@@ -75,25 +74,27 @@ class Response extends \Dframe\Router
         510 => 'Not Extended'
     );
 
-    public function status($code){
+    public function status($code)
+    {
         $this->status = $code;
         return $this;
     }
 
-    public function header($header = false){
+    public function header($header = false)
+    {
         $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1');
         $status = (!empty($this->status) ? $this->status : 200);
         $string = sprintf('%s %d %s', $protocol, $status, self::$code[$status]);
 
         header($string, true, $status); // Default header
-        if(!empty($header)){
+        if (!empty($header)) {
 
             foreach ($header as $field => $value) {
-                if(is_array($value)){
+                if (is_array($value)) {
                     foreach ($value as $v) {
                         header($field.': '.$v, false);
                     }
-                }else{
+                } else {
                     header($field.': '.$value);
                 }
             }
