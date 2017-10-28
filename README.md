@@ -46,11 +46,11 @@ app/Controller/taskForRouter.php:
 <?php
 namespace Controller;
 
-Class taskForRouterController extends \Controller\Controller
+Class TaskForRouterController extends \Controller\Controller
 {
     public function ActionForRouter(){
-         $exampleModel = $this->loadModel('example'); #Load model
-         $view = $this->loadView('index'); #Load view
+         $exampleModel = $this->loadModel('Example'); #Load model
+         $view = $this->loadView('Index'); #Load view
          
          $getId = $exampleModel->getId($_GET['id']); #Call method
          $view->assign('varForSmarty', $getId); #Set variable to view
@@ -64,12 +64,12 @@ Class taskForRouterController extends \Controller\Controller
 **2. Model** 
 is not required in project if you are not using any databases
 
-app/Model/exampleModel.php:
+app/Model/ExampleModel.php:
 ```php
 <?php
 namespace Model;
 
-Class exampleModel extends Model\Model
+Class ExampleModel extends Model\Model
 {
     public function getId($id){
         return $this->baseClass->db->pdoQuery('SELECT * FROM table WHERE id=? LIMIT 1', array($id))->results();
@@ -86,7 +86,7 @@ You can use **php**, **twig**, **smarty* or write own View engine
 <?php
 namespace Dframe\View;
 
-interface interfaceView
+interface ViewInterface
 {
 
     /**
@@ -131,7 +131,7 @@ interface interfaceView
 }
 ```
 S.M.A.R.T.Y example
-View/templates/exampleNameFile.hmtl.php:
+View/templates/exampleNameFile.html.php:
 ```html
 <html>
     <head>
