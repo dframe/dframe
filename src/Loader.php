@@ -143,7 +143,7 @@ class Loader extends Core
             $controller = $url[$urlCount];
         }
         // Does the class exist?
-        $patchController = APP_DIR.'Controller/'.$subControler.$controller.'.php'; 
+        $patchController = APP_DIR.'Controller/'.$subControler.ucfirst($controller).'.php'; 
         //var_dump($patchController);
         if (file_exists($patchController)) {
             include_once $patchController;
@@ -153,11 +153,11 @@ class Loader extends Core
         $xsubControler = str_replace("/", "\\", $subControler);
         try {
 
-            if (!class_exists('\Controller\\'.$xsubControler.''.$controller.'Controller')) {
+            if (!class_exists('\Controller\\'.$xsubControler.''.ucfirst($controller).'Controller')) {
                 throw new BaseException('Bad controller error');
             }
 
-            $controller = '\Controller\\'.$xsubControler.''.$controller.'Controller';
+            $controller = '\Controller\\'.$xsubControler.''.ucfirst($controller).'Controller';
             $returnController = new $controller($this->baseClass);
 
         }catch(BaseException $e) {
