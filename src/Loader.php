@@ -22,20 +22,10 @@ class Loader extends Core
     public function __construct($bootstrap = null)
     {
 
-        if (!defined('appDir') AND !defined('APP_DIR')) {
+        if (!defined('APP_DIR')) {
             throw new BaseException('Please Define appDir in Main config.php', 500);
         }
         
-        /* Backward compatibility */
-        if (defined('appDir') AND !defined('APP_DIR')) {
-            define('APP_DIR', appDir);
-        }
-
-        /* Backward compatibility */
-        if (!defined('appDir') AND defined('APP_DIR')) {
-            define('appDir', APP_DIR);
-        }
-
         if (!defined('SALT')) {
             throw new BaseException('Please Define SALT in Main config.php', 500);
         }
