@@ -2,6 +2,8 @@
 namespace Dframe\tests;
 ini_set('session.use_cookies', 0);
 
+session_start();
+
 define('APP_DIR', '');
 define('SALT', 'RaNdOmTeSt');
 

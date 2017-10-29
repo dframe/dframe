@@ -97,6 +97,10 @@ class Response extends \Dframe\Router
 
     public function header($header = false)
     {
+    	if (PHP_SAPI === 'cli') {
+            return $this;
+        }
+
         $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1');
         $status = (!empty($this->status) ? $this->status : 200);
         $string = sprintf('%s %d %s', $protocol, $status, self::$code[$status]);

@@ -14,4 +14,4 @@ only: master
 install: 
    composer install
 
-script: phpunit --stderr tests
+script: phpunit
