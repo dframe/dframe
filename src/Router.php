@@ -82,22 +82,22 @@ class Router
         $loader = new Loader($bootstrap);
         $controller = $loader->loadController($controller); // Loading Controller class
 
-        $response = null;
+        $response = array();
 
         if (method_exists($controller, 'start')) {
-            $response = $controller->start();
+            $response[] = $controller->start();
         }
         
         if (method_exists($controller, 'init')) {
-            $response .= call_user_func_array(array($controller, 'init'), $arg);
+            $response[] = call_user_func_array(array($controller, 'init'), $arg);
         }
 
         if (method_exists($controller, $action) AND is_callable(array($controller, $action))) {
-            $response .= call_user_func_array(array($controller, (string)$action), $arg);
+            $response[] = call_user_func_array(array($controller, (string)$action), $arg);
         }
         
         if (method_exists($controller, 'end')) {
-            $response .= $controller->end();
+            $response[] = $controller->end();
         }
 
         return $response;

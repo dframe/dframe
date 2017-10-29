@@ -1,6 +1,7 @@
 <?php
 namespace Dframe;
 use Dframe\Router;
+use Dframe\Router\Response;
 
 /**
  * DframeFramework
@@ -15,12 +16,16 @@ class Core
     public function run()
     {
         $router = new Router();
-        return $this->response($router->run());
-    }
-    
-    public function response($data)
-    {
-        echo $data;
+        $run = $router->run();
+
+        foreach ($run as $key => $data) {
+            if (!is_object($data)) {
+                Response::create($data)->display();
+            } elseif (is_object($data)) {
+                $data->display();
+            }
+        }
+
     }
 
     public function setView($view)

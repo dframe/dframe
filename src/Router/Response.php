@@ -14,6 +14,8 @@ class Response extends \Dframe\Router
 
     public $status = 200;
 
+    public $_body = '';
+
     public $headers = array();
 
     public static $code = array(
@@ -74,6 +76,19 @@ class Response extends \Dframe\Router
         510 => 'Not Extended'
     );
 
+    public function __construct($body = false)
+    {
+        if (isset($body)) {
+            $this->_body = $body;
+        }
+        return $this;
+    }
+
+    public static function create($body)
+    {
+        return new Response($body);
+    }
+
     public function status($code)
     {
         $this->status = $code;
@@ -82,10 +97,6 @@ class Response extends \Dframe\Router
 
     public function header($header = false)
     {
-        if (PHP_SAPI === 'cli'){
-            return $this;
-        }
-        
         $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1');
         $status = (!empty($this->status) ? $this->status : 200);
         $string = sprintf('%s %d %s', $protocol, $status, self::$code[$status]);
@@ -105,5 +116,27 @@ class Response extends \Dframe\Router
         }
 
         return $this;
+    }
+    
+    public function body($body)
+    {
+        $this->_body = $body;
+        return $this;
+    }
+
+    public function getBody()
+    {
+        return $this->_body;
+    }
+
+    public function display()
+    {
+        if (!headers_sent()) {
+            $this->header();
+        }
+
+
+        echo $this->getBody();
+
     }
 }
