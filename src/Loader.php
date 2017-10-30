@@ -137,7 +137,7 @@ class Loader extends Core
             $subControler = '';
             
             for ($i=0; $i < $urlCount; $i++) { 
-                $subControler .= $url[$i].'/';
+                $subControler .= ucfirst($url[$i]).'/';
             }
 
             $controller = $url[$urlCount];
