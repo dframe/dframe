@@ -1,7 +1,7 @@
 ## Dframe\Session
 Methods
 ```php
-$session  = new Session('HashSaltRandomForSession');
+$session  = new Session('hashSaltRandomForSession');
 $session->register(); // Set session_id and session_time - default 60
 $session->authLogin(); // Return true/false if session is registrer
 $session->set($key, $value); // set $_SESSION[$key] = $value;

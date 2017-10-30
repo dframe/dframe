@@ -7,23 +7,23 @@ You do not have to have big applicaiton to create tree. Example in articles modu
 ```txt
 -app
     -Controller
-        -articles // Controller folder
-            -content.php
-            -category.php
+        -Articles // Controller folder
+            -Content.php
+            -Category.php
         -Controller.php
         
     -Model
-        -articles // Model folder
-            -content.php
-            -category.php
-            -commnets.php
+        -Articles // Model folder
+            -Content.php
+            -Category.php
+            -Commnets.php
 
 ```
 For comments you don't have to Controller becouse comments will be under article so you should load
 ```php
-$this->loadModel('articles/commnets');
+$this->loadModel('Articles/Commnets');
 ```
-in your articles/content
+in your Articles/Content
 
 #### Router 
 will be looks this

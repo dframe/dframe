@@ -16,7 +16,7 @@ return array(
 Usage in controller
 ```php
 <?php
-use \Dframe\Config;
+use Dframe\Config;
 
 include_once 'vendor/autoload.php';
 

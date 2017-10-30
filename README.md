@@ -39,9 +39,9 @@ RewriteRule ^(.*)$ web/index.php [QSA,L]
 ### Overview
 
 **1. Controller** 
-file it is very important for dynamic routing. If you created file **taskForRouter.php** with class with method **ActionForRouter()** your **\Dframe\Router** url will look like ***yourpage.com/taskForRouter/ActionForRouter***
+file it is very important for dynamic routing. If you created file **TaskForRouter.php** with class with method **ActionForRouter()** your **\Dframe\Router** url will look like ***yourpage.com/TaskForRouter/ActionForRouter***
 
-app/Controller/taskForRouter.php:
+app/Controller/TaskForRouter.php:
 ```php
 <?php
 namespace Controller;
@@ -72,7 +72,7 @@ namespace Model;
 Class ExampleModel extends Model\Model
 {
     public function getId($id){
-        return $this->baseClass->db->pdoQuery('SELECT * FROM table WHERE id=? LIMIT 1', array($id))->results();
+        return $this->baseClass->db->pdoQuery('SELECT * FROM table WHERE id = ? LIMIT 1', array($id))->result();
     }
 }
 ```
@@ -108,7 +108,7 @@ interface ViewInterface
      *
      * @return void
      */
-     */
+    
     public function fetch($name, $path=null);
 
     /**

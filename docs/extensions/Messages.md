@@ -8,12 +8,12 @@ You have two type params for **adding** *(First)* and for **display** *(Second)*
 ##### Methods example #1
 Just display after add.
 ```php
-use \Dframe\Messages;
-use \Dframe\Session;
+use Dframe\Messages;
+use Dframe\Session;
 
 include_once 'vendor/autoload.php';
 
-$msg = new Messages(new Session('HashSaltRandomForSession')); // Join the current session
+$msg = new Messages(new Session('hashSaltRandomForSession')); // Join the current session
 $msg->add('s', 'Success Message!');
 //$msg->add('s', 'Success Message!', 'page/index'); // with redirect 
 $msg->hasMessages('success'): // Will return array['success']
@@ -29,14 +29,14 @@ var_dump($msg->display('success'));
 ##### Methods example #2*
 Set message and refresh/redirect
 ```php
-use \Dframe\Messages;
-use \Dframe\Router;
-use \Dframe\Session;
+use Dframe\Messages;
+use Dframe\Router;
+use Dframe\Session;
 
 include_once 'vendor/autoload.php';
 
 $router = new Router();
-$msg = new Messages(new Session('HashSaltRandomForSession')); // Join the current session
+$msg = new Messages(new Session('hashSaltRandomForSession')); // Join the current session
 
 if(!empty($msg->hasMessages())){
    var_dump($msg->display('success'));
@@ -60,12 +60,12 @@ $router->redirect('page/index');
 ##### Methods example #3
 
 ```php
-use \Dframe\Messages;
-use \Dframe\Session;
+use Dframe\Messages;
+use Dframe\Session;
 
 include_once 'vendor/autoload.php';
 
-$msg = new Messages(new Session('HashSaltRandomForSession')); // Join the current session
+$msg = new Messages(new Session('hashSaltRandomForSession')); // Join the current session
 
 if(isset($msg->hasMessages())){
    var_dump($msg->display('success'));
@@ -76,6 +76,3 @@ $msg->add('s', 'Success Message!', 'page/index');
 return;
 
 ```
-
-
-
