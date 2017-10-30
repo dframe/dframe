@@ -54,7 +54,7 @@ Class TaskForRouterController extends \Controller\Controller
          
          $getId = $exampleModel->getId($_GET['id']); #Call method
          $view->assign('varForSmarty', $getId); #Set variable to view
-         $view->render('exampleNameFile'); #Generate view app/View/templates/exampleNameFile.tpl
+         return $view->render('exampleNameFile'); #Generate view app/View/templates/exampleNameFile.tpl
     }
 }
 
