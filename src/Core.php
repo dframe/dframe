@@ -17,13 +17,15 @@ class Core
     {
         $router = new Router();
         $run = $router->run();
-
+        
         foreach ($run as $key => $data) {
-            if (!is_object($data)) {
-                Response::create($data)->display();
-            } elseif (is_object($data)) {
-                $data->display();
+
+            if (!empty($data) AND !is_object($data)) {
+                return Response::create($data)->display();
+            } elseif (!empty($data) AND is_object($data) AND method_exists($data, 'display')) {
+                return $data->display();
             }
+
         }
 
     }

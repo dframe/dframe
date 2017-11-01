@@ -3,6 +3,7 @@ namespace Dframe;
 use Dframe\BaseException;
 use Dframe\Config;
 use Dframe\Core;
+use Dframe\Router\Response;
 
 /**
  * DframeFramework
@@ -14,10 +15,8 @@ use Dframe\Core;
 class Loader extends Core
 {
 
-    private $controller;
-    private $action;
-    private $urlvalues;
-    public $bootstrap;
+    public $baseClass;
+    public $router;
 
     public function __construct($bootstrap = null)
     {
@@ -46,7 +45,7 @@ class Loader extends Core
 
     public function loadModel($name)
     {
-        return $this->loadObject($name, 'Model');
+        return $this->_loadObject($name, 'Model');
     }
 
     /**
@@ -55,11 +54,11 @@ class Loader extends Core
 
     public function loadView($name)
     {
-        return $this->loadObject($name, 'View');
+        return $this->_loadObject($name, 'View');
 
     }
 
-    private function loadObject($name, $type)
+    private function _loadObject($name, $type)
     {
 
         if (!in_array($type, (array('Model', 'View')))) {
@@ -87,45 +86,54 @@ class Loader extends Core
             include_once $path;
             $ob = new $name($this->baseClass);
             if (method_exists($ob, 'init')) {
-                $ob->init(); 
+                $ob->init();
             }
            
         }catch(BaseException $e) {
             
+            $msg = null;
             if (ini_get('display_errors') == "on") {
-                echo '<pre>';
-                echo 'Accept: '.$_SERVER['HTTP_ACCEPT'].'<br>';
-                echo 'Referer: '.$_SERVER['HTTP_REFERER'].'<br><br>';
-                echo 'Request Method: '.$_SERVER['REQUEST_METHOD'].'<br><br>';
+                $msg .= '<pre>';
+                $msg .= 'Message: <b>'.$e->getMessage().'</b><br><br>';
 
-                echo 'Current file Path: <b>'.$this->router->currentPath().'</b><br>';
+                $msg .= 'Accept: '.$_SERVER['HTTP_ACCEPT'].'<br>';
+                if(isset($_SERVER['HTTP_REFERER'])){
+                    $msg .= 'Referer: '.$_SERVER['HTTP_REFERER'].'<br><br>';
+                }
 
-                echo 'Message: <b>'.$e->getMessage().'</b><br><br>';
-                echo 'File Exception: '.$e->getFile().':'.$e->getLine().'<br><br>';
-                echo 'Trace: <br>'.$e->getTraceAsString().'<br>';
-                echo '</pre>';
-                exit();
+                $msg .= 'Request Method: '.$_SERVER['REQUEST_METHOD'].'<br><br>';
+
+                $msg .= 'Current file Path: <b>'.$this->router->currentPath().'</b><br>';
+
+                
+                $msg .= 'File Exception: '.$e->getFile().':'.$e->getLine().'<br><br>';
+                $msg .= 'Trace: <br>'.$e->getTraceAsString().'<br>';
+                $msg .= '</pre>';
+
+                return Response::create($msg)->display();
             }
+
 
             $routerConfig = Config::load('router');
-            $router->response()->status('400');
 
             if (isset($routerConfig->get('error/400')[0])) {
-                $this->router->redirect($routerConfig->get('error/400')[0]);
+                return $this->router->redirect($routerConfig->get('error/400')[0], 400);
 
             } elseif (isset($routerConfig->get('error/404')[0])) {
-                $this->router->redirect($routerConfig->get('error/404')[0]);
+                return $this->router->redirect($routerConfig->get('error/404')[0], 404);
 
             }
-
-            exit();
+            
         }
 
         return $ob;
     }
 
 
-    // Establish the requested controller as an object
+    /**
+     * Establish the requested controller as an object
+     */
+
     public function loadController($controller)
     {
 
@@ -142,6 +150,7 @@ class Loader extends Core
 
             $controller = $url[$urlCount];
         }
+
         // Does the class exist?
         $patchController = APP_DIR.'Controller/'.$subControler.ucfirst($controller).'.php'; 
         //var_dump($patchController);
@@ -162,19 +171,34 @@ class Loader extends Core
 
         }catch(BaseException $e) {
             
+            $msg = null;
             if (ini_get('display_errors') == 'on') {
-                echo $e->getMessage().'<br><br>
-                File: '.$e->getFile().'<br>
-                Code line: '.$e->getLine().'<br> 
-                Trace: '.$e->getTraceAsString();
-                exit();
+                $msg .= '<pre>';
+                $msg .= 'Message: <b>'.$e->getMessage().'</b><br><br>';
+
+                $msg .= 'Accept: '.$_SERVER['HTTP_ACCEPT'].'<br>';
+                if(isset($_SERVER['HTTP_REFERER'])){
+                    $msg .= 'Referer: '.$_SERVER['HTTP_REFERER'].'<br><br>';
+                }
+                
+                $msg .= 'Request Method: '.$_SERVER['REQUEST_METHOD'].'<br><br>';
+                $msg .= 'Current file Path: <b>'.$this->router->currentPath().'</b><br>';
+
+                $msg .= 'File Exception: '.$e->getFile().':'.$e->getLine().'<br><br>';
+                $msg .= 'Trace: <br>'.$e->getTraceAsString().'<br>';
+                $msg .= '</pre>';
+
+                return Response::create($msg)->display();
             }
 
             $routerConfig = Config::load('router');
-            header("HTTP/1.0 404 Not Found");
 
-            if (isset($routerConfig->get('error/404')[0])) {
-                $this->router->redirect($routerConfig->get('error/404')[0]);
+            if (isset($routerConfig->get('error/400')[0])) {
+                return $this->router->redirect($routerConfig->get('error/400')[0], 400);
+
+            } elseif (isset($routerConfig->get('error/404')[0])) {
+                return $this->router->redirect($routerConfig->get('error/404')[0], 404);
+
             }
 
             exit();

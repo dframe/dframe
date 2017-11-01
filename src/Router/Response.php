@@ -16,7 +16,7 @@ class Response extends \Dframe\Router
 
     public $_body = '';
 
-    public $headers = array();
+    private $_header = array();
 
     public static $code = array(
         100 => 'Continue',
@@ -84,7 +84,7 @@ class Response extends \Dframe\Router
         return $this;
     }
 
-    public static function create($body)
+    public static function create($body = null)
     {
         return new Response($body);
     }
@@ -97,32 +97,11 @@ class Response extends \Dframe\Router
 
     public function header($header = false)
     {
-    	if (PHP_SAPI === 'cli') {
-            return $this;
-        }
-
-        $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1');
-        $status = (!empty($this->status) ? $this->status : 200);
-        $string = sprintf('%s %d %s', $protocol, $status, self::$code[$status]);
-
-        header($string, true, $status); // Default header
-        if (!empty($header)) {
-
-            foreach ($header as $field => $value) {
-                if (is_array($value)) {
-                    foreach ($value as $v) {
-                        header($field.': '.$v, false);
-                    }
-                } else {
-                    header($field.': '.$value);
-                }
-            }
-        }
-
+        $this->_header = $header;
         return $this;
     }
     
-    public function body($body)
+    public function body($body = null)
     {
         $this->_body = $body;
         return $this;
@@ -136,9 +115,30 @@ class Response extends \Dframe\Router
     public function display()
     {
         if (!headers_sent()) {
-            $this->header();
-        }
 
+            if (PHP_SAPI !== 'cli') {
+    
+                $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1');
+                $status = (!empty($this->status) ? $this->status : 200);
+                $string = sprintf('%s %d %s', $protocol, $status, self::$code[$status]);
+
+                header($string, true, $status); // Default header
+                if (!empty($this->_header)) {
+    
+                    foreach ($this->_header as $field => $value) {
+                        if (is_array($value)) {
+                            foreach ($value as $v) {
+                                header("$field".': '.$v, false);
+                            }
+                        } else {
+                            header("$field".': '.$value);
+                        }
+                    }
+                }
+    
+            }
+    
+        }
 
         echo $this->getBody();
 

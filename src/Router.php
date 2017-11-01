@@ -51,8 +51,9 @@ class Router
 
             // If forced than redirect
             if (isset($_SERVER['REQUEST_SCHEME']) AND ((!empty($_SERVER['REQUEST_SCHEME']) AND $_SERVER['REQUEST_SCHEME'] == 'http'))) {
-                header('Location: '.$this->requestPrefix.$this->domain.'/'.$_SERVER['REQUEST_URI']);
-                return;
+                return Response::create()->header([
+                        'Refresh' => $this->requestPrefix.$this->domain.'/'.$_SERVER['REQUEST_URI']
+                    ]);
             }
             
         } else {
@@ -72,8 +73,8 @@ class Router
             $this->parseGets();
             $controller = $_GET['task'];
             $action = $_GET['action'];
-
         }
+
         $arg = $this->parseArgs;
 
         $bootstrap = new \Bootstrap();
@@ -433,15 +434,24 @@ class Router
      * @return void
      */
     
-    public function redirect($url = '') 
+    public function redirect($url = '', $status = 301) 
     {
+
+    	$response = Response::create();
+        $response->status($status);
+        
         if ($this->delay != null) {
-            header("Refresh:".$this->delay."; url=".$this->makeUrl($url));
-            return;
+            $header = array(
+            	'Refresh' => $this->delay."; url=".$this->makeUrl($url)
+            );
+        } else {
+        	$header = array(
+                'Location' => $this->makeUrl($url)
+            );
         }
 
-        header("Location: ".$this->makeUrl($url));
-        return;
+        $response->header($header);
+        return $response;
     }
 
     public function delay(int $delay)
