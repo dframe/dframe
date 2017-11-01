@@ -60,17 +60,29 @@ class Messages
 
         } catch(BaseException $e) {
 
-            if (ini_get('display_errors') == 'on') {
-                echo $e->getMessage().'<br><br>
-                File: '.$e->getFile().'<br>
-                Code line: '.$e->getLine().'<br> 
-                Trace: '.$e->getTraceAsString();
-                exit();
+            $msg = null;
+            if (ini_get('display_errors') == "on") {
+                $msg .= '<pre>';
+                $msg .= 'Message: <b>'.$e->getMessage().'</b><br><br>';
+
+                $msg .= 'Accept: '.$_SERVER['HTTP_ACCEPT'].'<br>';
+                if(isset($_SERVER['HTTP_REFERER'])){
+                    $msg .= 'Referer: '.$_SERVER['HTTP_REFERER'].'<br><br>';
+                }
+
+                $msg .= 'Request Method: '.$_SERVER['REQUEST_METHOD'].'<br><br>';
+
+                $msg .= 'Current file Path: <b>'.$this->router->currentPath().'</b><br>';
+
+                
+                $msg .= 'File Exception: '.$e->getFile().':'.$e->getLine().'<br><br>';
+                $msg .= 'Trace: <br>'.$e->getTraceAsString().'<br>';
+                $msg .= '</pre>';
+
+                return Response::create($msg)->display();
             }
 
-            $router->response()->status('501');
-            echo $e->getMessage();
-            exit();
+            return Response::create($e->getMessage())->status(501)->display();
         }
 
         $get = $this->session->get('flash_messages');
@@ -78,9 +90,8 @@ class Messages
         $this->session->set('flash_messages', $get);
 
         if (!is_null($redirect)) {
-            
-            $router->response()->status('301');
-            $router->redirect($redirect);
+
+            $router->redirect($redirect, 301);
             exit();
         }
         
