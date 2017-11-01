@@ -1,10 +1,9 @@
 <?php
-
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
  *
- * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
+ * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
 function pathFile($path)
@@ -25,7 +24,9 @@ function pathFile($path)
 }
 
 
-/* PO PRZEJŚCIU NA NOWY FRAMEWORK TRZEBA PRZENIEŚĆ TO DO BIBLIOTEKI LUB ZMIENIĆ */
+/**
+ * PO PRZEJŚCIU NA NOWY FRAMEWORK TRZEBA PRZENIEŚĆ TO DO BIBLIOTEKI LUB ZMIENIĆ 
+ */
 function validateDate($date, $format = 'Y-m-d H:i:s')
 {
     $d = DateTime::createFromFormat($format, $date);
@@ -35,7 +36,6 @@ function validateDate($date, $format = 'Y-m-d H:i:s')
 /**
  * Sumowanie minut
  */
-
 function convertMinutes($minut)
 {
     $godzin = floor($minut/60);  // liczba pełnych godzin
@@ -73,7 +73,7 @@ function generateRandomString($length = 10)
     $charactersLength = strlen($characters);
     $randomString = '';
     
-    for($i = 0; $i < $length; $i++) {
+    for ($i = 0; $i < $length; $i++) {
         $randomString .= $characters[rand(0, $charactersLength - 1)];
     }
 
@@ -91,7 +91,7 @@ function object_to_array($obj)
 
     if (is_array($obj)) {
         $new = array();
-        foreach($obj as $key => $val) {
+        foreach ($obj as $key => $val) {
             $key2 = str_replace("\0", "", $key);
             $new[$key2] = object_to_array($val);
         }

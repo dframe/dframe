@@ -1,16 +1,22 @@
 <?php
+/**
+ * DframeFramework
+ * Copyright (c) Sławomir Kaleta
+ *
+ * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
+ */
+
 namespace Dframe;
+
 use Dframe\Config;
 use Dframe\Loader;
 use Dframe\Router\Response;
 
 /**
- * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Short Description
  *
- * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
+ * @author Sławek Kaleta <slaszka@gmail.com>
  */
-
 class Router
 {
 

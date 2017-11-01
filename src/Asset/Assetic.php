@@ -1,8 +1,15 @@
 <?php
+/**
+ * DframeFramework
+ * Copyright (c) Sławomir Kaleta
+ *
+ * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
+ */
+
 namespace Dframe\Asset;
+
 use Dframe\BaseException;
 use Dframe\Router;
-
 use Assetic\Asset\FileAsset;
 use Assetic\Filter\CssImportFilter;
 use Assetic\Filter\CssRewriteFilter;
@@ -14,15 +21,13 @@ use Assetic\Asset\AssetReference;
 use Assetic\Filter\GoogleClosure;
 use Patchwork\JSqueeze;
 
-/**
- * DframeFramework
- * Copyright (c) Sławomir Kaleta
- *
- * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
- */
-
 set_time_limit(120);
 
+/**
+ * Short Description
+ *
+ * @author Sławek Kaleta <slaszka@gmail.com>
+ */
 class Assetic extends Router
 {
 
@@ -39,7 +44,6 @@ class Assetic extends Router
     public function assetJs($sUrl = null, $path = null, $compress = true)
     {
 
-
         if (is_null($path)) {
             $path = 'assets';
             if (isset($this->aRouting['assetsPath']) AND !empty($this->aRouting['assetsPath'])) {
@@ -47,7 +51,6 @@ class Assetic extends Router
                 $this->_checkDir($path); // Create Dir if not exist
             }
         }
-
 
         //Podstawowe sciezki
         $srcPath =  APP_DIR.'View/assets/'.$sUrl;

@@ -1,20 +1,26 @@
 <?php
-namespace Dframe\Router;
-use Dframe\Config;
-
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
  *
- * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
+ * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
+namespace Dframe\Router;
+
+use Dframe\Config;
+
+/**
+ * Short Description
+ *
+ * @author Sławek Kaleta <slaszka@gmail.com>
+ */
 class Response extends \Dframe\Router
 {
 
     public $status = 200;
 
-    public $_body = '';
+    private $_body = '';
 
     private $_header = array();
 

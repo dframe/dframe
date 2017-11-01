@@ -1,28 +1,51 @@
-<?php
-namespace Dframe\View;
-use Dframe\Config;
-use Dframe\Router;
-
+<?php 
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
  *
- * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
+ * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
+namespace Dframe\View;
+
+use Dframe\Config;
+use Dframe\Router;
+
+/**
+ * Short Description
+ *
+ * @author Sławek Kaleta <slaszka@gmail.com>
+ */
 class DefaultView implements \Dframe\View\ViewInterface
 {
+    
     public function __construct()
     {
         $this->templateConfig = Config::load('view/defaultConfig');
     }
 
+    /**
+     * Set the var to the template
+     *
+     * @param string $name 
+     * @param string $value
+     *
+     * @return void
+     */
     public function assign($name, $value)
     {
         $this->$name = $value;
     }
 
-    public function fetch($name, $path=null)
+    /**
+     * Return code
+     *
+     * @param string $name Filename
+     * @param string $path Alternative Path
+     *
+     * @return void
+     */
+    public function fetch($name, $path = null)
     {
         throw new \Exception('This module dont have fetch');
     }
@@ -30,8 +53,8 @@ class DefaultView implements \Dframe\View\ViewInterface
     /**
      * Przekazuje kod do szablonu Smarty
      *
-     * @param string $name Nazwa pliku
-     * @param string $path Ścieżka do szablonu
+     * @param string $name
+     * @param string $path
      *
      * @return void
      */
@@ -65,9 +88,12 @@ class DefaultView implements \Dframe\View\ViewInterface
     }
 
     /**
-     * Wyświetla dane JSON.
+     * Display JSON.
      *
-     * @param array $data Dane do wyświetlenia
+     * @param array $data
+     * @param int   $status
+     *
+     * @return Json
      */
     public function renderJSON($data, $status = false) 
     {
@@ -77,9 +103,11 @@ class DefaultView implements \Dframe\View\ViewInterface
     }
  
     /**
-     * Wyświetla dane JSONP.
+     * Display JSONP.
      *
-     * @param array $data Dane do wyświetlenia
+     * @param array $data
+     *
+     * @return Json with Calback
      */
     public function renderJSONP($data) 
     {

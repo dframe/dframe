@@ -1,17 +1,23 @@
 <?php
+/**
+ * DframeFramework
+ * Copyright (c) Sławomir Kaleta
+ *
+ * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
+ */
+
 namespace Dframe;
+
 use Dframe\BaseException;
 use Dframe\Config;
 use Dframe\Core;
 use Dframe\Router\Response;
 
 /**
- * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Short Description
  *
- * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
+ * @author Sławek Kaleta <slaszka@gmail.com>
  */
-
 class Loader extends Core
 {
 
@@ -97,7 +103,7 @@ class Loader extends Core
                 $msg .= 'Message: <b>'.$e->getMessage().'</b><br><br>';
 
                 $msg .= 'Accept: '.$_SERVER['HTTP_ACCEPT'].'<br>';
-                if(isset($_SERVER['HTTP_REFERER'])){
+                if (isset($_SERVER['HTTP_REFERER'])) {
                     $msg .= 'Referer: '.$_SERVER['HTTP_REFERER'].'<br><br>';
                 }
 
@@ -177,7 +183,7 @@ class Loader extends Core
                 $msg .= 'Message: <b>'.$e->getMessage().'</b><br><br>';
 
                 $msg .= 'Accept: '.$_SERVER['HTTP_ACCEPT'].'<br>';
-                if(isset($_SERVER['HTTP_REFERER'])){
+                if (isset($_SERVER['HTTP_REFERER'])) {
                     $msg .= 'Referer: '.$_SERVER['HTTP_REFERER'].'<br><br>';
                 }
                 

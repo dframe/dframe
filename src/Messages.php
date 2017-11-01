@@ -1,17 +1,23 @@
 <?php
+/**
+ * DframeFramework
+ * Copyright (c) Sławomir Kaleta
+ *
+ * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
+ */
+ 
 namespace Dframe;
+
 use Dframe\BaseException;
 use Dframe\Session;
 use Dframe\Router;
 
 /**
- * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Short Description
  *
- * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
- * Original @author Mike Everhart
+ * @author Sławek Kaleta <slaszka@gmail.com>
+ * @author Mike Everhart <mike@plasticbrain.net>
  */
-
 class Messages
 {
 
@@ -38,6 +44,7 @@ class Messages
      * @param  string $type     The type of message to add
      * @param  string $message  The message
      * @param  string $redirect (optional) If set, the user will be redirected to this URL
+     *
      * @return bool
      */
     public function add($type, $message, $redirect=null)
@@ -98,19 +105,14 @@ class Messages
         return true;
     }
     
-    //-----------------------------------------------------------------------------------------------
-    // display()
-    // print queued messages to the screen
-    //-----------------------------------------------------------------------------------------------
-
     /**
      * Display the queued messages
      * 
      * @param  string $type  Which messages to display
      * @param  bool   $print True print the messages on the screen
+     *
      * @return mixed
      */
-
     public function display($type='all', $print=false)
     {
         $messages = '';
@@ -160,7 +162,6 @@ class Messages
      * 
      * @return bool true There ARE error messages false There are NOT any error messages
      */
-
     public function hasErrors()
     {
         $flashMessages = $this->session->get('flash_messages');
@@ -171,9 +172,9 @@ class Messages
      * Check to see if there are any ($type) messages queued
      * 
      * @param  string $type The type of messages to check for
+     *
      * @return bool               
      */
-
     public function hasMessages($type=null)
     {
         if (!is_null($type)) {
@@ -198,6 +199,7 @@ class Messages
      * Clear messages from the session data
      * 
      * @param  string $type The type of messages to clear
+     *
      * @return bool 
      */
     public function clear($type='all')
@@ -213,7 +215,13 @@ class Messages
         
         return true;
     }
-    
+
+
+    /**
+     *
+     * @return string
+     */
+
     public function __toString()
     {
         return $this->hasMessages();    

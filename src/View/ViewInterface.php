@@ -1,11 +1,17 @@
 <?php
-namespace Dframe\View;
-
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
  *
- * @license https://github.com/dusta/Dframe/blob/master/LICENCE (MIT)
+ * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
+ */
+
+namespace Dframe\View;
+
+/**
+ * Short Description
+ *
+ * @author Sławek Kaleta <slaszka@gmail.com>
  */
 
 interface ViewInterface
@@ -16,10 +22,7 @@ interface ViewInterface
      *
      * @param string $name 
      * @param string $value
-     *
-     * @return void
      */
-
     public function assign($name, $value);
 
     /**
@@ -27,13 +30,13 @@ interface ViewInterface
      *
      * @param string $name - Filename
      * @param string $path - Alternative Path
-     *
-     * @return void
      */
     public function fetch($name, $path = null);
 
     /**
      * Include File
+     *
+     * @param string $path 
      */
     public function renderInclude($path);
      
@@ -41,6 +44,7 @@ interface ViewInterface
      * Display JSON.
      *
      * @param array $data
+     * @param int   $status
      */
     public function renderJSON($data, $status);
  
