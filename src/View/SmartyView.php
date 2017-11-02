@@ -128,7 +128,7 @@ class SmartyView implements \Dframe\View\ViewInterface
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
             }
 
-            $display = $this->smarty->fetch($path); // Ładowanie widoku
+            return $this->smarty->display($path); // Ładowanie widoku
 
         }catch(Exception $e) {
             echo $e->getMessage().'<br />
@@ -138,7 +138,7 @@ class SmartyView implements \Dframe\View\ViewInterface
             exit();
         }
 
-        return $display;
+  
     }
      
     /**
