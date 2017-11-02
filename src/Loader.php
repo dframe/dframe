@@ -131,6 +131,7 @@ class Loader extends Core
 
             }
             
+            return '_loadObject Error';
         }
 
         return $ob;
@@ -217,7 +218,7 @@ class Loader extends Core
 
             }
 
-            exit();
+            return 'loadController Error';
         }
         
         return $returnController;
