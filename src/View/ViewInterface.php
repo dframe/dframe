@@ -40,19 +40,4 @@ interface ViewInterface
      */
     public function renderInclude($path);
      
-    /**
-     * Display JSON.
-     *
-     * @param array $data
-     * @param int   $status
-     */
-    public function renderJSON($data, $status);
- 
-    /**
-     * Display JSONP.
-     *
-     * @param array $data Dane do wyświetlenia
-     */
-    public function renderJSONP($data);
-
 }

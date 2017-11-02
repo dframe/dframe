@@ -114,13 +114,11 @@ class TwigView implements \Dframe\View\ViewInterface
      *
      * @return Json
      */
-    public function renderJSON($data, $status = false) 
+    public function renderJSON($data, $status = 200) 
     {
-        $router = new Router();
-        $router->response()->status($status)->header(array('Content-Type' => 'application/json'));
-        return json_encode($data);
+        return Response::Create(json_encode($data))->status($status)->header(array('Content-Type' => 'application/json'))->display();
     }
-         
+ 
     /**
      * Display JSONP.
      *
@@ -130,14 +128,12 @@ class TwigView implements \Dframe\View\ViewInterface
      */
     public function renderJSONP($data) 
     {
-        header('Content-Type: application/json');
         $callback = null;
         if (isset($_GET['callback'])) { 
             $callback = $_GET['callback'];
         }
         
-        echo $callback . '(' . json_encode($data) . ')';
-        exit();
+        return Response::Create(json_encode($callback . '(' . json_encode($data) . ')'))->header(array('Content-Type' => 'application/json'))->display();
     }
     
 }
