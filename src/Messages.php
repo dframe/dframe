@@ -97,9 +97,7 @@ class Messages
         $this->session->set('flash_messages', $get);
 
         if (!is_null($redirect)) {
-
-            $router->redirect($redirect, 301);
-            exit();
+            return $router->redirect($redirect, 301);
         }
         
         return true;
