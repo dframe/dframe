@@ -94,7 +94,7 @@ class Router
         $response = array();
 
         if (method_exists($controller, 'start')) {
-           $controller->start();
+            $controller->start();
         }
         
         if (method_exists($controller, 'init')) {
