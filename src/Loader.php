@@ -80,10 +80,11 @@ class Loader extends Core
         try {
 
             if (!$this->isCamelCaps($name, true)) {
-            	if(!defined('CODING_STYLE') OR (defined('CODING_STYLE') AND CODING_STYLE == true))){
+                if (!defined('CODING_STYLE') OR (defined('CODING_STYLE') AND CODING_STYLE == true)) {
                      throw new BaseException('Camel Sensitive is on. Can not use '.$type.' '.$name.' try to use camelCaseName');
-            	}
+                }
             }
+            
             
             $name = !empty($folder) ? '\\'.$type.'\\'.str_replace(array('\\', '/'), '\\', $folder).$name.$type : '\\'.$type.'\\'.$name.$type;;   
     
