@@ -9,7 +9,6 @@
 namespace Dframe\View;
 
 use Dframe\Config;
-use Dframe\Router;
 
 /**
  * Short Description
@@ -106,34 +105,6 @@ class TwigView implements \Dframe\View\ViewInterface
         return $renderInclude;
     }
              
-    /**
-     * Display JSON.
-     *
-     * @param array $data
-     * @param int   $status
-     *
-     * @return Json
-     */
-    public function renderJSON($data, $status = 200) 
-    {
-        return Response::Create(json_encode($data))->status($status)->header(array('Content-Type' => 'application/json'))->display();
-    }
- 
-    /**
-     * Display JSONP.
-     *
-     * @param array $data
-     *
-     * @return Json with Calback
-     */
-    public function renderJSONP($data) 
-    {
-        $callback = null;
-        if (isset($_GET['callback'])) { 
-            $callback = $_GET['callback'];
-        }
-        
-        return Response::Create(json_encode($callback . '(' . json_encode($data) . ')'))->header(array('Content-Type' => 'application/json'))->display();
-    }
+
     
 }

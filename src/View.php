@@ -9,6 +9,8 @@
 namespace Dframe;
 
 use Dframe\BaseException;
+use Dframe\Router;
+use Dframe\Router\Response;
 
 /**
  * Short Description
@@ -71,23 +73,32 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
     }
      
     /**
-     * Wyświetla dane JSON.
+     * Display JSON.
      *
-     * @param array $data Dane do wyświetlenia
+     * @param array $data
+     * @param int   $status
+     *
+     * @return Json
      */
-    public function renderJSON($data, $status = false) 
+    public function renderJSON($data, $status = 200) 
     {
-        return $this->view->renderJSON($data, $status);
-
+        return Response::Create(json_encode($data))->status($status)->header(array('Content-Type' => 'application/json'))->display();
     }
  
     /**
-     * Wyświetla dane JSONP.
+     * Display JSONP.
      *
-     * @param array $data Dane do wyświetlenia
+     * @param array $data
+     *
+     * @return Json with Calback
      */
     public function renderJSONP($data) 
     {
-        return $this->view->renderJSONP($data);
+        $callback = null;
+        if (isset($_GET['callback'])) { 
+            $callback = $_GET['callback'];
+        }
+        
+        return Response::Create(json_encode($callback . '(' . json_encode($data) . ')'))->header(array('Content-Type' => 'application/json'))->display();
     }
 }
