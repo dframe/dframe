@@ -152,14 +152,23 @@ class Loader extends Core
             $subControler = '';
             
             for ($i=0; $i < $urlCount; $i++) { 
-                $subControler .= ucfirst($url[$i]).'/';
+
+                if (!defined('CODING_STYLE') OR (defined('CODING_STYLE') AND CODING_STYLE == true)) {
+                    $subControler .= ucfirst($url[$i]).'/';
+                }else{
+                    $subControler .= $url[$i].'/';
+                }
             }
 
             $controller = $url[$urlCount];
         }
 
+        if (!defined('CODING_STYLE') OR (defined('CODING_STYLE') AND CODING_STYLE == true)) {
+            $controller = ucfirst($controller);
+        }
+    
         // Does the class exist?
-        $patchController = APP_DIR.'Controller/'.$subControler.ucfirst($controller).'.php'; 
+        $patchController = APP_DIR.'Controller/'.$subControler.$controller.'.php'; 
         //var_dump($patchController);
         if (file_exists($patchController)) {
             include_once $patchController;
@@ -169,11 +178,11 @@ class Loader extends Core
         $xsubControler = str_replace("/", "\\", $subControler);
         try {
 
-            if (!class_exists('\Controller\\'.$xsubControler.''.ucfirst($controller).'Controller')) {
+            if (!class_exists('\Controller\\'.$xsubControler.''.$controller.'Controller')) {
                 throw new BaseException('Bad controller error');
             }
 
-            $controller = '\Controller\\'.$xsubControler.''.ucfirst($controller).'Controller';
+            $controller = '\Controller\\'.$xsubControler.''.$controller.'Controller';
             $returnController = new $controller($this->baseClass);
 
         }catch(BaseException $e) {
