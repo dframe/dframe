@@ -57,9 +57,11 @@ class Router
 
             // If forced than redirect
             if (isset($_SERVER['REQUEST_SCHEME']) AND ((!empty($_SERVER['REQUEST_SCHEME']) AND $_SERVER['REQUEST_SCHEME'] == 'http'))) {
-                return Response::create()->header([
+                return Response::create()->header(
+                    [
                         'Refresh' => $this->requestPrefix.$this->domain.'/'.$_SERVER['REQUEST_URI']
-                    ]);
+                    ]
+                );
             }
             
         } else {
@@ -443,15 +445,15 @@ class Router
     public function redirect($url = '', $status = 301) 
     {
 
-    	$response = Response::create();
+        $response = Response::create();
         $response->status($status);
         
         if ($this->delay != null) {
             $header = array(
-            	'Refresh' => $this->delay."; url=".$this->makeUrl($url)
+                'Refresh' => $this->delay."; url=".$this->makeUrl($url)
             );
         } else {
-        	$header = array(
+            $header = array(
                 'Location' => $this->makeUrl($url)
             );
         }

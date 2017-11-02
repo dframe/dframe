@@ -80,11 +80,10 @@ class Loader extends Core
         try {
 
             if (!$this->isCamelCaps($name, true)) {
-            	if (!defined('CODING_STYLE') OR (defined('CODING_STYLE') AND CODING_STYLE == true)) {
-                     throw new BaseException('Camel Sensitive is on. Can not use '.$type.' '.$name.' try to use camelCaseName');
-            	}
+                if (!defined('CODING_STYLE') OR (defined('CODING_STYLE') AND CODING_STYLE == true)) {
+                    throw new BaseException('Camel Sensitive is on. Can not use '.$type.' '.$name.' try to use StudlyCaps or CamelCase');
+                }
             }
-            
             
             $name = !empty($folder) ? '\\'.$type.'\\'.str_replace(array('\\', '/'), '\\', $folder).$name.$type : '\\'.$type.'\\'.$name.$type;;   
     
@@ -113,7 +112,6 @@ class Loader extends Core
                 $msg .= 'Request Method: '.$_SERVER['REQUEST_METHOD'].'<br><br>';
 
                 $msg .= 'Current file Path: <b>'.$this->router->currentPath().'</b><br>';
-
                 
                 $msg .= 'File Exception: '.$e->getFile().':'.$e->getLine().'<br><br>';
                 $msg .= 'Trace: <br>'.$e->getTraceAsString().'<br>';

@@ -41,9 +41,9 @@ class Messages
     /**
      * Add a message to the queue
      * 
-     * @param  string $type     The type of message to add
-     * @param  string $message  The message
-     * @param  string $redirect (optional) If set, the user will be redirected to this URL
+     * @param string $type     The type of message to add
+     * @param string $message  The message
+     * @param string $redirect (optional) If set, the user will be redirected to this URL
      *
      * @return bool
      */
@@ -73,7 +73,7 @@ class Messages
                 $msg .= 'Message: <b>'.$e->getMessage().'</b><br><br>';
 
                 $msg .= 'Accept: '.$_SERVER['HTTP_ACCEPT'].'<br>';
-                if(isset($_SERVER['HTTP_REFERER'])){
+                if(isset($_SERVER['HTTP_REFERER'])) {
                     $msg .= 'Referer: '.$_SERVER['HTTP_REFERER'].'<br><br>';
                 }
 
@@ -106,8 +106,8 @@ class Messages
     /**
      * Display the queued messages
      * 
-     * @param  string $type  Which messages to display
-     * @param  bool   $print True print the messages on the screen
+     * @param string $type  Which messages to display
+     * @param bool   $print True print the messages on the screen
      *
      * @return mixed
      */
@@ -169,7 +169,7 @@ class Messages
     /**
      * Check to see if there are any ($type) messages queued
      * 
-     * @param  string $type The type of messages to check for
+     * @param string $type The type of messages to check for
      *
      * @return bool               
      */
@@ -196,7 +196,7 @@ class Messages
     /**
      * Clear messages from the session data
      * 
-     * @param  string $type The type of messages to clear
+     * @param string $type The type of messages to clear
      *
      * @return bool 
      */
