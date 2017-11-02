@@ -79,7 +79,7 @@ class Loader extends Core
         $path = APP_DIR.$type.'/'.$folder.$n.'.php';
         try {
 
-            if (!$this->isCamelCaps($name)) {
+            if (!$this->isCamelCaps($name, true)) {
                  throw new BaseException('Camel Sensitive is on. Can not use '.$type.' '.$name.' try to use camelCaseName');
             }
             
