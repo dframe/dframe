@@ -147,6 +147,5 @@ class Response extends \Dframe\Router
         }
 
         echo $this->getBody();
-
     }
 }
