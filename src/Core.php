@@ -23,16 +23,6 @@ class Core
     {
         $router = new Router();
         $run = $router->run();
-        
-        foreach ($run as $key => $data) {
-
-            if (!empty($data) AND !is_object($data)) {
-                return Response::create($data)->display();
-            } elseif (!empty($data) AND is_object($data) AND method_exists($data, 'display')) {
-                return $data->display();
-            }
-
-        }
 
     }
 

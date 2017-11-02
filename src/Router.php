@@ -94,22 +94,22 @@ class Router
         $response = array();
 
         if (method_exists($controller, 'start')) {
-            $response[] = $controller->start();
+           $controller->start();
         }
         
         if (method_exists($controller, 'init')) {
-            $response[] = call_user_func_array(array($controller, 'init'), $arg);
+            call_user_func_array(array($controller, 'init'), $arg);
         }
 
         if (method_exists($controller, $action) AND is_callable(array($controller, $action))) {
-            $response[] = call_user_func_array(array($controller, (string)$action), $arg);
+            call_user_func_array(array($controller, (string)$action), $arg);
         }
         
         if (method_exists($controller, 'end')) {
-            $response[] = $controller->end();
+            $controller->end();
         }
-
-        return $response;
+        
+        return;
     }
  
     private function _setHttps($option = false)
