@@ -94,30 +94,30 @@ class Router
         $response = array();
 
         if (method_exists($controller, 'start')) {
-            $response[] = $controller->start();
+            $response[] = 'start';
         }
         
         if (method_exists($controller, 'init')) {
-            $response[] = call_user_func_array(array($controller, 'init'), $arg);
+            $response[] = 'init';
         }
 
         if (method_exists($controller, $action) AND is_callable(array($controller, $action))) {
-            $response[] = call_user_func_array(array($controller, (string)$action), $arg);
+        	$response[] =  $action;
         }
-        
-        if (method_exists($controller, 'end')) {
-            $response[] = $controller->end();
 
-        }
+        if (method_exists($controller, 'end')) {
+            $response[] = 'end';
+        }   
         
         foreach ($response as $key => $data) {
 
-            if ($data instanceof Response){
-                return $data->display();
-            }elseif(is_callable($data)){
-                $data();
+        	if(is_callable(array($controller, $data))){
+        		$run = $controller->$data();
+        		if ($run instanceof Response){
+                    return $run->display();
+                }
             }
-
+        
         }
 
         return;
@@ -455,6 +455,7 @@ class Router
     
     public function redirect($url = '', $status = 301) 
     {
+
 
         $response = Response::create();
         $response->status($status);
