@@ -94,21 +94,32 @@ class Router
         $response = array();
 
         if (method_exists($controller, 'start')) {
-            $controller->start();
+            $response[] = $controller->start();
         }
         
         if (method_exists($controller, 'init')) {
-            call_user_func_array(array($controller, 'init'), $arg);
+            $response[] = call_user_func_array(array($controller, 'init'), $arg);
         }
 
         if (method_exists($controller, $action) AND is_callable(array($controller, $action))) {
-            call_user_func_array(array($controller, (string)$action), $arg);
+            $response[] = call_user_func_array(array($controller, (string)$action), $arg);
         }
         
         if (method_exists($controller, 'end')) {
-            $controller->end();
+            $response[] = $controller->end();
+
         }
         
+        foreach ($response as $key => $data) {
+
+            if ($data instanceof Response){
+                return $data->display();
+            }elseif(is_callable($data)){
+                $data();
+            }
+
+        }
+
         return;
     }
  

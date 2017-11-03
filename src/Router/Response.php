@@ -148,4 +148,9 @@ class Response extends \Dframe\Router
 
         echo $this->_body;
     }
+
+    public function __toString(){
+        return $this->_body;
+    }
+
 }
