@@ -113,7 +113,7 @@ class Router
         foreach ($response as $key => $data) {
 
             if ($data instanceof Response){
-                $data->display();
+                return $data->display();
             }elseif(is_callable($data)){
                 $data();
             }
