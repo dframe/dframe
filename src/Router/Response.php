@@ -104,8 +104,9 @@ class Response extends \Dframe\Router
     {
         $body = json_encode($body);
         $Response = new Response($body);
-        if(isset($status))
-        $Response->header(array('Content-Type' => 'application/json'))
+        if(isset($status)){
+            $Response->header(array('Content-Type' => 'application/json'));
+        }
         return $Response;
     }
 
