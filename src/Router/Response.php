@@ -95,6 +95,20 @@ class Response extends \Dframe\Router
         return new Response($body);
     }
 
+    public static function render($body = null)
+    {
+        return new Response($body);
+    }
+
+    public static function renderJSON($body = null, $status)
+    {
+        $body = json_encode($body);
+        $Response = new Response($body);
+        if(isset($status))
+        $Response->header(array('Content-Type' => 'application/json'))
+        return $Response;
+    }
+
     public function status($code)
     {
         $this->status = $code;
