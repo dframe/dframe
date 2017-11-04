@@ -102,7 +102,7 @@ class Router
         }
 
         if (method_exists($controller, $action) AND is_callable(array($controller, $action))) {
-        	$response[] =  $action;
+            $response[] =  $action;
         }
 
         if (method_exists($controller, 'end')) {
@@ -111,9 +111,9 @@ class Router
         
         foreach ($response as $key => $data) {
 
-        	if(is_callable(array($controller, $data))){
-        		$run = $controller->$data();
-        		if ($run instanceof Response){
+            if(is_callable(array($controller, $data))) {
+                $run = $controller->$data();
+                if ($run instanceof Response) {
                     return $run->display();
                 }
             }

@@ -104,9 +104,10 @@ class Response extends \Dframe\Router
     {
         $body = json_encode($body);
         $Response = new Response($body);
-        if(isset($status))
-        $Response->header(array('Content-Type' => 'application/json'))
-        return $Response;
+        if(isset($status)) {
+            $Response->header(array('Content-Type' => 'application/json'))
+            return $Response;
+        }
     }
 
     public function status($code)
@@ -163,7 +164,8 @@ class Response extends \Dframe\Router
         echo $this->_body;
     }
 
-    public function __toString(){
+    public function __toString()
+    {
         return $this->_body;
     }
 
