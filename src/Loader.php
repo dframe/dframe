@@ -46,24 +46,35 @@ class Loader extends Core
 
 
     /**
-     *   Metoda do includowania pliku modelu i wywołanie objektu przez namespace
+     * Metoda do includowania pliku modelu i wywołanie objektu przez namespace
+     * @param string $name
+     *
+     * return object
      */
-
     public function loadModel($name)
     {
         return $this->_loadObject($name, 'Model');
     }
 
     /**
-     *   Metoda do includowania pliku widoku i wywołanie objektu przez namespace
+     * Metoda do includowania pliku widoku i wywołanie objektu przez namespace
+     * @param string $name
+     *
+     * return object
      */
-
     public function loadView($name)
     {
         return $this->_loadObject($name, 'View');
 
     }
 
+   /**
+     * Metoda do includowania pliku widoku i wywołanie objektu przez namespace
+     * @param string $name
+     * @param string $type
+     *
+     * return object
+     */
     private function _loadObject($name, $type)
     {
 
@@ -140,6 +151,7 @@ class Loader extends Core
 
     /**
      * Establish the requested controller as an object
+     * @param string $controller
      */
 
     public function loadController($controller)
@@ -223,8 +235,14 @@ class Loader extends Core
         
         return $returnController;
     }
-
-    public static function isCamelCaps($string, $classFormat=false, $public=true, $strict=true)
+    /**
+     *
+     * @param string $string
+     * @param boolean $classFormat
+     * @param boolean $public
+     * @param boolean $strict
+    */
+    public static function isCamelCaps($string, $classFormat = false, $public = true, $strict = true)
     {
 
         // Check the first character first.
@@ -291,14 +309,16 @@ class Loader extends Core
     /** 
      * Metoda 
      * init dzialajaca jak __construct wywoływana na poczatku kodu
-     * end identycznie tyle ze na końcu
      */
-
     public function init()
     {
 
     }
-
+    
+    /** 
+     * Metoda 
+     * dzialajaca jak __destruct wywoływana na koncu kodu
+     */
     public function end()
     {
 
