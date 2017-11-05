@@ -63,14 +63,13 @@ public function myProcetedAndPostMethod(){
         return $this->router->reditect('page/index');
     }
 
-    $firstModel = $this->loadModel('First');
-    $secondModel = $this->loadModel('Second');
-    $view = $this->loadView('Index');
-
     if (!isset($_POST['someValue']) AND !empty($_POST['someValue'])) {
-        return $view->renderJSON(array('return' => '1', 'response' => 'empty someVlue Post');
+        return Response::renderJSON(array('return' => '1', 'response' => 'empty someVlue Post'));
     }
 
+    $firstModel = $this->loadModel('First');
+    $secondModel = $this->loadModel('Second');
+    //...
 }
 ```
 Custom Response ?
