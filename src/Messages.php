@@ -24,6 +24,12 @@ class Messages
     public $msgId;
     public $msgTypes = array('help', 'info', 'warning', 'success', 'error');
 
+     /**
+     * Add a message to the queue
+     * 
+     * @param Object $session
+     *
+     */
     public function __construct(Session $session)
     {
         $this->session = $session;
@@ -45,9 +51,9 @@ class Messages
      * @param string $message  The message
      * @param string $redirect (optional) If set, the user will be redirected to this URL
      *
-     * @return bool
+     * @return mixed
      */
-    public function add($type, $message, $redirect=null)
+    public function add($type, $message, $redirec t= null)
     {
 
         if (!isset($type) OR !isset($message[0])) {
@@ -111,7 +117,7 @@ class Messages
      *
      * @return mixed
      */
-    public function display($type='all', $print=false)
+    public function display($type = 'all', $print = false)
     {
         $messages = '';
         $data = '';
@@ -217,7 +223,7 @@ class Messages
 
     /**
      *
-     * @return string
+     * @return bool
      */
 
     public function __toString()
