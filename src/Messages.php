@@ -53,7 +53,7 @@ class Messages
      *
      * @return mixed
      */
-    public function add($type, $message, $redirec t= null)
+    public function add($type, $message, $redirect = null)
     {
 
         if (!isset($type) OR !isset($message[0])) {
