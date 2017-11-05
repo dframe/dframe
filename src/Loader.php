@@ -49,7 +49,7 @@ class Loader extends Core
      * Metoda do includowania pliku modelu i wywołanie objektu przez namespace
      * @param string $name
      *
-     * return object
+     * @return object
      */
     public function loadModel($name)
     {
@@ -60,7 +60,7 @@ class Loader extends Core
      * Metoda do includowania pliku widoku i wywołanie objektu przez namespace
      * @param string $name
      *
-     * return object
+     * @return object
      */
     public function loadView($name)
     {
@@ -73,7 +73,7 @@ class Loader extends Core
      * @param string $name
      * @param string $type
      *
-     * return object
+     * @return object
      */
     private function _loadObject($name, $type)
     {
