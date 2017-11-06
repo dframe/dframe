@@ -128,7 +128,7 @@ class Loader extends Core
                 $msg .= 'Trace: <br>'.$e->getTraceAsString().'<br>';
                 $msg .= '</pre>';
 
-                return Response::create($msg)->display();
+                exit($msg);
             }
 
 
@@ -217,7 +217,7 @@ class Loader extends Core
                 $msg .= 'Trace: <br>'.$e->getTraceAsString().'<br>';
                 $msg .= '</pre>';
 
-                return Response::create($msg)->display();
+                exit($msg);
             }
 
             $routerConfig = Config::load('router');
