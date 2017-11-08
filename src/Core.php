@@ -22,7 +22,7 @@ class Core
     public function run()
     {
         $router = new Router();
-        $run = $router->run();
+        return $router->run();
 
     }
 

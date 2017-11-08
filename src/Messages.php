@@ -25,11 +25,10 @@ class Messages
     public $msgTypes = array('help', 'info', 'warning', 'success', 'error');
 
      /**
-     * Add a message to the queue
-     * 
-     * @param Object $session
-     *
-     */
+      * Add a message to the queue
+      * 
+      * @param Object $session
+      */
     public function __construct(Session $session)
     {
         $this->session = $session;

@@ -21,6 +21,7 @@ class Session
         if (!isset($_SESSION)) {
             session_name($name);
             session_start();
+
         }
     }
 

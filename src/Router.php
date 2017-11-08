@@ -61,7 +61,7 @@ class Router
                     [
                         'Refresh' => $this->requestPrefix.$this->domain.'/'.$_SERVER['REQUEST_URI']
                     ]
-                );
+                )->display();
             }
             
         } else {
@@ -111,16 +111,16 @@ class Router
         
         foreach ($response as $key => $data) {
 
-            if(is_callable(array($controller, $data))) {
+            if (is_callable(array($controller, $data))) {
                 $run = $controller->$data();
                 if ($run instanceof Response) {
                     return $run->display();
                 }
             }
-        
+   
         }
 
-        return;
+        return true;
     }
  
     private function _setHttps($option = false)
