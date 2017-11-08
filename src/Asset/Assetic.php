@@ -85,8 +85,10 @@ class Assetic extends Router
             }
 
             if (!file_put_contents($dstPath, $js)) {
-                $msg = 'Unable to copy an asset From: '.$srcPath.' TO '.$dstPath;
-                file_put_contents(APP_DIR.'/View/logs/router.txt', date('Y-m-d h:m:s') . ' :: ' . $msg . "\n", FILE_APPEND);
+                $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: ' . $srcPath.  ' TO ' . $dstPath . "\n";
+                $out = fopen(APP_DIR.'/View/logs/router.txt', "w");
+                fwrite($out, $str);
+                fclose($out);
             }
 
         }
@@ -177,9 +179,10 @@ class Assetic extends Router
                     // var_dump($sourceCopyFile);
                     $file = file_get_contents($sourceCopyFile);
                     if (!file_put_contents($fileDst.'/'.$endFile, $file)) {
-                        $msg = 'Unable to copy an asset From: '.$srcPath.' TO '.$dstPath;
-                        file_put_contents(APP_DIR.'/View/logs/router.txt', date('Y-m-d h:m:s') . ' :: ' . $msg . "\n", FILE_APPEND);
-            
+                        $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: '.$srcPath.' TO '.$dstPath . "\n";
+                        $out = fopen(APP_DIR.'/View/logs/router.txt', "w");
+                        fwrite($out, $str);
+                        fclose($out);
                     }
                 }
 
@@ -187,8 +190,10 @@ class Assetic extends Router
             }
             //file_put_contents($dstPath, $css->dump());
             if (!file_put_contents($dstPath, $css->dump())) {
-                $msg = 'Unable to copy an asset From: '.$srcPath.' TO '.$dstPath;
-                file_put_contents(APP_DIR.'/View/logs/router.txt', date('Y-m-d h:m:s') . ' :: ' . $msg . "\n", FILE_APPEND);
+                $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: '.$srcPath.' TO '.$dstPath . "\n";
+                $out = fopen(APP_DIR.'/View/logs/router.txt', "w");
+                fwrite($out, $str);
+                fclose($out);
             }
 
 
