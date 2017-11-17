@@ -11,7 +11,9 @@
         }
     ],
     "require": {
-        "php": ">=5.6",
+        "php": ">=5.6"
+    },
+    "suggest": {
         "smarty/smarty": "^3.1",
         "kriswallsmith/assetic": "^1.4",
         "patchwork/jsqueeze": "^2.0",

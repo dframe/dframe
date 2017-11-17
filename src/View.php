@@ -19,18 +19,12 @@ use Dframe\Router\Response;
  */
 abstract class View extends Loader implements \Dframe\View\ViewInterface
 {
-    public function __construct($baseClass)
-    {
-        parent::__construct($baseClass);
-        
-        if (!isset($this->view)) {
-            throw new BaseException('Please Define view engine in app/View.php', 500);
-        }
-
-    }
 
     public function assign($name, $value) 
     {
+        if (!isset($this->view)) {
+            throw new BaseException('Please Define view engine in app/View.php', 500);
+        }
         return $this->view->assign($name, $value);
     }
 
@@ -60,6 +54,10 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
 
     public function fetch($name, $path = null) 
     {
+        if (!isset($this->view)) {
+            throw new BaseException('Please Define view engine in app/View.php', 500);
+        }
+
         return $this->view->fetch($name, $path);
 
     }
@@ -69,6 +67,9 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
      */
     public function renderInclude($name, $path = null)
     {
+        if (!isset($this->view)) {
+            throw new BaseException('Please Define view engine in app/View.php', 500);
+        }
         return $this->view->renderInclude($name, $path);
     }
      
