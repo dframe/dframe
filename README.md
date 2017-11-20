@@ -15,7 +15,7 @@ The basic tools to build simple and complex pages.
 
 ### Website [dframeframework.com](http://dframeframework.com/pl/page/index)   
 Language
-[Polish](http://dframeframework.com/pl/page/index) | [English](http://dframeframework.com/en/page/index) - coming soon
+[Polish](http://dframeframework.com/pl/page/index) | [English](http://dframeframework.com/en/page/index) - coming soon.
 
 ### Installation
 
@@ -39,7 +39,7 @@ RewriteRule ^(.*)$ web/index.php [QSA,L]
 ### Overview
 
 **1. Controller** 
-file it is very important for dynamic routing. If you created file **TaskForRouter.php** with class with method **ActionForRouter()** your **\Dframe\Router** url will look like ***yourpage.com/TaskForRouter/ActionForRouter***
+file it is very important for dynamic routing. If you created file **TaskForRouter.php** with class with method **ActionForRouter()** your **\Dframe\Router** url will look like ***yourpage.com/TaskForRouter/ActionForRouter***.
 
 app/Controller/TaskForRouter.php:
 ```php
@@ -62,7 +62,7 @@ Class TaskForRouterController extends \Controller\Controller
 ```
 
 **2. Model** 
-is not required in project if you are not using any databases
+is not required in project if you are not using any databases.
 
 app/Model/ExampleModel.php:
 ```php
@@ -78,9 +78,9 @@ Class ExampleModel extends Model\Model
 ```
 
 **3. View** 
-receiving data from Controller and can display more advanced template. You dont have to use view if you using dframe only for **xml**/**json**/**jsonp** it can do controler without templates files
+receiving data from Controller and can display more advanced template. You dont have to use view if you using dframe only for **xml**/**json**/**jsonp** it can do controler without templates files.
 
-You can use **php**, **twig**, **smarty* or write own View engine 
+You can use **php**, **twig**, **smarty* or write own View engine.
 
 ```php
 <?php
@@ -151,8 +151,6 @@ License
 
 MIT
 
-
-
 ### Tech
-[Dframe\Database](https://github.com/dusta/Database)- PHP PDO Class Wrapper
-[S.M.A.R.T.Y](https://github.com/smarty-php/smarty) - Default Template Engine (available: php, twig)
+[Dframe\Database](https://github.com/dusta/Database)- PHP PDO Class Wrapper.
+[S.M.A.R.T.Y](https://github.com/smarty-php/smarty) - Default Template Engine (available: php, twig).
