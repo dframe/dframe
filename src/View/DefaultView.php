@@ -14,13 +14,14 @@ use Dframe\Config;
  * Short Description
  *
  * @author Sławek Kaleta <slaszka@gmail.com>
+ * @author Amadeusz Dzięcioł <amadeusz.xd@gmail.com>
  */
 class DefaultView implements \Dframe\View\ViewInterface
 {
     
     public function __construct()
     {
-        $this->templateConfig = Config::load('view/defaultConfig');
+        $this->templateConfig = Config::load('view/default');
     }
 
     /**
@@ -46,7 +47,30 @@ class DefaultView implements \Dframe\View\ViewInterface
      */
     public function fetch($name, $path = null)
     {
-        throw new \Exception('This module dont have fetch');
+        $pathFile = pathFile($name);
+        $folder = $pathFile[0];
+        $name = $pathFile[1];
+
+        if ($path == null) {
+            $path = $this->templateConfig->get('setTemplateDir').'/'.$folder.$name.$this->templateConfig->get('fileExtension', '.html.php');
+        }
+        
+        try{
+            if (!is_file($path)) {
+                throw new \Exception('Can not open template '.$name.' in: '.$path);
+            }
+            ob_start();
+            include($path);          
+
+        }catch(Exception $e) {
+            echo $e->getMessage().'<br />
+                File: '.$e->getFile().'<br />
+                Code line: '.$e->getLine().'<br />
+                Trace: '.$e->getTraceAsString();
+            exit();
+        }
+        
+        return ob_get_clean();
     }
 
     /**
@@ -57,7 +81,7 @@ class DefaultView implements \Dframe\View\ViewInterface
      *
      * @return void
      */
-    public function renderInclude($name)
+    public function renderInclude($name, $path = null)
     {
 
         $pathFile = pathFile($name);
