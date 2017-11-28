@@ -22,7 +22,7 @@ class Response extends \Dframe\Router
 
     private $_body = '';
 
-    private $_header = array();
+    private $_headers = array();
 
     public static $code = array(
         100 => 'Continue',
@@ -109,8 +109,15 @@ class Response extends \Dframe\Router
             $Response->status($status);
         }
 
-        $Response->header(array('Content-Type' => 'application/json'));
+        $Response->headers(array('Content-Type' => 'application/json'));
         return $Response;
+    }
+
+    public function json($json)
+    {
+        $this->headers(array('Content-Type' => 'application/json'));
+        $this->_body = json_encode($json);
+        return $this;
     }
 
     public function status($code)
@@ -119,9 +126,9 @@ class Response extends \Dframe\Router
         return $this;
     }
 
-    public function header($header = false)
+    public function headers($headers = false)
     {
-        $this->_header = $header;
+        $this->_headers = array_merge($this->_headers, $headers);
         return $this;
     }
     
@@ -138,6 +145,7 @@ class Response extends \Dframe\Router
 
     public function display()
     {
+
         if (!headers_sent()) {
 
             if (PHP_SAPI !== 'cli') {
@@ -147,9 +155,9 @@ class Response extends \Dframe\Router
                 $string = sprintf('%s %d %s', $protocol, $status, self::$code[$status]);
 
                 header($string, true, $status); // Default header
-                if (!empty($this->_header)) {
+                if (!empty($this->_headers)) {
     
-                    foreach ($this->_header as $field => $value) {
+                    foreach ($this->_headers as $field => $value) {
                         if (is_array($value)) {
                             foreach ($value as $v) {
                                 header("$field".': '.$v, false);
