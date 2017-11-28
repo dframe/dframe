@@ -80,7 +80,7 @@ Custom Response ?
         $view->assign('contents', 'Example assign');
         return Response::create($view->fetch('index'))
             ->status(200)
-            ->header([
+            ->headers([
                 'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT', 
                 'Cache-Control' => 'no-cache',
                 'Pragma', 'no-cache'
