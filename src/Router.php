@@ -46,7 +46,7 @@ class Router
         $this->_sURI = str_replace('/web/', '/', $this->_sURI);
 
         $routerConfig = Config::load('router');
-        $this->_setHttps($routerConfig->get('https', false));
+        $this->_setHttps($routerConfig->get('ht     tps', false));
 
         $this->aRouting = $routerConfig->get(); // For url
         $this->_aRoutingParse = $routerConfig->get(); // For parsing array
@@ -57,7 +57,7 @@ class Router
 
             // If forced than redirect
             if (isset($_SERVER['REQUEST_SCHEME']) AND ((!empty($_SERVER['REQUEST_SCHEME']) AND $_SERVER['REQUEST_SCHEME'] == 'http'))) {
-                return Response::create()->header(
+                return Response::create()->headers(
                     [
                         'Refresh' => $this->requestPrefix.$this->domain.'/'.$_SERVER['REQUEST_URI']
                     ]
@@ -461,16 +461,16 @@ class Router
         $response->status($status);
         
         if ($this->delay != null) {
-            $header = array(
+            $headers = array(
                 'Refresh' => $this->delay."; url=".$this->makeUrl($url)
             );
         } else {
-            $header = array(
+            $headers = array(
                 'Location' => $this->makeUrl($url)
             );
         }
 
-        $response->header($header);
+        $response->headers($headers);
         return $response;
     }
 
