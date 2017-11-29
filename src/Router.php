@@ -101,7 +101,7 @@ class Router
             $response[] = 'init';
         }
 
-        if (method_exists($controller, $action) AND is_callable(array($controller, $action))) {
+        if (method_exists($controller, $action) OR is_callable(array($controller, $action))) {
             $response[] =  $action;
         }
 
