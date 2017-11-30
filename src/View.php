@@ -35,10 +35,10 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
             return $this->view->renderInclude($data);
 
         } elseif ($type == 'jsonp') {
-            return $this->view->renderJSONP($data);
+            return $this->renderJSONP($data);
         
         } else {
-            return $this->view->renderJSON($data);
+            return $this->renderJSON($data);
         }
                
     } 
