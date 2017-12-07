@@ -113,6 +113,24 @@ class Response extends \Dframe\Router
         return $Response;
     }
 
+    public static function renderJSONP($body = null, $status = null)
+    {
+        
+        $callback = null;
+        if (isset($_GET['callback'])) { 
+            $callback = $_GET['callback'];
+        }
+        
+        $Response = new Response($callback . '(' . json_encode($body) . ')');
+        
+        if(isset($status)) {
+            $Response->status($status);
+        }
+
+        $Response->headers(array('Content-Type' => 'application/jsonp'));
+        return $Response;
+    }
+    
     public function json($json)
     {
         $this->headers(array('Content-Type' => 'application/json'));
