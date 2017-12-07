@@ -100,6 +100,6 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
             $callback = $_GET['callback'];
         }
         
-        exit(Response::Create(json_encode($callback . '(' . json_encode($data) . ')'))->headers(array('Content-Type' => 'application/json'))->display());
+        exit(Response::Create($callback . '(' . json_encode($data) . ')')->headers(array('Content-Type' => 'application/json'))->display());
     }
 }
