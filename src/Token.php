@@ -8,95 +8,146 @@
 
 namespace Dframe;
 
-use Dframe\Session;
-
 /**
  * Short Description
  *
  * @author Sławek Kaleta <slaszka@gmail.com>
- * @author Paweł Łopyta <unknown@unknown>
  */
+
 class Token
 {
 
-    protected $session;
+    protected $driver;
     protected $token = array();
     protected $time = array();
 
-    public function __construct(Session $session) 
+    /**
+     * constructor.
+     *
+     * @param string $driver
+     * @param array  $config
+     */
+
+    public function __construct($driver, array $config = [])
     {
-        $this->session = $session;
+        $this->driver = $driver;
         
-        $token = $this->session->get('token');
+        $token = $this->driver->get('token');
         if (!empty($token)) {
             $this->token = $token;
         }
 
-        $timeToken = $this->session->get('timeToken');
-
+        $timeToken = $this->driver->get('timeToken');
         if (!empty($timeToken)) {
             $this->time = $timeToken;
         }
     }
-    
-    public function generate($name) 
+
+    /**
+     * @param string $key
+     * @param null   $default
+     * @return mixed
+     */
+
+    public function get($key, $default = null)
     {
-        $this->setToken($name, md5(uniqid(rand(), true)));
-        $this->setTime($name, time() + 3600);
-        return $this;
-    }
-    
-    public function setToken($name, $token) 
-    {
-        $this->token[$name] = $token;
-        $this->session->set('token', $this->token);
-        return $this;
-    }
-    
-    public function getToken($name) 
-    {
-        if (isset($this->token[$name]) AND $this->getTime($name) >= time()) {
-            return $this->token[$name];
+        if (isset($this->token[$key]) AND $this->getTime($key) >= time()) {
+            return $this->token[$key];
         }
 
-        return $this->generate($name)->token[$name];
+        return $this->generate($key)->token[$key];
     }
-    
-    public function remove($name) 
+
+    /**
+     * @param string $key
+     * @param mixed  $value
+     * @param null   $ttl
+     * @return bool
+     */
+
+    public function set($key, $value, $ttl = null) 
     {
-        if (isset($this->token[$name])) {
-            unset($this->token[$name]);
+        $this->token[$key] = $value;
+        $this->driver->set('token', $this->token);
+        return $this;
+
+    }
+
+    public function delete($key)
+    {
+
+        if (isset($this->token[$key])) {
+            unset($this->token[$key]);
         }
         
-        if (isset($this->time[$name])) {
-            unset($this->time[$name]);
+        if (isset($this->time[$key])) {
+            unset($this->time[$key]);
         }
             
-        $this->session->set('token', $this->token);
-        $this->session->set('timeToken', $this->time);
+        $this->driver->set('token', $this->token);
+        $this->driver->set('timeToken', $this->time);
     }
-    
-    public function setTime($name, $time) 
+
+    public function clear()
     {
-        if (isset($this->token[$name])) {
-            $this->time[$name] = intval($time);
-            $this->session->set('timeToken', $this->time);
+        $this->token = array();
+        $this->time = array();
+
+        $this->driver->set('token', $this->token);
+        $this->driver->set('timeToken', $this->time); 
+    }
+
+    public function getMultiple($keys, $default = null)
+    {
+    }
+
+    public function setMultiple($values, $ttl = null)
+    {
+    }
+
+    public function deleteMultiple($keys)
+    {
+    }
+
+    /**
+     * @param string $key
+     * @return bool
+     */
+    
+    public function has($key)
+    {
+        return $this->isValid($key);
+    }
+
+
+    public function generate($key) 
+    {
+        $this->set($key, md5(uniqid(rand(), true)));
+        $this->setTime($key, time() + 3600);
+        return $this;
+    }           
+    
+    public function setTime($key, $time) 
+    {
+        if (isset($this->token[$key])) {
+            $this->time[$key] = intval($time);
+            $this->driver->set('timeToken', $this->time);
         }
 
         return $this;
     }
     
-    public function getTime($name) 
+    public function getTime($key) 
     {
-        return isset($this->time[$name]) ? $this->time[$name] : null;
+        return isset($this->time[$key]) ? $this->time[$key] : null;
     }
     
-    public function isValid($name, $token, $remove = false) 
+    public function isValid($key, $token, $delete = false) 
     {
-        $getToken = $this->getToken($name);
+        $getToken = $this->getToken($key);
 
-        if ($remove == true) {
-            $this->remove($name);
+        if ($delete == true) {
+            $this->delete($key);
         }
 
         if ($getToken == $token) {
@@ -104,5 +155,46 @@ class Token
         }
         
         return false;
-    }  
+    } 
+
+    /**
+     * @deprecated
+     *
+     * @return $this
+     */
+
+    public function getToken($key) 
+    {
+        $caller = next(debug_backtrace());
+        trigger_error($message.' in <strong>'.$caller['function'].'</strong> called from <strong>'.$caller['file'].'</strong> on line <strong>'.$caller['line'].'</strong>'."\n<br />error handler use get(".$key.")", E_USER_DEPRECATED); 
+
+        return $this->get($key);
+    }
+
+
+    /**
+     * @deprecated
+     *
+     * @return $this
+     */
+
+    public function setToken($key, $value) 
+    {
+        $caller = next(debug_backtrace());
+        trigger_error($message.' in <strong>'.$caller['function'].'</strong> called from <strong>'.$caller['file'].'</strong> on line <strong>'.$caller['line'].'</strong>'."\n<br />error handler use set(".$key.")", E_USER_DEPRECATED); 
+
+        return $this->set($key, $value);
+    }
+
+    /**
+     * @deprecated
+     *
+     * @return $this
+     */
+
+    public function remove($key) 
+    {
+        trigger_error('Method ' . __METHOD__ . ' is deprecated use delete('.$key.')', E_USER_DEPRECATED);
+        return $this->delete($key);
+    }
 }
