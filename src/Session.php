@@ -37,13 +37,15 @@ class Session
             session_start();
         }
         
-        $this->ipAddress = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
-		$this->userAgent = $_SERVER['HTTP_USER_AGENT'];
-
-        if($this->isValidFingerprint() != true){
-        	// Refresh Session
-        	$_SESSION = array();
-		    $_SESSION['_fingerprint'] = $this->_getFingerprint();
+        if(php_sapi_name() != 'cli'){
+            $this->ipAddress = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+		    $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
+    
+            if($this->isValidFingerprint() != true){
+            	// Refresh Session
+            	$_SESSION = array();
+		        $_SESSION['_fingerprint'] = $this->_getFingerprint();
+            }
         }
     }
 
