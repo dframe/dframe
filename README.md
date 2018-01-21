@@ -1,14 +1,26 @@
-[![Build Status](https://travis-ci.org/dframe/dframe.svg?branch=master)](https://travis-ci.org/dframe/dframe) [![Latest Stable Version](https://poser.pugx.org/dframe/dframe/v/stable)](https://packagist.org/packages/dframe/dframe) [![Total Downloads](https://poser.pugx.org/dframe/dframe/downloads)](https://packagist.org/packages/dframe/dframe) [![Latest Unstable Version](https://poser.pugx.org/dframe/dframe/v/unstable)](https://packagist.org/packages/dframe/dframe) [![License](https://poser.pugx.org/dframe/dframe/license)](https://packagist.org/packages/dframe/dframe)
-
 # Dframe - PHP Framework 
 
-The basic tools to build simple and complex pages.
+[![Build Status](https://travis-ci.org/dframe/dframe.svg?branch=master)](https://travis-ci.org/dframe/dframe) [![Latest Stable Version](https://poser.pugx.org/dframe/dframe/v/stable)](https://packagist.org/packages/dframe/dframe) [![Total Downloads](https://poser.pugx.org/dframe/dframe/downloads)](https://packagist.org/packages/dframe/dframe) [![Latest Unstable Version](https://poser.pugx.org/dframe/dframe/v/unstable)](https://packagist.org/packages/dframe/dframe) [![License](https://poser.pugx.org/dframe/dframe/license)](https://packagist.org/packages/dframe/dframe)
 
-### Documentation [dframeframework.com](http://dframeframework.com/pl/page/index)   
+The basic framework to help you build MVC project.
+
+**Documentation available at** [https://dframeframework.com](https://dframeframework.com/pl/page/index)
+
 Language
-[Polish](http://dframeframework.com/pl/page/index) | [English](http://dframeframework.com/en/page/index) - coming soon.
+[Polish](https://dframeframework.com/pl/page/index)
+
+[English](https://dframeframework.com/en/page/index) - coming soon.
+
+## What's included?
+ * ClassLoader
+ * Routing
+ * Sessions
+ * Config
+ * Tokens
+ * Templating
 
 
+##### Let's Start
 1. [Installation](#installation)
 2. [Overview](#overview)
 	- [Good Practice](docs/overview/GoodPractice.md)
