@@ -38,14 +38,16 @@ class Session
         }
         
         if(php_sapi_name() != 'cli') {
+         
             $this->ipAddress = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
-            $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
+            $this->userAgent = isset($_SERVER["HTTP_USER_AGENT"]) ? $_SERVER["HTTP_USER_AGENT"] : 'unknown';
     
             if($this->isValidFingerprint() != true) {
                 // Refresh Session
                 $_SESSION = array();
                 $_SESSION['_fingerprint'] = $this->_getFingerprint();
             }
+         
         }
     }
 
