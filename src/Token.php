@@ -144,7 +144,7 @@ class Token
     
     public function isValid($key, $token, $delete = false) 
     {
-        $getToken = $this->getToken($key);
+        $getToken = $this->get($key);
 
         if ($delete == true) {
             $this->delete($key);
