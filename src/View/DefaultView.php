@@ -60,7 +60,7 @@ class DefaultView implements \Dframe\View\ViewInterface
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
             }
             ob_start();
-            include($path);          
+            include $path;          
 
         }catch(Exception $e) {
             echo $e->getMessage().'<br />

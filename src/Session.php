@@ -20,37 +20,38 @@ class Session
     function __construct($name = '_sessionName', $options = [])
     {
 
-    	$this->name = $name;
+        $this->name = $name;
 
-    	if(!isset($_SESSION)){
+        if(!isset($_SESSION)) {
 
-    		$cookie = array(
-    		    'lifetime' => isset($options['cookie']['lifetime']) ? $options['cookie']['lifetime'] : 0,
-    		    'path' => isset($options['cookie']['path']) ? $options['cookie']['path'] : '/',
-    		    'domain' => isset($options['cookie']['domain']) ? $options['cookie']['domain'] : null,
-    		    'secure' => isset($options['cookie']['secure']) ? $options['cookie']['secure'] : isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : null,
-    		    'httponly' => isset($options['cookie']['httponly']) ? $options['cookie']['httponly'] : false,
-    		);
-    		
-		    session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly']);
+            $cookie = array(
+                'lifetime' => isset($options['cookie']['lifetime']) ? $options['cookie']['lifetime'] : 0,
+                'path' => isset($options['cookie']['path']) ? $options['cookie']['path'] : '/',
+                'domain' => isset($options['cookie']['domain']) ? $options['cookie']['domain'] : null,
+                'secure' => isset($options['cookie']['secure']) ? $options['cookie']['secure'] : isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : null,
+                'httponly' => isset($options['cookie']['httponly']) ? $options['cookie']['httponly'] : false,
+            );
+            
+            session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly']);
             session_name($this->name);
             session_start();
         }
         
-        if(php_sapi_name() != 'cli'){
+        if(php_sapi_name() != 'cli') {
             $this->ipAddress = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
-		    $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
+            $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
     
-            if($this->isValidFingerprint() != true){
-            	// Refresh Session
-            	$_SESSION = array();
-		        $_SESSION['_fingerprint'] = $this->_getFingerprint();
+            if($this->isValidFingerprint() != true) {
+                // Refresh Session
+                $_SESSION = array();
+                $_SESSION['_fingerprint'] = $this->_getFingerprint();
             }
         }
     }
 
-    private function _getFingerprint(){
-    	return md5($this->ipAddress.$this->userAgent.$this->name);
+    private function _getFingerprint()
+    {
+        return md5($this->ipAddress.$this->userAgent.$this->name);
     }
 
     /**
@@ -133,14 +134,15 @@ class Session
         $_SESSION = array();
     }
 
-    public function isValidFingerprint(){
+    public function isValidFingerprint()
+    {
 
-    	$_fingerprint = $this->_getFingerprint();
-    	if(isset($_SESSION['_fingerprint']) AND $_SESSION['_fingerprint'] == $_fingerprint){
-    		return true;
-    	}
+        $_fingerprint = $this->_getFingerprint();
+        if(isset($_SESSION['_fingerprint']) AND $_SESSION['_fingerprint'] == $_fingerprint) {
+            return true;
+        }
 
-    	return false;
+        return false;
     }
        
 }
