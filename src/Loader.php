@@ -90,7 +90,8 @@ class Loader extends Core
         $name = $pathFile[1];
         
         $n = str_replace($type, '', $name);
-        $path = APP_DIR.$type.'/'.$folder.$n.'.php';
+        $path = str_replace("\\", "/", APP_DIR.$type.'/'.$folder.$n.'.php'); 
+
         try {
 
             if (!$this->isCamelCaps($name, true)) {
