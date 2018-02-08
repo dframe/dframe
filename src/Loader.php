@@ -183,18 +183,21 @@ class Loader extends Core
         if (!defined('CODING_STYLE') OR (defined('CODING_STYLE') AND CODING_STYLE == true)) {
             $controller = ucfirst($controller);
         }
-    
-        // Does the class exist?
-        $patchController = APP_DIR.'Controller/'.$subControler.$controller.'.php'; 
-        //var_dump($patchController);
-        if (file_exists($patchController)) {
-            include_once $patchController;
-            $path = null;
-        }
 
-        $xsubControler = str_replace("/", "\\", $subControler);
+
+        
+        $controller = str_replace("/", "\\", $controller);
+        $path = str_replace("\\", "/", APP_DIR.'Controller/'.$subControler.$controller.'.php'); 
+
         try {
 
+            if (!is_file($path)) {
+                    throw new BaseException('Can not open Controller '.$controller.' in: '.$path);
+            }
+
+            include_once $path;
+
+            $xsubControler = str_replace("/", "\\", $subControler);
             if (!class_exists('\Controller\\'.$xsubControler.''.$controller.'Controller')) {
                 throw new BaseException('Bad controller error');
             }
