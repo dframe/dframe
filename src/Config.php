@@ -29,10 +29,10 @@ class Config
 
         $this->_file = $file;
         if (file_exists($this->path.$this->_file.'.php') != true) {
-            throw new BaseException('Not Found Config '. $this->path.$this->_file.'.php');
+            self::$cfg[$file] = array();
+        }else{
+            self::$cfg[$file] = isset(self::$cfg[$file]) ? self::$cfg[$file] : include $this->path.$this->_file.'.php';
         }
-    
-        self::$cfg[$file] = isset(self::$cfg[$file]) ? self::$cfg[$file] : include $this->path.$this->_file.'.php';
 
     }
 
