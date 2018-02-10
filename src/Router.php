@@ -46,7 +46,7 @@ class Router
         $this->_sURI = str_replace('/web/', '/', $this->_sURI);
 
         $routerConfig = Config::load('router');
-        $this->_setHttps($routerConfig->get('ht     tps', false));
+        $this->_setHttps($routerConfig->get('https', false));
 
         $this->aRouting = $routerConfig->get(); // For url
         $this->_aRoutingParse = $routerConfig->get(); // For parsing array
