@@ -49,7 +49,7 @@ class Router
         $this->_setHttps($routerConfig->get('https', false));
 
         $this->aRouting = $routerConfig->get(); // For url
-        $this->_aRoutingParse = $routerConfig->get(); // For parsing array
+        $this->_aRoutingParse = $routerConfig->get('routes'); // For parsing array
 
         // Check forced Https
         if ($this->https == true) {
@@ -187,9 +187,9 @@ class Router
 
         if (MOD_REWRITE) {
 
-            if (isset($this->aRouting[$findKey])) {
+            if (isset($this->aRouting['routes'][$findKey])) {
 
-                $sExpressionUrl = $this->aRouting[$findKey][0];
+                $sExpressionUrl = $this->aRouting['routes'][$findKey][0];
                 foreach ($aParams AS $key => $value) {
                     $sExpressionUrl = str_replace('['.$key.']', $value, $sExpressionUrl, $count);
                     if ($count > 0) {
@@ -199,8 +199,8 @@ class Router
                 }
 
                 if (isset($aParams)) {
-                    if (isset($this->aRouting[$findKey]['_params'])) {
-                        $sExpressionUrl = str_replace('[params]', $this->_parseParams($this->aRouting[$findKey]['_params'][0], $aParams), $sExpressionUrl);
+                    if (isset($this->aRouting['routes'][$findKey]['_params'])) {
+                        $sExpressionUrl = str_replace('[params]', $this->_parseParams($this->aRouting['routes'][$findKey]['_params'][0], $aParams), $sExpressionUrl);
                    
                     } elseif (!empty($aParams)) {
                         $sExpressionUrl = $sExpressionUrl . "?" . http_build_query($aParams);
@@ -209,12 +209,12 @@ class Router
 
             } else {
 
-                $sExpressionUrl = $this->aRouting['default'][0];
+                $sExpressionUrl = $this->aRouting['routes']['default'][0];
 
                 $sExpressionUrl = str_replace('[task]', $sTask, $sExpressionUrl);
                 $sExpressionUrl = str_replace('[action]', $sAction, $sExpressionUrl);
                 if (isset($aParams)) {
-                    $sExpressionUrl = str_replace('[params]', $this->_parseParams($this->aRouting['default']['_params'][0], $aParams), $sExpressionUrl);
+                    $sExpressionUrl = str_replace('[params]', $this->_parseParams($this->aRouting['routes']['default']['_params'][0], $aParams), $sExpressionUrl);
                 }
 
 
@@ -227,9 +227,9 @@ class Router
 
             } else {
 
-                if (isset($this->aRouting[$findKey])) {
+                if (isset($this->aRouting['routes'][$findKey])) {
     
-                    $sExpressionUrl0 = $this->aRouting[$findKey][1];
+                    $sExpressionUrl0 = $this->aRouting['routes'][$findKey][1];
                     foreach ($aParams AS $key => $value) {
                         $sExpressionUrl0 = str_replace('['.$key.']', $value, $sExpressionUrl0, $count);
                         if ($count > 0) {
@@ -438,8 +438,8 @@ class Router
 
     private function _transformParam($sParam, $k)
     {
-        if (isset($this->aRouting[$k][$sParam]) AND !is_array($this->aRouting[$k][$sParam])) {
-            return $this->aRouting[$k][$sParam];
+        if (isset($this->aRouting['routes'][$k][$sParam]) AND !is_array($this->aRouting['routes'][$k][$sParam])) {
+            return $this->aRouting['routes'][$k][$sParam];
         } else { 
             return '(.+?)';
         }
@@ -496,7 +496,7 @@ class Router
 
     public function addRoute($newRoute)
     {
-        $this->aRouting = array_merge($this->aRouting, $newRoute);
+        $this->aRouting['routes'] = array_merge($this->aRouting['routes'], $newRoute);
     }
 
     public function response()

@@ -34,7 +34,7 @@ class Assetic extends Router
     private function _checkDir($path)
     {
         if (!is_dir($path)) {
-            if (!mkdir($path)) {
+            if (!mkdir($path, 0755, true)) {
                 throw new BaseException('Unable to create'.$path);
             }
         }
@@ -44,45 +44,37 @@ class Assetic extends Router
     public function assetJs($sUrl = null, $path = null, $compress = true)
     {
 
+        //Podstawowe sciezki
+        $srcPath = $this->aRouting['assets']['assetsPath'].$this->aRouting['assets']['assetsDir'].'/'.$sUrl;
         if (is_null($path)) {
             $path = 'assets';
-            if (isset($this->aRouting['assetsPath']) AND !empty($this->aRouting['assetsPath'])) {
-                $path = $this->aRouting['assetsPath'];
-                $this->_checkDir($path); // Create Dir if not exist
+            if (isset($this->aRouting['assets']['assetsDir']) AND !empty($this->aRouting['assets']['assetsDir'])) {
+                $path = $this->aRouting['assets']['assetsDir'];
+                $this->_checkDir($path);
             }
+            $dstPath = $this->aRouting['assets']['cachePath'].$path.'/'.$sUrl;
+        }else{
+            $dstPath = $this->aRouting['assets']['cachePath'].$path;
         }
 
-        //Podstawowe sciezki
-        $srcPath =  APP_DIR.'View/assets/'.$sUrl;
-        $dstPath =  APP_DIR.'../web/'.$path.'/'.$sUrl;
+
         //Kopiowanie pliku jezeli nie istnieje
         if (!file_exists($dstPath)) {
             if (!file_exists($srcPath)) {
                 return $srcPath;
             }
 
-            //Rekonstruujemy sciezki
-            $relDir = explode('/', $sUrl);
-            array_pop($relDir);
-            $subDir = "";
-            foreach ($relDir as $dir) {
-                $subDir .= "/".$dir;
-                $this->_checkDir($path.$subDir); // Create Dir if not exist
-            }
-
-            $savePath = APP_DIR.'../web/'.$path;
-            if (!is_writable($savePath)) {
-                throw new BaseException('Unable to get an '.$savePath);
+            $pathinfo = pathinfo($dstPath);
+            if (!file_exists($pathinfo['dirname'])) {
+                mkdir($pathinfo['dirname'], 0777, true);
             }
 
             $js = file_get_contents($srcPath);
-
-            if (ini_get('display_errors') == "off") {
-                if ($compress === true) {
-                    $jSqueeze = new JSqueeze();
-                    $js = $jSqueeze->squeeze($js, true, true, false);
-                }
+            if ($compress === true AND $this->aRouting['assets']['minifyJsEnabled'] == true) {
+                $jSqueeze = new JSqueeze();
+                $js = $jSqueeze->squeeze($js, true, true, false);
             }
+            
 
             if (!file_put_contents($dstPath, $js)) {
                 $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: ' . $srcPath.  ' TO ' . $dstPath . "\n";
@@ -95,115 +87,92 @@ class Assetic extends Router
 
         //Zwrocenie linku do kopii
         $sExpressionUrl = $sUrl;
-        $sUrl = $this->requestPrefix.HTTP_HOST.'/'.$path.'/';
+        $sUrl = $this->requestPrefix.$this->aRouting['assets']['cacheUrl'].$path.'/';
         $sUrl .= $sExpressionUrl;
 
         return $sUrl;
     }
 
-    public function assetCss($sUrl = null, $path = null)
+    public function assetCss($sUrl = null, $path = null, $compress = true)
     {
 
+        //Podstawowe sciezki
+        $srcPath = $this->aRouting['assets']['assetsPath'].$this->aRouting['assets']['assetsDir'].'/'.$sUrl;
         if (is_null($path)) {
             $path = 'assets';
-            if (isset($this->aRouting['assetsPath']) AND !empty($this->aRouting['assetsPath'])) {
-                $path = $this->aRouting['assetsPath'];
+            if (isset($this->aRouting['assets']['assetsDir']) AND !empty($this->aRouting['assets']['assetsDir'])) {
+                $path = $this->aRouting['assets']['assetsDir'];
                 $this->_checkDir($path);
             }
+            $dstPath = $this->aRouting['assets']['cachePath'].$path.'/'.$sUrl;
+        }else{
+            $dstPath = $this->aRouting['assets']['cachePath'].$path;
         }
 
-        //Podstawowe sciezki
-        $srcPath = APP_DIR.'View/assets/'.$sUrl;
-        $dstPath = APP_DIR.'../web/'.$path.'/'.$sUrl;
+
         //Kopiowanie pliku jezeli nie istnieje
         if (!file_exists($dstPath)) {
             if (!file_exists($srcPath)) {
                 return '';
             }
 
-            //Rekonstruujemy sciezki
-            $relDir = explode('/', $sUrl);
-            array_pop($relDir);
-            $subDir = "";
-            foreach ($relDir as $dir) {
-                $subDir .= "/".$dir;
-                $this->_checkDir($path.$subDir); // Create Dir if not exist
+            $pathinfo = pathinfo($dstPath);
+            if (!file_exists($pathinfo['dirname'])) {
+                mkdir($pathinfo['dirname'], 0755, true);
             }
 
-            $savePath = APP_DIR.'../web/'.$path;
-            if (!is_writable($savePath)) {
-                throw new BaseException('Unable to get an '.$savePath);
+            $args = array();
+            //$args[] = new Yui\CssCompressorFilter('C:\yuicompressor-2.4.7\build\yuicompressor-2.4.7.jar', 'java'),
+
+            if($compress == true){
+                if ($this->aRouting['assets']['minifyCssEnabled'] == true){
+                    $args[] = new CssMinFilter();
+                }
+                
+                $args[] = new PhpCssEmbedFilter();
+                $args[] = new CssRewriteFilter();
+                $args[] = new CssImportFilter();
             }
 
             $css = new AssetCollection(
                 array(
-                new FileAsset($srcPath),
-                ), array(
-                // Windows Java
-                //new Yui\CssCompressorFilter('C:\yuicompressor-2.4.7\build\yuicompressor-2.4.7.jar', 'java'),
-                new CssImportFilter(),
-                new CssRewriteFilter(),
-                new PhpCssEmbedFilter(),
-                new CssMinFilter(),
-                )
+                    new FileAsset($srcPath),
+                ), $args
             );
 
-            preg_match_all("/url\('([^\)]+?\.(woff2|woff|eot|ttf|svg))/", $css->dump(), $m);
+            preg_match_all('/url\("([^\)]+?\.(woff2|woff|eot|ttf|svg|png|jpg|jpeg|gif))/', $css->dump(), $m);
+
+            $srcPathinfo = pathinfo($srcPath);
 
             foreach ($m['1'] as $key => $url) {
 
-                if (file_exists(APP_DIR.'View/assets/'.$subDir.'/'.$url)) {
 
-                    //var_dump(appDir.'../app/View/assets/'.$subDir.'/'.$url);
-
-                    //Rekonstruujemy sciezki
-                    $relDir = explode('/', $subDir.'/'.$url);
-                    $endFile = end($relDir);
-
-                    array_pop($relDir);
-                    $subDir = "";
-                    $i = 0;
-                    foreach ($relDir as $key => $dir) {
-                        $i++;
-                        if ($i < 2) {
-                            continue;
-                        }
-
-                        $subDir .= "/".$dir;
-                        $fileDst = appDir.$path.$subDir;
-                        $this->_checkDir($path.$subDir);
-
-                    }
-
-                    $sourceCopyFile = APP_DIR.'View/assets/'.$subDir.'/'.$url;
-                    // var_dump($sourceCopyFile);
-                    $file = file_get_contents($sourceCopyFile);
-                    if (!file_put_contents($fileDst.'/'.$endFile, $file)) {
-                        $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: '.$srcPath.' TO '.$dstPath . "\n";
-                        $out = fopen(APP_DIR.'/View/logs/router.txt', "w");
-                        fwrite($out, $str);
-                        fclose($out);
-                    }
+                $subPathinfo = pathinfo($pathinfo['dirname'].'/'.$url);
+                if (!file_exists($subPathinfo['dirname'])) {
+                    mkdir($subPathinfo['dirname'], 0777, true);
                 }
 
+                if (!copy($srcPathinfo['dirname'].'/'.$url, $pathinfo['dirname'].'/'.$url)) {
+                    $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: '.$srcPathinfo['dirname'].'/'.$url.' TO '.$pathinfo['dirname'].'/'.$url . "\n";
+                    $out = fopen(APP_DIR.'View/logs/router.txt', "w");
+                    fwrite($out, $str);
+                    fclose($out);
+                }
 
             }
-            //file_put_contents($dstPath, $css->dump());
+
             if (!file_put_contents($dstPath, $css->dump())) {
-                $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: '.$srcPath.' TO '.$dstPath . "\n";
-                $out = fopen(APP_DIR.'/View/logs/router.txt', "w");
-                fwrite($out, $str);
-                fclose($out);
+               $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: '.$srcPath.' TO '.$dstPath . "\n";
+               $out = fopen(APP_DIR.'/View/logs/router.txt', "w");
+               fwrite($out, $str);
+               fclose($out);
             }
 
-
-            //if ($copy === false);
-            //   throw new BaseException('Unable to copy an asset'. $dstPath);
         }
 
         //Zwrocenie linku do kopii
         $sExpressionUrl = $sUrl;
-        $sUrl = $this->requestPrefix.HTTP_HOST.'/'.$path.'/';
+        $sUrl = $this->requestPrefix.$this->aRouting['assets']['cacheUrl'].$path.'/';
         $sUrl .= $sExpressionUrl;
 
         return $sUrl;
