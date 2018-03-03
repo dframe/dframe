@@ -124,8 +124,8 @@ class Assetic extends Router
             $args = array();
             //$args[] = new Yui\CssCompressorFilter('C:\yuicompressor-2.4.7\build\yuicompressor-2.4.7.jar', 'java'),
 
-            if($compress == true){
-                if ($this->aRouting['assets']['minifyCssEnabled'] == true){
+            if($compress == true) {
+                if ($this->aRouting['assets']['minifyCssEnabled'] == true) {
                     $args[] = new CssMinFilter();
                 }
                 
@@ -162,10 +162,10 @@ class Assetic extends Router
             }
 
             if (!file_put_contents($dstPath, $css->dump())) {
-               $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: '.$srcPath.' TO '.$dstPath . "\n";
-               $out = fopen(APP_DIR.'/View/logs/router.txt', "w");
-               fwrite($out, $str);
-               fclose($out);
+                $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: '.$srcPath.' TO '.$dstPath . "\n";
+                $out = fopen(APP_DIR.'/View/logs/router.txt', "w");
+                fwrite($out, $str);
+                fclose($out);
             }
 
         }
