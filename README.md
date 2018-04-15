@@ -62,7 +62,8 @@ namespace Controller;
 
 Class TaskForRouterController extends \Controller\Controller
 {
-    public function ActionForRouter(){
+    public function ActionForRouter()
+    {
          $exampleModel = $this->loadModel('Example'); #Load model
          $view = $this->loadView('Index'); #Load view
          
@@ -85,7 +86,8 @@ namespace Model;
 
 Class ExampleModel extends Model\Model
 {
-    public function getId($id){
+    public function getId($id)
+    {
         return $this->baseClass->db->pdoQuery('SELECT * FROM table WHERE id = ? LIMIT 1', array($id))->result();
     }
 }
