@@ -6,7 +6,7 @@
 
 The basic framework to help you build MVC project.
 
-**Documentation available at** [https://dframeframework.com](https://dframeframework.com/pl/page/index)
+**Documentation available at** [https://dframeframework.com](https://dframeframework.com/en/page/index)
 
 Language
 [Polish](https://dframeframework.com/pl/page/index) | [English](https://dframeframework.com/en/page/index) 
