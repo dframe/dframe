@@ -299,7 +299,7 @@ class Router
         
         if (MOD_REWRITE) {
 
-            if (substr($sRequest, -1)!='/') {
+            if (substr($sRequest, -1) != '/') {
                 $sRequest .= '/';
             }
 
@@ -308,18 +308,18 @@ class Router
 
             parse_str($sGets, $aGets);
 
-            $_GET['task'] = !empty($aGets['task'])?$aGets['task']:$this->aRouting['NAME_CONTROLLER'];
+            $_GET['task'] = !empty($aGets['task']) ? $aGets['task']:$this->aRouting['NAME_CONTROLLER'];
             unset($aGets['task']);
 
-            $_GET['action'] = !empty($aGets['action'])?$aGets['action']:$this->aRouting['NAME_METHOD'];
+            $_GET['action'] = !empty($aGets['action']) ? $aGets['action'] : $this->aRouting['NAME_METHOD'];
             unset($aGets['action']);
 
             $_GET = array_merge($_GET, $aGets);
 
         } else {
 
-            $_GET['task'] = !empty($_GET['task'])?$_GET['task']:$this->aRouting['NAME_CONTROLLER'];
-            $_GET['action'] = !empty($_GET['action'])?$_GET['action']:$this->aRouting['NAME_METHOD'];
+            $_GET['task'] = !empty($_GET['task']) ? $_GET['task'] : $this->aRouting['NAME_CONTROLLER'];
+            $_GET['action'] = !empty($_GET['action']) ? $_GET['action'] : $this->aRouting['NAME_METHOD'];
             
         }
 
@@ -332,7 +332,7 @@ class Router
         
         if (MOD_REWRITE) {
 
-            if (substr($sRequest, -1)!='/') {
+            if (substr($sRequest, -1) != '/') {
                 $sRequest .= '/';
             }
 
@@ -350,13 +350,13 @@ class Router
     }
 
     private function _parseUrl($sRequest)
-    {   
+    {
 
         $sVars = null;
         $sRequest = str_replace('?', '/?', $sRequest);
-        
-        foreach ($this->_aRoutingParse AS $k => $v) {
-            
+
+        foreach ($this->_aRoutingParse as $k => $v) {
+
             if (!is_array($v)) {
                 continue;
             }
@@ -376,27 +376,27 @@ class Router
                     $args = $v['args'];
                 }
 
-                foreach ($aExpression__ AS $k_ => $v_) {
-                    foreach ($v_ AS $kkk => $vvv) {
+                foreach ($aExpression__ as $k_ => $v_) {
+                    foreach ($v_ as $kkk => $vvv) {
 
-                        if (!isset($aExpression_[1][$k_-1])) {
-                            $aExpression_[1][$k_-1] = null;
+                        if (!isset($aExpression_[1][$k_ - 1])) {
+                            $aExpression_[1][$k_ - 1] = null;
                         }
-                        
-                        if ($kkk>0) {
-                            $aExpression[] = array($aExpression_[1][$k_-1].'_'.$kkk, $vvv);
+
+                        if ($kkk > 0) {
+                            $aExpression[] = array($aExpression_[1][$k_ - 1] . '_' . $kkk, $vvv);
                         } else {
-                            $aExpression[] = array($aExpression_[1][$k_-1], $vvv);
+                            $aExpression[] = array($aExpression_[1][$k_ - 1], $vvv);
                         }
-                    
+
                     }
                 }
 
                 unset($aExpression[0]);
                 $iCount = count($aExpression__[0]);
-                if ($iCount>1) {
-                    for ($i=0;$i<$iCount;$i++) {
-                        if ($i>0) {
+                if ($iCount > 1) {
+                    for ($i = 0; $i < $iCount; $i++) {
+                        if ($i > 0) {
                             $sVars .= '&'.preg_replace('!\[(.+?)\]!i', '[$1_'.$i.']', $v[1]);
                         } else {
                             $sVars = '&'.$v[1];
@@ -407,7 +407,7 @@ class Router
                     $sVars = '&'.$v[1];
                 }
 
-                foreach ($aExpression AS $k => $v_) {
+                foreach ($aExpression as $k => $v_) {
 
                     if (!isset($v['_'.$v_[0]])) {
                         $v['_'.$v_[0]] = null;
@@ -426,12 +426,12 @@ class Router
 
                     }
                 }
-                $this->parseArgs = $args;  
-                break;                
+                $this->parseArgs = $args;
+                break;
 
             }
 
-        }    
+        }
 
         return $sVars;
     }
@@ -440,7 +440,7 @@ class Router
     {
         if (isset($this->aRouting['routes'][$k][$sParam]) AND !is_array($this->aRouting['routes'][$k][$sParam])) {
             return $this->aRouting['routes'][$k][$sParam];
-        } else { 
+        } else {
             return '(.+?)';
         }
 
@@ -452,17 +452,17 @@ class Router
      * @param  string $url CONTROLLER/MODEL?parametry
      * @return void
      */
-    
-    public function redirect($url = '', $status = 301) 
+
+    public function redirect($url = '', $status = 301)
     {
 
 
         $response = Response::create();
         $response->status($status);
-        
+
         if ($this->delay != null) {
             $headers = array(
-                'Refresh' => $this->delay."; url=".$this->makeUrl($url)
+                'Refresh' => $this->delay . "; url=" . $this->makeUrl($url)
             );
         } else {
             $headers = array(
@@ -484,14 +484,14 @@ class Router
     {
         $this->_subdomain = $subdomain;
         return $this;
-        
+
     }
 
     public function domain($domain)
     {
         $this->domain = $domain;
         return $this;
-        
+
     }
 
     public function addRoute($newRoute)

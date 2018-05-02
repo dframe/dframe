@@ -104,8 +104,8 @@ class Response extends \Dframe\Router
     {
         $body = json_encode($body);
         $Response = new Response($body);
-        
-        if(isset($status)) {
+
+        if (isset($status)) {
             $Response->status($status);
         }
 
@@ -115,15 +115,15 @@ class Response extends \Dframe\Router
 
     public static function renderJSONP($body = null, $status = null)
     {
-        
+
         $callback = null;
-        if (isset($_GET['callback'])) { 
+        if (isset($_GET['callback'])) {
             $callback = $_GET['callback'];
         }
-        
+
         $Response = new Response($callback . '(' . json_encode($body) . ')');
-        
-        if(isset($status)) {
+
+        if (isset($status)) {
             $Response->status($status);
         }
 
@@ -190,7 +190,7 @@ class Response extends \Dframe\Router
     
         }
 
-        if(!empty($this->getBody())) {
+        if (!empty($this->getBody())) {
             echo $this->getBody();
         }
     }

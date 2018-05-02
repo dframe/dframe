@@ -18,7 +18,7 @@ use Dframe\Router\Response;
  */
 class Core
 {
-    
+
     public function run()
     {
         $router = new Router();
