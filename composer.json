@@ -2,11 +2,12 @@
     "name": "dframe/dframe",
     "description": "Framework Dframe",
     "keywords": ["framework", "dframe", "mvc"],
+    "homepage": "https://dframeframework.com",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "Slawek Kaleta",
+            "name": "Sławomir Kaleta",
             "email": "slaszka@gmail.com"
         }
     ],
