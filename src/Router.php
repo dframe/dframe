@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
@@ -26,6 +27,14 @@ class Router
     private $_subdomain = false;
     public $delay = null;
     public $parseArgs = array();
+
+
+
+    private $_routesFile = 'routes.php';
+    private $_controllersFile = 'controllers.php';
+    private $_usedControllers = [];
+    private $_controllerDirs = APP_DIR . 'Controller/';
+    private $_cacheDir = APP_DIR . 'View/cache/';
 
     public function __construct()
     {
@@ -56,10 +65,10 @@ class Router
             $this->requestPrefix = 'https://';
 
             // If forced than redirect
-            if (isset($_SERVER['REQUEST_SCHEME']) AND ((!empty($_SERVER['REQUEST_SCHEME']) AND $_SERVER['REQUEST_SCHEME'] == 'http'))) {
+            if (isset($_SERVER['REQUEST_SCHEME']) and ((!empty($_SERVER['REQUEST_SCHEME']) and $_SERVER['REQUEST_SCHEME'] == 'http'))) {
                 return Response::create()->headers(
                     [
-                        'Refresh' => $this->requestPrefix.$this->domain.'/'.$_SERVER['REQUEST_URI']
+                        'Refresh' => $this->requestPrefix . $this->domain . '/' . $_SERVER['REQUEST_URI']
                     ]
                 )->display();
             }
@@ -72,6 +81,43 @@ class Router
             }
 
         }
+
+        $routesFile = 'routes.php';
+        $controllersFile = 'controllers.php';
+        $usedControllers = [];
+        $controllerDirs = APP_DIR . 'Controller/';
+        $cacheDir = APP_DIR . 'View/cache/';
+
+        // We save controller dirs
+        if (is_string($controllerDirs)) {
+            $controllerDirs = [$controllerDirs];
+        }
+
+        if (!is_array($controllerDirs)) {
+            throw new \InvalidArgumentException('Controllers directory must be either string or array');
+        }
+
+        $this->_controllerDirs = [];
+        foreach ($controllerDirs as $d) {
+            $realPath = realPath($d);
+            if ($realPath !== false) {
+                $this->_controllerDirs[] = $realPath;
+            }
+        }
+        // We save the cache dir
+        if (!is_dir($cacheDir)) {
+            $result = @mkdir($cacheDir, 0777, true);
+            if ($result === false) {
+                throw new \RuntimeException('Can\'t create cache directory');
+            }
+        }
+
+        if (!is_writable($cacheDir)) {
+            throw new \RuntimeException('Cache directory must be writable by web server');
+        }
+        $this->_cacheDir = rtrim($cacheDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $this->_generateRoutes();
+
     }
 
     public function run($controller = null, $action = null, $arg = array())
@@ -505,4 +551,149 @@ class Router
 
     }
 
+    private function _generateRoutes()
+    {
+        $parsingNeeded = !file_exists($this->_cacheDir . $this->_routesFile);
+        // We look for controller files
+        $files = $this->_findControllerFiles();
+        // We check if there has been modifications since last cache generation
+        if (!$parsingNeeded) {
+            $routesCacheMtime = filemtime($this->_cacheDir . $this->_routesFile);
+            foreach ($files as $file => $mtime) {
+                if ($mtime > $routesCacheMtime) {
+                    $parsingNeeded = true;
+                    break;
+                }
+            }
+        }
+        // We look for deleted controller files
+        if (!$parsingNeeded && file_exists($this->_cacheDir . $this->_controllersFile)) {
+            require_once $this->_cacheDir . $this->_controllersFile;
+            foreach ($this->_usedControllers as $controllerFile) {
+                if (!file_exists($controllerFile)) {
+                    $parsingNeeded = true;
+                    break;
+                }
+            }
+        }
+        // We regenerate cache file if needed
+        if ($parsingNeeded) {
+            $controllerFiles = [];
+            $commonFileContent = '<?php' . "\r\n" . '/**' . "\r\n" . ' * annotations router %s cache file, create ' . date('c') . "\r\n" . ' */' . "\r\n\r\n";
+
+            $routesFileContent = sprintf($commonFileContent, 'routes');
+            $controllersFileContent = sprintf($commonFileContent, 'controllers');
+
+            $routesFileContent .= 'return array(';
+            foreach ($files as $file => $mtime) {
+                // We generate routes for current file
+                $content = $this->_parseFile($file);
+                if ($content !== '') {
+                    $routesFileContent .= $content;
+                    $controllerFiles[] = $file;
+                }
+            }
+            $routesFileContent = rtrim($routesFileContent, ',');
+            $routesFileContent .= ");";
+
+            file_put_contents($this->_cacheDir . $this->_routesFile, $routesFileContent);
+            $usedControllers = (count($controllerFiles) > 0) ? '$this->_usedControllers = [\'' . join('\',\'', $controllerFiles) . '\'];' : '';
+            file_put_contents($this->_cacheDir . $this->_controllersFile, $controllersFileContent . $usedControllers);
+        }
+
+        $routesConfig = Config::load('routes', APP_DIR.'View/cache')-get();
+        if(!empty($routesConfig)) {
+            $this->_aRoutingParse = array_merge($routesConfig, $this->_aRoutingParse);
+        }
+    }
+
+    private function _findControllerFiles()
+    {
+        $result = [];
+        foreach ($this->_controllerDirs as $dir) {
+            $directoryIterator = new \RecursiveDirectoryIterator($dir);
+            $iterator = new \RecursiveIteratorIterator($directoryIterator);
+
+            $files = new \RegexIterator($iterator, '/\.php$/i', \RecursiveRegexIterator::GET_MATCH);
+            foreach ($files as $k => $v) {
+                $result[$k] = filemtime($k);
+            }
+        }
+        return $result;
+    }
+    /**
+     * @param string $file
+     * @return string
+     */
+    private function _parseFile($file)
+    {
+        $result = '';
+
+
+        $appDir = str_replace('web/../app/', '', APP_DIR);
+        $task = str_replace($appDir . 'app\Controller\\', '', $file);
+        $task = rtrim($task, '.php');
+        $task = str_replace('\\', ',', $task);
+   
+        // We load file content
+        $content = file_get_contents($file);
+        // We search for namespace
+        $namespace = null;
+        if (preg_match('/namespace\s+([\w\\\_-]+)/', $content, $matches) === 1) {
+            $namespace = $matches[1];
+        }
+        // We look for class name
+        if (preg_match('/class\s+([\w_-]+)/', $content, $matches) === 1) {
+            $className = ($namespace !== null) ? $namespace . '\\' . $matches[1] : $matches[1];
+            // We find class infos
+
+            $path = str_replace('Controller.php', '.php', $className . '.php');
+            $path = APP_DIR . str_replace("\\", "/", $path);
+            if (is_file($path)) {
+                include $path;
+            }
+
+            $reflector = new \ReflectionClass($className);
+
+            $prefix = '';
+            if (preg_match('/@RoutePrefix\(["\'](((?!(["\'])).)*)["\']\)/', $reflector->getDocComment(), $matches) === 1) {
+                $prefix = $matches[1];
+            }
+            $methods = $reflector->getMethods(\ReflectionMethod::IS_PUBLIC);
+
+            foreach ($methods as $m) {
+
+                if ($m->isStatic()) {
+                    continue;
+                }
+
+                if (preg_match('/@Route\(\s*["\']([^\'"]*)["\'][^)]*\)/', $m->getDocComment(), $matches) === 1) {
+                    $routePath = $matches[1];
+                    $route = $matches[0];
+                    $methods = '\'GET\'';
+
+                    if (preg_match('/methods={([^}]*)}/', $route, $matches) === 1) {
+                        $methods = str_replace('"', "'", $matches[1]);
+                    }
+
+                    $routeName = null;
+                    if (preg_match('/name=["](.*)["]/', $route, $matches)) {
+                        $routeName = $matches[1];
+                    }
+
+
+                    $routePath = ltrim($routePath, '/');
+                    $result = "
+    '" . $routeName . "' => array(
+        '" . $routePath . "',
+        'task=" . $task . "&action=" . $m->name . "',
+    ),";
+
+                }
+            }
+        }
+
+
+        return $result;
+    }
 }
