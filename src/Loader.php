@@ -37,7 +37,7 @@ class Loader extends Core
 
         $this->baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
 
-        if (isset($this->baseClass->router)) { 
+        if (isset($this->baseClass->router)) {
             $this->router = $this->baseClass->router;
         }
         
@@ -67,7 +67,6 @@ class Loader extends Core
     public function loadView($name)
     {
         return $this->_loadObject($name, 'View');
-
     }
 
     /**
@@ -90,17 +89,17 @@ class Loader extends Core
         $name = $pathFile[1];
         
         $n = str_replace($type, '', $name);
-        $path = str_replace("\\", "/", APP_DIR.$type.'/'.$folder.$n.'.php'); 
+        $path = str_replace("\\", "/", APP_DIR.$type.'/'.$folder.$n.'.php');
 
         try {
-
             if (!$this->isCamelCaps($name, true)) {
-                if (!defined('CODING_STYLE') OR (defined('CODING_STYLE') AND CODING_STYLE == true)) {
+                if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE == true)) {
                     throw new BaseException('Camel Sensitive is on. Can not use '.$type.' '.$name.' try to use StudlyCaps or CamelCase');
                 }
             }
             
-            $name = !empty($folder) ? '\\'.$type.'\\'.str_replace(array('\\', '/'), '\\', $folder).$name.$type : '\\'.$type.'\\'.$name.$type;;   
+            $name = !empty($folder) ? '\\'.$type.'\\'.str_replace(array('\\', '/'), '\\', $folder).$name.$type : '\\'.$type.'\\'.$name.$type;
+            ;
     
             if (!is_file($path)) {
                 throw new BaseException('Can not open '.$type.' '.$name.' in: '.$path);
@@ -111,9 +110,7 @@ class Loader extends Core
             if (method_exists($ob, 'init')) {
                 $ob->init();
             }
-           
-        }catch(BaseException $e) {
-            
+        } catch (BaseException $e) {
             $msg = null;
             if (ini_get('display_errors') == "on") {
                 $msg .= '<pre>';
@@ -140,10 +137,8 @@ class Loader extends Core
 
             if (isset($routerConfig->get('error/400')[0])) {
                 return $this->router->redirect($routerConfig->get('error/400')[0], 400);
-
             } elseif (isset($routerConfig->get('error/404')[0])) {
                 return $this->router->redirect($routerConfig->get('error/404')[0], 404);
-
             }
             
             return '_loadObject Error';
@@ -164,16 +159,14 @@ class Loader extends Core
 
         $subControler = null;
         if (strstr($controller, ",") !== false) {
-
             $url = explode(',', $controller);
             $urlCount = count($url)-1;
             $subControler = '';
             
-            for ($i=0; $i < $urlCount; $i++) { 
-
-                if (!defined('CODING_STYLE') OR (defined('CODING_STYLE') AND CODING_STYLE == true)) {
+            for ($i=0; $i < $urlCount; $i++) {
+                if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE == true)) {
                     $subControler .= ucfirst($url[$i]).'/';
-                }else{
+                } else {
                     $subControler .= $url[$i].'/';
                 }
             }
@@ -181,17 +174,16 @@ class Loader extends Core
             $controller = $url[$urlCount];
         }
 
-        if (!defined('CODING_STYLE') OR (defined('CODING_STYLE') AND CODING_STYLE == true)) {
+        if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE == true)) {
             $controller = ucfirst($controller);
         }
 
 
         
         $controller = str_replace("/", "\\", $controller);
-        $path = str_replace("\\", "/", APP_DIR.'Controller/'.$subControler.$controller.'.php'); 
+        $path = str_replace("\\", "/", APP_DIR.'Controller/'.$subControler.$controller.'.php');
 
         try {
-
             if (!is_file($path)) {
                     throw new BaseException('Can not open Controller '.$controller.' in: '.$path);
             }
@@ -205,9 +197,7 @@ class Loader extends Core
 
             $controller = '\Controller\\'.$xsubControler.''.$controller.'Controller';
             $returnController = new $controller($this->baseClass);
-
-        }catch(BaseException $e) {
-            
+        } catch (BaseException $e) {
             $msg = null;
             if (ini_get('display_errors') == 'on') {
                 $msg .= '<pre>';
@@ -232,10 +222,8 @@ class Loader extends Core
 
             if (isset($routerConfig->get('error/400')[0])) {
                 return $this->router->redirect($routerConfig->get('error/400')[0], 400);
-
             } elseif (isset($routerConfig->get('error/404')[0])) {
                 return $this->router->redirect($routerConfig->get('error/404')[0], 404);
-
             }
 
             return 'loadController Error';
@@ -261,7 +249,7 @@ class Loader extends Core
             }
 
             if ($strict === false) {
-                // Can either start with a lowercase letter, 
+                // Can either start with a lowercase letter,
                 // or multiple uppercase
                 // in a row, representing an acronym.
                 $legalFirstChar .= '([A-Z]{2,}|[a-z])';
@@ -283,7 +271,7 @@ class Loader extends Core
         }
 
         if ($strict === true) {
-            // Check that there are not two capital letters 
+            // Check that there are not two capital letters
             // next to each other.
             $length          = strlen($string);
             $lastCharWasCaps = $classFormat;
@@ -310,26 +298,22 @@ class Loader extends Core
         }//end if
 
         return true;
-
     }//end isCamelCaps()
 
 
-    /** 
-     * Metoda 
+    /**
+     * Metoda
      * init dzialajaca jak __construct wywoływana na poczatku kodu
      */
     public function init()
     {
-
     }
     
-    /** 
-     * Metoda 
+    /**
+     * Metoda
      * dzialajaca jak __destruct wywoływana na koncu kodu
      */
     public function end()
     {
-
     }
-
 }

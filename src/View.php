@@ -17,10 +17,11 @@ use Dframe\Router\Response;
  *
  * @author Sławek Kaleta <slaszka@gmail.com>
  */
+
 abstract class View extends Loader implements \Dframe\View\ViewInterface
 {
 
-    public function assign($name, $value) 
+    public function assign($name, $value)
     {
         if (!isset($this->view)) {
             throw new BaseException('Please Define view engine in app/View.php', 500);
@@ -31,17 +32,14 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
     public function render($data, $type = null)
     {
 
-        if (empty($type) OR $type == 'html') {
+        if (empty($type) or $type == 'html') {
             return $this->view->renderInclude($data);
-
         } elseif ($type == 'jsonp') {
             return $this->renderJSONP($data);
-        
         } else {
             return $this->renderJSON($data);
         }
-               
-    } 
+    }
 
     /**
      * Przekazuje kod do szablonu
@@ -52,14 +50,13 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
      * @return void
      */
 
-    public function fetch($name, $path = null) 
+    public function fetch($name, $path = null)
     {
         if (!isset($this->view)) {
             throw new BaseException('Please Define view engine in app/View.php', 500);
         }
 
         return $this->view->fetch($name, $path);
-
     }
 
     /**
@@ -81,7 +78,8 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
      *
      * @return Json
      */
-    public function renderJSON($data, $status = 200) 
+
+    public function renderJSON($data, $status = 200)
     {
         exit(Response::Create(json_encode($data))->status($status)->headers(array('Content-Type' => 'application/json'))->display());
     }
@@ -93,10 +91,11 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
      *
      * @return Json with Calback
      */
-    public function renderJSONP($data) 
+    
+    public function renderJSONP($data)
     {
         $callback = null;
-        if (isset($_GET['callback'])) { 
+        if (isset($_GET['callback'])) {
             $callback = $_GET['callback'];
         }
         

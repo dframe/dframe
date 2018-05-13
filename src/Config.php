@@ -25,21 +25,20 @@ class Config
     public function __construct($file, $path = '')
     {
 
-        $this->path = (isset($path) AND !empty($path)) ? $path :  APP_DIR.$path.'Config/';
+        $this->path = (isset($path) and !empty($path)) ? $path :  APP_DIR.$path.'Config/';
 
         $this->_file = $file;
         if (file_exists($this->path.$this->_file.'.php') != true) {
             self::$cfg[$file] = array();
-        }else{
+        } else {
             self::$cfg[$file] = isset(self::$cfg[$file]) ? self::$cfg[$file] : include $this->path.$this->_file.'.php';
         }
-
     }
 
     public static function load($file, $path = null)
     {
         return new Config($file, $path);
-    }    
+    }
 
     public function get($param = null, $or = null)
     {
@@ -47,7 +46,6 @@ class Config
             return (isset(self::$cfg[$this->_file]))? self::$cfg[$this->_file] : null;
         }
 
-        return (isset(self::$cfg[$this->_file][$param]) AND !empty(self::$cfg[$this->_file][$param]))? self::$cfg[$this->_file][$param] : $or;
+        return (isset(self::$cfg[$this->_file][$param]) and !empty(self::$cfg[$this->_file][$param]))? self::$cfg[$this->_file][$param] : $or;
     }
-
 }

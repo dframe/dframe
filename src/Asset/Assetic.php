@@ -38,7 +38,6 @@ class Assetic extends Router
                 throw new BaseException('Unable to create'.$path);
             }
         }
-
     }
 
     public function assetJs($sUrl = null, $path = null, $compress = true)
@@ -48,12 +47,12 @@ class Assetic extends Router
         $srcPath = $this->aRouting['assets']['assetsPath'].$this->aRouting['assets']['assetsDir'].'/'.$sUrl;
         if (is_null($path)) {
             $path = 'assets';
-            if (isset($this->aRouting['assets']['assetsDir']) AND !empty($this->aRouting['assets']['assetsDir'])) {
+            if (isset($this->aRouting['assets']['assetsDir']) and !empty($this->aRouting['assets']['assetsDir'])) {
                 $path = $this->aRouting['assets']['assetsDir'];
                 $this->_checkDir($path);
             }
             $dstPath = $this->aRouting['assets']['cachePath'].$path.'/'.$sUrl;
-        }else{
+        } else {
             $dstPath = $this->aRouting['assets']['cachePath'].$path;
         }
 
@@ -70,7 +69,7 @@ class Assetic extends Router
             }
 
             $js = file_get_contents($srcPath);
-            if ($compress === true AND $this->aRouting['assets']['minifyJsEnabled'] == true) {
+            if ($compress === true and $this->aRouting['assets']['minifyJsEnabled'] == true) {
                 $jSqueeze = new JSqueeze();
                 $js = $jSqueeze->squeeze($js, true, true, false);
             }
@@ -82,7 +81,6 @@ class Assetic extends Router
                 fwrite($out, $str);
                 fclose($out);
             }
-
         }
 
         //Zwrocenie linku do kopii
@@ -100,12 +98,12 @@ class Assetic extends Router
         $srcPath = $this->aRouting['assets']['assetsPath'].$this->aRouting['assets']['assetsDir'].'/'.$sUrl;
         if (is_null($path)) {
             $path = 'assets';
-            if (isset($this->aRouting['assets']['assetsDir']) AND !empty($this->aRouting['assets']['assetsDir'])) {
+            if (isset($this->aRouting['assets']['assetsDir']) and !empty($this->aRouting['assets']['assetsDir'])) {
                 $path = $this->aRouting['assets']['assetsDir'];
                 $this->_checkDir($path);
             }
             $dstPath = $this->aRouting['assets']['cachePath'].$path.'/'.$sUrl;
-        }else{
+        } else {
             $dstPath = $this->aRouting['assets']['cachePath'].$path;
         }
 
@@ -124,7 +122,7 @@ class Assetic extends Router
             $args = array();
             //$args[] = new Yui\CssCompressorFilter('C:\yuicompressor-2.4.7\build\yuicompressor-2.4.7.jar', 'java'),
 
-            if($compress == true) {
+            if ($compress == true) {
                 if ($this->aRouting['assets']['minifyCssEnabled'] == true) {
                     $args[] = new CssMinFilter();
                 }
@@ -137,7 +135,8 @@ class Assetic extends Router
             $css = new AssetCollection(
                 array(
                     new FileAsset($srcPath),
-                ), $args
+                ),
+                $args
             );
 
             preg_match_all('/url\("([^\)]+?\.(woff2|woff|eot|ttf|svg|png|jpg|jpeg|gif))/', $css->dump(), $m);
@@ -145,8 +144,6 @@ class Assetic extends Router
             $srcPathinfo = pathinfo($srcPath);
 
             foreach ($m['1'] as $key => $url) {
-
-
                 $subPathinfo = pathinfo($pathinfo['dirname'].'/'.$url);
                 if (!file_exists($subPathinfo['dirname'])) {
                     mkdir($subPathinfo['dirname'], 0777, true);
@@ -158,7 +155,6 @@ class Assetic extends Router
                     fwrite($out, $str);
                     fclose($out);
                 }
-
             }
 
             if (!file_put_contents($dstPath, $css->dump())) {
@@ -167,7 +163,6 @@ class Assetic extends Router
                 fwrite($out, $str);
                 fclose($out);
             }
-
         }
 
         //Zwrocenie linku do kopii

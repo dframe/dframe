@@ -23,12 +23,10 @@ class Core
     {
         $router = new Router();
         return $router->run();
-
     }
 
     public function setView($view)
     {
         $this->view = $view;
     }
-
 }

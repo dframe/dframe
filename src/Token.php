@@ -51,7 +51,7 @@ class Token
 
     public function get($key, $default = null)
     {
-        if (isset($this->token[$key]) AND $this->getTime($key) >= time()) {
+        if (isset($this->token[$key]) and $this->getTime($key) >= time()) {
             return $this->token[$key];
         }
 
@@ -65,12 +65,11 @@ class Token
      * @return bool
      */
 
-    public function set($key, $value, $ttl = null) 
+    public function set($key, $value, $ttl = null)
     {
         $this->token[$key] = $value;
         $this->driver->set('token', $this->token);
         return $this;
-
     }
 
     public function delete($key)
@@ -94,7 +93,7 @@ class Token
         $this->time = array();
 
         $this->driver->set('token', $this->token);
-        $this->driver->set('timeToken', $this->time); 
+        $this->driver->set('timeToken', $this->time);
     }
 
     public function getMultiple($keys, $default = null)
@@ -120,14 +119,14 @@ class Token
     }
 
 
-    public function generate($key) 
+    public function generate($key)
     {
         $this->set($key, md5(uniqid(rand(), true)));
         $this->setTime($key, time() + 3600);
         return $this;
-    }           
+    }
     
-    public function setTime($key, $time) 
+    public function setTime($key, $time)
     {
         if (isset($this->token[$key])) {
             $this->time[$key] = intval($time);
@@ -137,12 +136,12 @@ class Token
         return $this;
     }
     
-    public function getTime($key) 
+    public function getTime($key)
     {
         return isset($this->time[$key]) ? $this->time[$key] : null;
     }
     
-    public function isValid($key, $token, $delete = false) 
+    public function isValid($key, $token, $delete = false)
     {
         $getToken = $this->get($key);
 
@@ -155,7 +154,7 @@ class Token
         }
         
         return false;
-    } 
+    }
 
     /**
      * @deprecated
@@ -163,10 +162,10 @@ class Token
      * @return $this
      */
 
-    public function getToken($key) 
+    public function getToken($key)
     {
         $caller = next(debug_backtrace());
-        trigger_error($message.' in <strong>'.$caller['function'].'</strong> called from <strong>'.$caller['file'].'</strong> on line <strong>'.$caller['line'].'</strong>'."\n<br />error handler use get(".$key.")", E_USER_DEPRECATED); 
+        trigger_error($message.' in <strong>'.$caller['function'].'</strong> called from <strong>'.$caller['file'].'</strong> on line <strong>'.$caller['line'].'</strong>'."\n<br />error handler use get(".$key.")", E_USER_DEPRECATED);
 
         return $this->get($key);
     }
@@ -178,10 +177,10 @@ class Token
      * @return $this
      */
 
-    public function setToken($key, $value) 
+    public function setToken($key, $value)
     {
         $caller = next(debug_backtrace());
-        trigger_error($message.' in <strong>'.$caller['function'].'</strong> called from <strong>'.$caller['file'].'</strong> on line <strong>'.$caller['line'].'</strong>'."\n<br />error handler use set(".$key.")", E_USER_DEPRECATED); 
+        trigger_error($message.' in <strong>'.$caller['function'].'</strong> called from <strong>'.$caller['file'].'</strong> on line <strong>'.$caller['line'].'</strong>'."\n<br />error handler use set(".$key.")", E_USER_DEPRECATED);
 
         return $this->set($key, $value);
     }
@@ -192,7 +191,7 @@ class Token
      * @return $this
      */
 
-    public function remove($key) 
+    public function remove($key)
     {
         trigger_error('Method ' . __METHOD__ . ' is deprecated use delete('.$key.')', E_USER_DEPRECATED);
         return $this->delete($key);

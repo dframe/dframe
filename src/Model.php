@@ -38,8 +38,7 @@ abstract class Model extends Loader
         return $this->methodResult(false, array('errors' => $errors));
     }
       
-    public function init() 
+    public function init()
     {
     }
-    
 }

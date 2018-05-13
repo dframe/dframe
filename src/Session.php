@@ -22,8 +22,7 @@ class Session
 
         $this->name = $name;
 
-        if(!isset($_SESSION)) {
-
+        if (!isset($_SESSION)) {
             $cookie = array(
                 'lifetime' => isset($options['cookie']['lifetime']) ? $options['cookie']['lifetime'] : 0,
                 'path' => isset($options['cookie']['path']) ? $options['cookie']['path'] : '/',
@@ -37,17 +36,15 @@ class Session
             session_start();
         }
         
-        if(php_sapi_name() != 'cli') {
-         
+        if (php_sapi_name() != 'cli') {
             $this->ipAddress = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
             $this->userAgent = isset($_SERVER["HTTP_USER_AGENT"]) ? $_SERVER["HTTP_USER_AGENT"] : 'unknown';
     
-            if($this->isValidFingerprint() != true) {
+            if ($this->isValidFingerprint() != true) {
                 // Refresh Session
                 $_SESSION = array();
                 $_SESSION['_fingerprint'] = $this->_getFingerprint();
             }
-         
         }
     }
 
@@ -78,10 +75,9 @@ class Session
     {
         if (!empty($_SESSION['sessionId'])) {
             return true;
-        } else { 
+        } else {
             return false;
         }
-
     }
 
     public function keyExists($key, $in = false)
@@ -123,7 +119,7 @@ class Session
         return isset($_SESSION[$key]) ? $_SESSION[$key] : $or;
     }
     
-    public function remove($key) 
+    public function remove($key)
     {
         if (isset($_SESSION[$key])) {
             unset($_SESSION[$key]);
@@ -140,11 +136,10 @@ class Session
     {
 
         $_fingerprint = $this->_getFingerprint();
-        if(isset($_SESSION['_fingerprint']) AND $_SESSION['_fingerprint'] == $_fingerprint) {
+        if (isset($_SESSION['_fingerprint']) and $_SESSION['_fingerprint'] == $_fingerprint) {
             return true;
         }
 
         return false;
     }
-       
 }

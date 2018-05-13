@@ -26,7 +26,7 @@ class Messages
 
      /**
       * Add a message to the queue
-      * 
+      *
       * @param Object $session
       */
     public function __construct(Session $session)
@@ -40,12 +40,11 @@ class Messages
         if ($keyExists == false) {
             $this->session->set('flash_messages', array());
         }
-    
     }
     
     /**
      * Add a message to the queue
-     * 
+     *
      * @param string $type     The type of message to add
      * @param string $message  The message
      * @param string $redirect (optional) If set, the user will be redirected to this URL
@@ -55,7 +54,7 @@ class Messages
     public function add($type, $message, $redirect = null)
     {
 
-        if (!isset($type) OR !isset($message[0])) {
+        if (!isset($type) or !isset($message[0])) {
             return false;
         }
         // Replace any shorthand codes with their full version
@@ -69,16 +68,14 @@ class Messages
             if (!in_array($type, $this->msgTypes)) {  // Make sure it's a valid message type
                 throw new BaseException('"'.strip_tags($type).'" is not a valid message type!', 501);
             }
-
-        } catch(BaseException $e) {
-
+        } catch (BaseException $e) {
             $msg = null;
             if (ini_get('display_errors') == "on") {
                 $msg .= '<pre>';
                 $msg .= 'Message: <b>'.$e->getMessage().'</b><br><br>';
 
                 $msg .= 'Accept: '.$_SERVER['HTTP_ACCEPT'].'<br>';
-                if(isset($_SERVER['HTTP_REFERER'])) {
+                if (isset($_SERVER['HTTP_REFERER'])) {
                     $msg .= 'Referer: '.$_SERVER['HTTP_REFERER'].'<br><br>';
                 }
 
@@ -110,7 +107,7 @@ class Messages
     
     /**
      * Display the queued messages
-     * 
+     *
      * @param string $type  Which messages to display
      * @param bool   $print True print the messages on the screen
      *
@@ -123,7 +120,6 @@ class Messages
         
         // Print a certain type of message?
         if (in_array($type, $this->msgTypes)) {
-
             $flashMessages = $this->session->get('flash_messages');
             foreach ($flashMessages[$type] as $msg) {
                 $messages .= $msg;
@@ -139,13 +135,13 @@ class Messages
             foreach ($flashMessages as $type => $msgArray) {
                 $messages = '';
                 foreach ($msgArray as $msg) {
-                    $messages .= $msg;  
+                    $messages .= $msg;
                 }
                 $data .= $messages;
             }
             
             // Clear ALL of the messages
-            $this->clear(); 
+            $this->clear();
             // Invalid Message Type?
         } else {
             return false;
@@ -153,7 +149,7 @@ class Messages
         
         // Print everything to the screen or return the data
         if ($print) {
-            echo $data; 
+            echo $data;
         } else {
             return $data;
         }
@@ -162,34 +158,33 @@ class Messages
     
     /**
      * Check to  see if there are any queued error messages
-     * 
+     *
      * @return bool true There ARE error messages false There are NOT any error messages
      */
     public function hasErrors()
     {
         $flashMessages = $this->session->get('flash_messages');
-        return empty($flashMessages['error']) ? false : true;   
+        return empty($flashMessages['error']) ? false : true;
     }
     
     /**
      * Check to see if there are any ($type) messages queued
-     * 
+     *
      * @param string $type The type of messages to check for
      *
-     * @return bool               
+     * @return bool
      */
-    public function hasMessages($type=null)
+    public function hasMessages($type = null)
     {
         if (!is_null($type)) {
             $flashMessages = $this->session->get('flash_messages');
             if (!empty($flashMessages[$type])) {
-                return $flashMessages[$type];   
+                return $flashMessages[$type];
             }
-
         } else {
             $flashMessages = $this->session->get('flash_messages');
             foreach ($this->msgTypes as $type) {
-                if (!empty($flashMessages[$type])) { 
+                if (!empty($flashMessages[$type])) {
                     return true;
                 }
             }
@@ -200,16 +195,15 @@ class Messages
     
     /**
      * Clear messages from the session data
-     * 
+     *
      * @param string $type The type of messages to clear
      *
-     * @return bool 
+     * @return bool
      */
-    public function clear($type='all')
-    { 
+    public function clear($type = 'all')
+    {
         if ($type == 'all') {
             $this->session->remove('flash_messages');
-
         } else {
             $flashMessages = $this->session->get('flash_messages');
             unset($flashMessages[$type]);
@@ -227,7 +221,6 @@ class Messages
 
     public function __toString()
     {
-        return $this->hasMessages();    
+        return $this->hasMessages();
     }
-
 }

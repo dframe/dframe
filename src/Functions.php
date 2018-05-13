@@ -15,7 +15,7 @@ function pathFile($path)
         
         $pathCount = count($path)-1;
         $folder = '';
-        for ($i=0; $i < $pathCount; $i++) { 
+        for ($i=0; $i < $pathCount; $i++) {
             $folder .= $path[$i].'/';
         }
         $name = $path[$pathCount];
@@ -43,7 +43,7 @@ function generateRandomString($length = 10)
 
 /**
  * Zmiana Obiektu wielowymiaroa na tablice array
- */ 
+ */
 
 function object_to_array($obj)
 {
@@ -60,17 +60,17 @@ function object_to_array($obj)
         $new = $obj;
     }
 
-    return $new;       
+    return $new;
 }
 
 /**
- * Wyszukiwanie ciagu zdania za pozmoca wilcardu 
+ * Wyszukiwanie ciagu zdania za pozmoca wilcardu
  * ala ma kota -> ala * kota == TRUE
  */
 
 function stringMatchWithWildcard($source, $pattern)
 {
-    $pattern = preg_quote($pattern, '/'); 
-    $pattern = str_replace('\*', '.*', $pattern); 
-    return preg_match('/^'.$pattern.'$/i', $source); 
+    $pattern = preg_quote($pattern, '/');
+    $pattern = str_replace('\*', '.*', $pattern);
+    return preg_match('/^'.$pattern.'$/i', $source);
 }
