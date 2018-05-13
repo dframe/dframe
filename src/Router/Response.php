@@ -165,16 +165,13 @@ class Response extends \Dframe\Router
     {
 
         if (!headers_sent()) {
-
             if (PHP_SAPI !== 'cli') {
-    
                 $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1');
                 $status = (!empty($this->status) ? $this->status : 200);
                 $string = sprintf('%s %d %s', $protocol, $status, self::$code[$status]);
 
                 header($string, true, $status); // Default header
                 if (!empty($this->_headers)) {
-    
                     foreach ($this->_headers as $field => $value) {
                         if (is_array($value)) {
                             foreach ($value as $v) {
@@ -185,9 +182,7 @@ class Response extends \Dframe\Router
                         }
                     }
                 }
-    
             }
-    
         }
 
         if (!empty($this->getBody())) {
@@ -199,5 +194,4 @@ class Response extends \Dframe\Router
     {
         return $this->_body;
     }
-
 }

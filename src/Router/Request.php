@@ -7,9 +7,9 @@ namespace Dframe\Router;
 
 class Request
 {
-	
-	function __construct()
-	{
-		# code...
-	}
+    
+    function __construct()
+    {
+        # code...
+    }
 }
