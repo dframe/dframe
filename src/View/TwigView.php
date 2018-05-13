@@ -23,23 +23,23 @@ class TwigView implements \Dframe\View\ViewInterface
         $twigConfig = Config::load('view/twig');
         $loader = new \Twig_Loader_Filesystem($twigConfig->get('setTemplateDir'));
         $twig = new \Twig_Environment(
-            $loader, array(
+            $loader,
+            array(
                 'cache' => $twigConfig->get('setCompileDir')
             )
         );
         $this->twig = $twig;
-
     }
 
     /**
      * Set the var to the template
      *
-     * @param string $name 
+     * @param string $name
      * @param string $value
      *
      * @return void
      */
-    public function assign($name, $value) 
+    public function assign($name, $value)
     {
         try {
             if (isset($this->assigns[$name])) {
@@ -47,8 +47,7 @@ class TwigView implements \Dframe\View\ViewInterface
             }
                       
             $assign = $this->assigns[$name] = $value;
-        
-        }catch(\Exception $e) {
+        } catch (\Exception $e) {
             echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
                 Code line: '.$e->getLine().'<br />
@@ -79,22 +78,21 @@ class TwigView implements \Dframe\View\ViewInterface
      *
      * @return void
      */
-    public function renderInclude($name, $path=null) 
+    public function renderInclude($name, $path = null)
     {
         $twigConfig = Config::load('twig');
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
-        $name = $pathFile[1]; 
+        $name = $pathFile[1];
 
         $path = $twigConfig->get('setTemplateDir').'/'.$folder.$name.$twigConfig->get('fileExtension', '.twig');
-        try{
+        try {
             if (!is_file($path)) {
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
             }
 
             $renderInclude = $this->twig->render($name, $this->assign);
-                    
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             echo $e->getMessage().'<br />
                         File: '.$e->getFile().'<br />
                         Code line: '.$e->getLine().'<br />
@@ -104,7 +102,4 @@ class TwigView implements \Dframe\View\ViewInterface
                     
         return $renderInclude;
     }
-             
-
-    
 }

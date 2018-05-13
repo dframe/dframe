@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
@@ -27,7 +27,7 @@ class DefaultView implements \Dframe\View\ViewInterface
     /**
      * Set the var to the template
      *
-     * @param string $name 
+     * @param string $name
      * @param string $value
      *
      * @return void
@@ -55,14 +55,13 @@ class DefaultView implements \Dframe\View\ViewInterface
             $path = $this->templateConfig->get('setTemplateDir').'/'.$folder.$name.$this->templateConfig->get('fileExtension', '.html.php');
         }
         
-        try{
+        try {
             if (!is_file($path)) {
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
             }
             ob_start();
-            include $path;          
-
-        }catch(Exception $e) {
+            include $path;
+        } catch (Exception $e) {
             echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
                 Code line: '.$e->getLine().'<br />
@@ -92,14 +91,13 @@ class DefaultView implements \Dframe\View\ViewInterface
             $path = $this->templateConfig->get('setTemplateDir').'/'.$folder.$name.$this->templateConfig->get('fileExtension', '.html.php');
         }
         
-        try{
+        try {
             if (!is_file($path)) {
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
             }
             
-            $renderInclude = include $path;           
-
-        }catch(Exception $e) {
+            $renderInclude = include $path;
+        } catch (Exception $e) {
             echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
                 Code line: '.$e->getLine().'<br />
@@ -109,5 +107,4 @@ class DefaultView implements \Dframe\View\ViewInterface
         
         return $renderInclude;
     }
-
 }

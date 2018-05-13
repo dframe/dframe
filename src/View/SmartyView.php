@@ -34,22 +34,20 @@ class SmartyView implements \Dframe\View\ViewInterface
     /**
      * Set the var to the template
      *
-     * @param string $name 
+     * @param string $name
      * @param string $value
      *
      * @return void
      */
-    public function assign($name, $value) 
+    public function assign($name, $value)
     {
         try {
-    
             if ($this->smarty->getTemplateVars($name) !== null) {
                 throw new \Exception('You can\'t assign "'.$name . '" in Smarty');
             }
             
             $assign = $this->smarty->assign($name, $value);
-
-        }catch(Exception $e) {
+        } catch (Exception $e) {
             echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
                 Code line: '.$e->getLine().'<br />
@@ -68,7 +66,7 @@ class SmartyView implements \Dframe\View\ViewInterface
      *
      * @return void
      */
-    public function fetch($name, $path=null) 
+    public function fetch($name, $path = null)
     {
         $smartyConfig = Config::load('view/smarty');
 
@@ -81,14 +79,12 @@ class SmartyView implements \Dframe\View\ViewInterface
         }
 
         try {
-            
             if (!is_file($path)) {
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
             }
 
             $fetch = $this->smarty->fetch($path); // Ładowanie widoku
-
-        }catch(Exception $e) {
+        } catch (Exception $e) {
             echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
                 Code line: '.$e->getLine().'<br />
@@ -97,7 +93,7 @@ class SmartyView implements \Dframe\View\ViewInterface
         }
 
         return $fetch;
-    } 
+    }
 
     /**
      * Przekazuje kod do szablonu Smarty
@@ -107,7 +103,7 @@ class SmartyView implements \Dframe\View\ViewInterface
      *
      * @return void
      */
-    public function renderInclude($name, $path = null) 
+    public function renderInclude($name, $path = null)
     {
 
         $smartyConfig = Config::load('view/smarty');
@@ -120,23 +116,18 @@ class SmartyView implements \Dframe\View\ViewInterface
             $path = $smartyConfig->get('setTemplateDir').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
         }
         
-        try{
-
+        try {
             if (!is_file($path)) {
                 throw new \Exception('Can not open template '.$name.' in: '.$path);
             }
 
             return $this->smarty->display($path); // Ładowanie widoku
-
-        }catch(Exception $e) {
+        } catch (Exception $e) {
             echo $e->getMessage().'<br />
                 File: '.$e->getFile().'<br />
                 Code line: '.$e->getLine().'<br />
                 Trace: '.$e->getTraceAsString();
             exit();
         }
-
-  
     }
-
 }

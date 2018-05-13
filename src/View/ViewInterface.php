@@ -20,7 +20,7 @@ interface ViewInterface
     /**
      * Set the var to the template
      *
-     * @param string $name 
+     * @param string $name
      * @param string $value
      */
     public function assign($name, $value);
@@ -36,8 +36,7 @@ interface ViewInterface
     /**
      * Include File
      *
-     * @param string $path 
+     * @param string $path
      */
     public function renderInclude($path);
-     
 }
