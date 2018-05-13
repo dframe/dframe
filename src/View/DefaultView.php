@@ -13,7 +13,7 @@ use Dframe\Config;
 /**
  * Short Description
  *
- * @author Sławek Kaleta <slaszka@gmail.com>
+ * @author Sławomir Kaleta <slaszka@gmail.com>
  * @author Amadeusz Dzięcioł <amadeusz.xd@gmail.com>
  */
 class DefaultView implements \Dframe\View\ViewInterface

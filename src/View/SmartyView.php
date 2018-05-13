@@ -13,7 +13,7 @@ use Dframe\Config;
 /**
  * Short Description
  *
- * @author Sławek Kaleta <slaszka@gmail.com>
+ * @author Sławomir Kaleta <slaszka@gmail.com>
  */
 class SmartyView implements \Dframe\View\ViewInterface
 {

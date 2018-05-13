@@ -15,7 +15,7 @@ use Dframe\Router\Response;
 /**
  * Short Description
  *
- * @author Sławek Kaleta <slaszka@gmail.com>
+ * @author Sławomir Kaleta <slaszka@gmail.com>
  */
 
 abstract class View extends Loader implements \Dframe\View\ViewInterface

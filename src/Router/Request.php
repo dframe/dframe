@@ -2,7 +2,7 @@
 namespace Dframe\Router;
 
 /**
- * @author Sławek Kaleta <slaszka@gmail.com>
+ * @author Sławomir Kaleta <slaszka@gmail.com>
  */
 
 class Request

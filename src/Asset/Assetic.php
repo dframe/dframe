@@ -26,7 +26,7 @@ set_time_limit(120);
 /**
  * Short Description
  *
- * @author Sławek Kaleta <slaszka@gmail.com>
+ * @author Sławomir Kaleta <slaszka@gmail.com>
  */
 class Assetic extends Router
 {
