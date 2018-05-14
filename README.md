@@ -53,7 +53,7 @@ RewriteRule ^(.*)$ web/index.php [QSA,L]
 ### Overview
 
 **1. Controller** 
-file it is very important for dynamic routing. If you created file **TaskForRouter.php** with class with method **ActionForRouter()** your **\Dframe\Router** url will look like ***yourpage.com/TaskForRouter/ActionForRouter***.
+file it is very important for dynamic routing. If you created file **TaskForRouter.php** with class with method **actionForRouter()** your **\Dframe\Router** url will look like ***yourpage.com/TaskForRouter/actionForRouter***.
 
 app/Controller/TaskForRouter.php:
 ```php
@@ -62,7 +62,7 @@ namespace Controller;
 
 Class TaskForRouterController extends \Controller\Controller
 {
-    public function ActionForRouter()
+    public function actionForRouter()
     {
          $exampleModel = $this->loadModel('Example'); #Load model
          $view = $this->loadView('Index'); #Load view
