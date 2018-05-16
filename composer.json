@@ -26,7 +26,11 @@
         "psr-4": {"Dframe\\": "src"},
         "files": ["src/Functions.php"]
     },
-    
+
+    "require-dev": {
+        "mikey179/vfsStream": "^1.6"
+    },
+
     "scripts": {
         "test": [
             "@phpunit"
