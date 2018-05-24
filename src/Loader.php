@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
@@ -30,7 +31,7 @@ class Loader extends Core
         if (!defined('APP_DIR')) {
             throw new BaseException('Please Define appDir in Main config.php', 500);
         }
-        
+
         if (!defined('SALT')) {
             throw new BaseException('Please Define SALT in Main config.php', 500);
         }
@@ -40,7 +41,7 @@ class Loader extends Core
         if (isset($this->baseClass->router)) {
             $this->router = $this->baseClass->router;
         }
-        
+
         return $this;
     }
 
@@ -87,22 +88,21 @@ class Loader extends Core
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
         $name = $pathFile[1];
-        
+
         $n = str_replace($type, '', $name);
-        $path = str_replace("\\", "/", APP_DIR.$type.'/'.$folder.$n.'.php');
+        $path = str_replace("\\", "/", APP_DIR . $type . '/' . $folder . $n . '.php');
 
         try {
             if (!$this->isCamelCaps($name, true)) {
                 if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE == true)) {
-                    throw new BaseException('Camel Sensitive is on. Can not use '.$type.' '.$name.' try to use StudlyCaps or CamelCase');
+                    throw new BaseException('Camel Sensitive is on. Can not use ' . $type . ' ' . $name . ' try to use StudlyCaps or CamelCase');
                 }
             }
-            
-            $name = !empty($folder) ? '\\'.$type.'\\'.str_replace(array('\\', '/'), '\\', $folder).$name.$type : '\\'.$type.'\\'.$name.$type;
-            ;
-    
+
+            $name = !empty($folder) ? '\\' . $type . '\\' . str_replace(array('\\', '/'), '\\', $folder) . $name . $type : '\\' . $type . '\\' . $name . $type;;
+
             if (!is_file($path)) {
-                throw new BaseException('Can not open '.$type.' '.$name.' in: '.$path);
+                throw new BaseException('Can not open ' . $type . ' ' . $name . ' in: ' . $path);
             }
 
             include_once $path;
@@ -114,19 +114,19 @@ class Loader extends Core
             $msg = null;
             if (ini_get('display_errors') == "on") {
                 $msg .= '<pre>';
-                $msg .= 'Message: <b>'.$e->getMessage().'</b><br><br>';
+                $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
 
-                $msg .= 'Accept: '.$_SERVER['HTTP_ACCEPT'].'<br>';
+                $msg .= 'Accept: ' . $_SERVER['HTTP_ACCEPT'] . '<br>';
                 if (isset($_SERVER['HTTP_REFERER'])) {
-                    $msg .= 'Referer: '.$_SERVER['HTTP_REFERER'].'<br><br>';
+                    $msg .= 'Referer: ' . $_SERVER['HTTP_REFERER'] . '<br><br>';
                 }
 
-                $msg .= 'Request Method: '.$_SERVER['REQUEST_METHOD'].'<br><br>';
+                $msg .= 'Request Method: ' . $_SERVER['REQUEST_METHOD'] . '<br><br>';
 
-                $msg .= 'Current file Path: <b>'.$this->router->currentPath().'</b><br>';
-                
-                $msg .= 'File Exception: '.$e->getFile().':'.$e->getLine().'<br><br>';
-                $msg .= 'Trace: <br>'.$e->getTraceAsString().'<br>';
+                $msg .= 'Current file Path: <b>' . $this->router->currentPath() . '</b><br>';
+
+                $msg .= 'File Exception: ' . $e->getFile() . ':' . $e->getLine() . '<br><br>';
+                $msg .= 'Trace: <br>' . $e->getTraceAsString() . '<br>';
                 $msg .= '</pre>';
 
                 exit($msg);
@@ -140,7 +140,7 @@ class Loader extends Core
             } elseif (isset($routerConfig->get('error/404')[0])) {
                 return $this->router->redirect($routerConfig->get('error/404')[0], 404);
             }
-            
+
             return '_loadObject Error';
         }
 
@@ -160,14 +160,14 @@ class Loader extends Core
         $subControler = null;
         if (strstr($controller, ",") !== false) {
             $url = explode(',', $controller);
-            $urlCount = count($url)-1;
+            $urlCount = count($url) - 1;
             $subControler = '';
-            
-            for ($i=0; $i < $urlCount; $i++) {
+
+            for ($i = 0; $i < $urlCount; $i++) {
                 if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE == true)) {
-                    $subControler .= ucfirst($url[$i]).'/';
+                    $subControler .= ucfirst($url[$i]) . '/';
                 } else {
-                    $subControler .= $url[$i].'/';
+                    $subControler .= $url[$i] . '/';
                 }
             }
 
@@ -179,40 +179,40 @@ class Loader extends Core
         }
 
 
-        
+
         $controller = str_replace("/", "\\", $controller);
-        $path = str_replace("\\", "/", APP_DIR.'Controller/'.$subControler.$controller.'.php');
+        $path = str_replace("\\", "/", APP_DIR . 'Controller/' . $subControler . $controller . '.php');
 
         try {
             if (!is_file($path)) {
-                    throw new BaseException('Can not open Controller '.$controller.' in: '.$path);
+                throw new BaseException('Can not open Controller ' . $controller . ' in: ' . $path);
             }
 
             include_once $path;
 
             $xsubControler = str_replace("/", "\\", $subControler);
-            if (!class_exists('\Controller\\'.$xsubControler.''.$controller.'Controller')) {
+            if (!class_exists('\Controller\\' . $xsubControler . '' . $controller . 'Controller')) {
                 throw new BaseException('Bad controller error');
             }
 
-            $controller = '\Controller\\'.$xsubControler.''.$controller.'Controller';
+            $controller = '\Controller\\' . $xsubControler . '' . $controller . 'Controller';
             $returnController = new $controller($this->baseClass);
         } catch (BaseException $e) {
             $msg = null;
             if (ini_get('display_errors') == 'on') {
                 $msg .= '<pre>';
-                $msg .= 'Message: <b>'.$e->getMessage().'</b><br><br>';
+                $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
 
-                $msg .= 'Accept: '.$_SERVER['HTTP_ACCEPT'].'<br>';
+                $msg .= 'Accept: ' . $_SERVER['HTTP_ACCEPT'] . '<br>';
                 if (isset($_SERVER['HTTP_REFERER'])) {
-                    $msg .= 'Referer: '.$_SERVER['HTTP_REFERER'].'<br><br>';
+                    $msg .= 'Referer: ' . $_SERVER['HTTP_REFERER'] . '<br><br>';
                 }
-                
-                $msg .= 'Request Method: '.$_SERVER['REQUEST_METHOD'].'<br><br>';
-                $msg .= 'Current file Path: <b>'.$this->router->currentPath().'</b><br>';
 
-                $msg .= 'File Exception: '.$e->getFile().':'.$e->getLine().'<br><br>';
-                $msg .= 'Trace: <br>'.$e->getTraceAsString().'<br>';
+                $msg .= 'Request Method: ' . $_SERVER['REQUEST_METHOD'] . '<br><br>';
+                $msg .= 'Current file Path: <b>' . $this->router->currentPath() . '</b><br>';
+
+                $msg .= 'File Exception: ' . $e->getFile() . ':' . $e->getLine() . '<br><br>';
+                $msg .= 'Trace: <br>' . $e->getTraceAsString() . '<br>';
                 $msg .= '</pre>';
 
                 exit($msg);
@@ -228,7 +228,7 @@ class Loader extends Core
 
             return 'loadController Error';
         }
-        
+
         return $returnController;
     }
     /**
@@ -273,16 +273,19 @@ class Loader extends Core
         if ($strict === true) {
             // Check that there are not two capital letters
             // next to each other.
-            $length          = strlen($string);
+            $length = strlen($string);
             $lastCharWasCaps = $classFormat;
 
             for ($i = 1; $i < $length; $i++) {
-                $ascii = ord($string{$i});
+                $ascii = ord($string {
+                    $i});
                 if ($ascii >= 48 && $ascii <= 57) {
                     // The character is a number, so it cant be a capital.
                     $isCaps = false;
                 } else {
-                    if (strtoupper($string{$i}) === $string{$i}) {
+                    if (strtoupper($string {
+                        $i}) === $string {
+                        $i}) {
                         $isCaps = true;
                     } else {
                         $isCaps = false;
@@ -308,7 +311,7 @@ class Loader extends Core
     public function init()
     {
     }
-    
+
     /**
      * Metoda
      * dzialajaca jak __destruct wywoływana na koncu kodu
