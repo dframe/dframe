@@ -604,7 +604,7 @@ class Router
             $path = str_replace('Controller.php', '.php', $className . '.php');
             $path = APP_DIR . str_replace("\\", "/", $path);
             if (is_file($path)) {
-                include $path;
+                include_once $path;
             }
 
             $reflector = new \ReflectionClass($className);
