@@ -453,25 +453,9 @@ class Router
      * @return void
      */
 
-    public function redirect($url = '', $status = 301)
+    public static function redirect($url = '', $status = 301)
     {
-
-
-        $response = Response::create();
-        $response->status($status);
-
-        if ($this->delay != null) {
-            $headers = array(
-                'Refresh' => $this->delay . "; url=" . $this->makeUrl($url)
-            );
-        } else {
-            $headers = array(
-                'Location' => $this->makeUrl($url)
-            );
-        }
-
-        $response->headers($headers);
-        return $response;
+        return Response::redirect($url, $status);
     }
 
     public function delay(int $delay)

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
@@ -9,13 +10,14 @@
 namespace Dframe\Router;
 
 use Dframe\Config;
+use Dframe\Router;
 
 /**
  * Short Description
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class Response extends \Dframe\Router
+class Response extends Router
 {
 
     public $status = 200;
@@ -130,7 +132,27 @@ class Response extends \Dframe\Router
         $Response->headers(array('Content-Type' => 'application/jsonp'));
         return $Response;
     }
-    
+
+    /**
+     * Przekierowanie adresu
+     *
+     * @param string $url CONTROLLER/MODEL?parametry
+     * @return void
+     */
+    public static function redirect($url = '', $status = 301)
+    {
+
+        $Response = new Response();
+        $Response->status($status);
+
+        $headers = array(
+            'Location' => (new Router)->makeUrl($url)
+        );
+
+        $Response->headers($headers);
+        return $Response;
+    }
+
     public function json($json)
     {
         $this->headers(array('Content-Type' => 'application/json'));
@@ -149,7 +171,7 @@ class Response extends \Dframe\Router
         $this->_headers = array_merge($this->_headers, $headers);
         return $this;
     }
-    
+
     public function body($body = null)
     {
         $this->_body = $body;
@@ -175,10 +197,10 @@ class Response extends \Dframe\Router
                     foreach ($this->_headers as $field => $value) {
                         if (is_array($value)) {
                             foreach ($value as $v) {
-                                header("$field".': '.$v, false);
+                                header("$field" . ': ' . $v, false);
                             }
                         } else {
-                            header("$field".': '.$value);
+                            header("$field" . ': ' . $value);
                         }
                     }
                 }
