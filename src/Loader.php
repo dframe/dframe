@@ -24,6 +24,8 @@ class Loader extends Core
 
     public $baseClass;
     public $router;
+    private $_fileExtension = '.php';
+    private $_namespaceSeparator = '\\';
 
     public function __construct($bootstrap = null)
     {
@@ -44,7 +46,6 @@ class Loader extends Core
 
         return $this;
     }
-
 
     /**
      * Metoda do includowania pliku modelu i wywołanie objektu przez namespace
@@ -90,17 +91,17 @@ class Loader extends Core
         $name = $pathFile[1];
 
         $n = str_replace($type, '', $name);
-        $path = str_replace("\\", "/", APP_DIR . $type . '/' . $folder . $n . '.php');
+        $path = str_replace($this->_namespaceSeparator, DIRECTORY_SEPARATOR, APP_DIR . $type . '/' . $folder . $n . '.php');
 
         try {
+
             if (!$this->isCamelCaps($name, true)) {
                 if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE == true)) {
                     throw new BaseException('Camel Sensitive is on. Can not use ' . $type . ' ' . $name . ' try to use StudlyCaps or CamelCase');
                 }
             }
 
-            $name = !empty($folder) ? '\\' . $type . '\\' . str_replace(array('\\', '/'), '\\', $folder) . $name . $type : '\\' . $type . '\\' . $name . $type;;
-
+            $name = !empty($folder) ? $this->_namespaceSeparator . $type . $this->_namespaceSeparator . str_replace(array($this->_namespaceSeparator, '/'), $this->_namespaceSeparator, $folder) . $name . $type : $this->_namespaceSeparator . $type . $this->_namespaceSeparator . $name . $type;;
             if (!is_file($path)) {
                 throw new BaseException('Can not open ' . $type . ' ' . $name . ' in: ' . $path);
             }
@@ -110,6 +111,7 @@ class Loader extends Core
             if (method_exists($ob, 'init')) {
                 $ob->init();
             }
+
         } catch (BaseException $e) {
             $msg = null;
             if (ini_get('display_errors') == "on") {
@@ -122,9 +124,7 @@ class Loader extends Core
                 }
 
                 $msg .= 'Request Method: ' . $_SERVER['REQUEST_METHOD'] . '<br><br>';
-
                 $msg .= 'Current file Path: <b>' . $this->router->currentPath() . '</b><br>';
-
                 $msg .= 'File Exception: ' . $e->getFile() . ':' . $e->getLine() . '<br><br>';
                 $msg .= 'Trace: <br>' . $e->getTraceAsString() . '<br>';
                 $msg .= '</pre>';
@@ -165,9 +165,9 @@ class Loader extends Core
 
             for ($i = 0; $i < $urlCount; $i++) {
                 if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE == true)) {
-                    $subControler .= ucfirst($url[$i]) . '/';
+                    $subControler .= ucfirst($url[$i]) . DIRECTORY_SEPARATOR;
                 } else {
-                    $subControler .= $url[$i] . '/';
+                    $subControler .= $url[$i] . DIRECTORY_SEPARATOR;
                 }
             }
 
@@ -178,10 +178,9 @@ class Loader extends Core
             $controller = ucfirst($controller);
         }
 
+        $controller = str_replace(DIRECTORY_SEPARATOR, $this->_namespaceSeparator, $controller);
+        $path = str_replace($this->_namespaceSeparator, DIRECTORY_SEPARATOR, APP_DIR . 'Controller' . DIRECTORY_SEPARATOR . $subControler . $controller . '.php');
 
-
-        $controller = str_replace("/", "\\", $controller);
-        $path = str_replace("\\", "/", APP_DIR . 'Controller/' . $subControler . $controller . '.php');
 
         try {
             if (!is_file($path)) {
@@ -190,12 +189,12 @@ class Loader extends Core
 
             include_once $path;
 
-            $xsubControler = str_replace("/", "\\", $subControler);
-            if (!class_exists('\Controller\\' . $xsubControler . '' . $controller . 'Controller')) {
+            $xsubControler = str_replace(DIRECTORY_SEPARATOR, $this->_namespaceSeparator, $subControler);
+            if (!class_exists($this->_namespaceSeparator . 'Controller' . $this->_namespaceSeparator . $xsubControler . '' . $controller . 'Controller')) {
                 throw new BaseException('Bad controller error');
             }
 
-            $controller = '\Controller\\' . $xsubControler . '' . $controller . 'Controller';
+            $controller = $this->_namespaceSeparator . 'Controller' . $this->_namespaceSeparator . $xsubControler . '' . $controller . 'Controller';
             $returnController = new $controller($this->baseClass);
         } catch (BaseException $e) {
             $msg = null;
@@ -210,7 +209,6 @@ class Loader extends Core
 
                 $msg .= 'Request Method: ' . $_SERVER['REQUEST_METHOD'] . '<br><br>';
                 $msg .= 'Current file Path: <b>' . $this->router->currentPath() . '</b><br>';
-
                 $msg .= 'File Exception: ' . $e->getFile() . ':' . $e->getLine() . '<br><br>';
                 $msg .= 'Trace: <br>' . $e->getTraceAsString() . '<br>';
                 $msg .= '</pre>';
@@ -319,4 +317,5 @@ class Loader extends Core
     public function end()
     {
     }
+
 }
