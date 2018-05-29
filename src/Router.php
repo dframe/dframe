@@ -537,7 +537,7 @@ class Router
             file_put_contents($this->_cacheDir . $this->_controllersFile, $controllersFileContent . $usedControllers);
         }
 
-        $routesConfig = Config::load('routes', APP_DIR . 'View/cache')->get();
+        $routesConfig = Config::load('routes', APP_DIR . 'View/cache/')->get();
         if (!empty($routesConfig)) {
             $this->_aRoutingParse = array_merge($routesConfig, $this->_aRoutingParse);
         }
