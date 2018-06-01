@@ -84,7 +84,7 @@ class Response extends Router
         510 => 'Not Extended'
     );
 
-    public function __construct($body = false)
+    public function __construct($body = '')
     {
         if (isset($body)) {
             $this->_body = $body;
@@ -139,7 +139,7 @@ class Response extends Router
      * @param string $url CONTROLLER/MODEL?parametry
      * @return void
      */
-    public static function redirect($url = '', $status = 301)
+    public static function redirect($url = '', $status = 301, $headers = array())
     {
 
         $Response = new Response();
