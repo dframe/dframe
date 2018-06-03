@@ -14,7 +14,7 @@ use Dframe\Loader;
 use Dframe\Router\Response;
 
 /**
- * Short Description
+ * Router
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
@@ -28,16 +28,17 @@ class Router
     public $delay = null;
     public $parseArgs = array();
 
-
-
     private $_routesFile = 'routes.php';
     private $_controllersFile = 'controllers.php';
     private $_usedControllers = [];
     private $_controllerDirs = APP_DIR . 'Controller/';
     private $_cacheDir = APP_DIR . 'View/cache/';
+    public $routes;
 
-    public function __construct()
+    public function __construct($baseClass)
     {
+        $this->app = $baseClass;
+
 
         if (!defined('HTTP_HOST') and isset($_SERVER['HTTP_HOST'])) {
             define('HTTP_HOST', $_SERVER['HTTP_HOST']);
@@ -58,6 +59,9 @@ class Router
 
         $this->aRouting = $routerConfig->get(); // For url
         $this->_aRoutingParse = $routerConfig->get('routes'); // For parsing array
+
+        $this->aRouting['routes'] = array_merge($this->aRouting['routes'], $this->app->config['router']['routes']);
+        $this->_aRoutingParse = array_merge($this->app->config['router']['routes'], $this->_aRoutingParse);
 
         // Check forced HTTPS
         if ($this->https == true) {
@@ -114,24 +118,33 @@ class Router
         }
         $this->_cacheDir = rtrim($cacheDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $this->_generateRoutes();
+
     }
 
-    public function run($controller = null, $action = null, $arg = array())
+    public function getRoutes()
+    {
+        return $this->routes;
+    }
+
+    public function setRoutes($routes)
+    {
+        $this->routes = array_merge($routes);
+    }
+
+    public function run()
     {
 
-        if (is_null($controller) and is_null($action)) {
+        if (is_null($controller ?? null) and is_null($action ?? null)) {
             $this->parseGets();
-            $controller = $_GET['task'];
-            $action = $_GET['action'];
+            $controller = $this->controller;
+            $action = $this->action;
+            $namespace = $this->namespace;
         }
 
         $arg = $this->parseArgs;
 
-        $bootstrap = new \Bootstrap();
-        $bootstrap->router = $this;
-
-        $loader = new Loader($bootstrap);
-        $controller = $loader->loadController($controller); // Loading Controller class
+        $loader = new Loader($this->app);
+        $controller = $loader->loadController($controller, $namespace); // Loading Controller class
 
         $response = array();
 
@@ -325,20 +338,23 @@ class Router
             }
 
             $sGets = $this->_parseUrl($sRequest);
-            $sGets = str_replace('?', '&', $sGets);
 
+            $this->namespace = $sGets['v']['namespace'] ?? '';
+
+            $sGets = str_replace('?', '&', $sGets['sVars']);
             parse_str($sGets, $aGets);
 
-            $_GET['task'] = !empty($aGets['task']) ? $aGets['task'] : $this->aRouting['NAME_CONTROLLER'];
+            $this->controller = !empty($aGets['task']) ? $aGets['task'] : $this->aRouting['NAME_CONTROLLER'];
             unset($aGets['task']);
 
-            $_GET['action'] = !empty($aGets['action']) ? $aGets['action'] : $this->aRouting['NAME_METHOD'];
+            $this->action = !empty($aGets['action']) ? $aGets['action'] : $this->aRouting['NAME_METHOD'];
             unset($aGets['action']);
 
-            $_GET = array_merge($_GET, $aGets);
+            //$_GET = array_merge($_GET, $aGets);
+
         } else {
-            $_GET['task'] = !empty($_GET['task']) ? $_GET['task'] : $this->aRouting['NAME_CONTROLLER'];
-            $_GET['action'] = !empty($_GET['action']) ? $_GET['action'] : $this->aRouting['NAME_METHOD'];
+            $this->controller = !empty($_GET['task']) ? $_GET['task'] : $this->aRouting['NAME_CONTROLLER'];
+            $this->action = !empty($_GET['action']) ? $_GET['action'] : $this->aRouting['NAME_METHOD'];
         }
     }
 
@@ -353,7 +369,7 @@ class Router
             }
 
             $sGets = $this->_parseUrl($sRequest);
-            $sGets = str_replace('?', '&', $sGets);
+            $sGets = str_replace('?', '&', $sGets['sVars']);
         } else {
             $sGets = $_SERVER['QUERY_STRING'];
         }
@@ -426,7 +442,7 @@ class Router
                         $sVars = str_replace('[' . $v_[0] . ']', $v_[1], $sVars);
                     } else {
                         $this->_aRoutingParse = array($v['_' . $v_[0]]);
-                        $sVars = $sVars . $this->_parseUrl($v_[1]);
+                        $sVars = $sVars . $this->_parseUrl($v_[1])['sVars'];
                     }
                 }
                 $this->parseArgs = $args;
@@ -434,7 +450,7 @@ class Router
             }
         }
 
-        return $sVars;
+        return array('v' => $v, 'sVars' => $sVars);
     }
 
     private function _transformParam($sParam, $k)
@@ -642,4 +658,5 @@ class Router
 
         return $result;
     }
+
 }
