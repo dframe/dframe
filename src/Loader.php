@@ -27,25 +27,6 @@ class Loader extends Core
     private $_fileExtension = '.php';
     private $_namespaceSeparator = '\\';
 
-    public function __construct($bootstrap = null)
-    {
-
-        if (!defined('APP_DIR')) {
-            throw new BaseException('Please Define appDir in Main config.php', 500);
-        }
-
-        if (!defined('SALT')) {
-            throw new BaseException('Please Define SALT in Main config.php', 500);
-        }
-
-        $this->baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
-
-        if (isset($this->baseClass->router)) {
-            $this->router = $this->baseClass->router;
-        }
-
-        return $this;
-    }
 
     /**
      * Metoda do includowania pliku modelu i wywołanie objektu przez namespace
@@ -54,9 +35,9 @@ class Loader extends Core
      *
      * @return object
      */
-    public function loadModel($name)
+    public function loadModel($name, $namespace = null)
     {
-        return $this->_loadObject($name, 'Model');
+        return $this->_loadObject($name, 'Model', $namespace);
     }
 
     /**
@@ -66,9 +47,9 @@ class Loader extends Core
      *
      * @return object
      */
-    public function loadView($name)
+    public function loadView($name, $namespace = null)
     {
-        return $this->_loadObject($name, 'View');
+        return $this->_loadObject($name, 'View', $namespace);
     }
 
     /**
@@ -79,8 +60,20 @@ class Loader extends Core
      *
      * @return object
      */
-    private function _loadObject($name, $type)
+    private function _loadObject($name, $type, $namespace = null)
     {
+
+        if (!empty($namespace)) {
+
+            $name = '\\' . $namespace . '\\Model\\' . $name;
+            $ob = new $name($this->baseClass);
+            if (method_exists($ob, 'init')) {
+                $ob->init();
+            }
+
+            return $ob;
+        }
+        //var_dump($this->namespace);
 
         if (!in_array($type, (array('Model', 'View')))) {
             return false;
@@ -154,8 +147,13 @@ class Loader extends Core
      * @param string $controller
      */
 
-    public function loadController($controller)
+    public function loadController($controller, $namespace = null)
     {
+
+        if (!empty($namespace)) {
+            $class = '\\' . $namespace . '\\Controller\\' . $controller;
+            return new $class($this->baseClass);
+        }
 
         $subControler = null;
         if (strstr($controller, ",") !== false) {
