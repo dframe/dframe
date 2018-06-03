@@ -33,8 +33,7 @@ class Core
 
 
         $this->baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
-
-        foreach ($bootstrap->providers as $key => $value) {
+        foreach ($bootstrap->providers ?? [] as $key => $value) {
             $var = new $value($this->baseClass);
             $var->register();
             $var->boot();

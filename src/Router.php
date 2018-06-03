@@ -60,8 +60,8 @@ class Router
         $this->aRouting = $routerConfig->get(); // For url
         $this->_aRoutingParse = $routerConfig->get('routes'); // For parsing array
 
-        $this->aRouting['routes'] = array_merge($this->aRouting['routes'], $this->app->config['router']['routes']);
-        $this->_aRoutingParse = array_merge($this->app->config['router']['routes'], $this->_aRoutingParse);
+        $this->aRouting['routes'] = array_merge($this->aRouting['routes'], $this->app->config['router']['routes'] ?? []);
+        $this->_aRoutingParse = array_merge($this->app->config['router']['routes'] ?? [], $this->_aRoutingParse);
 
         // Check forced HTTPS
         if ($this->https == true) {
