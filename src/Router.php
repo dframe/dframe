@@ -357,6 +357,9 @@ class Router
             $this->controller = !empty($_GET['task']) ? $_GET['task'] : $this->aRouting['NAME_CONTROLLER'];
             $this->action = !empty($_GET['action']) ? $_GET['action'] : $this->aRouting['NAME_METHOD'];
         }
+        
+        $_GET['task'] = $this->controller;
+        $_GET['action'] = $this->action;
     }
 
     public function currentPath()
