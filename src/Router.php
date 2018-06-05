@@ -351,7 +351,7 @@ class Router
             $this->action = !empty($aGets['action']) ? $aGets['action'] : $this->aRouting['NAME_METHOD'];
             unset($aGets['action']);
 
-            //$_GET = array_merge($_GET, $aGets);
+            $_GET = array_merge($_GET, $aGets);
 
         } else {
             $this->controller = !empty($_GET['task']) ? $_GET['task'] : $this->aRouting['NAME_CONTROLLER'];
