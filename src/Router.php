@@ -35,7 +35,7 @@ class Router
     private $_cacheDir = APP_DIR . 'View/cache/';
     public $routes;
 
-    public function __construct($baseClass)
+    public function __construct($baseClass = null)
     {
         $this->app = $baseClass;
 
