@@ -35,7 +35,7 @@ class Router
     private $_cacheDir = APP_DIR . 'View/cache/';
     public $routes;
 
-    public function __construct($baseClass)
+    public function __construct($baseClass = null)
     {
         $this->app = $baseClass;
 
@@ -351,13 +351,13 @@ class Router
             $this->action = !empty($aGets['action']) ? $aGets['action'] : $this->aRouting['NAME_METHOD'];
             unset($aGets['action']);
 
-            //$_GET = array_merge($_GET, $aGets);
+            $_GET = array_merge($_GET, $aGets);
 
         } else {
             $this->controller = !empty($_GET['task']) ? $_GET['task'] : $this->aRouting['NAME_CONTROLLER'];
             $this->action = !empty($_GET['action']) ? $_GET['action'] : $this->aRouting['NAME_METHOD'];
         }
-        
+
         $_GET['task'] = $this->controller;
         $_GET['action'] = $this->action;
     }
