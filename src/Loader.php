@@ -127,11 +127,10 @@ class Loader extends Core
 
 
             $routerConfig = Config::load('router');
+            $routes = $routerConfig->get('routes');
 
-            if (isset($routerConfig->get('error/400')[0])) {
-                return $this->router->redirect($routerConfig->get('error/400')[0], 400);
-            } elseif (isset($routerConfig->get('error/404')[0])) {
-                return $this->router->redirect($routerConfig->get('error/404')[0], 404);
+            if (!empty($routes['error/:code'])) {
+                return Response::redirect('error/:code?code=400', 400)->display();
             }
 
             return '_loadObject Error';
@@ -215,11 +214,10 @@ class Loader extends Core
             }
 
             $routerConfig = Config::load('router');
+            $routes = $routerConfig->get('routes');
 
-            if (isset($routerConfig->get('error/400')[0])) {
-                return $this->router->redirect($routerConfig->get('error/400')[0], 400);
-            } elseif (isset($routerConfig->get('error/404')[0])) {
-                return $this->router->redirect($routerConfig->get('error/404')[0], 404);
+            if (!empty($routes['error/:code'])) {
+                return Response::redirect('error/:code?code=400', 400)->display();
             }
 
             return 'loadController Error';
