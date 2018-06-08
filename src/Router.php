@@ -600,21 +600,26 @@ class Router
 
             $methods = $reflector->getMethods(\ReflectionMethod::IS_PUBLIC);
 
-            $result = '';
+            $routes = array();echo '<pre>';
+            $sVars = null;
             foreach ($methods as $m) {
+                $sVars = null;
                 if ($m->isStatic()) {
                     continue;
                 }
-
-                if (preg_match('/@Route\(\s*["\']([^\'"]*)["\'][^)]*\)/', $m->getDocComment(), $matches) === 1) {
+                
+                if (preg_match('/@Route\((.*)\)/', $m->getDocComment(), $matches) === 1) {
+                    // preg_match_all('(?![@Route(])([a-zA-Z0-9"[\]:_(.*)\/[=])+(?![);])', $matches, $args);
+                    // var_dump($args);
                     $routePath = $matches[1];
                     $route = $matches[0];
                     $methods = '\'GET\'';
+                    $routeParams = '';
 
-                    if (preg_match('/methods={([^}]*)}/', $route, $matches) === 1) {
-                        $methods = str_replace('"', "'", $matches[1]);
-                    }
-
+                    // if (preg_match('/methods={([^}]*)}/', $route, $matches) === 1) {
+                    //     $methods = str_replace('"', "'", $matches[1]);
+                    // }
+                    var_dump($matches);
                     $routeName = null;
                     if (preg_match('/name=["](.*)["]/', $route, $matches)) {
                         $routeName = $matches[1];
@@ -623,7 +628,7 @@ class Router
                     if (empty($routeName)) {
                         throw new \InvalidArgumentException('Incorect name', 403);
                     }
-
+                    
                     $routePath = ltrim($routePath, '/');
 
                     $lChar = substr($routePath, -1);
@@ -631,12 +636,37 @@ class Router
                         $routePath = $routePath . "/";
                     }
 
-                    $result .= "\r\n";
-                    $result .= "    '" . $routeName . "' => array(" . "\r\n";
-                    $result .= "        '" . $routePath . "'," . "\r\n";
-                    $result .= "        'task=" . $task . "&action=" . $m->name . "'," . "\r\n";
-                    $result .= "    )," . "\r\n";
+                    preg_match_all('!\[(.+?)\]!i', $routePath, $aExpression_);
+
+                    $iCount = count($aExpression_[0]);
+                    
+                    for ($i = 0; $i < $iCount; $i++) {
+                        // if ($i > 0) {
+                        //     $sVars .= '&' . preg_replace('!\[(.+?)\]!i', '[$1_' . $i . ']', $aExpression_[0][$i]);
+                        // } else {
+                            $sVars .= '&' . $aExpression_[1][$i].'='.$aExpression_[0][$i];
+                        // }
+                    }
+
+                    $routes[$routePath] = array (
+                        'routeName' => $routeName,
+                        'routePath' => $routePath,
+                        'task' => $task,
+                        'action' => $m->name,
+                        'parms' => $sVars
+                    );
                 }
+            }
+            usort($routes, function($a, $b) {
+                return strlen($b['routePath'])-strlen($a['routePath']);
+            });
+            $result = '';
+            foreach ($routes as $key => $route) {
+                $result .= "\r\n";
+                $result .= "    '" . $route['routeName'] . "' => array(" . "\r\n";
+                $result .= "        '" . $route['routePath'] . "'," . "\r\n";
+                $result .= "        'task=" . $route['task'] . "&action=" . $route['action'] . $sVars . "'," . "\r\n";
+                $result .= "    )," . "\r\n";
             }
         }
 
