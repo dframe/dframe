@@ -5,18 +5,16 @@
 
 The basic framework to help you build MVC project.
 
-##### Let's Start
-
 - [Requirements](#Requirements)
 - [Installation](https://dframeframework.com/en/docs/dframe/master/installation/overview)
 - [Documentation](https://dframeframework.com/page/docs)
 - [Overview](#overview)
-	- [Good Practice](docs/overview/GoodPractice.md)
-
-- Extensions
-	- [Router](docs/extensions/Router.md)
-	- [Session](docs/extensions/Session.md)
-	- [Messages](docs/extensions/Messages.md)
+    - [Good Practice](docs/overview/GoodPractice.md)
+- [Extensions](#)
+    - [Router](docs/extensions/Router.md)
+    - [Session](docs/extensions/Session.md)
+    - [Messages](docs/extensions/Messages.md)
+- [License](#license)
 
 
 ## What's included?
