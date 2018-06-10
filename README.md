@@ -5,7 +5,7 @@
 
 The basic framework to help you build MVC project.
 
-- [Requirements](#Requirements)
+- [Requirements](#requirements)
 - [Installation](https://dframeframework.com/en/docs/dframe/master/installation/overview)
 - [Documentation](https://dframeframework.com/page/docs)
 - [Overview](#overview)
