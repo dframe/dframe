@@ -288,7 +288,7 @@ class Router
     private function _parseUrl($sRequest)
     {
         $sVars = null;
-        $sRequest = str_replace('?', '/?', $sRequest);
+        $sRequest = str_replace('?', '&', $sRequest);
         foreach ($this->_aRoutingParse as $k => $v) {
             if (!is_array($v)) {
                 continue;
