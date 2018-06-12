@@ -37,7 +37,7 @@ class Router
         } elseif (!defined('HTTP_HOST')) {
             define('HTTP_HOST', '');
         }
-        
+
         $this->domain = HTTP_HOST;
         $aURI = explode('/', $_SERVER['SCRIPT_NAME']);
         array_pop($aURI);
@@ -615,7 +615,7 @@ class Router
                 }
             }
             usort($routes, function ($a, $b) {
-                return strlen($b['routePath']) - strlen($a['routePath']);
+                return strcmp($b['routePath'], $a['routePath']) ?: strlen($b['routePath']) - strlen($a['routePath']);
             });
             $result = '';
             foreach ($routes as $key => $route) {
