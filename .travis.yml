@@ -8,14 +8,8 @@ php:
 # We don't want to run linux commands as super user
 sudo: false
 
-# Tell Travis CI to monitor only 'master' branch
-branches:
-only: master
-
 install: 
    composer install
 
 script:
    - phpunit
-   - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then bash ./travis/run_on_pull_requests; fi'
-   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then bash ./travis/run_on_non_pull_requests; fi'
