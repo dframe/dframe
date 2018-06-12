@@ -8,11 +8,8 @@ php:
 # We don't want to run linux commands as super user
 sudo: false
 
-# Tell Travis CI to monitor only 'master' branch
-branches:
-only: master
-
 install: 
    composer install
 
-script: phpunit
+script:
+   - phpunit
