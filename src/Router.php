@@ -374,9 +374,11 @@ class Router
             }
 
             preg_match_all('!\[(.+?)\]!i', $v[0], $aExpression_);
-            $sExpression = preg_replace_callback('!\[(.+?)\]!i', function ($m) use ($k) {
-                return $this->_transformParam($m[1], $k);
-            }, $v[0]);
+            $sExpression = preg_replace_callback(
+                '!\[(.+?)\]!i', function ($m) use ($k) {
+                    return $this->_transformParam($m[1], $k);
+                }, $v[0]
+            );
 
 
             if (preg_match_all('!' . $sExpression . '!i', $sRequest, $aExpression__)) {
@@ -503,7 +505,7 @@ class Router
         }
         // We look for deleted controller files
         if (!$parsingNeeded && file_exists($this->_cacheDir . $this->_controllersFile)) {
-            require_once $this->_cacheDir . $this->_controllersFile;
+            include_once $this->_cacheDir . $this->_controllersFile;
             foreach ($this->_usedControllers as $controllerFile) {
                 if (!file_exists($controllerFile)) {
                     $parsingNeeded = true;

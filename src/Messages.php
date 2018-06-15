@@ -1,11 +1,12 @@
 <?php
+
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
- 
+
 namespace Dframe;
 
 use Dframe\BaseException;
@@ -24,15 +25,19 @@ class Messages
     public $msgId;
     public $msgTypes = array('help', 'info', 'warning', 'success', 'error');
 
-     /**
-      * Add a message to the queue
-      *
-      * @param Object $session
-      */
-    public function __construct(Session $session)
+    /**
+     * Add a message to the queue
+     *
+     * @param Object $session
+     */
+    public function __construct($session)
     {
         $this->session = $session;
-
+        // $this->session = new $app['session']();
+        // if(!$this->session instanceof \Dframe\Session){
+        //     throw new \Exception("This class Require instance Of Dframe\Session", 1);
+        // }
+        
         // Generate a unique ID for this user and session
         $this->msgId = md5(uniqid());
 
@@ -41,7 +46,7 @@ class Messages
             $this->session->set('flash_messages', array());
         }
     }
-    
+
     /**
      * Add a message to the queue
      *
@@ -61,31 +66,31 @@ class Messages
         if (strlen(trim($type)) == 1) {
             $type = str_replace(array('h', 'i', 'w', 'e', 's'), array('help', 'info', 'warning', 'error', 'success'), $type);
         }
-        
+
         $router = new Router();
 
         try {
             if (!in_array($type, $this->msgTypes)) {  // Make sure it's a valid message type
-                throw new BaseException('"'.strip_tags($type).'" is not a valid message type!', 501);
+                throw new BaseException('"' . strip_tags($type) . '" is not a valid message type!', 501);
             }
         } catch (BaseException $e) {
             $msg = null;
             if (ini_get('display_errors') == "on") {
                 $msg .= '<pre>';
-                $msg .= 'Message: <b>'.$e->getMessage().'</b><br><br>';
+                $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
 
-                $msg .= 'Accept: '.$_SERVER['HTTP_ACCEPT'].'<br>';
+                $msg .= 'Accept: ' . $_SERVER['HTTP_ACCEPT'] . '<br>';
                 if (isset($_SERVER['HTTP_REFERER'])) {
-                    $msg .= 'Referer: '.$_SERVER['HTTP_REFERER'].'<br><br>';
+                    $msg .= 'Referer: ' . $_SERVER['HTTP_REFERER'] . '<br><br>';
                 }
 
-                $msg .= 'Request Method: '.$_SERVER['REQUEST_METHOD'].'<br><br>';
+                $msg .= 'Request Method: ' . $_SERVER['REQUEST_METHOD'] . '<br><br>';
 
-                $msg .= 'Current file Path: <b>'.$this->router->currentPath().'</b><br>';
+                $msg .= 'Current file Path: <b>' . $this->router->currentPath() . '</b><br>';
 
-                
-                $msg .= 'File Exception: '.$e->getFile().':'.$e->getLine().'<br><br>';
-                $msg .= 'Trace: <br>'.$e->getTraceAsString().'<br>';
+
+                $msg .= 'File Exception: ' . $e->getFile() . ':' . $e->getLine() . '<br><br>';
+                $msg .= 'Trace: <br>' . $e->getTraceAsString() . '<br>';
                 $msg .= '</pre>';
 
                 return Response::create($msg)->display();
@@ -101,10 +106,10 @@ class Messages
         if (!is_null($redirect)) {
             return $router->redirect($redirect, 301);
         }
-        
+
         return true;
     }
-    
+
     /**
      * Display the queued messages
      *
@@ -154,8 +159,8 @@ class Messages
             return $data;
         }
     }
-    
-    
+
+
     /**
      * Check to  see if there are any queued error messages
      *
@@ -166,7 +171,7 @@ class Messages
         $flashMessages = $this->session->get('flash_messages');
         return empty($flashMessages['error']) ? false : true;
     }
-    
+
     /**
      * Check to see if there are any ($type) messages queued
      *
@@ -192,7 +197,7 @@ class Messages
 
         return false;
     }
-    
+
     /**
      * Clear messages from the session data
      *
@@ -209,7 +214,7 @@ class Messages
             unset($flashMessages[$type]);
             $this->session->set('flash_messages', $flashMessages);
         }
-        
+
         return true;
     }
 
