@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta

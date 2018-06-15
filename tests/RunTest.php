@@ -1,5 +1,6 @@
 <?php
 namespace Dframe\tests;
+
 ini_set('session.use_cookies', 0);
 
 session_start();
@@ -8,7 +9,7 @@ define('APP_DIR', '');
 define('SALT', 'RaNdOmTeSt');
 
 // backward compatibility
-if (!class_exists('\PHPUnit\Framework\TestCase') AND class_exists('\PHPUnit_Framework_TestCase')) {
+if (!class_exists('\PHPUnit\Framework\TestCase') and class_exists('\PHPUnit_Framework_TestCase')) {
     class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
 }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
@@ -29,7 +30,7 @@ class Router
     private $_usedControllers = [];
     private $_controllerDirs = APP_DIR . 'Controller/';
     private $_cacheDir = APP_DIR . 'View/cache/';
-    
+
     public function __construct()
     {
         if (!defined('HTTP_HOST') and isset($_SERVER['HTTP_HOST'])) {
@@ -244,7 +245,7 @@ class Router
                 $sExpressionUrl = '';
             } else {
                 if (isset($this->aRouting['routes'][$findKey])) {
-                    
+
                     $sExpressionUrl0 = $this->aRouting['routes'][$findKey][1];
                     foreach ($aParams as $key => $value) {
                         $sExpressionUrl0 = str_replace('[' . $key . ']', $value, $sExpressionUrl0, $count);
@@ -354,7 +355,7 @@ class Router
         if ($routingParse == null) {
             $routingParse = $this->_aRoutingParse;
         }
-        
+
         $sRequest = str_replace('?', '&', $sRequest);
         foreach ($routingParse as $k => $v) {
             if (!is_array($v)) {
@@ -363,9 +364,11 @@ class Router
 
             preg_match_all('!\[(.+?)\]!i', $v[0], $aExpression_);
             $sExpression = preg_replace_callback(
-                '!\[(.+?)\]!i', function ($m) use ($k) {
+                '!\[(.+?)\]!i',
+                function ($m) use ($k) {
                     return $this->_transformParam($m[1], $k);
-                }, $v[0]
+                },
+                $v[0]
             );
 
             if (preg_match_all('!' . $sExpression . '!i', $sRequest, $aExpression__)) {
@@ -582,7 +585,7 @@ class Router
                 if ($m->isStatic()) {
                     continue;
                 }
-            
+
                 if (preg_match('/@Route\(\s*(.*)*\)/', $m->getDocComment(), $matches) === 1) {
                     preg_match_all('/(?![(@Route()])([@a-zA-Z0-9"[\]:_> \'(.*)\/[=])+["]/', $matches[0], $route2);
                     $routeName = null;
@@ -592,7 +595,7 @@ class Router
                     if (empty($routeName)) {
                         throw new \InvalidArgumentException('Incorect name', 403);
                     }
-                    
+
                     $routePath = trim($route2[0][0], '"');
                     $routePath = trim($routePath);
                     $routePath = ltrim($routePath, '/');
@@ -617,8 +620,9 @@ class Router
                 }
             }
             usort(
-                $routes, function ($a, $b) {
-                    return strcmp($b['routePath'], $a['routePath']) ?: strlen($b['routePath']) - strlen($a['routePath']);
+                $routes,
+                function ($a, $b) {
+                    return strcmp($b['routePath'], $a['routePath']) ? : strlen($b['routePath']) - strlen($a['routePath']);
                 }
             );
             $result = '';
