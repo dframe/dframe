@@ -1,6 +1,6 @@
 {
     "name": "dframe/dframe",
-    "description": "Framework Dframe",
+    "description": "PHP Framework - Dframe",
     "keywords": [
         "framework",
         "dframe",
@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": ">=5.6"
+        "php": ">=7.0"
     },
     "suggest": {
         "smarty/smarty": "^3.1",
