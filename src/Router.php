@@ -550,10 +550,10 @@ class Router
     {
         $result = '';
         $appDir = str_replace('web/../app/', '', APP_DIR);
-        $task = str_replace($appDir . 'app\Controller\\', '', $file);
+        $task = str_replace($appDir . 'app'.DIRECTORY_SEPARATOR.'Controller'.DIRECTORY_SEPARATOR.'', '', $file);
         $task = rtrim($task, '.php');
-        $task = str_replace('\\', ',', $task);
-   
+        $task = str_replace(DIRECTORY_SEPARATOR, ',', $task);
+
         // We load file content
         $content = file_get_contents($file);
         // We search for namespace
@@ -568,7 +568,7 @@ class Router
             $className = ($namespace !== null) ? $namespace . '\\' . $matches[1] : $matches[1];
             // We find class infos
             $path = str_replace('Controller.php', '.php', $className . '.php');
-            $path = APP_DIR . str_replace("\\", "/", $path);
+            $path = APP_DIR . str_replace(DIRECTORY_SEPARATOR, "/", $path);
             if (is_file($path)) {
                 include_once $path;
             }
