@@ -568,7 +568,7 @@ class Router
             $className = ($namespace !== null) ? $namespace . '\\' . $matches[1] : $matches[1];
             // We find class infos
             $path = str_replace('Controller.php', '.php', $className . '.php');
-            $path = APP_DIR . str_replace(DIRECTORY_SEPARATOR, "/", $path);
+            $path = APP_DIR . str_replace('\\', "/", $path);
             if (is_file($path)) {
                 include_once $path;
             }
