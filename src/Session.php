@@ -1,11 +1,12 @@
 <?php
+
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
- 
+
 namespace Dframe;
 
 /**
@@ -16,9 +17,11 @@ namespace Dframe;
 
 class Session
 {
-    
-    function __construct($name = '_sessionName', $options = [])
+
+    function __construct()
     {
+        $name = '_sessionName';
+        $options = [];
 
         $this->name = $name;
 
@@ -30,16 +33,16 @@ class Session
                 'secure' => isset($options['cookie']['secure']) ? $options['cookie']['secure'] : isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : null,
                 'httponly' => isset($options['cookie']['httponly']) ? $options['cookie']['httponly'] : false,
             );
-            
+
             session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly']);
             session_name($this->name);
             session_start();
         }
-        
+
         if (php_sapi_name() != 'cli') {
             $this->ipAddress = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
             $this->userAgent = isset($_SERVER["HTTP_USER_AGENT"]) ? $_SERVER["HTTP_USER_AGENT"] : 'unknown';
-    
+
             if ($this->isValidFingerprint() != true) {
                 // Refresh Session
                 $_SESSION = array();
@@ -50,7 +53,7 @@ class Session
 
     private function _getFingerprint()
     {
-        return md5($this->ipAddress.$this->userAgent.$this->name);
+        return md5($this->ipAddress . $this->userAgent . $this->name);
     }
 
     /**
@@ -89,7 +92,7 @@ class Session
         if (array_key_exists($key, $in) == true) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -118,7 +121,7 @@ class Session
     {
         return isset($_SESSION[$key]) ? $_SESSION[$key] : $or;
     }
-    
+
     public function remove($key)
     {
         if (isset($_SESSION[$key])) {

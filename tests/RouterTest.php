@@ -11,7 +11,7 @@ if (!class_exists('\PHPUnit\Framework\TestCase') and class_exists('\PHPUnit_Fram
 
 class RouterTest extends \PHPUnit\Framework\TestCase
 {
- 
+
     public function testResponseJson()
     {
         $response = new Response();

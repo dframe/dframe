@@ -10,4 +10,5 @@ sudo: false
 install: 
    composer install
 
-script: phpunit
+script:
+   - phpunit

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
@@ -35,7 +36,7 @@ class Assetic extends Router
     {
         if (!is_dir($path)) {
             if (!mkdir($path, 0755, true)) {
-                throw new BaseException('Unable to create'.$path);
+                throw new BaseException('Unable to create' . $path);
             }
         }
     }
@@ -44,16 +45,16 @@ class Assetic extends Router
     {
 
         //Podstawowe sciezki
-        $srcPath = $this->aRouting['assets']['assetsPath'].$this->aRouting['assets']['assetsDir'].'/'.$sUrl;
+        $srcPath = $this->aRouting['assets']['assetsPath'] . $this->aRouting['assets']['assetsDir'] . '/' . $sUrl;
         if (is_null($path)) {
             $path = 'assets';
             if (isset($this->aRouting['assets']['assetsDir']) and !empty($this->aRouting['assets']['assetsDir'])) {
                 $path = $this->aRouting['assets']['assetsDir'];
                 $this->_checkDir($path);
             }
-            $dstPath = $this->aRouting['assets']['cachePath'].$path.'/'.$sUrl;
+            $dstPath = $this->aRouting['assets']['cachePath'] . $path . '/' . $sUrl;
         } else {
-            $dstPath = $this->aRouting['assets']['cachePath'].$path;
+            $dstPath = $this->aRouting['assets']['cachePath'] . $path;
         }
 
 
@@ -73,11 +74,11 @@ class Assetic extends Router
                 $jSqueeze = new JSqueeze();
                 $js = $jSqueeze->squeeze($js, true, true, false);
             }
-            
+
 
             if (!file_put_contents($dstPath, $js)) {
-                $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: ' . $srcPath.  ' TO ' . $dstPath . "\n";
-                $out = fopen(APP_DIR.'/View/logs/router.txt', "w");
+                $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: ' . $srcPath . ' TO ' . $dstPath . "\n";
+                $out = fopen(APP_DIR . '/View/logs/router.txt', "w");
                 fwrite($out, $str);
                 fclose($out);
             }
@@ -85,7 +86,7 @@ class Assetic extends Router
 
         //Zwrocenie linku do kopii
         $sExpressionUrl = $sUrl;
-        $sUrl = $this->requestPrefix.$this->aRouting['assets']['cacheUrl'].$path.'/';
+        $sUrl = $this->requestPrefix . $this->aRouting['assets']['cacheUrl'] . $path . '/';
         $sUrl .= $sExpressionUrl;
 
         return $sUrl;
@@ -95,16 +96,16 @@ class Assetic extends Router
     {
 
         //Podstawowe sciezki
-        $srcPath = $this->aRouting['assets']['assetsPath'].$this->aRouting['assets']['assetsDir'].'/'.$sUrl;
+        $srcPath = $this->aRouting['assets']['assetsPath'] . $this->aRouting['assets']['assetsDir'] . '/' . $sUrl;
         if (is_null($path)) {
             $path = 'assets';
             if (isset($this->aRouting['assets']['assetsDir']) and !empty($this->aRouting['assets']['assetsDir'])) {
                 $path = $this->aRouting['assets']['assetsDir'];
                 $this->_checkDir($path);
             }
-            $dstPath = $this->aRouting['assets']['cachePath'].$path.'/'.$sUrl;
+            $dstPath = $this->aRouting['assets']['cachePath'] . $path . '/' . $sUrl;
         } else {
-            $dstPath = $this->aRouting['assets']['cachePath'].$path;
+            $dstPath = $this->aRouting['assets']['cachePath'] . $path;
         }
 
 
@@ -126,7 +127,7 @@ class Assetic extends Router
                 if ($this->aRouting['assets']['minifyCssEnabled'] == true) {
                     $args[] = new CssMinFilter();
                 }
-                
+
                 $args[] = new PhpCssEmbedFilter();
                 $args[] = new CssRewriteFilter();
                 $args[] = new CssImportFilter();
@@ -144,22 +145,22 @@ class Assetic extends Router
             $srcPathinfo = pathinfo($srcPath);
 
             foreach ($m['1'] as $key => $url) {
-                $subPathinfo = pathinfo($pathinfo['dirname'].'/'.$url);
+                $subPathinfo = pathinfo($pathinfo['dirname'] . '/' . $url);
                 if (!file_exists($subPathinfo['dirname'])) {
                     mkdir($subPathinfo['dirname'], 0777, true);
                 }
 
-                if (!copy($srcPathinfo['dirname'].'/'.$url, $pathinfo['dirname'].'/'.$url)) {
-                    $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: '.$srcPathinfo['dirname'].'/'.$url.' TO '.$pathinfo['dirname'].'/'.$url . "\n";
-                    $out = fopen(APP_DIR.'View/logs/router.txt', "w");
+                if (!copy($srcPathinfo['dirname'] . '/' . $url, $pathinfo['dirname'] . '/' . $url)) {
+                    $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: ' . $srcPathinfo['dirname'] . '/' . $url . ' TO ' . $pathinfo['dirname'] . '/' . $url . "\n";
+                    $out = fopen(APP_DIR . 'View/logs/router.txt', "w");
                     fwrite($out, $str);
                     fclose($out);
                 }
             }
 
             if (!file_put_contents($dstPath, $css->dump())) {
-                $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: '.$srcPath.' TO '.$dstPath . "\n";
-                $out = fopen(APP_DIR.'/View/logs/router.txt', "w");
+                $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: ' . $srcPath . ' TO ' . $dstPath . "\n";
+                $out = fopen(APP_DIR . '/View/logs/router.txt', "w");
                 fwrite($out, $str);
                 fclose($out);
             }
@@ -167,7 +168,7 @@ class Assetic extends Router
 
         //Zwrocenie linku do kopii
         $sExpressionUrl = $sUrl;
-        $sUrl = $this->requestPrefix.$this->aRouting['assets']['cacheUrl'].$path.'/';
+        $sUrl = $this->requestPrefix . $this->aRouting['assets']['cacheUrl'] . $path . '/';
         $sUrl .= $sExpressionUrl;
 
         return $sUrl;

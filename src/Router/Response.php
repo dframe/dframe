@@ -136,7 +136,7 @@ class Response extends Router
     /**
      * Przekierowanie adresu
      *
-     * @param string $url CONTROLLER/MODEL?parametry
+     * @param  string $url CONTROLLER/MODEL?parametry
      * @return void
      */
     public static function redirect($url = '', $status = 301, $headers = array())

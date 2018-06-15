@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
@@ -69,7 +70,7 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
         }
         return $this->view->renderInclude($name, $path);
     }
-     
+
     /**
      * Display JSON.
      *
@@ -83,7 +84,7 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
     {
         exit(Response::Create(json_encode($data))->status($status)->headers(array('Content-Type' => 'application/json'))->display());
     }
- 
+
     /**
      * Display JSONP.
      *
@@ -91,14 +92,14 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
      *
      * @return Json with Calback
      */
-    
+
     public function renderJSONP($data)
     {
         $callback = null;
         if (isset($_GET['callback'])) {
             $callback = $_GET['callback'];
         }
-        
+
         exit(Response::Create($callback . '(' . json_encode($data) . ')')->headers(array('Content-Type' => 'application/jsonp'))->display());
     }
 }

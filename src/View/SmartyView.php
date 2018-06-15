@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
@@ -17,7 +18,7 @@ use Dframe\Config;
  */
 class SmartyView implements \Dframe\View\ViewInterface
 {
-    
+
     public function __construct()
     {
         $smartyConfig = Config::load('view/smarty');
@@ -43,15 +44,15 @@ class SmartyView implements \Dframe\View\ViewInterface
     {
         try {
             if ($this->smarty->getTemplateVars($name) !== null) {
-                throw new \Exception('You can\'t assign "'.$name . '" in Smarty');
+                throw new \Exception('You can\'t assign "' . $name . '" in Smarty');
             }
-            
+
             $assign = $this->smarty->assign($name, $value);
         } catch (Exception $e) {
-            echo $e->getMessage().'<br />
-                File: '.$e->getFile().'<br />
-                Code line: '.$e->getLine().'<br />
-                Trace: '.$e->getTraceAsString();
+            echo $e->getMessage() . '<br />
+                File: ' . $e->getFile() . '<br />
+                Code line: ' . $e->getLine() . '<br />
+                Trace: ' . $e->getTraceAsString();
             exit();
         }
 
@@ -73,22 +74,22 @@ class SmartyView implements \Dframe\View\ViewInterface
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
         $name = $pathFile[1];
-        
+
         if ($path == null) {
-            $path = $smartyConfig->get('setTemplateDir').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
+            $path = $smartyConfig->get('setTemplateDir') . '/' . $folder . $name . $smartyConfig->get('fileExtension', '.html.php');
         }
 
         try {
             if (!is_file($path)) {
-                throw new \Exception('Can not open template '.$name.' in: '.$path);
+                throw new \Exception('Can not open template ' . $name . ' in: ' . $path);
             }
 
             $fetch = $this->smarty->fetch($path); // Ładowanie widoku
         } catch (Exception $e) {
-            echo $e->getMessage().'<br />
-                File: '.$e->getFile().'<br />
-                Code line: '.$e->getLine().'<br />
-                Trace: '.$e->getTraceAsString();
+            echo $e->getMessage() . '<br />
+                File: ' . $e->getFile() . '<br />
+                Code line: ' . $e->getLine() . '<br />
+                Trace: ' . $e->getTraceAsString();
             exit();
         }
 
@@ -107,26 +108,26 @@ class SmartyView implements \Dframe\View\ViewInterface
     {
 
         $smartyConfig = Config::load('view/smarty');
-        
+
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
         if ($path == null) {
-            $path = $smartyConfig->get('setTemplateDir').'/'.$folder.$name.$smartyConfig->get('fileExtension', '.html.php');
+            $path = $smartyConfig->get('setTemplateDir') . '/' . $folder . $name . $smartyConfig->get('fileExtension', '.html.php');
         }
-        
+
         try {
             if (!is_file($path)) {
-                throw new \Exception('Can not open template '.$name.' in: '.$path);
+                throw new \Exception('Can not open template ' . $name . ' in: ' . $path);
             }
 
             return $this->smarty->display($path); // Ładowanie widoku
         } catch (Exception $e) {
-            echo $e->getMessage().'<br />
-                File: '.$e->getFile().'<br />
-                Code line: '.$e->getLine().'<br />
-                Trace: '.$e->getTraceAsString();
+            echo $e->getMessage() . '<br />
+                File: ' . $e->getFile() . '<br />
+                Code line: ' . $e->getLine() . '<br />
+                Trace: ' . $e->getTraceAsString();
             exit();
         }
     }
