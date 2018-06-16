@@ -117,6 +117,7 @@ class Router
 
         // Check forced HTTPS
         if ($this->https == true) {
+            $this->requestPrefix = 'https://';
             // If forced than redirect
             if (isset($_SERVER['REQUEST_SCHEME']) and ((!empty($_SERVER['REQUEST_SCHEME']) and $_SERVER['REQUEST_SCHEME'] == 'http'))) {
                 return Response::create()->headers(
@@ -290,9 +291,9 @@ class Router
         $sUrl = $this->requestPrefix . $this->domain . '/' . $path;
         $sUrl .= $sExpressionUrl;
 
-        // unset($this->_subdomain);
-        // $this->domain = HTTP_HOST;
-        // $this->setHttps($this->routerConfig->get('https', false));
+        unset($this->_subdomain);
+        $this->domain = HTTP_HOST;
+        $this->setHttps($this->routerConfig->get('https', false));
         
         return $sUrl;
     }
