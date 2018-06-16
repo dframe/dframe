@@ -579,7 +579,11 @@ class Router
     private function _parseFile($file)
     {
         $result = '';
+        //Windows
         $appDir = str_replace('web/../app/', '', APP_DIR);
+        //All
+        $appDir = str_replace('web'. DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . '', '', APP_DIR);
+
         $task = str_replace($appDir . 'app'.DIRECTORY_SEPARATOR.'Controller'.DIRECTORY_SEPARATOR.'', '', $file);
         $task = rtrim($task, '.php');
         $task = str_replace(DIRECTORY_SEPARATOR, ',', $task);
