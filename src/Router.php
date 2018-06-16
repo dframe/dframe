@@ -112,49 +112,53 @@ class Router
                 $this->requestPrefix = 'https://';
             }
         }
-
-        $routesFile = 'routes.php';
-        $controllersFile = 'controllers.php';
-        $usedControllers = array();
-        $controllerDirs = APP_DIR . 'Controller/';
-        $cacheDir = APP_DIR . 'View/cache/';
+        
+        if (PHP_SAPI !== 'cli') {
+            $routesFile = 'routes.php';
+            $controllersFile = 'controllers.php';
+            $usedControllers = array();
+            $controllerDirs = APP_DIR . 'Controller/';
+            $cacheDir = APP_DIR . 'View/cache/';
 
         // We save controller dirs
-        if (is_string($controllerDirs)) {
-            $controllerDirs = [$controllerDirs];
-        }
-
-        if (!is_array($controllerDirs)) {
-            throw new \InvalidArgumentException('Controllers directory must be either string or array');
-        }
-
-        $this->_controllerDirs = [];
-        foreach ($controllerDirs as $d) {
-            $realPath = realPath($d);
-            if ($realPath !== false) {
-                $this->_controllerDirs[] = $realPath;
+            if (is_string($controllerDirs)) {
+                $controllerDirs = [$controllerDirs];
             }
-        }
+
+            if (!is_array($controllerDirs)) {
+                throw new \InvalidArgumentException('Controllers directory must be either string or array');
+            }
+
+            $this->_controllerDirs = [];
+            foreach ($controllerDirs as $d) {
+                $realPath = realPath($d);
+                if ($realPath !== false) {
+                    $this->_controllerDirs[] = $realPath;
+                }
+            }
 
         // We save the cache dir
-        if (!is_dir($cacheDir)) {
-            $result = @mkdir($cacheDir, 0777, true);
-            if ($result === false) {
-                throw new \RuntimeException('Can\'t create cache directory');
+            if (!is_dir($cacheDir)) {
+                $result = @mkdir($cacheDir, 0777, true);
+                if ($result === false) {
+                    throw new \RuntimeException('Can\'t create cache directory');
+                }
             }
-        }
 
-        if (!is_writable($cacheDir)) {
-            throw new \RuntimeException('Cache directory must be writable by web server');
-        }
+            if (!is_writable($cacheDir)) {
+                throw new \RuntimeException('Cache directory must be writable by web server');
+            }
 
-        $this->_cacheDir = rtrim($cacheDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        $this->_generateRoutes();
+            $this->_cacheDir = rtrim($cacheDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 
-        $routesConfig = Config::load('routes', APP_DIR . 'View/cache/')->get();
-        if (!empty($routesConfig)) {
-            $this->_aRoutingParse = array_merge($routesConfig, $this->_aRoutingParse);
-            $this->aRouting['routes'] = array_merge($routesConfig, $this->aRouting['routes']);
+
+            $this->_generateRoutes();
+
+            $routesConfig = Config::load('routes', APP_DIR . 'View/cache/')->get();
+            if (!empty($routesConfig)) {
+                $this->_aRoutingParse = array_merge($routesConfig, $this->_aRoutingParse);
+                $this->aRouting['routes'] = array_merge($routesConfig, $this->aRouting['routes']);
+            }
         }
 
     }
@@ -233,7 +237,7 @@ class Router
      */
     public function isActive($url)
     {
-        if ($this->makeUrl($url, true) == str_replace($this->_sURI, '', $_SERVER['REQUEST_URI'])) {
+        if ($this->makeUrl($url, true) == str_replace($this->_sURI, '', $_SERVER['REQUEST_URI'] ?? '')) {
             return true;
         }
 
