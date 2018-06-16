@@ -166,7 +166,7 @@ class Router
     }
 
     /**
-     * @parms string ||array $url (folder,)controller/action
+     * @params string ||array $url (folder,)controller/action
      * Sprawdzanie czy to jest aktualnie wybrana zakładka
      */
     public function isActive($url)
@@ -214,7 +214,8 @@ class Router
             $findKey = $findKey[0];
         }
 
-        if (MOD_REWRITE) {
+        if (defined('MOD_REWRITE') and MOD_REWRITE == true) {
+
             if (isset($this->aRouting['routes'][$findKey])) {
 
                 $sExpressionUrl = $this->aRouting['routes'][$findKey][0];
@@ -310,7 +311,7 @@ class Router
     public function parseGets()
     {
         $sRequest = preg_replace('!' . $this->_sURI . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
-        if (MOD_REWRITE) {
+        if (defined('MOD_REWRITE') and MOD_REWRITE == true) {
 
             if (substr($sRequest, -1) != '/') {
                 $sRequest .= '/';
@@ -334,7 +335,7 @@ class Router
     {
         $sRequest = preg_replace('!' . $this->_sURI . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
 
-        if (MOD_REWRITE) {
+        if (defined('MOD_REWRITE') and MOD_REWRITE == true) {
             if (substr($sRequest, -1) != '/') {
                 $sRequest .= '/';
             }
