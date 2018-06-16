@@ -43,9 +43,6 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testResponseRedirect()
     {
-        define('HTTP_HOST', 'dframeframework.com');
-        define('MOD_REWRITE', false);
-
         $response = Response::redirect();
         $this->assertSame(array('Location' => 'http://dframeframework.com'), $response->getHeaders());
     }
