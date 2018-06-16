@@ -10,7 +10,7 @@
 namespace Dframe;
 
 /**
- * Short Description
+ * Token Class
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
@@ -51,6 +51,7 @@ class Token
     /**
      * @param string $key
      * @param null   $default
+     * 
      * @return mixed
      */
 
@@ -67,9 +68,9 @@ class Token
      * @param string $key
      * @param mixed  $value
      * @param null   $ttl
+     * 
      * @return bool
      */
-
     public function set($key, $value, $ttl = null)
     {
         $this->token[$key] = $value;
@@ -115,9 +116,9 @@ class Token
 
     /**
      * @param string $key
+     * 
      * @return bool
      */
-
     public function has($key)
     {
         return $this->isValid($key);

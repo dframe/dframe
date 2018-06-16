@@ -14,7 +14,7 @@ use Dframe\Session;
 use Dframe\Router;
 
 /**
- * Short Description
+ * Message Class
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  * @author Mike Everhart <mike@plasticbrain.net>

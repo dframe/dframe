@@ -14,7 +14,7 @@ use Dframe\Router;
 use Dframe\Router\Response;
 
 /**
- * View support
+ * View Class
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */

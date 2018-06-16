@@ -13,7 +13,7 @@ use Dframe\Router;
 use Dframe\Router\Response;
 
 /**
- * Short Description
+ * Core Class
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */

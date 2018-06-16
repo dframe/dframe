@@ -12,7 +12,7 @@ namespace Dframe;
 use Dframe\BaseException;
 
 /**
- * Short Description
+ * Config Class
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
@@ -26,7 +26,7 @@ class Config
     public function __construct($file, $path = '')
     {
 
-        $this->path = (isset($path) and !empty($path)) ? $path : APP_DIR . $path . 'Config/';
+        $this->path = (isset($path) and !empty($path)) ? $path : APP_DIR . $path . 'Config'. DIRECTORY_SEPARATOR;
 
         $this->_file = $file;
         if (file_exists($this->path . $this->_file . '.php') != true) {

@@ -15,7 +15,7 @@ use Dframe\Core;
 use Dframe\Router\Response;
 
 /**
- * Short Description
+ * Loader Class
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */

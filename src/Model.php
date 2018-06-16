@@ -10,7 +10,7 @@
 namespace Dframe;
 
 /**
- * Short Description
+ * Model Class
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
