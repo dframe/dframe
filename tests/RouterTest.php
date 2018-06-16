@@ -55,12 +55,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
     public function testPublicWeb()
     {
-        if (!defined('HTTP_HOST')) {
-            define('HTTP_HOST', 'dframeframework.com');
-            define('MOD_REWRITE', true);
-        }
-
-        $this->assertSame ('http://dframeframework.com/css/example.css', $this->router->publicWeb ('css/example.css'));
+        $this->assertSame('http://dframeframework.com/css/example.css', $this->router->publicWeb('css/example.css'));
         $this->assertSame('http://dframeframework.com/deep/css/example.css', $this->router->publicWeb('css/example.css', 'deep/'));
     }
 
@@ -71,7 +66,6 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('http://test.dframeframework.com/page/index', $this->router->subdomain('test')->makeUrl('page/:page?page=index'));
         $this->assertSame('https://dframeframework.com/page/index', $this->router->setHttps(true)->makeUrl('page/:page?page=index'));
         $this->assertSame('http://dframeframework.com/page/index', $this->router->makeUrl('page/:page?page=index'));
-
     }
 
 }
