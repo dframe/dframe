@@ -2,7 +2,7 @@
 namespace Dframe\tests;
 
 use PHPUnit\Framework\TestCase;
-use Dframe\Router\Response;
+use Dframe\Router;
 
 // backward compatibility
 if (!class_exists('\PHPUnit\Framework\TestCase') and class_exists('\PHPUnit_Framework_TestCase')) {
@@ -12,11 +12,14 @@ if (!class_exists('\PHPUnit\Framework\TestCase') and class_exists('\PHPUnit_Fram
 class RouterTest extends \PHPUnit\Framework\TestCase
 {
 
-    public function testResponseJson()
+    public function setUp() {
+        $this->router = new Router();
+    }
+
+    public function testRouterIsActive()
     {
-        $response = new Response();
-        $response->json(array('foo' => 'bar'));
-        $this->assertSame('{"foo":"bar"}', $response->getBody());
+        $this->assertSame(true, $this->router->isActive(''));
+        $this->assertSame(false, $this->router->isActive('this-is-not-page-that-you-looking-for'));
     }
 
 }
