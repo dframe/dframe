@@ -55,7 +55,12 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
     public function testPublicWeb()
     {
-        $this->assertSame('http://dframeframework.com/css/example.css', $this->router->publicWeb('css/example.css'));
+        if (!defined('HTTP_HOST')) {
+            define('HTTP_HOST', 'dframeframework.com');
+            define('MOD_REWRITE', true);
+        }
+
+        $this->assertSame ('http://dframeframework.com/css/example.css', $this->router->publicWeb ('css/example.css'));
         $this->assertSame('http://dframeframework.com/deep/css/example.css', $this->router->publicWeb('css/example.css', 'deep/'));
     }
 
