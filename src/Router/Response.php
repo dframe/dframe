@@ -84,7 +84,7 @@ class Response extends Router
         510 => 'Not Extended'
     );
 
-    public function __construct($body = '')
+    public function __construct($body = null)
     {
         if (isset($body)) {
             $this->_body = $body;
@@ -145,11 +145,15 @@ class Response extends Router
         $Response = new Response();
         $Response->status($status);
 
-        $headers = array(
-            'Location' => (new Router)->makeUrl($url)
-        );
+        if (!empty($headers)) {
+            $Response->headers($headers);
+        }
 
-        $Response->headers($headers);
+        $Response->headers(array(
+            'Location' => (new Router)->makeUrl($url)
+        ));
+
+
         return $Response;
     }
 
@@ -166,10 +170,20 @@ class Response extends Router
         return $this;
     }
 
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
     public function headers($headers = false)
     {
-        $this->_headers = array_merge($this->_headers, $headers);
+        $this->_headers = array_unique(array_merge($this->_headers, $headers));
         return $this;
+    }
+
+    public function getHeaders()
+    {
+        return $this->_headers;
     }
 
     public function body($body = null)
