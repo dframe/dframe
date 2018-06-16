@@ -30,7 +30,6 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
      * 
      * @return void
      */
-
     public function assign($name, $value)
     {
         if (!isset($this->view)) {
