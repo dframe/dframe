@@ -290,9 +290,9 @@ class Router
         $sUrl = $this->requestPrefix . $this->domain . '/' . $path;
         $sUrl .= $sExpressionUrl;
 
-        unset($this->_subdomain);
-        $this->domain = HTTP_HOST;
-        $this->setHttps($this->routerConfig->get('https', false));
+        // unset($this->_subdomain);
+        // $this->domain = HTTP_HOST;
+        // $this->setHttps($this->routerConfig->get('https', false));
         
         return $sUrl;
     }
