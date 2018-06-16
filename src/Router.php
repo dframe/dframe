@@ -85,9 +85,6 @@ class Router
             define('HTTP_HOST', '');
         }
 
-        // for travis
-        var_dump(HTTP_HOST);
-
         $this->domain = HTTP_HOST;
         $aURI = explode('/', $_SERVER['SCRIPT_NAME']);
         array_pop($aURI);
