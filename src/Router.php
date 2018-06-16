@@ -90,14 +90,33 @@ class Router
         array_pop($aURI);
         $this->_sURI = implode('/', $aURI) . '/';
         $this->_sURI = str_replace('/web/', '/', $this->_sURI);
-        $routerConfig = Config::load('router');
-        $this->_setHttps($routerConfig->get('https', false));
-        $this->aRouting = $routerConfig->get(); // For url
-        $this->_aRoutingParse = $routerConfig->get('routes'); // For parsing array
+
+        $this->routerConfig = Config::load('router');
+
+        $this->setHttps($this->routerConfig->get('https', false));
+        $this->aRouting = $this->routerConfig->get(true, array(
+            'https' => false,
+            'NAME_CONTROLLER' => '',
+            'NAME_METHOD' => '',
+            'publicWeb' => '',
+            'assetsPath' => '',
+            'routes' => array(
+                'default' => array(
+                    '[task]/[action]/[params]',
+                    'task=[task]&action=[action]',
+                    'params' => '(.*)',
+                    '_params' => array(
+                        '[name]/[value]/',
+                        '[name]=[value]'
+                    )
+                ),
+            )
+        )); // For url
+
+        $this->_aRoutingParse = $this->routerConfig->get('routes', $this->aRouting['routes']); // For parsing array
 
         // Check forced HTTPS
         if ($this->https == true) {
-            $this->requestPrefix = 'https://';
             // If forced than redirect
             if (isset($_SERVER['REQUEST_SCHEME']) and ((!empty($_SERVER['REQUEST_SCHEME']) and $_SERVER['REQUEST_SCHEME'] == 'http'))) {
                 return Response::create()->headers(
@@ -106,13 +125,14 @@ class Router
                     ]
                 )->display();
             }
+
         } else {
             $this->requestPrefix = 'http://';
             if ((isset($_SERVER['REQUEST_SCHEME']) and (!empty($_SERVER['REQUEST_SCHEME']) and ($_SERVER['REQUEST_SCHEME'] == 'https') or !empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] == 'on') or (!empty($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] == '443'))) {
                 $this->requestPrefix = 'https://';
             }
         }
-        
+
         if (PHP_SAPI !== 'cli') {
             $routesFile = 'routes.php';
             $controllersFile = 'controllers.php';
@@ -137,7 +157,7 @@ class Router
                 }
             }
 
-        // We save the cache dir
+            // We save the cache dir
             if (!is_dir($cacheDir)) {
                 $result = @mkdir($cacheDir, 0777, true);
                 if ($result === false) {
@@ -219,13 +239,21 @@ class Router
      * 
      */
 
-    private function _setHttps($option = false)
+    public function setHttps($option = false)
     {
         if (!in_array($option, array(true, false))) {
             throw new \InvalidArgumentException('Incorect option', 403);
         }
+        
+        if($option == true){
+            $this->requestPrefix = 'https://';
+        }else{
+            $this->requestPrefix = 'http://';
+        }
+        
 
         $this->https = $option;
+        return $this;
     }
 
     /**
@@ -237,7 +265,7 @@ class Router
      */
     public function isActive($url)
     {
-        if ($this->makeUrl($url, true) == str_replace($this->_sURI, '', $_SERVER['REQUEST_URI'] ?? '')) {
+        if ($this->makeUrl($url, true) == str_replace($this->_sURI, '', $_SERVER['REQUEST_URI'])) {
             return true;
         }
 
@@ -262,6 +290,10 @@ class Router
         $sUrl = $this->requestPrefix . $this->domain . '/' . $path;
         $sUrl .= $sExpressionUrl;
 
+        unset($this->_subdomain);
+        $this->domain = HTTP_HOST;
+        $this->setHttps($this->routerConfig->get('https', false));
+        
         return $sUrl;
     }
 
@@ -275,6 +307,7 @@ class Router
      */
     public function makeUrl(string $sUrl = null, $onlyExt = false)
     {
+
         $aParamsHook = explode('#', $sUrl);
         $aParams = explode('?', $aParamsHook[0]);
         $aParams_ = explode('/', $aParams[0]);
@@ -376,6 +409,11 @@ class Router
         $sUrl .= $sExpressionUrl;
         $sUrl = rtrim($sUrl, '/');
 
+
+        unset($this->_subdomain);
+        $this->domain = HTTP_HOST;
+        $this->setHttps($this->routerConfig->get('https', false));
+
         return $sUrl;
     }
 
@@ -433,16 +471,15 @@ class Router
     public function currentPath()
     {
         $sRequest = preg_replace('!' . $this->_sURI . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
-
         if (defined('MOD_REWRITE') and MOD_REWRITE == true) {
+
             if (substr($sRequest, -1) != '/') {
                 $sRequest .= '/';
             }
 
             $sGets = $this->_parseUrl($sRequest);
+            var_dump($sGets);
             $sGets = str_replace('?', '&', $sGets);
-        } else {
-            $sGets = $_SERVER['QUERY_STRING'];
         }
 
         return $sGets;
@@ -465,6 +502,7 @@ class Router
         }
 
         $sRequest = str_replace('?', '&', $sRequest);
+        
         foreach ($routingParse as $k => $v) {
             if (!is_array($v)) {
                 continue;
@@ -613,6 +651,7 @@ class Router
      */
     public function addRoute($newRoute)
     {
+        $this->aRouting['routes'] = array_merge($this->aRouting['routes'], $newRoute);
         $this->_aRoutingParse = array_merge($this->_aRoutingParse, $newRoute);
     }
 
