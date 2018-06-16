@@ -17,6 +17,14 @@ namespace Dframe;
 abstract class Model extends Loader
 {
 
+    /**
+     * Standard method for returning the result from the method
+     *
+     * @param boolean $type
+     * @param array $array
+     * 
+     * @return array
+     */
     public function methodResult($type, $array = null)
     {
         if (!is_null($array)) {
@@ -26,6 +34,13 @@ abstract class Model extends Loader
         return array('return' => $type);
     }
 
+    /**
+     * Standard method for returning  result from the method
+     *
+     * @param array $errors
+     * 
+     * @return array
+     */
     public function methodFail($errors = null)
     {
         if ($errors === null) {
@@ -39,6 +54,9 @@ abstract class Model extends Loader
         return $this->methodResult(false, array('errors' => $errors));
     }
 
+    /**
+     * Init method
+     */
     public function init()
     {
     }
