@@ -13,24 +13,70 @@ use Dframe\Loader;
 use Dframe\Router\Response;
 
 /**
- * Short Description
+ * Router class
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
 class Router
 {
-    public $aRouting;
-    private $_aRoutingParse;
+    /**
+     * @var string[]
+     */
+    public $aRouting = array();
+
+    /**
+     * @var string[]
+     */
+    private $_aRoutingParse = array();
+
+    /**
+     * @var string
+     */
     private $_sURI;
+
+    /**
+     * @var boolean
+     */
     private $_subdomain = false;
+
+    /**
+     * Delay Redirect
+     */
     public $delay = null;
+
+    /**
+     * @var string[]
+     */
     public $parseArgs = array();
+
+    /**
+     * @var string
+     */
     private $_routesFile = 'routes.php';
+
+    /**
+     * @var string
+     */
     private $_controllersFile = 'controllers.php';
+
+    /**
+     * @var string[]
+     */
     private $_usedControllers = [];
+
+    /**
+     * @var string
+     */
     private $_controllerDirs = APP_DIR . 'Controller/';
+
+    /**
+     * @var string
+     */
     private $_cacheDir = APP_DIR . 'View/cache/';
 
+    /**
+     * __construct Class
+     */
     public function __construct()
     {
         if (!defined('HTTP_HOST') and isset($_SERVER['HTTP_HOST'])) {
@@ -113,6 +159,12 @@ class Router
 
     }
 
+    /**
+     * Display Controller result
+     * 
+     * @param boolen|Response
+     * 
+     */
     public function run($controller = null, $action = null, $arg = array())
     {
         if (is_null($controller) and is_null($action)) {
@@ -156,6 +208,13 @@ class Router
         return true;
     }
 
+    /**
+     * Set up http/https
+     * 
+     * @param boolen $option
+     * 
+     */
+
     private function _setHttps($option = false)
     {
         if (!in_array($option, array(true, false))) {
@@ -166,8 +225,11 @@ class Router
     }
 
     /**
-     * @params string ||array $url (folder,)controller/action
-     * Sprawdzanie czy to jest aktualnie wybrana zakładka
+     * Check current active page
+     * 
+     * @param string|array $url
+     * 
+     * @return boolen
      */
     public function isActive($url)
     {
@@ -178,6 +240,14 @@ class Router
         return false;
     }
 
+    /**
+     * Gerenate full url for files
+     * 
+     * @param string $sUrl
+     * @param string $path
+     * 
+     * @return string
+     */
     public function publicWeb($sUrl = null, $path = null)
     {
         if (is_null($path)) {
@@ -191,6 +261,14 @@ class Router
         return $sUrl;
     }
 
+    /**
+     * Gerenate url
+     * 
+     * @param string $sUrl
+     * @param string $onlyExt
+     * 
+     * @return string
+     */
     public function makeUrl(string $sUrl = null, $onlyExt = false)
     {
         $aParamsHook = explode('#', $sUrl);
@@ -297,6 +375,14 @@ class Router
         return $sUrl;
     }
 
+    /**
+     * Parse url params into a 'request' 
+     * 
+     * @param string $sRouting
+     * @param string $aParams
+     * 
+     * @return string
+     */
     private function _parseParams($sRouting, $aParams)
     {
         $sReturn = null;
@@ -308,6 +394,9 @@ class Router
         return $sReturn;
     }
 
+    /**
+     * Parse request
+     */
     public function parseGets()
     {
         $sRequest = preg_replace('!' . $this->_sURI . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
@@ -331,6 +420,12 @@ class Router
         }
     }
 
+
+    /**
+     * Return Current path
+     * 
+     * @return string
+     */
     public function currentPath()
     {
         $sRequest = preg_replace('!' . $this->_sURI . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
@@ -349,6 +444,14 @@ class Router
         return $sGets;
     }
 
+    /**
+     * Match given request
+     * 
+     * @param string $sRequest
+     * @param string $routingParse
+     * 
+     * @return string
+     */
     private function _parseUrl($sRequest, $routingParse = null)
     {
         $sVars = null;
@@ -428,6 +531,14 @@ class Router
         return $sVars;
     }
 
+    /**
+     * Prepares the regexp
+     * 
+     * @param string $sParam
+     * @param string $k
+     * 
+     * @return string
+     */
     private function _transformParam($sParam, $k)
     {
         if (isset($this->_aRoutingParse[$k][$sParam]) and !is_array($this->_aRoutingParse[$k][$sParam])) {
@@ -438,34 +549,64 @@ class Router
     }
 
     /**
-     * Przekierowanie adresu
+     * Redirect
      *
-     * @param  string $url CONTROLLER/MODEL?parametry
-     * @return void
+     * @param string $url The URI
+     * @param string $status
+     * 
+     * @return object
      */
     public static function redirect($url = '', $status = 301)
     {
         return Response::redirect($url, $status);
     }
 
+    /**
+     * Redirect delay
+     *
+     * @param string $delay time in seconds
+     * 
+     * @return object
+     */
     public function delay(int $delay)
     {
         $this->delay = $delay;
         return $this;
     }
 
+    /**
+     * Set up subdomain prefix
+     *
+     * @param string $subdomain
+     * 
+     * @return object
+     */
     public function subdomain($subdomain)
     {
         $this->_subdomain = $subdomain;
         return $this;
     }
 
+    /**
+     * Set up domain
+     *
+     * @param string $domain
+     * 
+     * @return object
+     */
     public function domain($domain)
     {
         $this->domain = $domain;
         return $this;
     }
 
+    /**
+     * Set up new route
+     *
+     * @param string $newRoute
+     * 
+     * @return object
+     */
     public function addRoute($newRoute)
     {
         $this->_aRoutingParse = array_merge($this->_aRoutingParse, $newRoute);
@@ -476,6 +617,9 @@ class Router
         return new Response();
     }
 
+    /**
+     * Annotations parser
+     */
     private function _generateRoutes()
     {
         $parsingNeeded = !file_exists($this->_cacheDir . $this->_routesFile);
@@ -529,6 +673,9 @@ class Router
         }
     }
 
+    /**
+     * Find all file in controller dir
+     */
     private function _findControllerFiles()
     {
         $result = [];
@@ -544,14 +691,17 @@ class Router
     }
 
     /**
+     * Parsing annotations
+     * 
      * @param string $file
+     * 
      * @return string
      */
     private function _parseFile($file)
     {
         $result = '';
         $appDir = str_replace('web/../app/', '', APP_DIR);
-        $task = str_replace($appDir . 'app'.DIRECTORY_SEPARATOR.'Controller'.DIRECTORY_SEPARATOR.'', '', $file);
+        $task = str_replace($appDir . 'app' . DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR . '', '', $file);
         $task = rtrim($task, '.php');
         $task = str_replace(DIRECTORY_SEPARATOR, ',', $task);
 
