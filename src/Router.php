@@ -85,6 +85,9 @@ class Router
             define('HTTP_HOST', '');
         }
 
+        // for travis
+        var_dump(HTTP_HOST);
+
         $this->domain = HTTP_HOST;
         $aURI = explode('/', $_SERVER['SCRIPT_NAME']);
         array_pop($aURI);
@@ -245,13 +248,13 @@ class Router
         if (!in_array($option, array(true, false))) {
             throw new \InvalidArgumentException('Incorect option', 403);
         }
-        
-        if($option == true){
+
+        if ($option == true) {
             $this->requestPrefix = 'https://';
-        }else{
+        } else {
             $this->requestPrefix = 'http://';
         }
-        
+
 
         $this->https = $option;
         return $this;
@@ -294,7 +297,7 @@ class Router
         unset($this->_subdomain);
         $this->domain = HTTP_HOST;
         $this->setHttps($this->routerConfig->get('https', false));
-        
+
         return $sUrl;
     }
 
@@ -479,7 +482,6 @@ class Router
             }
 
             $sGets = $this->_parseUrl($sRequest);
-            var_dump($sGets);
             $sGets = str_replace('?', '&', $sGets);
         }
 
@@ -503,7 +505,7 @@ class Router
         }
 
         $sRequest = str_replace('?', '&', $sRequest);
-        
+
         foreach ($routingParse as $k => $v) {
             if (!is_array($v)) {
                 continue;
