@@ -14,13 +14,22 @@ use Dframe\Router;
 use Dframe\Router\Response;
 
 /**
- * Short Description
+ * View support
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
 
 abstract class View extends Loader implements \Dframe\View\ViewInterface
 {
+
+    /**
+     * Defines template variables. 
+     * 
+     * @param string $name 
+     * @param mixed  $value
+     * 
+     * @return void
+     */
 
     public function assign($name, $value)
     {
@@ -30,6 +39,14 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
         return $this->view->assign($name, $value);
     }
 
+    /**
+     * Generates the output of the templates with parsing all the template variables.
+     * 
+     * @param string $data 
+     * @param string $type
+     * 
+     * @return mix
+     */
     public function render($data, $type = null)
     {
 
@@ -43,14 +60,13 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
     }
 
     /**
-     * Przekazuje kod do szablonu
+     * Fetch the output of the templates with parsing all the template variables.
      *
-     * @param string $name Nazwa pliku
-     * @param string $path Ścieżka do szablonu
+     * @param string $name
+     * @param string $path
      *
      * @return void
      */
-
     public function fetch($name, $path = null)
     {
         if (!isset($this->view)) {
@@ -79,7 +95,6 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
      *
      * @return Json
      */
-
     public function renderJSON($data, $status = 200)
     {
         exit(Response::Create(json_encode($data))->status($status)->headers(array('Content-Type' => 'application/json'))->display());
@@ -92,7 +107,6 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
      *
      * @return Json with Calback
      */
-
     public function renderJSONP($data)
     {
         $callback = null;
