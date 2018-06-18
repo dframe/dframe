@@ -4,8 +4,14 @@
 	
     <testsuites>
         <testsuite name="AppTests">
-            <directory>./tests/</directory>
+            <directory suffix="Test.php">./tests/</directory>
         </testsuite>
     </testsuites>
-    
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src</directory>
+        </whitelist>
+    </filter>
+
 </phpunit>

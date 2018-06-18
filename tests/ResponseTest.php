@@ -4,12 +4,7 @@ namespace Dframe\tests;
 use PHPUnit\Framework\TestCase;
 use Dframe\Router\Response;
 
-// backward compatibility
-if (!class_exists('\PHPUnit\Framework\TestCase') and class_exists('\PHPUnit_Framework_TestCase')) {
-    class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
-}
-
-class ResponseTest extends \PHPUnit\Framework\TestCase
+class ResponseTest extends TestCase
 {
     public function testResponseConstruct()
     {
