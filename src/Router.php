@@ -94,24 +94,29 @@ class Router
         $this->routerConfig = Config::load('router');
 
         $this->setHttps($this->routerConfig->get('https', false));
-        $this->aRouting = $this->routerConfig->get(true, array(
-            'https' => false,
-            'NAME_CONTROLLER' => '',
-            'NAME_METHOD' => '',
-            'publicWeb' => '',
-            'assetsPath' => '',
-            'routes' => array(
-                'default' => array(
-                    '[task]/[action]/[params]',
-                    'task=[task]&action=[action]',
-                    'params' => '(.*)',
-                    '_params' => array(
-                        '[name]/[value]/',
-                        '[name]=[value]'
-                    )
-                ),
-            )
-        )); // For url
+        $this->aRouting = $this->routerConfig->get();
+        if (empty($this->aRouting)) {
+            $this->aRouting = array(
+                'https' => false,
+                'NAME_CONTROLLER' => 'page',
+                'NAME_METHOD' => 'login',
+                'publicWeb' => '',
+
+                'routes' => array(
+                    'default' => array(
+                        '[task]/[action]/[params]',
+                        'task=[task]&action=[action]',
+                        'params' => '(.*)',
+                        '_params' => array(
+                            '[name]/[value]/',
+                            '[name]=[value]'
+                        )
+                    ),
+                )
+            ); // For url
+        }
+
+
 
         $this->_aRoutingParse = $this->routerConfig->get('routes', $this->aRouting['routes']); // For parsing array
 
