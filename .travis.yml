@@ -4,11 +4,6 @@ os:
 - linux
 - windows
 
-env:
-  global:
-    - HTTP_HOST=dframeframework.com
-    - MOD_REWRITE=true
-
 php:
   - 7.0
   - 7.1
