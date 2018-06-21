@@ -176,8 +176,6 @@ class Router
             }
 
             $this->_cacheDir = rtrim($cacheDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-
-
             $this->_generateRoutes();
 
             $routesConfig = Config::load('routes', APP_DIR . 'View/cache/')->get();
@@ -696,28 +694,46 @@ class Router
             }
         }
 
-        // We regenerate cache file if needed
-        if ($parsingNeeded) {
-            $controllerFiles = [];
-            $commonFileContent = '<?php' . "\r\n" . '/**' . "\r\n" . ' * annotations router %s cache file, create ' . date('c') . "\r\n" . ' */' . "\r\n\r\n";
-            $routesFileContent = sprintf($commonFileContent, 'routes');
-            $controllersFileContent = sprintf($commonFileContent, 'controllers');
-            $routesFileContent .= 'return array(';
-
-            foreach ($files as $file => $mtime) {
-                    // We generate routes for current file
-                $content = $this->_parseFile($file);
-                if ($content !== '') {
-                    $routesFileContent .= $content;
-                    $controllerFiles[] = $file;
-                }
+        $routes = array();
+        foreach ($files as $file => $mtime) {
+            $_parseFile = $this->_parseFile($file);
+            if (!empty($_parseFile)) {
+                $routes = array_merge($routes, $_parseFile);
             }
+        }
 
-            $routesFileContent = rtrim($routesFileContent, ',' . "\r\n");
-            $routesFileContent .= "\r\n" . ");";
-            file_put_contents($this->_cacheDir . $this->_routesFile, $routesFileContent);
-            $usedControllers = (count($controllerFiles) > 0) ? '$this->_usedControllers = [\'' . join('\',\'', $controllerFiles) . '\'];' : '';
-            file_put_contents($this->_cacheDir . $this->_controllersFile, $controllersFileContent . $usedControllers);
+        if (!empty($routes)) {
+
+            usort(
+                $routes,
+                function ($a, $b) {
+                    if (strlen($a['routePath']) == strlen($b['routePath'])) return 0;
+                    return strlen($a['routePath']) < strlen($b['routePath']) ? 1 : -1;
+                }
+            );
+          
+            // We regenerate cache file if needed
+            if ($parsingNeeded) {
+                $controllerFiles = [];
+                $commonFileContent = '<?php' . "\r\n" . '/**' . "\r\n" . ' * annotations router %s cache file, create ' . date('c') . "\r\n" . ' */' . "\r\n\r\n";
+                $routesFileContent = sprintf($commonFileContent, 'routes');
+                $controllersFileContent = sprintf($commonFileContent, 'controllers');
+                $routesFileContent .= 'return array(';
+
+                foreach ($routes as $key => $route) {
+                    $routesFileContent .= "\r\n";
+                    $routesFileContent .= "    '" . $route['routeName'] . "' => array(" . "\r\n";
+                    $routesFileContent .= "        '" . $route['routePath'] . "'," . "\r\n";
+                    $routesFileContent .= "        'task=" . $route['task'] . "&action=" . $route['action'] . $route['substring'] . "'," . "\r\n";
+                    $routesFileContent .= "    )," . "\r\n";
+                }
+
+                $routesFileContent = rtrim($routesFileContent, ',' . "\r\n");
+                $routesFileContent .= "\r\n" . ");";
+                file_put_contents($this->_cacheDir . $this->_routesFile, $routesFileContent);
+                $usedControllers = (count($controllerFiles) > 0) ? '$this->_usedControllers = [\'' . join('\',\'', $controllerFiles) . '\'];' : '';
+                file_put_contents($this->_cacheDir . $this->_controllersFile, $controllersFileContent . $usedControllers);
+            }
         }
     }
 
@@ -748,6 +764,7 @@ class Router
     private function _parseFile($file)
     {
         $result = '';
+        $routes = array();
         $appDir = str_replace('web/../app/', '', APP_DIR);
         $task = str_replace($appDir . 'app' . DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR . '', '', $file);
         $task = rtrim($task, '.php');
@@ -778,7 +795,7 @@ class Router
             }
             $methods = $reflector->getMethods(\ReflectionMethod::IS_PUBLIC);
             $result = '';
-            $routes = array();
+
             $sVars = null;
             foreach ($methods as $m) {
                 if ($m->isStatic()) {
@@ -816,23 +833,11 @@ class Router
                         'action' => $m->name,
                         'substring' => $sVars
                     );
+
                 }
             }
-            usort(
-                $routes,
-                function ($a, $b) {
-                    return strcmp($b['routePath'], $a['routePath']) ? : strlen($b['routePath']) - strlen($a['routePath']);
-                }
-            );
-            $result = '';
-            foreach ($routes as $key => $route) {
-                $result .= "\r\n";
-                $result .= "    '" . $route['routeName'] . "' => array(" . "\r\n";
-                $result .= "        '" . $route['routePath'] . "'," . "\r\n";
-                $result .= "        'task=" . $route['task'] . "&action=" . $route['action'] . $route['substring'] . "'," . "\r\n";
-                $result .= "    )," . "\r\n";
-            }
+
+            return $routes;
         }
-        return $result;
     }
 }
