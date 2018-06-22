@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
@@ -18,7 +19,7 @@ use Dframe\Config;
  */
 class DefaultView implements \Dframe\View\ViewInterface
 {
-    
+
     public function __construct()
     {
         $this->templateConfig = Config::load('view/default');
@@ -52,23 +53,23 @@ class DefaultView implements \Dframe\View\ViewInterface
         $name = $pathFile[1];
 
         if ($path == null) {
-            $path = $this->templateConfig->get('setTemplateDir').'/'.$folder.$name.$this->templateConfig->get('fileExtension', '.html.php');
+            $path = $this->templateConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name . $this->templateConfig->get('fileExtension', '.html.php');
         }
-        
+
         try {
             if (!is_file($path)) {
-                throw new \Exception('Can not open template '.$name.' in: '.$path);
+                throw new \Exception('Can not open template ' . $name . ' in: ' . $path);
             }
             ob_start();
             include $path;
         } catch (Exception $e) {
-            echo $e->getMessage().'<br />
-                File: '.$e->getFile().'<br />
-                Code line: '.$e->getLine().'<br />
-                Trace: '.$e->getTraceAsString();
+            echo $e->getMessage() . '<br />
+                File: ' . $e->getFile() . '<br />
+                Code line: ' . $e->getLine() . '<br />
+                Trace: ' . $e->getTraceAsString();
             exit();
         }
-        
+
         return ob_get_clean();
     }
 
@@ -88,23 +89,23 @@ class DefaultView implements \Dframe\View\ViewInterface
         $name = $pathFile[1];
 
         if ($path == null) {
-            $path = $this->templateConfig->get('setTemplateDir').'/'.$folder.$name.$this->templateConfig->get('fileExtension', '.html.php');
+            $path = $this->templateConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name . $this->templateConfig->get('fileExtension', '.html.php');
         }
-        
+
         try {
             if (!is_file($path)) {
-                throw new \Exception('Can not open template '.$name.' in: '.$path);
+                throw new \Exception('Can not open template ' . $name . ' in: ' . $path);
             }
-            
+
             $renderInclude = include $path;
         } catch (Exception $e) {
-            echo $e->getMessage().'<br />
-                File: '.$e->getFile().'<br />
-                Code line: '.$e->getLine().'<br />
-                Trace: '.$e->getTraceAsString();
+            echo $e->getMessage() . '<br />
+                File: ' . $e->getFile() . '<br />
+                Code line: ' . $e->getLine() . '<br />
+                Trace: ' . $e->getTraceAsString();
             exit();
         }
-        
+
         return $renderInclude;
     }
 }

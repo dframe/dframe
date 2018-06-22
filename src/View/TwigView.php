@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
@@ -17,7 +18,7 @@ use Dframe\Config;
  */
 class TwigView implements \Dframe\View\ViewInterface
 {
-    
+
     public function __construct()
     {
         $twigConfig = Config::load('view/twig');
@@ -43,15 +44,15 @@ class TwigView implements \Dframe\View\ViewInterface
     {
         try {
             if (isset($this->assigns[$name])) {
-                throw new \Exception('You can\'t assign "'.$name . '" in Twig');
+                throw new \Exception('You can\'t assign "' . $name . '" in Twig');
             }
-                      
+
             $assign = $this->assigns[$name] = $value;
         } catch (\Exception $e) {
-            echo $e->getMessage().'<br />
-                File: '.$e->getFile().'<br />
-                Code line: '.$e->getLine().'<br />
-                Trace: '.$e->getTraceAsString();
+            echo $e->getMessage() . '<br />
+                File: ' . $e->getFile() . '<br />
+                Code line: ' . $e->getLine() . '<br />
+                Trace: ' . $e->getTraceAsString();
             exit();
         }
         return $assign;
@@ -85,21 +86,21 @@ class TwigView implements \Dframe\View\ViewInterface
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
-        $path = $twigConfig->get('setTemplateDir').'/'.$folder.$name.$twigConfig->get('fileExtension', '.twig');
+        $path = $twigConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name . $twigConfig->get('fileExtension', '.twig');
         try {
             if (!is_file($path)) {
-                throw new \Exception('Can not open template '.$name.' in: '.$path);
+                throw new \Exception('Can not open template ' . $name . ' in: ' . $path);
             }
 
             $renderInclude = $this->twig->render($name, $this->assign);
         } catch (\Exception $e) {
-            echo $e->getMessage().'<br />
-                        File: '.$e->getFile().'<br />
-                        Code line: '.$e->getLine().'<br />
-                        Trace: '.$e->getTraceAsString();
+            echo $e->getMessage() . '<br />
+                        File: ' . $e->getFile() . '<br />
+                        Code line: ' . $e->getLine() . '<br />
+                        Trace: ' . $e->getTraceAsString();
             exit();
         }
-                    
+
         return $renderInclude;
     }
 }

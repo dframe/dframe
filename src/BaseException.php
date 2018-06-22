@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DframeFramework
  * Copyright (c) Sławomir Kaleta
@@ -9,7 +10,7 @@
 namespace Dframe;
 
 /**
- * Short Description
+ * BaseException Class
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
