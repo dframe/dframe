@@ -708,7 +708,7 @@ class Router
                 $routes,
                 function ($a, $b) {
                     if (strlen($a['routePath']) == strlen($b['routePath'])) return 0;
-                    return strlen($a['routePath']) < strlen($b['routePath']) ? 1 : -1;
+                    return strcmp($b['routePath'], $a['routePath']) ?: strlen($b['routePath']) - strlen($a['routePath']);
                 }
             );
           
