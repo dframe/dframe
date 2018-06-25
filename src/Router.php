@@ -798,6 +798,7 @@ class Router
 
             $sVars = null;
             foreach ($methods as $m) {
+                $sVars = null;
                 if ($m->isStatic()) {
                     continue;
                 }
