@@ -56,7 +56,7 @@ class Loader extends Core
      */
     public function loadModel($name)
     {
-        return $this->_loadObject($name, 'Model');
+        return $this->loadObject($name, 'Model');
     }
 
     /**
@@ -68,7 +68,7 @@ class Loader extends Core
      */
     public function loadView($name)
     {
-        return $this->_loadObject($name, 'View');
+        return $this->loadObject($name, 'View');
     }
 
     /**
@@ -79,7 +79,7 @@ class Loader extends Core
      *
      * @return object
      */
-    private function _loadObject($name, $type)
+    private function loadObject($name, $type)
     {
 
         if (!in_array($type, (['Model', 'View']))) {
@@ -141,7 +141,7 @@ class Loader extends Core
                 return $this->router->redirect($routerConfig->get('error/404')[0], 404);
             }
 
-            return '_loadObject Error';
+            return 'loadObject Error';
         }
 
         return $ob;
