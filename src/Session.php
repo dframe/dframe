@@ -46,12 +46,12 @@ class Session
             if ($this->isValidFingerprint() != true) {
                 // Refresh Session
                 $_SESSION = [];
-                $_SESSION['_fingerprint'] = $this->_getFingerprint();
+                $_SESSION['_fingerprint'] = $this->getFingerprint();
             }
         }
     }
 
-    private function _getFingerprint()
+    private function getFingerprint()
     {
         return md5($this->ipAddress . $this->userAgent . $this->name);
     }
@@ -138,7 +138,7 @@ class Session
     public function isValidFingerprint()
     {
 
-        $_fingerprint = $this->_getFingerprint();
+        $_fingerprint = $this->getFingerprint();
         if (isset($_SESSION['_fingerprint']) and $_SESSION['_fingerprint'] == $_fingerprint) {
             return true;
         }
