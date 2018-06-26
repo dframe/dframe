@@ -23,7 +23,7 @@ class Messages
 {
 
     public $msgId;
-    public $msgTypes = array('help', 'info', 'warning', 'success', 'error');
+    public $msgTypes = ['help', 'info', 'warning', 'success', 'error'];
 
     /**
      * Add a message to the queue
@@ -43,7 +43,7 @@ class Messages
 
         $keyExists = $this->session->keyExists('flash_messages');
         if ($keyExists == false) {
-            $this->session->set('flash_messages', array());
+            $this->session->set('flash_messages', []);
         }
     }
 
@@ -64,7 +64,7 @@ class Messages
         }
         // Replace any shorthand codes with their full version
         if (strlen(trim($type)) == 1) {
-            $type = str_replace(array('h', 'i', 'w', 'e', 's'), array('help', 'info', 'warning', 'error', 'success'), $type);
+            $type = str_replace(['h', 'i', 'w', 'e', 's'], ['help', 'info', 'warning', 'error', 'success'], $type);
         }
 
         $router = new Router();

@@ -19,8 +19,8 @@ class Token
 {
 
     protected $driver;
-    protected $token = array();
-    protected $time = array();
+    protected $token = [];
+    protected $time = [];
 
     /**
      * constructor.
@@ -95,8 +95,8 @@ class Token
 
     public function clear()
     {
-        $this->token = array();
-        $this->time = array();
+        $this->token = [];
+        $this->time = [];
 
         $this->driver->set('token', $this->token);
         $this->driver->set('timeToken', $this->time);

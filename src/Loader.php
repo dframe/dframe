@@ -82,7 +82,7 @@ class Loader extends Core
     private function _loadObject($name, $type)
     {
 
-        if (!in_array($type, (array('Model', 'View')))) {
+        if (!in_array($type, (['Model', 'View']))) {
             return false;
         }
 
@@ -101,7 +101,7 @@ class Loader extends Core
                 }
             }
 
-            $name = !empty($folder) ? $this->_namespaceSeparator . $type . $this->_namespaceSeparator . str_replace(array($this->_namespaceSeparator, '/'), $this->_namespaceSeparator, $folder) . $name . $type : $this->_namespaceSeparator . $type . $this->_namespaceSeparator . $name . $type;;
+            $name = !empty($folder) ? $this->_namespaceSeparator . $type . $this->_namespaceSeparator . str_replace([$this->_namespaceSeparator, '/'], $this->_namespaceSeparator, $folder) . $name . $type : $this->_namespaceSeparator . $type . $this->_namespaceSeparator . $name . $type;;
             if (!is_file($path)) {
                 throw new BaseException('Can not open ' . $type . ' ' . $name . ' in: ' . $path);
             }

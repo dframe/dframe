@@ -22,7 +22,7 @@ function pathFile($path)
         $name = $path[$pathCount];
     }
 
-    return array($folder, $name);
+    return [$folder, $name];
 }
 
 /**
@@ -52,7 +52,7 @@ function object_to_array($obj)
     $obj = is_object($obj) ? (array)$obj : $obj;
 
     if (is_array($obj)) {
-        $new = array();
+        $new = [];
         foreach ($obj as $key => $val) {
             $key2 = str_replace("\0", "", $key);
             $new[$key2] = object_to_array($val);

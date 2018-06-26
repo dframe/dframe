@@ -25,9 +25,9 @@ class TwigView implements \Dframe\View\ViewInterface
         $loader = new \Twig_Loader_Filesystem($twigConfig->get('setTemplateDir'));
         $twig = new \Twig_Environment(
             $loader,
-            array(
+            [
                 'cache' => $twigConfig->get('setCompileDir')
-            )
+            ]
         );
         $this->twig = $twig;
     }

@@ -22,12 +22,12 @@ class Router
     /**
      * @var string[]
      */
-    public $aRouting = array();
+    public $aRouting = [];
 
     /**
      * @var string[]
      */
-    private $_aRoutingParse = array();
+    private $_aRoutingParse = [];
 
     /**
      * @var string
@@ -47,7 +47,7 @@ class Router
     /**
      * @var string[]
      */
-    public $parseArgs = array();
+    public $parseArgs = [];
 
     /**
      * @var string
@@ -96,24 +96,24 @@ class Router
         $this->setHttps($this->routerConfig->get('https', false));
         $this->aRouting = $this->routerConfig->get();
         if (empty($this->aRouting)) {
-            $this->aRouting = array(
+            $this->aRouting = [
                 'https' => false,
                 'NAME_CONTROLLER' => 'page',
                 'NAME_METHOD' => 'login',
                 'publicWeb' => '',
 
-                'routes' => array(
-                    'default' => array(
+                'routes' => [
+                    'default' => [
                         '[task]/[action]/[params]',
                         'task=[task]&action=[action]',
                         'params' => '(.*)',
-                        '_params' => array(
+                        '_params' => [
                             '[name]/[value]/',
                             '[name]=[value]'
-                        )
-                    ),
-                )
-            ); // For url
+                        ]
+                    ],
+                ]
+            ]; // For url
         }
 
 
@@ -142,7 +142,7 @@ class Router
         if (PHP_SAPI !== 'cli') {
             $routesFile = 'routes.php';
             $controllersFile = 'controllers.php';
-            $usedControllers = array();
+            $usedControllers = [];
             $controllerDirs = APP_DIR . 'Controller/';
             $cacheDir = APP_DIR . 'View/cache/';
 
@@ -193,7 +193,7 @@ class Router
      * @param boolen|Response
      * 
      */
-    public function run($controller = null, $action = null, $arg = array())
+    public function run($controller = null, $action = null, $arg = [])
     {
         if (is_null($controller) and is_null($action)) {
             $this->parseGets();
@@ -206,7 +206,7 @@ class Router
         $bootstrap->router = $this;
         $loader = new Loader($bootstrap);
         $controller = $loader->loadController($controller); // Loading Controller class
-        $response = array();
+        $response = [];
 
         if (method_exists($controller, 'start')) {
             $response[] = 'start';
@@ -216,7 +216,7 @@ class Router
             $response[] = 'init';
         }
 
-        if (method_exists($controller, $action) or is_callable(array($controller, $action))) {
+        if (method_exists($controller, $action) or is_callable([$controller, $action])) {
             $response[] = $action;
         }
 
@@ -225,7 +225,7 @@ class Router
         }
 
         foreach ($response as $key => $data) {
-            if (is_callable(array($controller, $data))) {
+            if (is_callable([$controller, $data])) {
                 $run = $controller->$data();
                 if ($run instanceof Response) {
                     return $run->display();
@@ -245,7 +245,7 @@ class Router
 
     public function setHttps($option = false)
     {
-        if (!in_array($option, array(true, false))) {
+        if (!in_array($option, [true, false])) {
             throw new \InvalidArgumentException('Incorect option', 403);
         }
 
@@ -325,7 +325,7 @@ class Router
         if (isset($aParams[1])) {
             parse_str($aParams[1], $aParams);
         } else {
-            $aParams = array();
+            $aParams = [];
         }
 
         $findKey = explode('?', $sUrl);
@@ -434,7 +434,7 @@ class Router
         $sReturn = null;
 
         foreach ($aParams as $key => $value) {
-            $sReturn .= str_replace(array('[name]', '[value]'), array($key, $value), $sRouting);
+            $sReturn .= str_replace(['[name]', '[value]'], [$key, $value], $sRouting);
         }
 
         return $sReturn;
@@ -521,7 +521,7 @@ class Router
             );
 
             if (preg_match_all('!' . $sExpression . '!i', $sRequest, $aExpression__)) {
-                $args = array();
+                $args = [];
 
                 if (isset($v['args'])) {
                     $args = $v['args'];
@@ -534,9 +534,9 @@ class Router
                         }
 
                         if ($kkk > 0) {
-                            $aExpression[] = array($aExpression_[1][$k_ - 1] . '_' . $kkk, $vvv);
+                            $aExpression[] = [$aExpression_[1][$k_ - 1] . '_' . $kkk, $vvv];
                         } else {
-                            $aExpression[] = array($aExpression_[1][$k_ - 1], $vvv);
+                            $aExpression[] = [$aExpression_[1][$k_ - 1], $vvv];
                         }
                     }
                 }
@@ -566,7 +566,7 @@ class Router
                         }
                         $sVars = str_replace('[' . $v_[0] . ']', $v_[1], $sVars);
                     } else {
-                        $sVars = $sVars . $this->_parseUrl($v_[1], array($v['_' . $v_[0]]));
+                        $sVars = $sVars . $this->_parseUrl($v_[1], [$v['_' . $v_[0]]]);
                     }
                 }
                 $this->parseArgs = $args;
@@ -694,7 +694,7 @@ class Router
             }
         }
 
-        $routes = array();
+        $routes = [];
         foreach ($files as $file => $mtime) {
             $_parseFile = $this->_parseFile($file);
             if (!empty($_parseFile)) {
@@ -708,7 +708,7 @@ class Router
                 $routes,
                 function ($a, $b) {
                     if (strlen($a['routePath']) == strlen($b['routePath'])) return 0;
-                    return strcmp($b['routePath'], $a['routePath']) ?: strlen($b['routePath']) - strlen($a['routePath']);
+                    return strcmp($b['routePath'], $a['routePath']) ? : strlen($b['routePath']) - strlen($a['routePath']);
                 }
             );
           
@@ -764,7 +764,7 @@ class Router
     private function _parseFile($file)
     {
         $result = '';
-        $routes = array();
+        $routes = [];
         $appDir = str_replace('web/../app/', '', APP_DIR);
         $task = str_replace($appDir . 'app' . DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR . '', '', $file);
         $task = rtrim($task, '.php');
@@ -827,13 +827,13 @@ class Router
                             $sVars .= '&' . $aExpression_[1][$i] . '=' . $aExpression_[0][$i];
                         }
                     }
-                    $routes[$routePath] = array(
+                    $routes[$routePath] = [
                         'routeName' => $routeName,
                         'routePath' => $routePath,
                         'task' => $task,
                         'action' => $m->name,
                         'substring' => $sVars
-                    );
+                    ];
 
                 }
             }

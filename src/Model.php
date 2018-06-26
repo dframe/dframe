@@ -28,10 +28,10 @@ abstract class Model extends Loader
     public function methodResult($type, $array = null)
     {
         if (!is_null($array)) {
-            return array_merge(array('return' => $type), $array);
+            return array_merge(['return' => $type], $array);
         }
 
-        return array('return' => $type);
+        return ['return' => $type];
     }
 
     /**
@@ -48,10 +48,10 @@ abstract class Model extends Loader
         }
 
         if (!is_array($errors)) {
-            $errors = array($errors);
+            $errors = [$errors];
         }
 
-        return $this->methodResult(false, array('errors' => $errors));
+        return $this->methodResult(false, ['errors' => $errors]);
     }
 
     /**

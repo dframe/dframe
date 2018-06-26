@@ -12,7 +12,7 @@ class ContigTest extends TestCase
     {
         $directory = [
             'Config' => [
-                'test.php' => "<?php return array('create' => 'yes');"
+                'test.php' => "<?php return ['create' => 'yes'];"
             ]
         ];
 

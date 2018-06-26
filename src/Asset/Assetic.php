@@ -120,7 +120,7 @@ class Assetic extends Router
                 mkdir($pathinfo['dirname'], 0755, true);
             }
 
-            $args = array();
+            $args = [];
             //$args[] = new Yui\CssCompressorFilter('C:\yuicompressor-2.4.7\build\yuicompressor-2.4.7.jar', 'java'),
 
             if ($compress == true) {
@@ -134,9 +134,9 @@ class Assetic extends Router
             }
 
             $css = new AssetCollection(
-                array(
+                [
                     new FileAsset($srcPath),
-                ),
+                ],
                 $args
             );
 
