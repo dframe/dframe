@@ -12,33 +12,33 @@ class RouterTest extends TestCase
 
         $this->router = new Router();
 
-        $this->router->addRoute(array(
-            'page/:page' => array(
+        $this->router->addRoute([
+            'page/:page' => [
                 'page/[page]/',
                 'task=page&action=[page]'
-            )
-        ));
+            ]
+        ]);
 
-        $this->router->addRoute(array(
-            'error/:code' => array(
+        $this->router->addRoute([
+            'error/:code' => [
                 'error/[code]/',
                 'task=page&action=error&type=[code]',
-                'args' => array(
+                'args' => [
                     'code' => '[code]'
-                ),
-            )
-        ));
-        $this->router->addRoute(array(
-            'default' => array(
+                ],
+            ]
+        ]);
+        $this->router->addRoute([
+            'default' => [
                 '[task]/[action]/[params]',
                 'task=[task]&action=[action]',
                 'params' => '(.*)',
-                '_params' => array(
+                '_params' => [
                     '[name]/[value]/',
                     '[name]=[value]'
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
     }
 
     public function testRouterIsActive()

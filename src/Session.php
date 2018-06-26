@@ -26,13 +26,13 @@ class Session
         $this->name = $name;
 
         if (!isset($_SESSION)) {
-            $cookie = array(
+            $cookie = [
                 'lifetime' => isset($options['cookie']['lifetime']) ? $options['cookie']['lifetime'] : 0,
                 'path' => isset($options['cookie']['path']) ? $options['cookie']['path'] : '/',
                 'domain' => isset($options['cookie']['domain']) ? $options['cookie']['domain'] : null,
                 'secure' => isset($options['cookie']['secure']) ? $options['cookie']['secure'] : isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : null,
                 'httponly' => isset($options['cookie']['httponly']) ? $options['cookie']['httponly'] : false,
-            );
+            ];
 
             session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly']);
             session_name($this->name);
@@ -45,7 +45,7 @@ class Session
 
             if ($this->isValidFingerprint() != true) {
                 // Refresh Session
-                $_SESSION = array();
+                $_SESSION = [];
                 $_SESSION['_fingerprint'] = $this->_getFingerprint();
             }
         }
@@ -132,7 +132,7 @@ class Session
     public function end()
     {
         session_destroy();
-        $_SESSION = array();
+        $_SESSION = [];
     }
 
     public function isValidFingerprint()

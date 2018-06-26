@@ -24,9 +24,9 @@ class Response extends Router
 
     private $_body = '';
 
-    private $_headers = array();
+    private $_headers = [];
 
-    public static $code = array(
+    public static $code = [
         100 => 'Continue',
         101 => 'Switching Protocols',
         102 => 'Processing',
@@ -82,7 +82,7 @@ class Response extends Router
         507 => 'Insufficient Storage',
         509 => 'Bandwidth Limit Exceeded',
         510 => 'Not Extended'
-    );
+    ];
 
     public function __construct($body = null)
     {
@@ -111,7 +111,7 @@ class Response extends Router
             $Response->status($status);
         }
 
-        $Response->headers(array('Content-Type' => 'application/json'));
+        $Response->headers(['Content-Type' => 'application/json']);
         return $Response;
     }
 
@@ -129,7 +129,7 @@ class Response extends Router
             $Response->status($status);
         }
 
-        $Response->headers(array('Content-Type' => 'application/jsonp'));
+        $Response->headers(['Content-Type' => 'application/jsonp']);
         return $Response;
     }
 
@@ -139,7 +139,7 @@ class Response extends Router
      * @param  string $url CONTROLLER/MODEL?parametry
      * @return void
      */
-    public static function redirect($url = '', $status = 301, $headers = array())
+    public static function redirect($url = '', $status = 301, $headers = [])
     {
 
         $Response = new Response();
@@ -149,9 +149,9 @@ class Response extends Router
             $Response->headers($headers);
         }
 
-        $Response->headers(array(
+        $Response->headers([
             'Location' => (new Router)->makeUrl($url)
-        ));
+        ]);
 
 
         return $Response;
@@ -159,7 +159,7 @@ class Response extends Router
 
     public function json($json)
     {
-        $this->headers(array('Content-Type' => 'application/json'));
+        $this->headers(['Content-Type' => 'application/json']);
         $this->_body = json_encode($json);
         return $this;
     }
