@@ -88,8 +88,8 @@ class Router
         $this->domain = HTTP_HOST;
         $aURI = explode('/', $_SERVER['SCRIPT_NAME']);
         array_pop($aURI);
-        $this->_sURI = implode('/', $aURI) . '/';
-        $this->_sURI = str_replace('/web/', '/', $this->_sURI);
+        $this->sURI = implode('/', $aURI) . '/';
+        $this->sURI = str_replace('/web/', '/', $this->sURI);
 
         $this->routerConfig = Config::load('router');
 
@@ -155,11 +155,11 @@ class Router
                 throw new \InvalidArgumentException('Controllers directory must be either string or array');
             }
 
-            $this->_controllerDirs = [];
+            $this->controllerDirs = [];
             foreach ($controllerDirs as $d) {
                 $realPath = realPath($d);
                 if ($realPath !== false) {
-                    $this->_controllerDirs[] = $realPath;
+                    $this->controllerDirs[] = $realPath;
                 }
             }
 
@@ -269,7 +269,7 @@ class Router
      */
     public function isActive($url)
     {
-        if ($this->makeUrl($url, true) == str_replace($this->_sURI, '', $_SERVER['REQUEST_URI'])) {
+        if ($this->makeUrl($url, true) == str_replace($this->sURI, '', $_SERVER['REQUEST_URI'])) {
             return true;
         }
 
@@ -294,7 +294,7 @@ class Router
         $sUrl = $this->requestPrefix . $this->domain . '/' . $path;
         $sUrl .= $sExpressionUrl;
 
-        unset($this->_subdomain);
+        unset($this->subdomain);
         $this->domain = HTTP_HOST;
         $this->setHttps($this->routerConfig->get('https', false));
 
@@ -401,8 +401,8 @@ class Router
 
         $HTTP_HOST = $this->domain;
 
-        if (!empty($this->_subdomain)) {
-            $HTTP_HOST = $this->_subdomain . '.' . $this->domain;
+        if (!empty($this->subdomain)) {
+            $HTTP_HOST = $this->subdomain . '.' . $this->domain;
         }
 
         $sUrl = null;
@@ -414,7 +414,7 @@ class Router
         $sUrl = rtrim($sUrl, '/');
 
 
-        unset($this->_subdomain);
+        unset($this->subdomain);
         $this->domain = HTTP_HOST;
         $this->setHttps($this->routerConfig->get('https', false));
 
@@ -445,7 +445,7 @@ class Router
      */
     public function parseGets()
     {
-        $sRequest = preg_replace('!' . $this->_sURI . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
+        $sRequest = preg_replace('!' . $this->sURI . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
         if (defined('MOD_REWRITE') and MOD_REWRITE == true) {
 
             if (substr($sRequest, -1) != '/') {
@@ -474,7 +474,7 @@ class Router
      */
     public function currentPath()
     {
-        $sRequest = preg_replace('!' . $this->_sURI . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
+        $sRequest = preg_replace('!' . $this->sURI . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
         if (defined('MOD_REWRITE') and MOD_REWRITE == true) {
 
             if (substr($sRequest, -1) != '/') {
@@ -628,7 +628,7 @@ class Router
      */
     public function subdomain($subdomain)
     {
-        $this->_subdomain = $subdomain;
+        $this->subdomain = $subdomain;
         return $this;
     }
 
@@ -668,13 +668,13 @@ class Router
      */
     private function generateRoutes()
     {
-        $parsingNeeded = !file_exists($this->cacheDir . $this->_routesFile);
+        $parsingNeeded = !file_exists($this->cacheDir . $this->routesFile);
         // We look for controller files
         $files = $this->findControllerFiles();
 
         // We check if there has been modifications since last cache generation
         if (!$parsingNeeded) {
-            $routesCacheMtime = filemtime($this->cacheDir . $this->_routesFile);
+            $routesCacheMtime = filemtime($this->cacheDir . $this->routesFile);
             foreach ($files as $file => $mtime) {
                 if ($mtime > $routesCacheMtime) {
                     $parsingNeeded = true;
@@ -684,8 +684,8 @@ class Router
         }
 
         // We look for deleted controller files
-        if (!$parsingNeeded and file_exists($this->cacheDir . $this->_controllersFile)) {
-            include_once $this->cacheDir . $this->_controllersFile;
+        if (!$parsingNeeded and file_exists($this->cacheDir . $this->controllersFile)) {
+            include_once $this->cacheDir . $this->controllersFile;
             foreach ($this->usedControllers as $controllerFile) {
                 if (!file_exists($controllerFile)) {
                     $parsingNeeded = true;
@@ -730,9 +730,9 @@ class Router
 
                 $routesFileContent = rtrim($routesFileContent, ',' . "\r\n");
                 $routesFileContent .= "\r\n" . ");";
-                file_put_contents($this->cacheDir . $this->_routesFile, $routesFileContent);
+                file_put_contents($this->cacheDir . $this->routesFile, $routesFileContent);
                 $usedControllers = (count($controllerFiles) > 0) ? '$this->usedControllers = [\'' . join('\',\'', $controllerFiles) . '\'];' : '';
-                file_put_contents($this->cacheDir . $this->_controllersFile, $controllersFileContent . $usedControllers);
+                file_put_contents($this->cacheDir . $this->controllersFile, $controllersFileContent . $usedControllers);
             }
         }
     }
@@ -743,7 +743,7 @@ class Router
     private function findControllerFiles()
     {
         $result = [];
-        foreach ($this->_controllerDirs as $dir) {
+        foreach ($this->controllerDirs as $dir) {
             $directoryIterator = new \RecursiveDirectoryIterator($dir);
             $iterator = new \RecursiveIteratorIterator($directoryIterator);
             $files = new \RegexIterator($iterator, '/\.php$/i', \RecursiveRegexIterator::GET_MATCH);
