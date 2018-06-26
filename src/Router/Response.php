@@ -22,9 +22,9 @@ class Response extends Router
 
     public $status = 200;
 
-    private $_body = '';
+    private $body = '';
 
-    private $_headers = [];
+    private $headers = [];
 
     public static $code = [
         100 => 'Continue',
@@ -87,7 +87,7 @@ class Response extends Router
     public function __construct($body = null)
     {
         if (isset($body)) {
-            $this->_body = $body;
+            $this->body = $body;
         }
         return $this;
     }
@@ -160,7 +160,7 @@ class Response extends Router
     public function json($json)
     {
         $this->headers(['Content-Type' => 'application/json']);
-        $this->_body = json_encode($json);
+        $this->body = json_encode($json);
         return $this;
     }
 
@@ -177,24 +177,24 @@ class Response extends Router
 
     public function headers($headers = false)
     {
-        $this->_headers = array_unique(array_merge($this->_headers, $headers));
+        $this->headers = array_unique(array_merge($this->headers, $headers));
         return $this;
     }
 
     public function getHeaders()
     {
-        return $this->_headers;
+        return $this->headers;
     }
 
     public function body($body = null)
     {
-        $this->_body = $body;
+        $this->body = $body;
         return $this;
     }
 
     public function getBody()
     {
-        return $this->_body;
+        return $this->body;
     }
 
     public function display()
@@ -207,8 +207,8 @@ class Response extends Router
                 $string = sprintf('%s %d %s', $protocol, $status, self::$code[$status]);
 
                 header($string, true, $status); // Default header
-                if (!empty($this->_headers)) {
-                    foreach ($this->_headers as $field => $value) {
+                if (!empty($this->headers)) {
+                    foreach ($this->headers as $field => $value) {
                         if (is_array($value)) {
                             foreach ($value as $v) {
                                 header("$field" . ': ' . $v, false);
@@ -228,6 +228,6 @@ class Response extends Router
 
     public function __toString()
     {
-        return $this->_body;
+        return $this->body;
     }
 }
