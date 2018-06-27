@@ -25,9 +25,9 @@ class TwigView implements \Dframe\View\ViewInterface
         $loader = new \Twig_Loader_Filesystem($twigConfig->get('setTemplateDir'));
         $twig = new \Twig_Environment(
             $loader,
-            array(
+            [
                 'cache' => $twigConfig->get('setCompileDir')
-            )
+            ]
         );
         $this->twig = $twig;
     }
@@ -86,7 +86,7 @@ class TwigView implements \Dframe\View\ViewInterface
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
-        $path = $twigConfig->get('setTemplateDir') . '/' . $folder . $name . $twigConfig->get('fileExtension', '.twig');
+        $path = $twigConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name . $twigConfig->get('fileExtension', '.twig');
         try {
             if (!is_file($path)) {
                 throw new \Exception('Can not open template ' . $name . ' in: ' . $path);

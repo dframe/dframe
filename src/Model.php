@@ -10,22 +10,37 @@
 namespace Dframe;
 
 /**
- * Short Description
+ * Model Class
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
 abstract class Model extends Loader
 {
 
+    /**
+     * Standard method for returning the result from the method
+     *
+     * @param boolean $type
+     * @param array $array
+     * 
+     * @return array
+     */
     public function methodResult($type, $array = null)
     {
         if (!is_null($array)) {
-            return array_merge(array('return' => $type), $array);
+            return array_merge(['return' => $type], $array);
         }
 
-        return array('return' => $type);
+        return ['return' => $type];
     }
 
+    /**
+     * Standard method for returning  result from the method
+     *
+     * @param array $errors
+     * 
+     * @return array
+     */
     public function methodFail($errors = null)
     {
         if ($errors === null) {
@@ -33,12 +48,15 @@ abstract class Model extends Loader
         }
 
         if (!is_array($errors)) {
-            $errors = array($errors);
+            $errors = [$errors];
         }
 
-        return $this->methodResult(false, array('errors' => $errors));
+        return $this->methodResult(false, ['errors' => $errors]);
     }
 
+    /**
+     * Init method
+     */
     public function init()
     {
     }

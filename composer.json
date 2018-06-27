@@ -34,8 +34,14 @@
             "src/Functions.php"
         ]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Dframe\\tests\\": "tests"
+        }
+    },
     "require-dev": {
-        "mikey179/vfsStream": "^1.6"
+        "mikey179/vfsStream": "^1.6",
+        "phpunit/phpunit": "^6.5"
     },
     "scripts": {
         "test": [

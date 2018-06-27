@@ -1,4 +1,9 @@
 language: php
+
+os: 
+- linux
+- windows
+
 php:
   - 7.0
   - 7.1
@@ -11,4 +16,4 @@ install:
    composer install
 
 script:
-   - phpunit
+   - vendor/bin/phpunit

@@ -15,7 +15,7 @@ use Dframe\Core;
 use Dframe\Router\Response;
 
 /**
- * Short Description
+ * Loader Class
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
@@ -24,8 +24,8 @@ class Loader extends Core
 
     public $baseClass;
     public $router;
-    private $_fileExtension = '.php';
-    private $_namespaceSeparator = '\\';
+    private $fileExtension = '.php';
+    private $namespaceSeparator = '\\';
 
 
     /**
@@ -37,7 +37,7 @@ class Loader extends Core
      */
     public function loadModel($name, $namespace = null)
     {
-        return $this->_loadObject($name, 'Model', $namespace);
+        return $this->loadObject($name, 'Model', $namespace);
     }
 
     /**
@@ -49,7 +49,7 @@ class Loader extends Core
      */
     public function loadView($name, $namespace = null)
     {
-        return $this->_loadObject($name, 'View', $namespace);
+        return $this->loadObject($name, 'View', $namespace);
     }
 
     /**
@@ -60,7 +60,7 @@ class Loader extends Core
      *
      * @return object
      */
-    private function _loadObject($name, $type, $namespace = null)
+    private function loadObject($name, $type, $namespace = null)
     {
 
         if (!empty($namespace)) {
@@ -75,7 +75,7 @@ class Loader extends Core
         }
         //var_dump($this->namespace);
 
-        if (!in_array($type, (array('Model', 'View')))) {
+        if (!in_array($type, (['Model', 'View']))) {
             return false;
         }
 
@@ -84,7 +84,7 @@ class Loader extends Core
         $name = $pathFile[1];
 
         $n = str_replace($type, '', $name);
-        $path = str_replace($this->_namespaceSeparator, DIRECTORY_SEPARATOR, APP_DIR . $type . '/' . $folder . $n . '.php');
+        $path = str_replace($this->namespaceSeparator, DIRECTORY_SEPARATOR, APP_DIR . $type . '/' . $folder . $n . '.php');
 
         try {
 
@@ -94,7 +94,7 @@ class Loader extends Core
                 }
             }
 
-            $name = !empty($folder) ? $this->_namespaceSeparator . $type . $this->_namespaceSeparator . str_replace(array($this->_namespaceSeparator, '/'), $this->_namespaceSeparator, $folder) . $name . $type : $this->_namespaceSeparator . $type . $this->_namespaceSeparator . $name . $type;;
+            $name = !empty($folder) ? $this->namespaceSeparator . $type . $this->namespaceSeparator . str_replace([$this->namespaceSeparator, '/'], $this->namespaceSeparator, $folder) . $name . $type : $this->namespaceSeparator . $type . $this->namespaceSeparator . $name . $type;;
             if (!is_file($path)) {
                 throw new BaseException('Can not open ' . $type . ' ' . $name . ' in: ' . $path);
             }
@@ -133,7 +133,7 @@ class Loader extends Core
                 return Response::redirect('error/:code?code=400', 400)->display();
             }
 
-            return '_loadObject Error';
+            return 'loadObject Error';
         }
 
         return $ob;
@@ -175,8 +175,8 @@ class Loader extends Core
             $controller = ucfirst($controller);
         }
 
-        $controller = str_replace(DIRECTORY_SEPARATOR, $this->_namespaceSeparator, $controller);
-        $path = str_replace($this->_namespaceSeparator, DIRECTORY_SEPARATOR, APP_DIR . 'Controller' . DIRECTORY_SEPARATOR . $subControler . $controller . '.php');
+        $controller = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $controller);
+        $path = str_replace($this->namespaceSeparator, DIRECTORY_SEPARATOR, APP_DIR . 'Controller' . DIRECTORY_SEPARATOR . $subControler . $controller . '.php');
 
 
         try {
@@ -186,12 +186,12 @@ class Loader extends Core
 
             include_once $path;
 
-            $xsubControler = str_replace(DIRECTORY_SEPARATOR, $this->_namespaceSeparator, $subControler);
-            if (!class_exists($this->_namespaceSeparator . 'Controller' . $this->_namespaceSeparator . $xsubControler . '' . $controller . 'Controller')) {
+            $xsubControler = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $subControler);
+            if (!class_exists($this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $xsubControler . '' . $controller . 'Controller')) {
                 throw new BaseException('Bad controller error');
             }
 
-            $controller = $this->_namespaceSeparator . 'Controller' . $this->_namespaceSeparator . $xsubControler . '' . $controller . 'Controller';
+            $controller = $this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $xsubControler . '' . $controller . 'Controller';
             $returnController = new $controller($this->baseClass);
         } catch (BaseException $e) {
             $msg = null;

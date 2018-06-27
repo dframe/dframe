@@ -10,7 +10,7 @@
 namespace Dframe;
 
 /**
- * Short Description
+ * Session Class
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
@@ -26,13 +26,13 @@ class Session
         $this->name = $name;
 
         if (!isset($_SESSION)) {
-            $cookie = array(
+            $cookie = [
                 'lifetime' => isset($options['cookie']['lifetime']) ? $options['cookie']['lifetime'] : 0,
                 'path' => isset($options['cookie']['path']) ? $options['cookie']['path'] : '/',
                 'domain' => isset($options['cookie']['domain']) ? $options['cookie']['domain'] : null,
                 'secure' => isset($options['cookie']['secure']) ? $options['cookie']['secure'] : isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : null,
                 'httponly' => isset($options['cookie']['httponly']) ? $options['cookie']['httponly'] : false,
-            );
+            ];
 
             session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly']);
             session_name($this->name);
@@ -45,13 +45,13 @@ class Session
 
             if ($this->isValidFingerprint() != true) {
                 // Refresh Session
-                $_SESSION = array();
-                $_SESSION['_fingerprint'] = $this->_getFingerprint();
+                $_SESSION = [];
+                $_SESSION['_fingerprint'] = $this->getFingerprint();
             }
         }
     }
 
-    private function _getFingerprint()
+    private function getFingerprint()
     {
         return md5($this->ipAddress . $this->userAgent . $this->name);
     }
@@ -132,13 +132,13 @@ class Session
     public function end()
     {
         session_destroy();
-        $_SESSION = array();
+        $_SESSION = [];
     }
 
     public function isValidFingerprint()
     {
 
-        $_fingerprint = $this->_getFingerprint();
+        $_fingerprint = $this->getFingerprint();
         if (isset($_SESSION['_fingerprint']) and $_SESSION['_fingerprint'] == $_fingerprint) {
             return true;
         }

@@ -1,10 +1,10 @@
 <?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
 use Dframe\Session;
 use Dframe\Messages;
 use Dframe\Token;
-
-$autoloader = include dirname(__DIR__) . '/vendor/autoload.php';
-$autoloader->addPsr4('Dframe\tests\\', __DIR__);
 
 class Bootstrap
 {

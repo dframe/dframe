@@ -5,19 +5,14 @@ use PHPUnit\Framework\TestCase;
 use Dframe\Config;
 use org\bovigo\vfs\vfsStream;
 
-// backward compatibility
-if (!class_exists('\PHPUnit\Framework\TestCase') and class_exists('\PHPUnit_Framework_TestCase')) {
-    class_alias('\PHPUnit_Framework_TestCase', '\PHPUnit\Framework\TestCase');
-}
-
-class ContigTest extends \PHPUnit\Framework\TestCase
+class ContigTest extends TestCase
 {
 
     protected function setUp()
     {
         $directory = [
             'Config' => [
-                'test.php' => "<?php return array('create' => 'yes');"
+                'test.php' => "<?php return ['create' => 'yes'];"
             ]
         ];
 

@@ -32,7 +32,7 @@ set_time_limit(120);
 class Assetic extends Router
 {
 
-    private function _checkDir($path)
+    private function checkDir($path)
     {
         if (!is_dir($path)) {
             if (!mkdir($path, 0755, true)) {
@@ -50,7 +50,7 @@ class Assetic extends Router
             $path = 'assets';
             if (isset($this->aRouting['assets']['assetsDir']) and !empty($this->aRouting['assets']['assetsDir'])) {
                 $path = $this->aRouting['assets']['assetsDir'];
-                $this->_checkDir($path);
+                $this->checkDir($path);
             }
             $dstPath = $this->aRouting['assets']['cachePath'] . $path . '/' . $sUrl;
         } else {
@@ -101,7 +101,7 @@ class Assetic extends Router
             $path = 'assets';
             if (isset($this->aRouting['assets']['assetsDir']) and !empty($this->aRouting['assets']['assetsDir'])) {
                 $path = $this->aRouting['assets']['assetsDir'];
-                $this->_checkDir($path);
+                $this->checkDir($path);
             }
             $dstPath = $this->aRouting['assets']['cachePath'] . $path . '/' . $sUrl;
         } else {
@@ -120,7 +120,7 @@ class Assetic extends Router
                 mkdir($pathinfo['dirname'], 0755, true);
             }
 
-            $args = array();
+            $args = [];
             //$args[] = new Yui\CssCompressorFilter('C:\yuicompressor-2.4.7\build\yuicompressor-2.4.7.jar', 'java'),
 
             if ($compress == true) {
@@ -134,9 +134,9 @@ class Assetic extends Router
             }
 
             $css = new AssetCollection(
-                array(
+                [
                     new FileAsset($srcPath),
-                ),
+                ],
                 $args
             );
 
