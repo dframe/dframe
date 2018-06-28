@@ -77,7 +77,7 @@ class Router
     /**
      * __construct Class
      */
-    public function __construct()
+    public function __construct($baseClass = null)
     {
         $this->app = $baseClass;
 
