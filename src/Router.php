@@ -225,7 +225,7 @@ class Router
         $bootstrap = new \Bootstrap();
         $bootstrap->router = $this;
         $loader = new Loader($this->app);
-        $controller = $loader->loadController($controller); // Loading Controller class
+        $controller = $loader->loadController($controller, $namespace); // Loading Controller class
         $response = [];
 
         if (method_exists($controller, 'start')) {
