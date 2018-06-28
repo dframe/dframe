@@ -79,6 +79,10 @@ class Router
      */
     public function __construct()
     {
+        if (ini_get('display_errors') == "on") {
+            $this->debug = new Debug();
+        }
+
         if (!defined('HTTP_HOST') and isset($_SERVER['HTTP_HOST'])) {
             define('HTTP_HOST', $_SERVER['HTTP_HOST']);
         } elseif (!defined('HTTP_HOST')) {
@@ -205,7 +209,9 @@ class Router
         $bootstrap = new \Bootstrap();
         $bootstrap->router = $this;
         $loader = new Loader($bootstrap);
-        $controller = $loader->loadController($controller); // Loading Controller class
+        $loadController = $loader->loadController($controller); // Loading Controller class
+
+        $controller = $loadController->returnController;
         $response = [];
 
         if (method_exists($controller, 'start')) {
@@ -228,6 +234,10 @@ class Router
             if (is_callable([$controller, $data])) {
                 $run = $controller->$data();
                 if ($run instanceof Response) {
+                    if (isset($this->debug)) {
+                        $this->debug->addHeader(array('X-DF-Debug-Method' => $action));
+                        $run->headers($this->debug->getHeader());
+                    }
                     return $run->display();
                 }
             }
@@ -572,6 +582,10 @@ class Router
                 $this->parseArgs = $args;
                 break;
             }
+        }
+        
+        if(isset($this->debug)){
+            $this->debug->addHeader(array('X-DF-Debug-sVars' => $sVars));
         }
         return $sVars;
     }

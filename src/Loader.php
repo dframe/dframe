@@ -187,6 +187,8 @@ class Loader extends Core
                 throw new BaseException('Can not open Controller ' . $controller . ' in: ' . $path);
             }
 
+            $this->baseClass->router->debug->addHeader(array('X-DF-Debug-File' => $path));
+            $this->baseClass->router->debug->addHeader(array('X-DF-Debug-Controller' => $controller));
             include_once $path;
 
             $xsubControler = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $subControler);
@@ -195,7 +197,7 @@ class Loader extends Core
             }
 
             $controller = $this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $xsubControler . '' . $controller . 'Controller';
-            $returnController = new $controller($this->baseClass);
+            $this->returnController = new $controller($this->baseClass);
         } catch (BaseException $e) {
             $msg = null;
             if (ini_get('display_errors') == 'on') {
@@ -227,7 +229,7 @@ class Loader extends Core
             return 'loadController Error';
         }
 
-        return $returnController;
+        return $this;
     }
     /**
      *
