@@ -124,7 +124,7 @@ class Router
 
         $routerConfig = $this->app->config['router'] ?? [];
         $this->aRouting['routes'] = array_merge($this->aRouting['routes'] ?? [], $routerConfig['routes'] ?? []);
-        $this->_aRoutingParse = array_merge($routerConfig['routes'] ?? [], $this->_aRoutingParse ?? []);
+        $this->aRoutingParse = array_merge($routerConfig['routes'] ?? [], $this->aRoutingParse ?? []);
 
         // Check forced HTTPS
         if ($this->https == true) {
@@ -198,7 +198,8 @@ class Router
         return $this->aRouting;
     }
 
-    public function setRoutes($routes){
+    public function setRoutes($routes)
+    {
         $this->aRouting = array_merge($this->aRouting, $routes);
     }
 
@@ -315,7 +316,7 @@ class Router
 
         unset($this->subdomain);
         $this->domain = HTTP_HOST;
-        $this->setHttps($this->routerConfig->get('https', false));
+        //$this->setHttps($this->routerConfig->get('https', false));
 
         return $sUrl;
     }
@@ -435,7 +436,7 @@ class Router
 
         unset($this->subdomain);
         $this->domain = HTTP_HOST;
-        $this->setHttps($this->routerConfig->get('https', false));
+        //$this->setHttps($this->routerConfig->get('https', false));
 
         return $sUrl;
     }
@@ -471,7 +472,7 @@ class Router
                 $sRequest .= '/';
             }
 
-            $sGets = $this->_parseUrl($sRequest);
+            $sGets = $this->parseUrl($sRequest);
             $this->namespace = $sGets['v']['namespace'] ?? '';
             $sGets = str_replace('?', '&', $sGets['sVars']);
             parse_str($sGets, $aGets);
@@ -793,6 +794,8 @@ class Router
     private function parseFile($file)
     {
         $result = '';
+        $routes = [];
+        
         //Windows
         $appDir = str_replace('web/../app/', '', APP_DIR);
         //All
