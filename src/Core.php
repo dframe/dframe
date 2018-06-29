@@ -19,6 +19,7 @@ use Dframe\Router\Response;
  */
 class Core
 {
+    public $app;
 
     public function __construct()
     {

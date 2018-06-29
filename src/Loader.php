@@ -33,6 +33,7 @@ class Loader
         $this->router = new Router($this->baseClass);
 
     }
+
     /**
      * Metoda do includowania pliku modelu i wywołanie objektu przez namespace
      *
@@ -67,7 +68,6 @@ class Loader
      */
     private function loadObject($name, $type, $namespace = null)
     {
-
 
         if (!empty($namespace)) {
 
@@ -157,6 +157,11 @@ class Loader
 
     public function loadController($controller, $namespace = null)
     {
+        if (!empty($namespace)) {
+            $class = '\\' . $namespace . '\\Controller\\' . $controller;
+            return new $class($this->baseClass);
+        }
+
         if (!empty($namespace)) {
             $class = '\\' . $namespace . '\\Controller\\' . $controller;
             return new $class($this->baseClass);
