@@ -15,11 +15,12 @@ namespace Dframe;
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
 
-class Session
+class Session implements \Psr\SimpleCache\CacheInterface
 {
 
-    function __construct()
+    function __construct($baseClass)
     {
+
         $name = '_sessionName';
         $options = [];
 
@@ -103,7 +104,7 @@ class Session
      * @param string $value
      */
 
-    public function set($key, $value)
+    public function set($key, $value, $tll = null)
     {
         $_SESSION[$key] = $value;
     }
@@ -124,6 +125,11 @@ class Session
 
     public function remove($key)
     {
+        $this->delete($key);
+    }
+
+    public function delete($key)
+    {
         if (isset($_SESSION[$key])) {
             unset($_SESSION[$key]);
         }
@@ -131,8 +137,7 @@ class Session
 
     public function end()
     {
-        session_destroy();
-        $_SESSION = [];
+        $this->clear();
     }
 
     public function isValidFingerprint()
@@ -145,4 +150,27 @@ class Session
 
         return false;
     }
+
+
+    public function setMultiple($values, $ttl = null){
+        //todo
+    }
+
+    public function getMultiple($keys, $default = null){
+        //todo
+    }
+
+    public function deleteMultiple($keys){
+        //todo
+    }
+
+    public function has($key){
+        //todo
+    }
+
+    public function clear(){
+        session_destroy();
+        $_SESSION = [];
+    }
+
 }
