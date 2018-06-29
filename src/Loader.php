@@ -19,34 +19,20 @@ use Dframe\Router\Response;
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class Loader extends Core
+class Loader
 {
 
     public $baseClass;
     public $router;
     private $fileExtension = '.php';
     private $namespaceSeparator = '\\';
-
-    public function __construct($bootstrap = null)
+    
+    public function __construct($app)
     {
+        $this->baseClass = $app;
+        $this->router = new Router($this->baseClass);
 
-        if (!defined('APP_DIR')) {
-            throw new BaseException('Please Define appDir in Main config.php', 500);
-        }
-
-        if (!defined('SALT')) {
-            throw new BaseException('Please Define SALT in Main config.php', 500);
-        }
-
-        $this->baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
-
-        if (isset($this->baseClass->router)) {
-            $this->router = $this->baseClass->router;
-        }
-
-        return $this;
     }
-
     /**
      * Metoda do includowania pliku modelu i wywołanie objektu przez namespace
      *
@@ -54,9 +40,9 @@ class Loader extends Core
      *
      * @return object
      */
-    public function loadModel($name)
+    public function loadModel($name, $namespace = null)
     {
-        return $this->loadObject($name, 'Model');
+        return $this->loadObject($name, 'Model', $namespace);
     }
 
     /**
@@ -66,9 +52,9 @@ class Loader extends Core
      *
      * @return object
      */
-    public function loadView($name)
+    public function loadView($name, $namespace = null)
     {
-        return $this->loadObject($name, 'View');
+        return $this->loadObject($name, 'View', $namespace);
     }
 
     /**
@@ -79,8 +65,21 @@ class Loader extends Core
      *
      * @return object
      */
-    private function loadObject($name, $type)
+    private function loadObject($name, $type, $namespace = null)
     {
+
+
+        if (!empty($namespace)) {
+
+            $name = '\\' . $namespace . '\\Model\\' . $name;
+            $ob = new $name($this->baseClass);
+            if (method_exists($ob, 'init')) {
+                $ob->init();
+            }
+
+            return $ob;
+        }
+        //var_dump($this->namespace);
 
         if (!in_array($type, (['Model', 'View']))) {
             return false;
@@ -108,10 +107,13 @@ class Loader extends Core
 
             include_once $path;
             $ob = new $name($this->baseClass);
+            if (method_exists($ob, 'start')) {
+                $ob->start();
+            }
             if (method_exists($ob, 'init')) {
                 $ob->init();
             }
-
+  
         } catch (BaseException $e) {
             $msg = null;
             if (ini_get('display_errors') == "on") {
@@ -134,11 +136,10 @@ class Loader extends Core
 
 
             $routerConfig = Config::load('router');
+            $routes = $routerConfig->get('routes');
 
-            if (isset($routerConfig->get('error/400')[0])) {
-                return $this->router->redirect($routerConfig->get('error/400')[0], 400);
-            } elseif (isset($routerConfig->get('error/404')[0])) {
-                return $this->router->redirect($routerConfig->get('error/404')[0], 404);
+            if (!empty($routes['error/:code'])) {
+                return Response::redirect('error/:code?code=400', 400)->display();
             }
 
             return 'loadObject Error';
@@ -154,8 +155,12 @@ class Loader extends Core
      * @param string $controller
      */
 
-    public function loadController($controller)
+    public function loadController($controller, $namespace = null)
     {
+        if (!empty($namespace)) {
+            $class = '\\' . $namespace . '\\Controller\\' . $controller;
+            return new $class($this->baseClass);
+        }
 
         $subControler = null;
         if (strstr($controller, ",") !== false) {
@@ -222,11 +227,10 @@ class Loader extends Core
             }
 
             $routerConfig = Config::load('router');
+            $routes = $routerConfig->get('routes');
 
-            if (isset($routerConfig->get('error/400')[0])) {
-                return $this->router->redirect($routerConfig->get('error/400')[0], 400);
-            } elseif (isset($routerConfig->get('error/404')[0])) {
-                return $this->router->redirect($routerConfig->get('error/404')[0], 404);
+            if (!empty($routes['error/:code'])) {
+                return Response::redirect('error/:code?code=400', 400)->display();
             }
 
             return 'loadController Error';

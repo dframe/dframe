@@ -115,4 +115,5 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
 
         exit(Response::Create($callback . '(' . json_encode($data) . ')')->headers(['Content-Type' => 'application/jsonp'])->display());
     }
+
 }

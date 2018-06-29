@@ -20,14 +20,39 @@ use Dframe\Router\Response;
 class Core
 {
 
-    public function run()
+    public function __construct()
     {
-        $router = new Router();
-        return $router->run();
+        
+        if (!defined('APP_DIR')) {
+            throw new BaseException('Please Define appDir in Main config.php', 500);
+        }
+
+        if (!defined('SALT')) {
+            throw new BaseException('Please Define SALT in Main config.php', 500);
+        }
+
+        $this->baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
+        
+        foreach ($this->baseClass->providers['core'] ?? [] as $key => $value) {
+            $this->$key = new $value($this);
+        }
+
+        foreach ($this->baseClass->providers['baseClass'] ?? [] as $key => $value) {
+            $this->baseClass->$key = new $value($this);
+        }
+
+        foreach ($this->baseClass->providers['module'] ?? [] as $key => $value) {
+            $this->$key = new $value($this);
+            $this->$key->register();
+            $this->$key->boot();
+        }
+
+        return $this;
     }
 
-    public function setView($view)
+    public function run()
     {
-        $this->view = $view;
+        $this->router->run();
     }
+
 }
