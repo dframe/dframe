@@ -186,9 +186,12 @@ class Loader extends Core
             if (!is_file($path)) {
                 throw new BaseException('Can not open Controller ' . $controller . ' in: ' . $path);
             }
-
-            $this->baseClass->router->debug->addHeader(array('X-DF-Debug-File' => $path));
-            $this->baseClass->router->debug->addHeader(array('X-DF-Debug-Controller' => $controller));
+            
+            if(isset($this->baseClass->router->debug)){
+                $this->baseClass->router->debug->addHeader(array('X-DF-Debug-File' => $path));
+                $this->baseClass->router->debug->addHeader(array('X-DF-Debug-Controller' => $controller));
+            }
+            
             include_once $path;
 
             $xsubControler = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $subControler);
