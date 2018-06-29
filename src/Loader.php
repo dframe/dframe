@@ -27,7 +27,7 @@ class Loader
     private $fileExtension = '.php';
     private $namespaceSeparator = '\\';
     
-    public function __construct($app)
+    public function __construct($app = null)
     {
         $this->baseClass = $app;
         $this->router = new Router($this->baseClass);
