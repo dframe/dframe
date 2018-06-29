@@ -30,13 +30,13 @@ class Messages
      *
      * @param Object $session
      */
-    public function __construct($session)
+    public function __construct($baseClass)
     {
-        $this->session = $session;
-        // $this->session = new $app['session']();
-        // if(!$this->session instanceof \Dframe\Session){
-        //     throw new \Exception("This class Require instance Of Dframe\Session", 1);
-        // }
+
+        $this->session = $baseClass->session;
+        if(!$this->session instanceof \Dframe\Session){
+            throw new \Exception("This class Require instance Of Dframe\Session", 1);
+        }
         
         // Generate a unique ID for this user and session
         $this->msgId = md5(uniqid());
