@@ -19,20 +19,13 @@ use Dframe\Router\Response;
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class Loader
+class Loader extends Core
 {
 
-    public $baseClass;
     public $router;
     private $fileExtension = '.php';
     private $namespaceSeparator = '\\';
-    
-    public function __construct($app = null)
-    {
-        $this->baseClass = $app;
-        $this->router = new Router($this->baseClass);
 
-    }
 
     /**
      * Metoda do includowania pliku modelu i wywołanie objektu przez namespace
@@ -68,10 +61,13 @@ class Loader
      */
     private function loadObject($name, $type, $namespace = null)
     {
+        if (!in_array($type, (['Model', 'View']))) {
+            return false;
+        }
 
         if (!empty($namespace)) {
 
-            $name = '\\' . $namespace . '\\Model\\' . $name;
+            $name = '\\' . $namespace . '\\'. $type .'\\' . $name;
             $ob = new $name($this->baseClass);
             if (method_exists($ob, 'init')) {
                 $ob->init();
@@ -81,9 +77,7 @@ class Loader
         }
         //var_dump($this->namespace);
 
-        if (!in_array($type, (['Model', 'View']))) {
-            return false;
-        }
+  
 
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
@@ -157,14 +151,11 @@ class Loader
 
     public function loadController($controller, $namespace = null)
     {
+        
         if (!empty($namespace)) {
             $class = '\\' . $namespace . '\\Controller\\' . $controller;
-            return new $class($this->baseClass);
-        }
-
-        if (!empty($namespace)) {
-            $class = '\\' . $namespace . '\\Controller\\' . $controller;
-            return new $class($this->baseClass);
+            $this->returnController = new $class($this);
+            return $this;
         }
 
         $subControler = null;
@@ -210,7 +201,7 @@ class Loader
             }
 
             $controller = $this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $xsubControler . '' . $controller . 'Controller';
-            $this->returnController = new $controller($this->baseClass);
+            $this->returnController = new $controller();
         } catch (BaseException $e) {
             $msg = null;
             if (ini_get('display_errors') == 'on') {

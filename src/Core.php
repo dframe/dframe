@@ -19,7 +19,6 @@ use Dframe\Router\Response;
  */
 class Core
 {
-    public $app;
 
     public function __construct()
     {
@@ -32,17 +31,19 @@ class Core
             throw new BaseException('Please Define SALT in Main config.php', 500);
         }
 
-        $this->baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
+        $baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
+        $this->baseClass = (object)array();
         
-        foreach ($this->baseClass->providers['core'] ?? [] as $key => $value) {
+        foreach ($baseClass->providers['core'] ?? [] as $key => $value) {
             $this->$key = new $value($this);
         }
 
-        foreach ($this->baseClass->providers['baseClass'] ?? [] as $key => $value) {
-            $this->baseClass->$key = new $value($this);
+        foreach ($baseClass->providers['baseClass'] ?? [] as $key => $value) {
+            $this->baseClass->$key = new $value($this->baseClass);
         }
 
-        foreach ($this->baseClass->providers['module'] ?? [] as $key => $value) {
+
+        foreach ($baseClass->providers['modules'] ?? [] as $key => $value) {
             $this->$key = new $value($this);
             $this->$key->register();
             $this->$key->boot();
@@ -53,7 +54,7 @@ class Core
 
     public function run()
     {
-        $this->router->run();
+       $this->router->setUp($this)->run();
     }
 
 }
