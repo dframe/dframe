@@ -74,13 +74,16 @@ class Router
      */
     private $cacheDir = APP_DIR . 'View/cache/';
 
+    public function __construct($app = null){
+        $this->setUp($app);
+    }
+
     /**
      * __construct Class
      */
-    public function __construct($baseClass = null)
+    public function setUp($app)
     {
-
-        $this->app = $baseClass;
+        $this->app = $app;
         if (ini_get('display_errors') == "on") {
             $this->debug = new Debug();
         }
@@ -193,7 +196,9 @@ class Router
             }
         }
 
+        return $this;
     }
+
 
     public function getRoutes()
     {
