@@ -36,7 +36,7 @@ class Core
         }
 
         $baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
-        $this->baseClass = (object)array();
+        $this->baseClass = (object)[];
 
         foreach ($baseClass->providers['core'] ?? [] as $key => $value) {
             $this->$key = new $value($this);

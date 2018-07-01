@@ -189,8 +189,8 @@ class Loader extends Core
             }
             
             if(isset($this->baseClass->router->debug)){
-                $this->baseClass->router->debug->addHeader(array('X-DF-Debug-File' => $path));
-                $this->baseClass->router->debug->addHeader(array('X-DF-Debug-Controller' => $controller));
+                $this->baseClass->router->debug->addHeader(['X-DF-Debug-File' => $path]);
+                $this->baseClass->router->debug->addHeader(['X-DF-Debug-Controller' => $controller]);
             }
             
             include_once $path;
