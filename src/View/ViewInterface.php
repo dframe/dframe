@@ -10,7 +10,7 @@
 namespace Dframe\View;
 
 /**
- * Short Description
+ * View Interface
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */

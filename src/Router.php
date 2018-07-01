@@ -12,6 +12,9 @@ use Dframe\Config;
 use Dframe\Loader;
 use Dframe\Router\Response;
 
+use Dframe\Router\Exceptions\InvalidArgumentException;
+use Dframe\Router\Exceptions\RuntimeException;
+
 /**
  * Router class
  *
@@ -156,7 +159,7 @@ class Router
             }
 
             if (!is_array($controllerDirs)) {
-                throw new \InvalidArgumentException('Controllers directory must be either string or array');
+                throw new InvalidArgumentException('Controllers directory must be either string or array');
             }
 
             $this->controllerDirs = [];
@@ -169,14 +172,13 @@ class Router
 
             // We save the cache dir
             if (!is_dir($cacheDir)) {
-                $result = @mkdir($cacheDir, 0777, true);
-                if ($result === false) {
-                    throw new \RuntimeException('Can\'t create cache directory');
+                if (!mkdir($cacheDir, 0777, true)) {
+                    throw new RuntimeException('Can\'t create cache directory');
                 }
             }
 
             if (!is_writable($cacheDir)) {
-                throw new \RuntimeException('Cache directory must be writable by web server');
+                throw new RuntimeException('Cache directory must be writable by web server');
             }
 
             $this->cacheDir = rtrim($cacheDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
@@ -256,7 +258,7 @@ class Router
     public function setHttps($option = false)
     {
         if (!in_array($option, [true, false])) {
-            throw new \InvalidArgumentException('Incorect option', 403);
+            throw new InvalidArgumentException('Incorect option', 403);
         }
 
         if ($option == true) {
@@ -824,7 +826,7 @@ class Router
                         $routeName = $matches[1];
                     }
                     if (empty($routeName)) {
-                        throw new \InvalidArgumentException('Incorect name', 403);
+                        throw new InvalidArgumentException('Incorect name', 403);
                     }
 
                     $routePath = trim($route2[0][0], '"');

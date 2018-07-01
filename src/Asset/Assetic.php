@@ -22,6 +22,8 @@ use Assetic\Asset\AssetReference;
 use Assetic\Filter\GoogleClosure;
 use Patchwork\JSqueeze;
 
+use Dframe\Asset\AsseticException;
+
 set_time_limit(120);
 
 /**
@@ -35,8 +37,8 @@ class Assetic extends Router
     private function checkDir($path)
     {
         if (!is_dir($path)) {
-            if (!mkdir($path, 0755, true)) {
-                throw new BaseException('Unable to create' . $path);
+            if (!mkdir($path, 0777, true)) {
+                throw new AsseticException('Unable to create' . $path, '', 403);
             }
         }
     }
@@ -57,7 +59,6 @@ class Assetic extends Router
             $dstPath = $this->aRouting['assets']['cachePath'] . $path;
         }
 
-
         //Kopiowanie pliku jezeli nie istnieje
         if (!file_exists($dstPath)) {
             if (!file_exists($srcPath)) {
@@ -66,7 +67,11 @@ class Assetic extends Router
 
             $pathinfo = pathinfo($dstPath);
             if (!file_exists($pathinfo['dirname'])) {
-                mkdir($pathinfo['dirname'], 0777, true);
+
+                if (!mkdir($pathinfo['dirname'], 0777, true)) {
+                    throw new AsseticException('Unable to create' . $path, '', 403);
+                }
+
             }
 
             $js = file_get_contents($srcPath);
@@ -74,7 +79,6 @@ class Assetic extends Router
                 $jSqueeze = new JSqueeze();
                 $js = $jSqueeze->squeeze($js, true, true, false);
             }
-
 
             if (!file_put_contents($dstPath, $js)) {
                 $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: ' . $srcPath . ' TO ' . $dstPath . "\n";
@@ -117,7 +121,9 @@ class Assetic extends Router
 
             $pathinfo = pathinfo($dstPath);
             if (!file_exists($pathinfo['dirname'])) {
-                mkdir($pathinfo['dirname'], 0755, true);
+                if (!mkdir($pathinfo['dirname'], 0777, true)) {
+                    throw new AsseticException('Unable to create' . $path, '', 403);
+                }
             }
 
             $args = [];
@@ -147,7 +153,9 @@ class Assetic extends Router
             foreach ($m['1'] as $key => $url) {
                 $subPathinfo = pathinfo($pathinfo['dirname'] . '/' . $url);
                 if (!file_exists($subPathinfo['dirname'])) {
-                    mkdir($subPathinfo['dirname'], 0777, true);
+                    if (!mkdir($subPathinfo['dirname'], 0777, true)) {
+                        throw new AsseticException('Unable to create' . $path, '', 403);
+                    }
                 }
 
                 if (!copy($srcPathinfo['dirname'] . '/' . $url, $pathinfo['dirname'] . '/' . $url)) {

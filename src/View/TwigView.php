@@ -10,9 +10,10 @@
 namespace Dframe\View;
 
 use Dframe\Config;
+use Dframe\View\Exception\ViewException;
 
 /**
- * Short Description
+ * Twig View
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
@@ -44,11 +45,11 @@ class TwigView implements \Dframe\View\ViewInterface
     {
         try {
             if (isset($this->assigns[$name])) {
-                throw new \Exception('You can\'t assign "' . $name . '" in Twig');
+                throw new ViewException('You can\'t assign "' . $name . '" in Twig');
             }
 
             $assign = $this->assigns[$name] = $value;
-        } catch (\Exception $e) {
+        } catch (ViewException $e) {
             echo $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />
@@ -89,11 +90,11 @@ class TwigView implements \Dframe\View\ViewInterface
         $path = $twigConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name . $twigConfig->get('fileExtension', '.twig');
         try {
             if (!is_file($path)) {
-                throw new \Exception('Can not open template ' . $name . ' in: ' . $path);
+                throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
             }
 
             $renderInclude = $this->twig->render($name, $this->assign);
-        } catch (\Exception $e) {
+        } catch (ViewException $e) {
             echo $e->getMessage() . '<br />
                         File: ' . $e->getFile() . '<br />
                         Code line: ' . $e->getLine() . '<br />
