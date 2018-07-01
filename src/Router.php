@@ -77,13 +77,7 @@ class Router
      */
     private $cacheDir = APP_DIR . 'View/cache/';
 
-    /**
-     * __construct Class
-     */
-    public function setUp($app)
-    {
-        $this->app = $app;
-        
+    public function __construct(){
 
         if (!defined('HTTP_HOST') and isset($_SERVER['HTTP_HOST'])) {
             define('HTTP_HOST', $_SERVER['HTTP_HOST']);
@@ -124,10 +118,6 @@ class Router
 
         $this->aRoutingParse = $this->routerConfig->get('routes', $this->aRouting['routes']); // For parsing array
 
-        $routerConfig = $this->app->config['router'] ?? [];
-        $this->aRouting['routes'] = array_merge($this->aRouting['routes'] ?? [], $routerConfig['routes'] ?? []);
-        $this->aRoutingParse = array_merge($routerConfig['routes'] ?? [], $this->aRoutingParse ?? []);
-
         // Check forced HTTPS
         if ($this->https == true) {
             $this->requestPrefix = 'https://';
@@ -146,6 +136,19 @@ class Router
                 $this->requestPrefix = 'https://';
             }
         }
+    }
+
+    /**
+     * __construct Class
+     */
+    public function setUp($app)
+    {
+        $this->app = $app;
+
+        $routerConfig = $this->app->config['router'] ?? [];
+        $this->aRouting['routes'] = array_merge($this->aRouting['routes'] ?? [], $routerConfig['routes'] ?? []);
+        $this->aRoutingParse = array_merge($routerConfig['routes'] ?? [], $this->aRoutingParse ?? []);
+
 
         if (PHP_SAPI !== 'cli') {
             $routesFile = 'routes.php';
