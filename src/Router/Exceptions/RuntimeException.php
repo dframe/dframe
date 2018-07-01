@@ -7,7 +7,7 @@
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
-namespace Dframe;
+namespace Dframe\Router\Exceptions;
 
 /**
  * RuntimeException Class
