@@ -9,11 +9,11 @@
 
 namespace Dframe;
 
-use Dframe\BaseException;
+
 use Dframe\Config;
 use Dframe\Core;
 use Dframe\Router\Response;
-
+use Dframe\Loader\Exceptions\LoaderException;
 /**
  * Loader Class
  *
@@ -31,11 +31,11 @@ class Loader extends Core
     {
 
         if (!defined('APP_DIR')) {
-            throw new BaseException('Please Define appDir in Main config.php', 500);
+            throw new LoaderException('Please Define appDir in Main config.php', 500);
         }
 
         if (!defined('SALT')) {
-            throw new BaseException('Please Define SALT in Main config.php', 500);
+            throw new LoaderException('Please Define SALT in Main config.php', 500);
         }
 
         $this->baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
@@ -97,13 +97,13 @@ class Loader extends Core
 
             if (!$this->isCamelCaps($name, true)) {
                 if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE == true)) {
-                    throw new BaseException('Camel Sensitive is on. Can not use ' . $type . ' ' . $name . ' try to use StudlyCaps or CamelCase');
+                    throw new LoaderException('Camel Sensitive is on. Can not use ' . $type . ' ' . $name . ' try to use StudlyCaps or CamelCase');
                 }
             }
 
             $name = !empty($folder) ? $this->namespaceSeparator . $type . $this->namespaceSeparator . str_replace([$this->namespaceSeparator, '/'], $this->namespaceSeparator, $folder) . $name . $type : $this->namespaceSeparator . $type . $this->namespaceSeparator . $name . $type;;
             if (!is_file($path)) {
-                throw new BaseException('Can not open ' . $type . ' ' . $name . ' in: ' . $path);
+                throw new LoaderException('Can not open ' . $type . ' ' . $name . ' in: ' . $path);
             }
 
             include_once $path;
@@ -112,7 +112,7 @@ class Loader extends Core
                 $ob->init();
             }
 
-        } catch (BaseException $e) {
+        } catch (LoaderException $e) {
             $msg = null;
             if (ini_get('display_errors') == "on") {
                 $msg .= '<pre>';
@@ -184,7 +184,7 @@ class Loader extends Core
 
         try {
             if (!is_file($path)) {
-                throw new BaseException('Can not open Controller ' . $controller . ' in: ' . $path);
+                throw new LoaderException('Can not open Controller ' . $controller . ' in: ' . $path);
             }
             
             if(isset($this->baseClass->router->debug)){
@@ -196,12 +196,12 @@ class Loader extends Core
 
             $xsubControler = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $subControler);
             if (!class_exists($this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $xsubControler . '' . $controller . 'Controller')) {
-                throw new BaseException('Bad controller error');
+                throw new LoaderException('Bad controller error');
             }
 
             $controller = $this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $xsubControler . '' . $controller . 'Controller';
             $this->returnController = new $controller($this->baseClass);
-        } catch (BaseException $e) {
+        } catch (LoaderException $e) {
             $msg = null;
             if (ini_get('display_errors') == 'on') {
                 $msg .= '<pre>';
