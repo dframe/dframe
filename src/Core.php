@@ -63,7 +63,7 @@ class Core
      */
     public function run($controller = null, $action = null, $args = [])
     {
-
+        $this->router->setUp($this);
         if (is_null($controller ?? null) and is_null($action ?? null)) {
             $this->router->parseGets();
             $controller = $this->router->controller;

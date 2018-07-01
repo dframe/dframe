@@ -77,10 +77,6 @@ class Router
      */
     private $cacheDir = APP_DIR . 'View/cache/';
 
-    public function __construct($app = null){
-        $this->setUp($app);
-    }
-
     /**
      * __construct Class
      */
