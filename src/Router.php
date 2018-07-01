@@ -87,9 +87,7 @@ class Router
     public function setUp($app)
     {
         $this->app = $app;
-        if (ini_get('display_errors') == "on") {
-            $this->debug = new Debug();
-        }
+        
 
         if (!defined('HTTP_HOST') and isset($_SERVER['HTTP_HOST'])) {
             define('HTTP_HOST', $_SERVER['HTTP_HOST']);
@@ -560,8 +558,8 @@ class Router
         }
 
 
-        if (isset($this->debug)) {
-            $this->debug->addHeader(array('X-DF-Debug-sVars' => $sVars));
+        if (isset($this->app->debug)) {
+            $this->app->debug->addHeader(array('X-DF-Debug-sVars' => $sVars));
         }
 
         return array('v' => $v, 'sVars' => $sVars);
