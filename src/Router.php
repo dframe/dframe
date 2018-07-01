@@ -73,7 +73,7 @@ class Router
     private $controllerDirs = APP_DIR . 'Controller/';
 
     /**
-     * @var string
+     * @var string 
      */
     private $cacheDir = APP_DIR . 'View/cache/';
 
@@ -210,64 +210,6 @@ class Router
     public function setRoutes($routes)
     {
         $this->aRouting = array_merge($this->aRouting, $routes);
-    }
-
-    /**
-     * Display Controller result
-     * 
-     * @param boolen|Response
-     * 
-     */
-    public function run($controller = null, $action = null, $arg = [])
-    {
-
-        if (is_null($controller ?? null) and is_null($action ?? null)) {
-            $this->parseGets();
-            $controller = $this->controller;
-            $action = $this->action;
-            $namespace = $this->namespace;
-        }
-
-        $arg = $this->parseArgs;
-
-        $response = [];
-        //$bootstrap = new \Bootstrap();
-        //$bootstrap->router = $this;
-        $loader = new Loader($this->app);
-        $loadController = $loader->loadController($controller, $namespace); // Loading Controller class
-        $controller = $loadController->returnController;
-        $response = [];
-
-        if (method_exists($controller, 'start')) {
-            $response[] = 'start';
-        }
-
-        if (method_exists($controller, 'init')) {
-            $response[] = 'init';
-        }
-
-        if (method_exists($controller, $action) or is_callable([$controller, $action])) {
-            $response[] = $action;
-        }
-
-        if (method_exists($controller, 'end')) {
-            $response[] = 'end';
-        }
-
-        foreach ($response as $key => $data) {
-            if (is_callable([$controller, $data])) {
-                $run = $controller->$data();
-                if ($run instanceof Response) {
-                    if (isset($this->debug)) {
-                        $this->debug->addHeader(array('X-DF-Debug-Method' => $action));
-                        $run->headers($this->debug->getHeader());
-                    }
-                    return $run->display();
-                }
-            }
-        }
-
-        return true;
     }
 
     /**

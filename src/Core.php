@@ -22,7 +22,7 @@ class Core
 
     public function __construct()
     {
-        
+
         if (!defined('APP_DIR')) {
             throw new BaseException('Please Define appDir in Main config.php', 500);
         }
@@ -33,7 +33,7 @@ class Core
 
         $baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
         $this->baseClass = (object)array();
-        
+
         foreach ($baseClass->providers['core'] ?? [] as $key => $value) {
             $this->$key = new $value($this);
         }
@@ -52,9 +52,60 @@ class Core
         return $this;
     }
 
-    public function run()
+    /**
+     * Display Controller result
+     * 
+     * @param boolen|Response
+     * 
+     */
+    public function run($controller = null, $action = null, $args = [])
     {
-       $this->router->setUp($this)->run();
+       
+
+        if (is_null($controller ?? null) and is_null($action ?? null)) {
+            $this->router->parseGets();
+            $controller = $this->router->controller;
+            $action = $this->router->action;
+            $namespace = $this->router->namespace;
+        }
+
+        $arg = $this->router->parseArgs;
+
+        $response = [];
+        $loader = new Loader($this);
+        $loadController = $loader->loadController($controller, $namespace); // Loading Controller class
+        $controller = $loadController->returnController;
+        $response = [];
+
+        if (method_exists($controller, 'start')) {
+            $response[] = ['start', []];
+        }
+
+        if (method_exists($controller, 'init')) {
+            $response[] = ['init', []];
+        }
+
+        if (method_exists($controller, $action) or is_callable([$controller, $action])) {
+            $response[] = [$action, $args];
+        }
+
+        if (method_exists($controller, 'end')) {
+            $response[] = ['end',[]];
+        }
+
+        foreach ($response as $key => $data) {
+            $run = call_user_func_array([$controller, $data[0]], $data[1]);
+            if ($run instanceof Response) {
+                if (isset($this->debug)) {
+                    $this->debug->addHeader(['X-DF-Debug-Method' => $action]);
+                    $run->headers($this->debug->getHeader());
+                }
+                return $run->display();
+            }
+
+        }
+
+        return true;
     }
 
 }
