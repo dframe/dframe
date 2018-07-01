@@ -10,9 +10,10 @@
 namespace Dframe\View;
 
 use Dframe\Config;
+use Dframe\View\Exception\ViewException;
 
 /**
- * Short Description
+ * Smarty View
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
@@ -44,11 +45,11 @@ class SmartyView implements \Dframe\View\ViewInterface
     {
         try {
             if ($this->smarty->getTemplateVars($name) !== null) {
-                throw new \Exception('You can\'t assign "' . $name . '" in Smarty');
+                throw new ViewException('You can\'t assign "' . $name . '" in Smarty');
             }
 
             $assign = $this->smarty->assign($name, $value);
-        } catch (Exception $e) {
+        } catch (ViewException $e) {
             echo $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />
@@ -81,7 +82,7 @@ class SmartyView implements \Dframe\View\ViewInterface
 
         try {
             if (!is_file($path)) {
-                throw new \Exception('Can not open template ' . $name . ' in: ' . $path);
+                throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
             }
 
             $fetch = $this->smarty->fetch($path); // Ładowanie widoku
@@ -119,11 +120,11 @@ class SmartyView implements \Dframe\View\ViewInterface
 
         try {
             if (!is_file($path)) {
-                throw new \Exception('Can not open template ' . $name . ' in: ' . $path);
+                throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
             }
 
             return $this->smarty->display($path); // Ładowanie widoku
-        } catch (Exception $e) {
+        } catch (ViewException $e) {
             echo $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />

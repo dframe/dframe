@@ -10,9 +10,10 @@
 namespace Dframe\View;
 
 use Dframe\Config;
+use Dframe\View\Exception\ViewException;
 
 /**
- * Short Description
+ * Default View
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  * @author Amadeusz Dzięcioł <amadeusz.xd@gmail.com>
@@ -58,11 +59,11 @@ class DefaultView implements \Dframe\View\ViewInterface
 
         try {
             if (!is_file($path)) {
-                throw new \Exception('Can not open template ' . $name . ' in: ' . $path);
+                throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
             }
             ob_start();
             include $path;
-        } catch (Exception $e) {
+        } catch (ViewException $e) {
             echo $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />
@@ -94,11 +95,11 @@ class DefaultView implements \Dframe\View\ViewInterface
 
         try {
             if (!is_file($path)) {
-                throw new \Exception('Can not open template ' . $name . ' in: ' . $path);
+                throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
             }
 
             $renderInclude = include $path;
-        } catch (Exception $e) {
+        } catch (ViewException $e) {
             echo $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />
