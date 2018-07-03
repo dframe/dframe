@@ -34,9 +34,10 @@ class Core
         if (ini_get('display_errors') == "on") {
             $this->debug = new Debug();
         }
-
+        
+        $bootstrap = (object)[];
         $baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
-        $this->baseClass = (object)[];
+        $this->baseClass = $baseClass;
 
         foreach ($baseClass->providers['core'] ?? [] as $key => $value) {
             $this->$key = new $value($this);
