@@ -12,18 +12,17 @@ class Bootstrap
     public function __construct()
     {
 
+
         $this->providers['core'] = [
             'router' => \Dframe\Router::class,
+            //'debug' => \Dframe\Debug::class,
         ];
 
-        $this->providers['baseClass'] = [
-            'session' => \Dframe\Session::class, // Best to set projec
-            'msg' => \Dframe\Messages::class,     // Default notify cl
-            'token' => \Dframe\Token::class,     // Default csrf token
-        ];
+        $this->router = new \Dframe\Router();
+        $this->session = new \Dframe\Session('Test'); // Best to set projec
+        $this->msg = new \Dframe\Messages($this->session);     // Default notify cl
+        $this->token = new \Dframe\Token($this->session);     // Default csrf token
 
-        $this->providers['modules'] = [
-        ];
 
         return $this;
     }
