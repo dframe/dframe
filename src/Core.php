@@ -17,43 +17,8 @@ use Dframe\Router\Response;
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class Core
+class Core extends Loader
 {
-
-    public function __construct()
-    {
-
-        if (!defined('APP_DIR')) {
-            throw new BaseException('Please Define appDir in Main config.php', 500);
-        }
-
-        if (!defined('SALT')) {
-            throw new BaseException('Please Define SALT in Main config.php', 500);
-        }
-
-        if (ini_get('display_errors') == "on") {
-            $this->debug = new Debug();
-        }
-
-        $baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
-        $this->baseClass = (object)[];
-
-        foreach ($baseClass->providers['core'] ?? [] as $key => $value) {
-            $this->$key = new $value($this);
-        }
-
-        foreach ($baseClass->providers['baseClass'] ?? [] as $key => $value) {
-            $this->baseClass->$key = new $value($this->baseClass);
-        }
-
-        foreach ($baseClass->providers['modules'] ?? [] as $key => $value) {
-            $this->$key = new $value($this);
-            $this->$key->register();
-            $this->$key->boot();
-        }
-
-        return $this;
-    }
 
     /**
      * Display Controller result
@@ -63,7 +28,8 @@ class Core
      */
     public function run($controller = null, $action = null, $args = [])
     {
-        $this->router->setUp($this);
+        
+        $this->router->boot($this);
         if (is_null($controller ?? null) and is_null($action ?? null)) {
             $this->router->parseGets();
             $controller = $this->router->controller;
@@ -74,9 +40,11 @@ class Core
         $arg = $this->router->parseArgs;
 
         $response = [];
-        $loader = new Loader($this);
+        $loader = new Loader($this->baseClass);
         $loadController = $loader->loadController($controller, $namespace); // Loading Controller class
+
         $controllerObject = $loadController->returnController;
+
         $response = [];
 
         if (method_exists($controllerObject, 'start')) {
@@ -92,20 +60,21 @@ class Core
         }
 
         if (method_exists($controllerObject, 'end')) {
-            $response[] = ['end',[]];
+            $response[] = ['end', []];
         }
 
         foreach ($response as $key => $data) {
             $run = call_user_func_array([$controllerObject, $data[0]], $data[1]);
             if ($run instanceof Response) {
                 if (isset($this->debug)) {
+                    
                     $this->debug->addHeader(['X-DF-Debug-Controller' => $controller]);
                     $this->debug->addHeader(['X-DF-Debug-Method' => $action]);
-                    
+
                     $run->headers($this->debug->getHeader());
                 }
 
-                return $run->display();
+               return $run->display();
             }
 
         }

@@ -19,12 +19,46 @@ use Dframe\Loader\Exceptions\LoaderException;
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class Loader extends Core
+class Loader
 {
 
     public $router;
     private $fileExtension = '.php';
     private $namespaceSeparator = '\\';
+
+    public function __construct($bootstrap = null)
+    {
+        
+        if (!defined('APP_DIR')) {
+            throw new LoaderException('Please Define appDir in Main config.php', 500);
+        }
+        if (!defined('SALT')) {
+            throw new LoaderException('Please Define SALT in Main config.php', 500);
+        }
+
+        $this->baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
+        $baseClass = new \Bootstrap();
+        foreach ($baseClass->providers['core'] ?? [] as $key => $value) {
+            $this->$key = new $value($this);
+        }
+
+        if (is_null($bootstrap)) {
+            foreach ($baseClass->providers['baseClass'] ?? [] as $key => $value) {
+                $this->baseClass->$key = new $value($this->baseClass);
+            }
+
+            $this->baseClass->modules = (object)[];
+            foreach ($baseClass->providers['modules'] ?? [] as $key => $value) {
+                $this->baseClass->modules->$key = new $value($this);
+                $this->baseClass->modules->$key->register();
+                $this->baseClass->modules->$key->boot();
+            }
+
+            
+        }
+
+        return $this;
+    }
 
 
     /**
@@ -75,8 +109,6 @@ class Loader extends Core
 
             return $ob;
         }
-        //var_dump($this->namespace);
-
   
 
         $pathFile = pathFile($name);
@@ -151,10 +183,10 @@ class Loader extends Core
 
     public function loadController($controller, $namespace = null)
     {
-        
+
         if (!empty($namespace)) {
             $class = '\\' . $namespace . '\\Controller\\' . $controller;
-            $this->returnController = new $class($this);
+            $this->returnController = new $class($this->baseClass);
             return $this;
         }
 
@@ -187,10 +219,10 @@ class Loader extends Core
             if (!is_file($path)) {
                 throw new LoaderException('Can not open Controller ' . $controller . ' in: ' . $path);
             }
-            
-            if(isset($this->baseClass->router->debug)){
-                $this->baseClass->router->debug->addHeader(['X-DF-Debug-File' => $path]);
-                $this->baseClass->router->debug->addHeader(['X-DF-Debug-Controller' => $controller]);
+
+            if (isset($this->debug)) {
+                $this->debug->addHeader(['X-DF-Debug-File' => $path]);
+                $this->debug->addHeader(['X-DF-Debug-Controller' => $controller]);
             }
             
             include_once $path;
@@ -201,7 +233,8 @@ class Loader extends Core
             }
 
             $controller = $this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $xsubControler . '' . $controller . 'Controller';
-            $this->returnController = new $controller();
+            $this->returnController = new $controller($this->baseClass);
+   
         } catch (LoaderException $e) {
             $msg = null;
             if (ini_get('display_errors') == 'on') {
