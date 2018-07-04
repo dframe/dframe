@@ -136,19 +136,19 @@ class Router
                 $this->requestPrefix = 'https://';
             }
         }
+
     }
 
     /**
      * __construct Class
      */
-    public function setUp($app)
+    public function boot($app)
     {
         $this->app = $app;
 
         $routerConfig = $this->app->config['router'] ?? [];
         $this->aRouting['routes'] = array_merge($this->aRouting['routes'] ?? [], $routerConfig['routes'] ?? []);
         $this->aRoutingParse = array_merge($routerConfig['routes'] ?? [], $this->aRoutingParse ?? []);
-
 
         if (PHP_SAPI !== 'cli') {
             $routesFile = 'routes.php';
