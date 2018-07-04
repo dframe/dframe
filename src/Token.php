@@ -29,10 +29,11 @@ class Token
      * @param array  $config
      */
 
-    public function __construct($baseClass)
+    public function __construct($driver)
     {
-        $this->driver = $baseClass->session;
-        if (!$this->driver instanceof \Psr\SimpleCache\CacheInterface) {
+
+        $this->driver = $driver;
+        if (!($this->driver instanceof \Psr\SimpleCache\CacheInterface) == true) {
             throw new \Exception("This class Require instance Of Dframe\Session", 1);
         }
 

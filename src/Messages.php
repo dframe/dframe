@@ -30,20 +30,19 @@ class Messages
      *
      * @param Object $session
      */
-    public function __construct($baseClass)
+    public function __construct($driver)
     {
-
-        $this->session = $baseClass->session;
-        if(!$this->session instanceof \Dframe\Session){
+        $this->driver = $driver;
+        if(!($this->driver instanceof \Psr\SimpleCache\CacheInterface) == true){
             throw new \Exception("This class Require instance Of Dframe\Session", 1);
         }
         
         // Generate a unique ID for this user and session
         $this->msgId = md5(uniqid());
 
-        $keyExists = $this->session->keyExists('flash_messages');
+        $keyExists = $this->driver->keyExists('flash_messages');
         if ($keyExists == false) {
-            $this->session->set('flash_messages', []);
+            $this->driver->set('flash_messages', []);
         }
     }
 
@@ -99,9 +98,9 @@ class Messages
             return Response::create($e->getMessage())->status(501)->display();
         }
 
-        $get = $this->session->get('flash_messages');
+        $get = $this->driver->get('flash_messages');
         $get[$type][] = $message;
-        $this->session->set('flash_messages', $get);
+        $this->driver->set('flash_messages', $get);
 
         if (!is_null($redirect)) {
             return $router->redirect($redirect, 301);
@@ -125,7 +124,7 @@ class Messages
         
         // Print a certain type of message?
         if (in_array($type, $this->msgTypes)) {
-            $flashMessages = $this->session->get('flash_messages');
+            $flashMessages = $this->driver->get('flash_messages');
             foreach ($flashMessages[$type] as $msg) {
                 $messages .= $msg;
             }
@@ -136,7 +135,7 @@ class Messages
             $this->clear($type);
             // Print ALL queued messages
         } elseif ($type == 'all') {
-            $flashMessages = $this->session->get('flash_messages');
+            $flashMessages = $this->driver->get('flash_messages');
             foreach ($flashMessages as $type => $msgArray) {
                 $messages = '';
                 foreach ($msgArray as $msg) {
@@ -168,7 +167,7 @@ class Messages
      */
     public function hasErrors()
     {
-        $flashMessages = $this->session->get('flash_messages');
+        $flashMessages = $this->driver->get('flash_messages');
         return empty($flashMessages['error']) ? false : true;
     }
 
@@ -182,12 +181,12 @@ class Messages
     public function hasMessages($type = null)
     {
         if (!is_null($type)) {
-            $flashMessages = $this->session->get('flash_messages');
+            $flashMessages = $this->driver->get('flash_messages');
             if (!empty($flashMessages[$type])) {
                 return $flashMessages[$type];
             }
         } else {
-            $flashMessages = $this->session->get('flash_messages');
+            $flashMessages = $this->driver->get('flash_messages');
             foreach ($this->msgTypes as $type) {
                 if (!empty($flashMessages[$type])) {
                     return true;
@@ -208,11 +207,11 @@ class Messages
     public function clear($type = 'all')
     {
         if ($type == 'all') {
-            $this->session->remove('flash_messages');
+            $this->driver->remove('flash_messages');
         } else {
-            $flashMessages = $this->session->get('flash_messages');
+            $flashMessages = $this->driver->get('flash_messages');
             unset($flashMessages[$type]);
-            $this->session->set('flash_messages', $flashMessages);
+            $this->driver->set('flash_messages', $flashMessages);
         }
 
         return true;
