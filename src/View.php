@@ -51,7 +51,7 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
     {
 
         if (empty($type) or $type == 'html') {
-            return $this->view->renderInclude($data);
+            return Response::Create($this->view->renderInclude($data));
         } elseif ($type == 'jsonp') {
             return $this->renderJSONP($data);
         } else {
@@ -116,4 +116,5 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
 
         exit(Response::Create($callback . '(' . json_encode($data) . ')')->headers(['Content-Type' => 'application/jsonp'])->display());
     }
+
 }

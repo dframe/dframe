@@ -122,8 +122,8 @@ class SmartyView implements \Dframe\View\ViewInterface
             if (!is_file($path)) {
                 throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
             }
-
-            return $this->smarty->display($path); // Ładowanie widoku
+            
+            return $this->smarty->fetch($path); // Ładowanie widoku
         } catch (ViewException $e) {
             echo $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />

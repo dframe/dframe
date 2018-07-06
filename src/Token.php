@@ -15,7 +15,7 @@ namespace Dframe;
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
 
-class Token
+class Token 
 {
 
     protected $driver;
@@ -29,13 +29,13 @@ class Token
      * @param array  $config
      */
 
-    public function __construct($session)
+    public function __construct($driver)
     {
-        $this->driver = $session;
-        // $this->driver = new $app['session']();
-        // if (!$this->driver instanceof \Dframe\Session) {
-        //     throw new \Exception("This class Require instance Of Dframe\Session", 1);
-        // }
+
+        $this->driver = $driver;
+        if (!($this->driver instanceof \Psr\SimpleCache\CacheInterface) == true) {
+            throw new \Exception("This class Require instance Of Dframe\Session", 1);
+        }
 
         $token = $this->driver->get('token');
         if (!empty($token)) {
