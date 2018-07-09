@@ -7,7 +7,7 @@
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
-namespace Dframe\Assets\Exceptions;
+namespace Dframe\Asset\Exceptions;
 
 /**
  * AsseticException Class

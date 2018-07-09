@@ -7,7 +7,8 @@
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
-namespace Dframe\View\Exceptions;;
+namespace Dframe\View\Exceptions;
+
 
 /**
  * ViewException Class
