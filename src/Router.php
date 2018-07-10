@@ -150,48 +150,52 @@ class Router
         $this->aRouting['routes'] = array_merge($this->aRouting['routes'] ?? [], $routerConfig['routes'] ?? []);
         $this->aRoutingParse = array_merge($routerConfig['routes'] ?? [], $this->aRoutingParse ?? []);
 
-        if (PHP_SAPI !== 'cli') {
-            $routesFile = 'routes.php';
-            $controllersFile = 'controllers.php';
-            $usedControllers = [];
-            $controllerDirs = APP_DIR . 'Controller/';
-            $cacheDir = APP_DIR . 'View/cache/';
+        $annotationRoute = $this->routerConfig->get('annotation', false);
+        if ($annotationRoute === true) {
 
+            if (PHP_SAPI !== 'cli') {
+                $routesFile = 'routes.php';
+                $controllersFile = 'controllers.php';
+                $usedControllers = [];
+                $controllerDirs = APP_DIR . 'Controller/';
+                $cacheDir = APP_DIR . 'View/cache/';
         // We save controller dirs
-            if (is_string($controllerDirs)) {
-                $controllerDirs = [$controllerDirs];
-            }
-
-            if (!is_array($controllerDirs)) {
-                throw new InvalidArgumentException('Controllers directory must be either string or array');
-            }
-
-            $this->controllerDirs = [];
-            foreach ($controllerDirs as $d) {
-                $realPath = realPath($d);
-                if ($realPath !== false) {
-                    $this->controllerDirs[] = $realPath;
+                if (is_string($controllerDirs)) {
+                    $controllerDirs = [$controllerDirs];
                 }
-            }
+
+                if (!is_array($controllerDirs)) {
+                    throw new InvalidArgumentException('Controllers directory must be either string or array');
+                }
+
+                $this->controllerDirs = [];
+                foreach ($controllerDirs as $d) {
+                    $realPath = realPath($d);
+                    if ($realPath !== false) {
+                        $this->controllerDirs[] = $realPath;
+                    }
+                }
 
             // We save the cache dir
-            if (!is_dir($cacheDir)) {
-                if (!mkdir($cacheDir, 0777, true)) {
-                    throw new RuntimeException('Can\'t create cache directory');
+                if (!is_dir($cacheDir)) {
+                    if (!mkdir($cacheDir, 0777, true)) {
+                        throw new RuntimeException('Can\'t create cache directory');
+                    }
                 }
-            }
 
-            if (!is_writable($cacheDir)) {
-                throw new RuntimeException('Cache directory must be writable by web server');
-            }
+                if (!is_writable($cacheDir)) {
+                    throw new RuntimeException('Cache directory must be writable by web server');
+                }
 
-            $this->cacheDir = rtrim($cacheDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-            $this->generateRoutes();
+                $this->cacheDir = rtrim($cacheDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+                $this->generateRoutes();
 
-            $routesConfig = Config::load('routes', APP_DIR . 'View/cache/')->get();
-            if (!empty($routesConfig)) {
-                $this->aRoutingParse = array_merge($routesConfig, $this->aRoutingParse);
-                $this->aRouting['routes'] = array_merge($routesConfig, $this->aRouting['routes']);
+                $routesConfig = Config::load('routes', APP_DIR . 'View/cache/')->get();
+                if (!empty($routesConfig)) {
+                    $this->aRoutingParse = array_merge($routesConfig, $this->aRoutingParse);
+                    $this->aRouting['routes'] = array_merge($routesConfig, $this->aRouting['routes']);
+                }
+
             }
         }
 
@@ -487,6 +491,11 @@ class Router
 
         if ($routingParse == null) {
             $routingParse = $this->aRoutingParse;
+        }
+
+        $pos = strpos($sRequest, '?task=');
+        if ($pos !== false) {
+            $sRequest = substr_replace($sRequest, '/?task=', $pos, strlen('?task='));
         }
 
         $sRequest = str_replace('?', '&', $sRequest);
