@@ -434,7 +434,6 @@ class Router
 
             $sGets = $this->parseUrl($sRequest);
             $this->namespace = $sGets['v']['namespace'] ?? '';
-            $sGets = str_replace('?', '&', $sGets['sVars']);
             parse_str($sGets, $aGets);
 
             $this->controller = !empty($aGets['task']) ? $aGets['task'] : $this->aRouting['NAME_CONTROLLER'];
@@ -469,10 +468,10 @@ class Router
             }
 
             $sGets = $this->parseUrl($sRequest);
-            $sGets = str_replace('?', '&', $sGets['sVars']);
         } else {
             $sGets = $_SERVER['QUERY_STRING'];
         }
+
 
         return $sGets;
     }
