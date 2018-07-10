@@ -522,6 +522,11 @@ class Router
             $routingParse = $this->aRoutingParse;
         }
 
+        $pos = strpos($sRequest, '?task=');
+        if ($pos !== false) {
+            $sRequest = substr_replace($sRequest, '/?task=', $pos, strlen('?task='));
+        }
+
         $sRequest = str_replace('?', '&', $sRequest);
 
         foreach ($routingParse as $k => $v) {
