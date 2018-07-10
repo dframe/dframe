@@ -432,9 +432,9 @@ class Router
                 $sRequest .= '/';
             }
 
-            $sGets = $this->parseUrl($sRequest);
-            $this->namespace = $sGets['v']['namespace'] ?? '';
-            parse_str($sGets, $aGets);
+            $parseUrl = $this->parseUrl($sRequest);
+            $this->namespace = $parseUrl['v']['namespace'] ?? '';
+            parse_str($parseUrl['sVars'], $aGets);
 
             $this->controller = !empty($aGets['task']) ? $aGets['task'] : $this->aRouting['NAME_CONTROLLER'];
             unset($aGets['task']);
@@ -467,7 +467,8 @@ class Router
                 $sRequest .= '/';
             }
 
-            $sGets = $this->parseUrl($sRequest);
+            $parseUrl = $this->parseUrl($sRequest);
+            $sGets = $parseUrl['sVars'];
         } else {
             $sGets = $_SERVER['QUERY_STRING'];
         }
