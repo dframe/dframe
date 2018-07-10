@@ -434,7 +434,7 @@ class Router
 
             $sGets = $this->parseUrl($sRequest);
             $this->namespace = $sGets['v']['namespace'] ?? '';
-            parse_str($sGets, $aGets);
+            parse_str($sGets['sVars'], $aGets);
 
             $this->controller = !empty($aGets['task']) ? $aGets['task'] : $this->aRouting['NAME_CONTROLLER'];
             unset($aGets['task']);
