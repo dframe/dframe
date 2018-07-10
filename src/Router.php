@@ -471,7 +471,6 @@ class Router
             }
 
             $sGets = $this->parseUrl($sRequest);
-            $sGets = str_replace('?', '&', $sGets);
             parse_str($sGets, $aGets);
             $_GET['task'] = !empty($aGets['task']) ? $aGets['task'] : $this->aRouting['NAME_CONTROLLER'];
             unset($aGets['task']);
@@ -500,8 +499,11 @@ class Router
             }
 
             $sGets = $this->parseUrl($sRequest);
-            $sGets = str_replace('?', '&', $sGets);
+
+        } else {
+            $sGets = $sRequest;
         }
+
 
         return $sGets;
     }
