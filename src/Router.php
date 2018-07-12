@@ -598,8 +598,8 @@ class Router
                 break;
             }
         }
-        
-        if(isset($this->debug)){
+
+        if (isset($this->debug)) {
             $this->debug->addHeader(array('X-DF-Debug-sVars' => $sVars));
         }
         return $sVars;

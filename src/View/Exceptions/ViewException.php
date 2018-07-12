@@ -14,7 +14,7 @@ namespace Dframe\View\Exceptions;
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class ViewException extends \ErrorException 
+class ViewException extends \ErrorException
 {
 
     public function __construct($messages = null, $code = 0, \Exception $previous = null)
