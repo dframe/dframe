@@ -77,7 +77,8 @@ class Router
      */
     private $cacheDir = APP_DIR . 'View/cache/';
 
-    public function __construct(){
+    public function __construct()
+    {
 
         if (!defined('HTTP_HOST') and isset($_SERVER['HTTP_HOST'])) {
             define('HTTP_HOST', $_SERVER['HTTP_HOST']);
