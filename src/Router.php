@@ -216,34 +216,37 @@ class Router
         $loader = new Loader($bootstrap);
         $loadController = $loader->loadController($controller); // Loading Controller class
 
-        $controller = $loadController->returnController;
-        $response = [];
+        if (isset($loadController->returnController)) {
 
-        if (method_exists($controller, 'start')) {
-            $response[] = 'start';
-        }
+            $controller = $loadController->returnController;
+            $response = [];
 
-        if (method_exists($controller, 'init')) {
-            $response[] = 'init';
-        }
+            if (method_exists($controller, 'start')) {
+                $response[] = 'start';
+            }
 
-        if (method_exists($controller, $action) or is_callable([$controller, $action])) {
-            $response[] = $action;
-        }
+            if (method_exists($controller, 'init')) {
+                $response[] = 'init';
+            }
 
-        if (method_exists($controller, 'end')) {
-            $response[] = 'end';
-        }
+            if (method_exists($controller, $action) or is_callable([$controller, $action])) {
+                $response[] = $action;
+            }
 
-        foreach ($response as $key => $data) {
-            if (is_callable([$controller, $data])) {
-                $run = $controller->$data();
-                if ($run instanceof Response) {
-                    if (isset($this->debug)) {
-                        $this->debug->addHeader(array('X-DF-Debug-Method' => $action));
-                        $run->headers($this->debug->getHeader());
+            if (method_exists($controller, 'end')) {
+                $response[] = 'end';
+            }
+
+            foreach ($response as $key => $data) {
+                if (is_callable([$controller, $data])) {
+                    $run = $controller->$data();
+                    if ($run instanceof Response) {
+                        if (isset($this->debug)) {
+                            $this->debug->addHeader(array('X-DF-Debug-Method' => $action));
+                            $run->headers($this->debug->getHeader());
+                        }
+                        return $run->display();
                     }
-                    return $run->display();
                 }
             }
         }
