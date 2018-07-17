@@ -10,7 +10,7 @@
 namespace Dframe\View;
 
 use Dframe\Config;
-use Dframe\View\Exception\ViewException;
+use Dframe\View\Exceptions\ViewException;
 
 /**
  * Twig View

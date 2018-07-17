@@ -22,7 +22,7 @@ use Assetic\Asset\AssetReference;
 use Assetic\Filter\GoogleClosure;
 use Patchwork\JSqueeze;
 
-use Dframe\Asset\AsseticException;
+use Dframe\Asset\Exceptions\AsseticException;
 
 set_time_limit(120);
 
