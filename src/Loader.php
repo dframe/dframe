@@ -28,7 +28,7 @@ class Loader
 
     public function __construct($bootstrap = null)
     {
-        
+
         if (!defined('APP_DIR')) {
             throw new LoaderException('Please Define appDir in Main config.php', 500);
         }
@@ -54,7 +54,7 @@ class Loader
                 $this->baseClass->modules->$key->boot();
             }
 
-            
+
         }
 
         return $this;
@@ -101,7 +101,7 @@ class Loader
 
         if (!empty($namespace)) {
 
-            $name = '\\' . $namespace . '\\'. $type .'\\' . $name;
+            $name = '\\' . $namespace . '\\' . $type . '\\' . $name;
             $name = str_replace('/', $this->namespaceSeparator, $name);
 
             $ob = new $name($this->baseClass);
@@ -111,7 +111,7 @@ class Loader
 
             return $ob;
         }
-  
+
 
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
@@ -213,6 +213,8 @@ class Loader
 
         if (!empty($namespace)) {
             $class = '\\' . $namespace . '\\Controller\\' . $subControler . $controller;
+            $class = str_replace('/', $this->namespaceSeparator, $class);
+            
             $this->returnController = new $class($this->baseClass);
             return $this;
         }
@@ -230,7 +232,7 @@ class Loader
                 $this->debug->addHeader(['X-DF-Debug-File' => $path]);
                 $this->debug->addHeader(['X-DF-Debug-Controller' => $controller]);
             }
-            
+
             include_once $path;
 
             $xsubControler = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $subControler);
@@ -240,7 +242,7 @@ class Loader
 
             $controller = $this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $xsubControler . '' . $controller . 'Controller';
             $this->returnController = new $controller($this->baseClass);
-   
+
         } catch (LoaderException $e) {
             $msg = null;
             if (ini_get('display_errors') == 'on') {
