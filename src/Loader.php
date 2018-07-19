@@ -102,6 +102,8 @@ class Loader
         if (!empty($namespace)) {
 
             $name = '\\' . $namespace . '\\'. $type .'\\' . $name;
+            $name = str_replace('/', $this->namespaceSeparator, $name);
+
             $ob = new $name($this->baseClass);
             if (method_exists($ob, 'init')) {
                 $ob->init();
@@ -184,12 +186,6 @@ class Loader
     public function loadController($controller, $namespace = null)
     {
 
-        if (!empty($namespace)) {
-            $class = '\\' . $namespace . '\\Controller\\' . $controller;
-            $this->returnController = new $class($this->baseClass);
-            return $this;
-        }
-
         $subControler = null;
         if (strstr($controller, ",") !== false) {
             $url = explode(',', $controller);
@@ -212,6 +208,16 @@ class Loader
         }
 
         $controller = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $controller);
+
+
+
+        if (!empty($namespace)) {
+            $class = '\\' . $namespace . '\\Controller\\' . $subControler . $controller;
+            $this->returnController = new $class($this->baseClass);
+            return $this;
+        }
+
+
         $path = str_replace($this->namespaceSeparator, DIRECTORY_SEPARATOR, APP_DIR . 'Controller' . DIRECTORY_SEPARATOR . $subControler . $controller . '.php');
 
 
