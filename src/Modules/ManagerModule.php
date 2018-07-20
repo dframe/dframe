@@ -18,7 +18,7 @@ namespace Dframe\Modules;
 class ManagerModule
 {
 
-    protected $app;
+    public $app;
 
     public function __construct($app)
     {
@@ -42,7 +42,7 @@ class ManagerModule
      * @param  array  $path
      * @return void
      */
-    public function loadModels($path)
+    protected function loadModels($path)
     {
         $this->app->config['model'] = array_unique(array_merge($this->app->config['model'] ?? [], $path));
     }
@@ -53,7 +53,7 @@ class ManagerModule
      * @param  array  $path
      * @return void
      */
-    public function loadControllers($path)
+    protected function loadControllers($path)
     {
         $this->app->config['controller'] = array_unique(array_merge($this->app->config['controller'] ?? [], $path));
     }

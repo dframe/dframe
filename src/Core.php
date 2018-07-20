@@ -29,7 +29,8 @@ class Core extends Loader
     public function run($controller = null, $action = null, $args = [])
     {
 
-        $this->router->boot($this);
+        $this->router = $this->router->boot($this);
+
         if (is_null($controller ?? null) and is_null($action ?? null)) {
             $this->router->parseGets();
             $controller = $this->router->controller;

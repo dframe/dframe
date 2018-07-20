@@ -25,6 +25,7 @@ class Loader
     public $router;
     private $fileExtension = '.php';
     private $namespaceSeparator = '\\';
+    public $config;
 
     public function __construct($bootstrap = null)
     {
@@ -37,9 +38,13 @@ class Loader
         }
 
         $this->baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
+
         $baseClass = new \Bootstrap();
         foreach ($baseClass->providers['core'] ?? [] as $key => $value) {
             $this->$key = new $value($this);
+            if (method_exists($this->$key, 'boot') or is_callable([$this->$key, 'boot'])) {
+                $this->$key->boot($this);
+            }
         }
 
         if (is_null($bootstrap)) {
@@ -51,11 +56,23 @@ class Loader
             foreach ($baseClass->providers['modules'] ?? [] as $key => $value) {
                 $this->baseClass->modules->$key = new $value($this);
                 $this->baseClass->modules->$key->register();
-                $this->baseClass->modules->$key->boot();
+                $this->baseClass->modules->$key->boot($this->baseClass->modules->$key->app);
+
             }
 
+        } else {
+
+            foreach ($this->baseClass->providers['modules'] ?? [] as $key => $value) {
+                foreach ($baseClass->providers['core'] ?? [] as $key2 => $value2) {
+                    if (method_exists($this->$key2, 'boot') or is_callable([$this->$key2, 'boot'])) {
+                        $this->$key2->boot($this->baseClass->modules->$key->app);
+                    }
+                }
+
+            }
 
         }
+
 
         return $this;
     }
@@ -214,7 +231,7 @@ class Loader
         if (!empty($namespace)) {
             $class = '\\' . $namespace . '\\Controller\\' . $subControler . $controller;
             $class = str_replace('/', $this->namespaceSeparator, $class);
-            
+
             $this->returnController = new $class($this->baseClass);
             return $this;
         }
