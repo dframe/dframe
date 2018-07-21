@@ -53,7 +53,7 @@ class DefaultView implements \Dframe\View\ViewInterface
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
-        if ($path == null) {
+        if ($path === null) {
             $path = $this->templateConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name . $this->templateConfig->get('fileExtension', '.html.php');
         }
 
@@ -89,7 +89,7 @@ class DefaultView implements \Dframe\View\ViewInterface
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
-        if ($path == null) {
+        if ($path === null) {
             $path = $this->templateConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name . $this->templateConfig->get('fileExtension', '.html.php');
         }
 

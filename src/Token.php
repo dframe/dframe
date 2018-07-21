@@ -15,7 +15,7 @@ namespace Dframe;
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
 
-class Token 
+class Token
 {
 
     protected $driver;
@@ -33,7 +33,7 @@ class Token
     {
 
         $this->driver = $driver;
-        if (!($this->driver instanceof \Psr\SimpleCache\CacheInterface) == true) {
+        if (!($this->driver instanceof \Psr\SimpleCache\CacheInterface) === true) {
             throw new \Exception("This class Require instance Of Dframe\Session", 1);
         }
 
@@ -51,7 +51,7 @@ class Token
     /**
      * @param string $key
      * @param null   $default
-     * 
+     *
      * @return mixed
      */
 
@@ -68,7 +68,7 @@ class Token
      * @param string $key
      * @param mixed  $value
      * @param null   $ttl
-     * 
+     *
      * @return bool
      */
     public function set($key, $value, $ttl = null)
@@ -116,7 +116,7 @@ class Token
 
     /**
      * @param string $key
-     * 
+     *
      * @return bool
      */
     public function has($key)
@@ -151,11 +151,11 @@ class Token
     {
         $getToken = $this->get($key);
 
-        if ($delete == true) {
+        if ($delete === true) {
             $this->delete($key);
         }
 
-        if ($getToken == $token) {
+        if ($getToken === $token) {
             return true;
         }
 

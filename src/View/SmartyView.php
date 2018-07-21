@@ -76,7 +76,7 @@ class SmartyView implements \Dframe\View\ViewInterface
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
-        if ($path == null) {
+        if ($path === null) {
             $path = $smartyConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name . $smartyConfig->get('fileExtension', '.html.php');
         }
 
@@ -114,7 +114,7 @@ class SmartyView implements \Dframe\View\ViewInterface
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
-        if ($path == null) {
+        if ($path === null) {
             $path = $smartyConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name . $smartyConfig->get('fileExtension', '.html.php');
         }
 
@@ -122,7 +122,7 @@ class SmartyView implements \Dframe\View\ViewInterface
             if (!is_file($path)) {
                 throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
             }
-            
+
             return $this->smarty->fetch($path); // Ładowanie widoku
         } catch (ViewException $e) {
             echo $e->getMessage() . '<br />

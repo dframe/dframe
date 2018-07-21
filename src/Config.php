@@ -43,7 +43,7 @@ class Config
 
     public function get($param = null, $or = null)
     {
-        if ($param == null) {
+        if ($param === null) {
             return (isset(self::$cfg[$this->file])) ? self::$cfg[$this->file] : null;
         }
 

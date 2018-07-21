@@ -140,7 +140,7 @@ class Loader
         try {
 
             if (!$this->isCamelCaps($name, true)) {
-                if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE == true)) {
+                if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
                     throw new LoaderException('Camel Sensitive is on. Can not use ' . $type . ' ' . $name . ' try to use StudlyCaps or CamelCase');
                 }
             }
@@ -161,7 +161,7 @@ class Loader
 
         } catch (LoaderException $e) {
             $msg = null;
-            if (ini_get('display_errors') == "on") {
+            if (ini_get('display_errors') === "on") {
                 $msg .= '<pre>';
                 $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
 
@@ -210,7 +210,7 @@ class Loader
             $subControler = '';
 
             for ($i = 0; $i < $urlCount; $i++) {
-                if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE == true)) {
+                if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
                     $subControler .= ucfirst($url[$i]) . DIRECTORY_SEPARATOR;
                 } else {
                     $subControler .= $url[$i] . DIRECTORY_SEPARATOR;
@@ -220,7 +220,7 @@ class Loader
             $controller = $url[$urlCount];
         }
 
-        if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE == true)) {
+        if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
             $controller = ucfirst($controller);
         }
 
@@ -262,7 +262,7 @@ class Loader
 
         } catch (LoaderException $e) {
             $msg = null;
-            if (ini_get('display_errors') == 'on') {
+            if (ini_get('display_errors') === 'on') {
                 $msg .= '<pre>';
                 $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
 
