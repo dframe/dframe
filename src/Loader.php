@@ -122,6 +122,9 @@ class Loader
             $name = str_replace('/', $this->namespaceSeparator, $name);
 
             $ob = new $name($this->baseClass);
+            if (method_exists($ob, 'start')) {
+                $ob->start();
+            }
             if (method_exists($ob, 'init')) {
                 $ob->init();
             }
