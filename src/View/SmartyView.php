@@ -70,14 +70,13 @@ class SmartyView implements \Dframe\View\ViewInterface
      */
     public function fetch($name, $path = null)
     {
-        $smartyConfig = Config::load('view/smarty');
 
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
-        if ($path === null) {
-            $path = $smartyConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name . $smartyConfig->get('fileExtension', '.html.php');
+        if ($path == null) {
+            $path = $this->smarty->getTemplateDir(0) . DIRECTORY_SEPARATOR . $folder . $name . $smartyConfig->get('fileExtension', '.html.php');
         }
 
         try {
@@ -114,8 +113,8 @@ class SmartyView implements \Dframe\View\ViewInterface
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
-        if ($path === null) {
-            $path = $smartyConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name . $smartyConfig->get('fileExtension', '.html.php');
+        if ($path == null) {
+            $path = $this->smarty->getTemplateDir(0) . DIRECTORY_SEPARATOR . $folder . $name . $smartyConfig->get('fileExtension', '.html.php');
         }
 
         try {
