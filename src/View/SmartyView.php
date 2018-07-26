@@ -75,7 +75,7 @@ class SmartyView implements \Dframe\View\ViewInterface
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
-        if ($path == null) {
+        if ($path === null) {
             $path = $this->smarty->getTemplateDir(0) . DIRECTORY_SEPARATOR . $folder . $name . $smartyConfig->get('fileExtension', '.html.php');
         }
 
@@ -113,7 +113,7 @@ class SmartyView implements \Dframe\View\ViewInterface
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
-        if ($path == null) {
+        if ($path === null) {
             $path = $this->smarty->getTemplateDir(0) . DIRECTORY_SEPARATOR . $folder . $name . $smartyConfig->get('fileExtension', '.html.php');
         }
 
