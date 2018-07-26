@@ -73,7 +73,7 @@ class Router
     private $controllerDirs = APP_DIR . 'Controller/';
 
     /**
-     * @var string 
+     * @var string
      */
     private $cacheDir = APP_DIR . 'View/cache/';
 
@@ -120,10 +120,10 @@ class Router
         $this->aRoutingParse = $this->routerConfig->get('routes', $this->aRouting['routes']); // For parsing array
 
         // Check forced HTTPS
-        if ($this->https == true) {
+        if ($this->https === true) {
             $this->requestPrefix = 'https://';
             // If forced than redirect
-            if (isset($_SERVER['REQUEST_SCHEME']) and ((!empty($_SERVER['REQUEST_SCHEME']) and $_SERVER['REQUEST_SCHEME'] == 'http'))) {
+            if (isset($_SERVER['REQUEST_SCHEME']) and ((!empty($_SERVER['REQUEST_SCHEME']) and $_SERVER['REQUEST_SCHEME'] === 'http'))) {
                 return Response::create()->headers(
                     [
                         'Refresh' => $this->requestPrefix . $this->domain . '/' . $_SERVER['REQUEST_URI']
@@ -133,7 +133,7 @@ class Router
 
         } else {
             $this->requestPrefix = 'http://';
-            if ((isset($_SERVER['REQUEST_SCHEME']) and (!empty($_SERVER['REQUEST_SCHEME']) and ($_SERVER['REQUEST_SCHEME'] == 'https') or !empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] == 'on') or (!empty($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] == '443'))) {
+            if ((isset($_SERVER['REQUEST_SCHEME']) and (!empty($_SERVER['REQUEST_SCHEME']) and ($_SERVER['REQUEST_SCHEME'] === 'https') or !empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] === 'on') or (!empty($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] === '443'))) {
                 $this->requestPrefix = 'https://';
             }
         }
@@ -216,9 +216,9 @@ class Router
 
     /**
      * Set up http/https
-     * 
+     *
      * @param boolen $option
-     * 
+     *
      */
 
     public function setHttps($option = false)
@@ -227,11 +227,11 @@ class Router
             throw new InvalidArgumentException('Incorect option', 403);
         }
 
-        if ($option == true) {
+        if ($option === true) {
             $this->requestPrefix = 'https://';
         } else {
             $this->requestPrefix = 'http://';
-            if ((isset($_SERVER['REQUEST_SCHEME']) and (!empty($_SERVER['REQUEST_SCHEME']) and ($_SERVER['REQUEST_SCHEME'] == 'https') or !empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] == 'on') or (!empty($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] == '443'))) {
+            if ((isset($_SERVER['REQUEST_SCHEME']) and (!empty($_SERVER['REQUEST_SCHEME']) and ($_SERVER['REQUEST_SCHEME'] === 'https') or !empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] === 'on') or (!empty($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] === '443'))) {
                 $this->requestPrefix = 'https://';
             }
         }
@@ -243,14 +243,14 @@ class Router
 
     /**
      * Check current active page
-     * 
+     *
      * @param string|array $url
-     * 
+     *
      * @return boolen
      */
     public function isActive($url)
     {
-        if ($this->makeUrl($url, true) == str_replace($this->sURI, '', $_SERVER['REQUEST_URI'])) {
+        if ($this->makeUrl($url, true) === str_replace($this->sURI, '', $_SERVER['REQUEST_URI'])) {
             return true;
         }
 
@@ -259,10 +259,10 @@ class Router
 
     /**
      * Gerenate full url for files
-     * 
+     *
      * @param string $sUrl
      * @param string $path
-     * 
+     *
      * @return string
      */
     public function publicWeb($sUrl = null, $path = null)
@@ -284,10 +284,10 @@ class Router
 
     /**
      * Gerenate url
-     * 
+     *
      * @param string $sUrl
      * @param string $onlyExt
-     * 
+     *
      * @return string
      */
     public function makeUrl(string $sUrl = null, $onlyExt = false)
@@ -314,7 +314,7 @@ class Router
             $findKey = $findKey[0];
         }
 
-        if (defined('MOD_REWRITE') and MOD_REWRITE == true) {
+        if (defined('MOD_REWRITE') and MOD_REWRITE === true) {
 
             if (isset($this->aRouting['routes'][$findKey])) {
 
@@ -403,11 +403,11 @@ class Router
     }
 
     /**
-     * Parse url params into a 'request' 
-     * 
+     * Parse url params into a 'request'
+     *
      * @param string $sRouting
      * @param string $aParams
-     * 
+     *
      * @return string
      */
     private function parseParams($sRouting, $aParams)
@@ -427,7 +427,7 @@ class Router
     public function parseGets()
     {
         $sRequest = preg_replace('!' . $this->sURI . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
-        if (defined('MOD_REWRITE') and MOD_REWRITE == true) {
+        if (defined('MOD_REWRITE') and MOD_REWRITE === true) {
 
             if (substr($sRequest, -1) != '/') {
                 $sRequest .= '/';
@@ -456,13 +456,13 @@ class Router
 
     /**
      * Return Current path
-     * 
+     *
      * @return string
      */
     public function currentPath()
     {
         $sRequest = preg_replace('!' . $this->sURI . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
-        if (defined('MOD_REWRITE') and MOD_REWRITE == true) {
+        if (defined('MOD_REWRITE') and MOD_REWRITE === true) {
 
             if (substr($sRequest, -1) != '/') {
                 $sRequest .= '/';
@@ -480,17 +480,17 @@ class Router
 
     /**
      * Match given request
-     * 
+     *
      * @param string $sRequest
      * @param string $routingParse
-     * 
+     *
      * @return string
      */
     private function parseUrl($sRequest, $routingParse = null)
     {
         $sVars = null;
 
-        if ($routingParse == null) {
+        if ($routingParse === null) {
             $routingParse = $this->aRoutingParse;
         }
 
@@ -579,10 +579,10 @@ class Router
 
     /**
      * Prepares the regexp
-     * 
+     *
      * @param string $sParam
      * @param string $k
-     * 
+     *
      * @return string
      */
     private function transformParam($sParam, $k)
@@ -599,7 +599,7 @@ class Router
      *
      * @param string $url The URI
      * @param string $status
-     * 
+     *
      * @return object
      */
     public static function redirect($url = '', $status = 301)
@@ -611,7 +611,7 @@ class Router
      * Redirect delay
      *
      * @param string $delay time in seconds
-     * 
+     *
      * @return object
      */
     public function delay(int $delay)
@@ -624,7 +624,7 @@ class Router
      * Set up subdomain prefix
      *
      * @param string $subdomain
-     * 
+     *
      * @return object
      */
     public function subdomain($subdomain)
@@ -637,7 +637,7 @@ class Router
      * Set up domain
      *
      * @param string $domain
-     * 
+     *
      * @return object
      */
     public function domain($domain)
@@ -650,7 +650,7 @@ class Router
      * Set up new route
      *
      * @param string $newRoute
-     * 
+     *
      * @return object
      */
     public function addRoute($newRoute)
@@ -708,11 +708,11 @@ class Router
             usort(
                 $routes,
                 function ($a, $b) {
-                    if (strlen($a['routePath']) == strlen($b['routePath'])) return 0;
+                    if (strlen($a['routePath']) === strlen($b['routePath'])) return 0;
                     return strcmp($b['routePath'], $a['routePath']) ? : strlen($b['routePath']) - strlen($a['routePath']);
                 }
             );
-          
+
             // We regenerate cache file if needed
             if ($parsingNeeded) {
                 $controllerFiles = [];
@@ -757,16 +757,16 @@ class Router
 
     /**
      * Parsing annotations
-     * 
+     *
      * @param string $file
-     * 
+     *
      * @return string
      */
     private function parseFile($file)
     {
         $result = '';
         $routes = [];
-        
+
         //Windows
         $appDir = str_replace('web/../app/', '', APP_DIR);
         //All
@@ -784,7 +784,7 @@ class Router
         if (preg_match('/namespace\s+([\w\\\_-]+)/', $content, $matches) === 1) {
             $namespace = $matches[1];
         }
-        
+
         // We look for class name
         if (preg_match('/class\s+([\w_-]+)/', $content, $matches) === 1) {
             $className = ($namespace !== null) ? $namespace . '\\' . $matches[1] : $matches[1];

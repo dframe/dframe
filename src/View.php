@@ -23,11 +23,11 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
 {
 
     /**
-     * Defines template variables. 
-     * 
-     * @param string $name 
+     * Defines template variables.
+     *
+     * @param string $name
      * @param mixed  $value
-     * 
+     *
      * @return void
      */
     public function assign($name, $value)
@@ -41,18 +41,18 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
 
     /**
      * Generates the output of the templates with parsing all the template variables.
-     * 
-     * @param string $data 
+     *
+     * @param string $data
      * @param string $type
-     * 
+     *
      * @return mix
      */
     public function render($data, $type = null)
     {
 
-        if (empty($type) or $type == 'html') {
+        if (empty($type) or $type === 'html') {
             return Response::Create($this->view->renderInclude($data));
-        } elseif ($type == 'jsonp') {
+        } elseif ($type === 'jsonp') {
             return $this->renderJSONP($data);
         } else {
             return $this->renderJSON($data);

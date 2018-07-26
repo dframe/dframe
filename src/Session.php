@@ -90,7 +90,7 @@ class Session implements \Psr\SimpleCache\CacheInterface
             $in = $_SESSION;
         }
 
-        if (array_key_exists($key, $in) == true) {
+        if (array_key_exists($key, $in) === true) {
             return true;
         }
 
@@ -144,7 +144,7 @@ class Session implements \Psr\SimpleCache\CacheInterface
     {
 
         $_fingerprint = $this->getFingerprint();
-        if (isset($_SESSION['_fingerprint']) and $_SESSION['_fingerprint'] == $_fingerprint) {
+        if (isset($_SESSION['_fingerprint']) and $_SESSION['_fingerprint'] === $_fingerprint) {
             return true;
         }
 

@@ -33,15 +33,15 @@ class Messages
     public function __construct($driver)
     {
         $this->driver = $driver;
-        if(!($this->driver instanceof \Psr\SimpleCache\CacheInterface) == true){
+        if(!($this->driver instanceof \Psr\SimpleCache\CacheInterface) === true){
             throw new \Exception("This class Require instance Of Dframe\Session", 1);
         }
-        
+
         // Generate a unique ID for this user and session
         $this->msgId = md5(uniqid());
 
         $keyExists = $this->driver->keyExists('flash_messages');
-        if ($keyExists == false) {
+        if ($keyExists === false) {
             $this->driver->set('flash_messages', []);
         }
     }
@@ -62,7 +62,7 @@ class Messages
             return false;
         }
         // Replace any shorthand codes with their full version
-        if (strlen(trim($type)) == 1) {
+        if (strlen(trim($type)) === 1) {
             $type = str_replace(['h', 'i', 'w', 'e', 's'], ['help', 'info', 'warning', 'error', 'success'], $type);
         }
 
@@ -74,7 +74,7 @@ class Messages
             }
         } catch (BaseException $e) {
             $msg = null;
-            if (ini_get('display_errors') == "on") {
+            if (ini_get('display_errors') === "on") {
                 $msg .= '<pre>';
                 $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
 
@@ -121,7 +121,7 @@ class Messages
     {
         $messages = '';
         $data = '';
-        
+
         // Print a certain type of message?
         if (in_array($type, $this->msgTypes)) {
             $flashMessages = $this->driver->get('flash_messages');
@@ -130,11 +130,11 @@ class Messages
             }
 
             $data .= $messages;
-            
+
             // Clear the viewed messages
             $this->clear($type);
             // Print ALL queued messages
-        } elseif ($type == 'all') {
+        } elseif ($type === 'all') {
             $flashMessages = $this->driver->get('flash_messages');
             foreach ($flashMessages as $type => $msgArray) {
                 $messages = '';
@@ -143,14 +143,14 @@ class Messages
                 }
                 $data .= $messages;
             }
-            
+
             // Clear ALL of the messages
             $this->clear();
             // Invalid Message Type?
         } else {
             return false;
         }
-        
+
         // Print everything to the screen or return the data
         if ($print) {
             echo $data;
@@ -206,7 +206,7 @@ class Messages
      */
     public function clear($type = 'all')
     {
-        if ($type == 'all') {
+        if ($type === 'all') {
             $this->driver->remove('flash_messages');
         } else {
             $flashMessages = $this->driver->get('flash_messages');
