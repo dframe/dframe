@@ -9,7 +9,6 @@
 
 namespace Dframe;
 
-
 use Dframe\Config;
 use Dframe\Core;
 use Dframe\Router\Response;
