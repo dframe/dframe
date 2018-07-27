@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
+define('SESSION_NAME', 'demo_session');
 
 use Dframe\Session;
 use Dframe\Messages;
