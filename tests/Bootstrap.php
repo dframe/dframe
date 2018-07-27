@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
-define('SESSION_NAME', 'demo_session');
+define('APP_NAME', 'Dframe');
 
 use Dframe\Session;
 use Dframe\Messages;
@@ -12,7 +12,6 @@ class Bootstrap
 
     public function __construct()
     {
-
 
         $this->providers['core'] = [
             'router' => \Dframe\Router::class,

@@ -22,7 +22,7 @@ class Session implements \Psr\SimpleCache\CacheInterface
     {
 
         $options = [];
-        $this->name = SESSION_NAME ?? '_sessionName';;
+        $this->name = APP_NAME ?? '_sessionName';;
 
         if (!isset($_SESSION)) {
             $cookie = [
