@@ -18,11 +18,11 @@ namespace Dframe;
 class Session implements \Psr\SimpleCache\CacheInterface
 {
 
-    function __construct($baseClass)
+    function __construct($app = [])
     {
 
-        $options = [];
-        $this->name = APP_NAME ?? '_sessionName';;
+        $options = $this->app->config['session'] ?? '';
+        $this->name = APP_NAME ?? '_sessionName';
 
         if (!isset($_SESSION)) {
             $cookie = [
