@@ -33,8 +33,9 @@ class ManagerModule
      */
     protected function loadRoutes($path)
     {
-        $this->app->config['router'] = array_merge($this->app->config['router'] ?? [], require $path);
+        $this->app->config['router']['routes'] = array_merge($this->app->config['router']['routes'] ?? [], (require $path)['routes']);
     }
+
 
     /**
      * Load model.
