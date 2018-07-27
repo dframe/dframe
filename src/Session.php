@@ -21,10 +21,8 @@ class Session implements \Psr\SimpleCache\CacheInterface
     function __construct($baseClass)
     {
 
-        $name = '_sessionName';
         $options = [];
-
-        $this->name = $name;
+        $this->name = SESSION_NAME ?? '_sessionName';;
 
         if (!isset($_SESSION)) {
             $cookie = [
