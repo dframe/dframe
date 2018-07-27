@@ -77,9 +77,9 @@ class Session implements \Psr\SimpleCache\CacheInterface
     {
         if (!empty($_SESSION['sessionId'])) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function keyExists($key, $in = false)
