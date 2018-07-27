@@ -37,6 +37,15 @@ class Token
             throw new \Exception("This class Require instance Of Dframe\Session", 1);
         }
 
+        $token = $this->driver->get('token');
+        if (!empty($token)) {
+            $this->token = $token;
+        }
+
+        $timeToken = $this->driver->get('timeToken');
+        if (!empty($timeToken)) {
+            $this->time = $timeToken;
+        }
     }
 
     /**
