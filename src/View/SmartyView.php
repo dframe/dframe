@@ -22,13 +22,13 @@ class SmartyView implements \Dframe\View\ViewInterface
 
     public function __construct()
     {
-        $smartyConfig = Config::load('view/smarty');
+        $this->smartyConfig = Config::load('view/smarty');
 
         $smarty = new \Smarty;
-        $smarty->debugging = $smartyConfig->get('debugging', false);
-        $smarty->setTemplateDir($smartyConfig->get('setTemplateDir'))
-            ->setCompileDir($smartyConfig->get('setCompileDir'))
-            ->addPluginsDir($smartyConfig->get('addPluginsDir'));
+        $smarty->debugging = $this->smartyConfig->get('debugging', false);
+        $smarty->setTemplateDir($this->smartyConfig->get('setTemplateDir'))
+            ->setCompileDir($this->smartyConfig->get('setCompileDir'))
+            ->addPluginsDir($this->smartyConfig->get('addPluginsDir'));
 
         $this->smarty = $smarty;
     }
@@ -76,7 +76,7 @@ class SmartyView implements \Dframe\View\ViewInterface
         $name = $pathFile[1];
 
         if ($path === null) {
-            $path = $this->smarty->getTemplateDir(0) . DIRECTORY_SEPARATOR . $folder . $name . $smartyConfig->get('fileExtension', '.html.php');
+            $path = $this->smarty->getTemplateDir(0) . DIRECTORY_SEPARATOR . $folder . $name . $this->smartyConfig->get('fileExtension', '.html.php');
         }
 
         try {
@@ -107,14 +107,12 @@ class SmartyView implements \Dframe\View\ViewInterface
     public function renderInclude($name, $path = null)
     {
 
-        $smartyConfig = Config::load('view/smarty');
-
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
         if ($path === null) {
-            $path = $this->smarty->getTemplateDir(0) . DIRECTORY_SEPARATOR . $folder . $name . $smartyConfig->get('fileExtension', '.html.php');
+            $path = $this->smarty->getTemplateDir(0) . DIRECTORY_SEPARATOR . $folder . $name . $this->smartyConfig->get('fileExtension', '.html.php');
         }
 
         try {
