@@ -17,7 +17,6 @@ namespace Dframe;
 
 class Token
 {
-
     protected $driver;
     protected $token = [];
     protected $time = [];
@@ -31,7 +30,6 @@ class Token
 
     public function __construct($driver)
     {
-
         $this->driver = $driver;
         if (!($this->driver instanceof \Psr\SimpleCache\CacheInterface) === true) {
             throw new \Exception("This class Require instance Of Dframe\Session", 1);
@@ -80,7 +78,6 @@ class Token
 
     public function delete($key)
     {
-
         if (isset($this->token[$key])) {
             unset($this->token[$key]);
         }

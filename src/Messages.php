@@ -9,10 +9,6 @@
 
 namespace Dframe;
 
-use Dframe\BaseException;
-use Dframe\Session;
-use Dframe\Router;
-
 /**
  * Message Class
  *
@@ -21,7 +17,6 @@ use Dframe\Router;
  */
 class Messages
 {
-
     public $msgId;
     public $msgTypes = ['help', 'info', 'warning', 'success', 'error'];
 
@@ -33,7 +28,7 @@ class Messages
     public function __construct($driver)
     {
         $this->driver = $driver;
-        if(!($this->driver instanceof \Psr\SimpleCache\CacheInterface) === true){
+        if (!($this->driver instanceof \Psr\SimpleCache\CacheInterface) === true) {
             throw new \Exception("This class Require instance Of Dframe\Session", 1);
         }
 
@@ -57,7 +52,6 @@ class Messages
      */
     public function add($type, $message, $redirect = null)
     {
-
         if (!isset($type) or !isset($message[0])) {
             return false;
         }
@@ -133,7 +127,7 @@ class Messages
 
             // Clear the viewed messages
             $this->clear($type);
-            // Print ALL queued messages
+        // Print ALL queued messages
         } elseif ($type === 'all') {
             $flashMessages = $this->driver->get('flash_messages');
             foreach ($flashMessages as $type => $msgArray) {
@@ -146,7 +140,7 @@ class Messages
 
             // Clear ALL of the messages
             $this->clear();
-            // Invalid Message Type?
+        // Invalid Message Type?
         } else {
             return false;
         }

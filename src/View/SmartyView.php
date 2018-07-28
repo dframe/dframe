@@ -19,7 +19,6 @@ use Dframe\View\Exceptions\ViewException;
  */
 class SmartyView implements \Dframe\View\ViewInterface
 {
-
     public function __construct()
     {
         $this->smartyConfig = Config::load('view/smarty');
@@ -70,7 +69,6 @@ class SmartyView implements \Dframe\View\ViewInterface
      */
     public function fetch($name, $path = null)
     {
-
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
         $name = $pathFile[1];
@@ -106,7 +104,6 @@ class SmartyView implements \Dframe\View\ViewInterface
      */
     public function renderInclude($name, $path = null)
     {
-
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
         $name = $pathFile[1];

@@ -10,7 +10,6 @@
 namespace Dframe;
 
 use Dframe\View\Exception\ViewException;
-use Dframe\Router;
 use Dframe\Router\Response;
 
 /**
@@ -49,7 +48,6 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
      */
     public function render($data, $type = null)
     {
-
         if (empty($type) or $type === 'html') {
             return Response::Create($this->view->renderInclude($data));
         } elseif ($type === 'jsonp') {
@@ -116,5 +114,4 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
 
         exit(Response::Create($callback . '(' . json_encode($data) . ')')->headers(['Content-Type' => 'application/jsonp'])->display());
     }
-
 }
