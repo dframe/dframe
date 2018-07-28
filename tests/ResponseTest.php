@@ -49,5 +49,4 @@ class ResponseTest extends TestCase
         $response->status(403);
         $this->assertSame(403, $response->getStatus());
     }
-
 }

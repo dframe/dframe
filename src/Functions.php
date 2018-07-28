@@ -48,7 +48,6 @@ function generateRandomString($length = 10)
 
 function object_to_array($obj)
 {
-
     $obj = is_object($obj) ? (array)$obj : $obj;
 
     if (is_array($obj)) {

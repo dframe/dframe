@@ -9,10 +9,9 @@
 
 namespace Dframe;
 
-use Dframe\Config;
-use Dframe\Core;
 use Dframe\Router\Response;
 use Dframe\Loader\Exceptions\LoaderException;
+
 /**
  * Loader Class
  *
@@ -20,7 +19,6 @@ use Dframe\Loader\Exceptions\LoaderException;
  */
 class Loader
 {
-
     public $router;
     private $fileExtension = '.php';
     private $namespaceSeparator = '\\';
@@ -28,7 +26,6 @@ class Loader
 
     public function __construct($bootstrap = null)
     {
-
         if (!defined('APP_DIR')) {
             throw new LoaderException('Please Define appDir in Main config.php', 500);
         }
@@ -56,20 +53,15 @@ class Loader
                 $this->baseClass->modules->$key = new $value($this);
                 $this->baseClass->modules->$key->register();
                 $this->baseClass->modules->$key->boot($this->baseClass->modules->$key->app);
-
             }
-
         } else {
-
             foreach ($this->baseClass->providers['modules'] ?? [] as $key => $value) {
                 foreach ($baseClass->providers['core'] ?? [] as $key2 => $value2) {
                     if (method_exists($this->$key2, 'boot') or is_callable([$this->$key2, 'boot'])) {
                         $this->$key2->boot($this->baseClass->modules->$key->app);
                     }
                 }
-
             }
-
         }
 
 
@@ -116,7 +108,6 @@ class Loader
         }
 
         if (!empty($namespace)) {
-
             $name = '\\' . $namespace . '\\' . $type . '\\' . $name;
             $name = str_replace('/', $this->namespaceSeparator, $name);
 
@@ -140,14 +131,14 @@ class Loader
         $path = str_replace($this->namespaceSeparator, DIRECTORY_SEPARATOR, APP_DIR . $type . '/' . $folder . $n . '.php');
 
         try {
-
             if (!$this->isCamelCaps($name, true)) {
                 if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
                     throw new LoaderException('Camel Sensitive is on. Can not use ' . $type . ' ' . $name . ' try to use StudlyCaps or CamelCase');
                 }
             }
 
-            $name = !empty($folder) ? $this->namespaceSeparator . $type . $this->namespaceSeparator . str_replace([$this->namespaceSeparator, '/'], $this->namespaceSeparator, $folder) . $name . $type : $this->namespaceSeparator . $type . $this->namespaceSeparator . $name . $type;;
+            $name = !empty($folder) ? $this->namespaceSeparator . $type . $this->namespaceSeparator . str_replace([$this->namespaceSeparator, '/'], $this->namespaceSeparator, $folder) . $name . $type : $this->namespaceSeparator . $type . $this->namespaceSeparator . $name . $type;
+            ;
             if (!is_file($path)) {
                 throw new LoaderException('Can not open ' . $type . ' ' . $name . ' in: ' . $path);
             }
@@ -160,7 +151,6 @@ class Loader
             if (method_exists($ob, 'init')) {
                 $ob->init();
             }
-
         } catch (LoaderException $e) {
             $msg = null;
             if (ini_get('display_errors') === "on") {
@@ -204,7 +194,6 @@ class Loader
 
     public function loadController($controller, $namespace = null)
     {
-
         $subControler = null;
         if (strstr($controller, ",") !== false) {
             $url = explode(',', $controller);
@@ -261,7 +250,6 @@ class Loader
 
             $controller = $this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $xsubControler . '' . $controller . 'Controller';
             $this->returnController = new $controller($this->baseClass);
-
         } catch (LoaderException $e) {
             $msg = null;
             if (ini_get('display_errors') === 'on') {
@@ -384,5 +372,4 @@ class Loader
     public function end()
     {
     }
-
 }

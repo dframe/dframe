@@ -9,7 +9,6 @@
 
 namespace Dframe;
 
-use Dframe\Router;
 use Dframe\Router\Response;
 
 /**
@@ -22,13 +21,12 @@ class Core extends Loader
 
     /**
      * Display Controller result
-     * 
+     *
      * @param boolen|Response
-     * 
+     *
      */
     public function run($controller = null, $action = null, $args = [])
     {
-
         $this->router = $this->router->boot($this);
 
         if (is_null($controller ?? null) and is_null($action ?? null)) {
@@ -69,7 +67,6 @@ class Core extends Loader
                 $run = call_user_func_array([$controllerObject, $data[0]], $data[1]);
                 if ($run instanceof Response) {
                     if (isset($this->debug)) {
-
                         $this->debug->addHeader(['X-DF-Debug-Controller' => $controller]);
                         $this->debug->addHeader(['X-DF-Debug-Method' => $action]);
 
@@ -78,11 +75,9 @@ class Core extends Loader
 
                     return $run->display();
                 }
-
             }
         }
 
         return true;
     }
-
 }
