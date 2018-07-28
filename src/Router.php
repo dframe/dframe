@@ -8,8 +8,6 @@
  */
 namespace Dframe;
 
-use Dframe\Config;
-use Dframe\Loader;
 use Dframe\Router\Response;
 
 use Dframe\Router\Exceptions\InvalidArgumentException;
@@ -79,7 +77,6 @@ class Router
 
     public function __construct()
     {
-
         if (!defined('HTTP_HOST') and isset($_SERVER['HTTP_HOST'])) {
             define('HTTP_HOST', $_SERVER['HTTP_HOST']);
         } elseif (!defined('HTTP_HOST')) {
@@ -130,14 +127,12 @@ class Router
                     ]
                 )->display();
             }
-
         } else {
             $this->requestPrefix = 'http://';
             if ((isset($_SERVER['REQUEST_SCHEME']) and (!empty($_SERVER['REQUEST_SCHEME']) and ($_SERVER['REQUEST_SCHEME'] === 'https') or !empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] === 'on') or (!empty($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] === '443'))) {
                 $this->requestPrefix = 'https://';
             }
         }
-
     }
 
     /**
@@ -153,14 +148,13 @@ class Router
 
         $annotationRoute = $this->routerConfig->get('annotation', false);
         if ($annotationRoute === true) {
-
             if (PHP_SAPI !== 'cli') {
                 $routesFile = 'routes.php';
                 $controllersFile = 'controllers.php';
                 $usedControllers = [];
                 $controllerDirs = APP_DIR . 'Controller/';
                 $cacheDir = APP_DIR . 'View/cache/';
-        // We save controller dirs
+                // We save controller dirs
                 if (is_string($controllerDirs)) {
                     $controllerDirs = [$controllerDirs];
                 }
@@ -177,7 +171,7 @@ class Router
                     }
                 }
 
-            // We save the cache dir
+                // We save the cache dir
                 if (!is_dir($cacheDir)) {
                     if (!mkdir($cacheDir, 0777, true)) {
                         throw new RuntimeException('Can\'t create cache directory');
@@ -196,7 +190,6 @@ class Router
                     $this->aRoutingParse = array_merge($routesConfig, $this->aRoutingParse);
                     $this->aRouting['routes'] = array_merge($routesConfig, $this->aRouting['routes']);
                 }
-
             }
         }
 
@@ -292,7 +285,6 @@ class Router
      */
     public function makeUrl(string $sUrl = null, $onlyExt = false)
     {
-
         $aParamsHook = explode('#', $sUrl);
         $aParams = explode('?', $aParamsHook[0]);
         $aParams_ = explode('/', $aParams[0]);
@@ -315,9 +307,7 @@ class Router
         }
 
         if (defined('MOD_REWRITE') and MOD_REWRITE === true) {
-
             if (isset($this->aRouting['routes'][$findKey])) {
-
                 $sExpressionUrl = $this->aRouting['routes'][$findKey][0];
                 foreach ($aParams as $key => $value) {
                     $sExpressionUrl = str_replace('[' . $key . ']', $value, $sExpressionUrl, $count);
@@ -346,7 +336,6 @@ class Router
                 $sExpressionUrl = '';
             } else {
                 if (isset($this->aRouting['routes'][$findKey])) {
-
                     $sExpressionUrl0 = $this->aRouting['routes'][$findKey][1];
                     foreach ($aParams as $key => $value) {
                         $sExpressionUrl0 = str_replace('[' . $key . ']', $value, $sExpressionUrl0, $count);
@@ -428,7 +417,6 @@ class Router
     {
         $sRequest = preg_replace('!' . $this->sURI . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
         if (defined('MOD_REWRITE') and MOD_REWRITE === true) {
-
             if (substr($sRequest, -1) != '/') {
                 $sRequest .= '/';
             }
@@ -443,7 +431,6 @@ class Router
             $this->action = !empty($aGets['action']) ? $aGets['action'] : $this->aRouting['NAME_METHOD'];
             unset($aGets['action']);
             $_GET = array_merge($_GET, $aGets);
-
         } else {
             $this->controller = !empty($_GET['task']) ? $_GET['task'] : $this->aRouting['NAME_CONTROLLER'];
             $this->action = !empty($_GET['action']) ? $_GET['action'] : $this->aRouting['NAME_METHOD'];
@@ -463,7 +450,6 @@ class Router
     {
         $sRequest = preg_replace('!' . $this->sURI . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
         if (defined('MOD_REWRITE') and MOD_REWRITE === true) {
-
             if (substr($sRequest, -1) != '/') {
                 $sRequest .= '/';
             }
@@ -704,11 +690,12 @@ class Router
         }
 
         if (!empty($routes)) {
-
             usort(
                 $routes,
                 function ($a, $b) {
-                    if (strlen($a['routePath']) === strlen($b['routePath'])) return 0;
+                    if (strlen($a['routePath']) === strlen($b['routePath'])) {
+                        return 0;
+                    }
                     return strcmp($b['routePath'], $a['routePath']) ? : strlen($b['routePath']) - strlen($a['routePath']);
                 }
             );
@@ -840,12 +827,10 @@ class Router
                         'action' => $m->name,
                         'substring' => $sVars
                     ];
-
                 }
             }
 
             return $routes;
         }
     }
-
 }

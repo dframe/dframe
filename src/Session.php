@@ -17,10 +17,8 @@ namespace Dframe;
 
 class Session implements \Psr\SimpleCache\CacheInterface
 {
-
-    function __construct($app = [])
+    public function __construct($app = [])
     {
-
         $options = $this->app->config['session'] ?? '';
         $this->name = APP_NAME ?? '_sessionName';
 
@@ -140,7 +138,6 @@ class Session implements \Psr\SimpleCache\CacheInterface
 
     public function isValidFingerprint()
     {
-
         $_fingerprint = $this->getFingerprint();
         if (isset($_SESSION['_fingerprint']) and $_SESSION['_fingerprint'] === $_fingerprint) {
             return true;
@@ -175,5 +172,4 @@ class Session implements \Psr\SimpleCache\CacheInterface
         session_destroy();
         $_SESSION = [];
     }
-
 }

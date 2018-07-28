@@ -20,7 +20,6 @@ use Dframe\View\Exceptions\ViewException;
  */
 class DefaultView implements \Dframe\View\ViewInterface
 {
-
     public function __construct()
     {
         $this->templateConfig = Config::load('view/default');
@@ -84,7 +83,6 @@ class DefaultView implements \Dframe\View\ViewInterface
      */
     public function renderInclude($name, $path = null)
     {
-
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
         $name = $pathFile[1];

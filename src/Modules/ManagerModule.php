@@ -17,7 +17,6 @@ namespace Dframe\Modules;
 
 class ManagerModule
 {
-
     public $app;
 
     public function __construct($app)
@@ -58,5 +57,4 @@ class ManagerModule
     {
         $this->app->config['controller'] = array_unique(array_merge($this->app->config['controller'] ?? [], $path));
     }
-
 }

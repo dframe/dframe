@@ -9,8 +9,6 @@
 
 namespace Dframe;
 
-use Dframe\BaseException;
-
 /**
  * Config Class
  *
@@ -18,14 +16,12 @@ use Dframe\BaseException;
  */
 class Config
 {
-
     protected static $cfg = [];
     private $file;
     public $path;
 
     public function __construct($file, $path = '')
     {
-
         $this->path = (isset($path) and !empty($path)) ? $path : APP_DIR . $path . 'Config' . DIRECTORY_SEPARATOR;
 
         $this->file = $file;

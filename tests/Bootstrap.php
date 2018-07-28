@@ -3,16 +3,12 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 define('APP_NAME', 'Dframe');
 
-use Dframe\Session;
-use Dframe\Messages;
 use Dframe\Token;
 
 class Bootstrap
 {
-
     public function __construct()
     {
-
         $this->providers['core'] = [
             'router' => \Dframe\Router::class,
             //'debug' => \Dframe\Debug::class,
@@ -25,5 +21,4 @@ class Bootstrap
 
         return $this;
     }
-
 }

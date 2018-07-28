@@ -6,10 +6,8 @@ use Dframe\Router;
 
 class RouterTest extends TestCase
 {
-
     public function setUp()
     {
-
         $this->router = new Router();
 
         $this->router->addRoute([
@@ -62,5 +60,4 @@ class RouterTest extends TestCase
     //     $this->assertSame('https://dframeframework.com/page/index', $this->router->setHttps(true)->makeUrl('page/:page?page=index'));
     //     $this->assertSame('http://dframeframework.com/page/index', $this->router->makeUrl('page/:page?page=index'));
     // }
-
 }

@@ -22,7 +22,7 @@ abstract class Model extends Loader
      *
      * @param boolean $type
      * @param array $array
-     * 
+     *
      * @return array
      */
     public function methodResult($type, $array = null)
@@ -38,7 +38,7 @@ abstract class Model extends Loader
      * Standard method for returning  result from the method
      *
      * @param array $errors
-     * 
+     *
      * @return array
      */
     public function methodFail($errors = null)

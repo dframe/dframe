@@ -16,7 +16,6 @@ namespace Dframe\Router\Exceptions;
  */
 class RuntimeException extends \RuntimeException
 {
-
     public function __construct($messages = null, $code = 0, \Exception $previous = null)
     {
         parent::__construct($messages, $code, $previous);
