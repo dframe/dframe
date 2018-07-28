@@ -1,0 +1,5 @@
+preset: psr2
+
+enabled:
+    - no_unused_imports
+    - short_array_syntax
