@@ -26,11 +26,11 @@ class Session implements \Psr\SimpleCache\CacheInterface
 
         if (!isset($_SESSION)) {
             $cookie = [
-                'lifetime' => isset($options['cookie']['lifetime']) ? $options['cookie']['lifetime'] : 0,
-                'path' => isset($options['cookie']['path']) ? $options['cookie']['path'] : '/',
-                'domain' => isset($options['cookie']['domain']) ? $options['cookie']['domain'] : null,
-                'secure' => isset($options['cookie']['secure']) ? $options['cookie']['secure'] : isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : null,
-                'httponly' => isset($options['cookie']['httponly']) ? $options['cookie']['httponly'] : false,
+                'lifetime' => $options['cookie']['lifetime'] ?? 0,
+                'path' => $options['cookie']['path'] ?? '/',
+                'domain' => $options['cookie']['domain'] ?? null,
+                'secure' => $options['cookie']['secure'] ?? ($_SERVER['HTTPS'] ?? null),
+                'httponly' => $options['cookie']['httponly'] ?? false,
             ];
 
             session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly']);
@@ -39,8 +39,8 @@ class Session implements \Psr\SimpleCache\CacheInterface
         }
 
         if (php_sapi_name() != 'cli') {
-            $this->ipAddress = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
-            $this->userAgent = isset($_SERVER["HTTP_USER_AGENT"]) ? $_SERVER["HTTP_USER_AGENT"] : 'unknown';
+            $this->ipAddress = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'];
+            $this->userAgent = $_SERVER["HTTP_USER_AGENT"] ?? 'unknown';
 
             if ($this->isValidFingerprint() != true) {
                 // Refresh Session
@@ -150,23 +150,28 @@ class Session implements \Psr\SimpleCache\CacheInterface
     }
 
 
-    public function setMultiple($values, $ttl = null){
+    public function setMultiple($values, $ttl = null)
+    {
         //todo
     }
 
-    public function getMultiple($keys, $default = null){
+    public function getMultiple($keys, $default = null)
+    {
         //todo
     }
 
-    public function deleteMultiple($keys){
+    public function deleteMultiple($keys)
+    {
         //todo
     }
 
-    public function has($key){
+    public function has($key)
+    {
         //todo
     }
 
-    public function clear(){
+    public function clear()
+    {
         session_destroy();
         $_SESSION = [];
     }
