@@ -9,8 +9,6 @@
 
 namespace Dframe;
 
-use Dframe\BaseException;
-
 /**
  * Debug Class
  *
@@ -26,7 +24,8 @@ class Debug
         return $this;
     }
 
-    public function getHeader(){
+    public function getHeader()
+    {
         return $this->headers;
     }
 }

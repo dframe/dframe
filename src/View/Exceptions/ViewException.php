@@ -9,7 +9,6 @@
 
 namespace Dframe\View\Exceptions;
 
-
 /**
  * ViewException Class
  *
@@ -17,7 +16,6 @@ namespace Dframe\View\Exceptions;
  */
 class ViewException extends \ErrorException
 {
-
     public function __construct($messages = null, $code = 0, \Exception $previous = null)
     {
         parent::__construct($messages, $code, $previous);

@@ -9,7 +9,6 @@
 
 namespace Dframe\Router;
 
-use Dframe\Config;
 use Dframe\Router;
 
 /**
@@ -19,7 +18,6 @@ use Dframe\Router;
  */
 class Response extends Router
 {
-
     public $status = 200;
 
     private $body = '';
@@ -117,7 +115,6 @@ class Response extends Router
 
     public static function renderJSONP($body = null, $status = null)
     {
-
         $callback = null;
         if (isset($_GET['callback'])) {
             $callback = $_GET['callback'];
@@ -141,7 +138,6 @@ class Response extends Router
      */
     public static function redirect($url = '', $status = 301, $headers = [])
     {
-
         $Response = new Response();
         $Response->status($status);
 
@@ -199,7 +195,6 @@ class Response extends Router
 
     public function display()
     {
-
         if (!headers_sent()) {
             if (PHP_SAPI !== 'cli') {
                 $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1');

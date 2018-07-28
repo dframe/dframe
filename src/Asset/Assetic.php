@@ -9,17 +9,13 @@
 
 namespace Dframe\Asset;
 
-use Dframe\BaseException;
 use Dframe\Router;
 use Assetic\Asset\FileAsset;
 use Assetic\Filter\CssImportFilter;
 use Assetic\Filter\CssRewriteFilter;
 use Assetic\Filter\PhpCssEmbedFilter;
 use Assetic\Filter\CssMinFilter;
-use Assetic\Filter;
 use Assetic\Asset\AssetCollection;
-use Assetic\Asset\AssetReference;
-use Assetic\Filter\GoogleClosure;
 use Patchwork\JSqueeze;
 
 use Dframe\Asset\Exceptions\AsseticException;
@@ -33,7 +29,6 @@ set_time_limit(120);
  */
 class Assetic extends Router
 {
-
     private function checkDir($path)
     {
         if (!is_dir($path)) {
@@ -67,11 +62,9 @@ class Assetic extends Router
 
             $pathinfo = pathinfo($dstPath);
             if (!file_exists($pathinfo['dirname'])) {
-
                 if (!mkdir($pathinfo['dirname'], 0777, true)) {
                     throw new AsseticException('Unable to create' . $path, '', 403);
                 }
-
             }
 
             $js = file_get_contents($srcPath);
