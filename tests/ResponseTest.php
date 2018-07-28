@@ -39,7 +39,7 @@ class ResponseTest extends TestCase
     public function testResponseRedirect()
     {
         $response = Response::redirect();
-        $this->assertSame(array('Location' => 'http://dframeframework.com'), $response->getHeaders());
+        $this->assertSame(['Location' => 'http://dframeframework.com'], $response->getHeaders());
     }
 
     public function testResponseStatus()

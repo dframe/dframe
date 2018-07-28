@@ -561,7 +561,7 @@ class Router
                         }
                         $sVars = str_replace('[' . $v_[0] . ']', $v_[1], $sVars);
                     } else {
-                        $sVars = $sVars . $this->parseUrl($v_[1], array($v['_' . $v_[0]]))['sVars'];
+                        $sVars = $sVars . $this->parseUrl($v_[1], [$v['_' . $v_[0]]])['sVars'];
                     }
                 }
                 $this->parseArgs = $args;
@@ -571,10 +571,10 @@ class Router
 
 
         if (isset($this->app->debug)) {
-            $this->app->debug->addHeader(array('X-DF-Debug-sVars' => $sVars));
+            $this->app->debug->addHeader(['X-DF-Debug-sVars' => $sVars]);
         }
 
-        return array('v' => $v, 'sVars' => $sVars);
+        return ['v' => $v, 'sVars' => $sVars];
     }
 
     /**
@@ -719,18 +719,18 @@ class Router
                 $commonFileContent = '<?php' . "\r\n" . '/**' . "\r\n" . ' * annotations router %s cache file, create ' . date('c') . "\r\n" . ' */' . "\r\n\r\n";
                 $routesFileContent = sprintf($commonFileContent, 'routes');
                 $controllersFileContent = sprintf($commonFileContent, 'controllers');
-                $routesFileContent .= 'return array(';
+                $routesFileContent .= 'return [';
 
                 foreach ($routes as $key => $route) {
                     $routesFileContent .= "\r\n";
-                    $routesFileContent .= "    '" . $route['routeName'] . "' => array(" . "\r\n";
+                    $routesFileContent .= "    '" . $route['routeName'] . "' => [" . "\r\n";
                     $routesFileContent .= "        '" . $route['routePath'] . "'," . "\r\n";
                     $routesFileContent .= "        'task=" . $route['task'] . "&action=" . $route['action'] . $route['substring'] . "'," . "\r\n";
-                    $routesFileContent .= "    )," . "\r\n";
+                    $routesFileContent .= "    ]," . "\r\n";
                 }
 
                 $routesFileContent = rtrim($routesFileContent, ',' . "\r\n");
-                $routesFileContent .= "\r\n" . ");";
+                $routesFileContent .= "\r\n" . "];";
                 file_put_contents($this->cacheDir . $this->routesFile, $routesFileContent);
                 $usedControllers = (count($controllerFiles) > 0) ? '$this->usedControllers = [\'' . join('\',\'', $controllerFiles) . '\'];' : '';
                 file_put_contents($this->cacheDir . $this->controllersFile, $controllersFileContent . $usedControllers);
