@@ -16,5 +16,4 @@ namespace Dframe\Cron;
  */
 abstract class Task extends \Dframe\Controller
 {
-
 }
