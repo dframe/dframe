@@ -16,4 +16,54 @@ namespace Dframe\Cron;
  */
 abstract class Task extends \Dframe\Controller
 {
+    private function checkDir($path)
+    {
+        if (!is_dir($path)) {
+            if (!mkdir($path, 0777, true)) {
+                throw new \Exception('Unable to create' . $path, '', 403);
+            }
+        }
+    }
+
+    protected function lockTime($key, $ttl = 3600)
+    {
+        $dir = $dirLog = APP_DIR . 'View/cache/logs/';
+        $file = $key . '.txt';
+        $this->checkDir($dir);
+        $dirLog = $dir . $file;
+
+        if (file_exists($dirLog) and filemtime($dirLog) + 59 > time()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function inLock($key, $callback, array $bind = array(), $ttl = 3600)
+    {
+        $dir = APP_DIR . 'View/cache/logs/';
+        $file = $key . '.txt';
+        $this->checkDir($dir);
+        $dirLog = $dir . $file;
+
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException;
+        }
+
+        $fp = fopen($dirLog, "a");
+        if (flock($fp, LOCK_EX | LOCK_NB)) { // do an exclusive lock
+
+            call_user_func_array($callback, $bind);
+
+            flock($fp, LOCK_UN); // release the lock
+            $this->lockTime($key, $ttl);
+        } else {
+            return false;
+        }
+
+        fclose($fp);
+        return true;
+
+    }
+
 }
