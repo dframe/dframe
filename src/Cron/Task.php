@@ -43,7 +43,7 @@ abstract class Task extends \Dframe\Controller
         return true;
     }
 
-    protected function inLock($key, $callback, array $bind = array(), $ttl = 3600)
+    protected function inLock($key, $callback, array $bind = [], $ttl = 3600)
     {
         $dir = APP_DIR . 'View/cache/logs/';
         $file = $key . '.txt';
