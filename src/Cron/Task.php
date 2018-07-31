@@ -35,7 +35,11 @@ abstract class Task extends \Dframe\Controller
         if (file_exists($dirLog) and filemtime($dirLog) + 59 > time()) {
             return false;
         }
-
+        
+        $fp = fopen($dirLog, "w");
+        fwrite($fp, date("d-m-Y H:i:s"));
+        fclose($fp);
+        
         return true;
     }
 
@@ -52,7 +56,6 @@ abstract class Task extends \Dframe\Controller
 
         $fp = fopen($dirLog, "a");
         if (flock($fp, LOCK_EX | LOCK_NB)) { // do an exclusive lock
-
             call_user_func_array($callback, $bind);
 
             flock($fp, LOCK_UN); // release the lock
@@ -60,7 +63,7 @@ abstract class Task extends \Dframe\Controller
         } else {
             return false;
         }
-
+        fwrite($fp, date("d-m-Y H:i:s"));
         fclose($fp);
         return true;
 
