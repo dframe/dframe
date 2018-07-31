@@ -54,7 +54,7 @@ abstract class Task extends \Dframe\Controller
             throw new \InvalidArgumentException;
         }
 
-        $fp = fopen($dirLog, "a");
+        $fp = fopen($dirLog, "w");
         if (flock($fp, LOCK_EX | LOCK_NB)) { // do an exclusive lock
             call_user_func_array($callback, $bind);
 
