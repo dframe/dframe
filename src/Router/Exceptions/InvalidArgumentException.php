@@ -16,7 +16,7 @@ namespace Dframe\Router\Exceptions;
  */
 class InvalidArgumentException extends \InvalidArgumentException
 {
-    public function __construct($messages = null, $code = 0, \Exception $previous = null)
+    public function __construct($messages = null, $code = 0, \InvalidArgumentException $previous = null)
     {
         parent::__construct($messages, $code, $previous);
     }
