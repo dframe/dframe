@@ -66,7 +66,5 @@ abstract class Task extends \Dframe\Controller
         fwrite($fp, date("d-m-Y H:i:s"));
         fclose($fp);
         return ['return' => true, 'response' => $data];
-
     }
-
 }
