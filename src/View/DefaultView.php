@@ -2,7 +2,7 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
@@ -13,7 +13,7 @@ use Dframe\Config;
 use Dframe\View\Exceptions\ViewException;
 
 /**
- * Default View
+ * Default View.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  * @author Amadeusz Dzięcioł <amadeusz.xd@gmail.com>
@@ -26,7 +26,7 @@ class DefaultView implements \Dframe\View\ViewInterface
     }
 
     /**
-     * Set the var to the template
+     * Set the var to the template.
      *
      * @param string $name
      * @param string $value
@@ -39,7 +39,7 @@ class DefaultView implements \Dframe\View\ViewInterface
     }
 
     /**
-     * Return code
+     * Return code.
      *
      * @param string $name Filename
      * @param string $path Alternative Path
@@ -74,7 +74,7 @@ class DefaultView implements \Dframe\View\ViewInterface
     }
 
     /**
-     * Przekazuje kod do szablonu Smarty
+     * Przekazuje kod do szablonu Smarty.
      *
      * @param string $name
      * @param string $path

@@ -2,11 +2,10 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
-
 function pathFile($path)
 {
     $folder = '';
@@ -26,9 +25,8 @@ function pathFile($path)
 }
 
 /**
- * Randomowo generowany string
+ * Randomowo generowany string.
  */
-
 function generateRandomString($length = 10)
 {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -43,9 +41,8 @@ function generateRandomString($length = 10)
 }
 
 /**
- * Zmiana Obiektu wielowymiaroa na tablice array
+ * Zmiana Obiektu wielowymiaroa na tablice array.
  */
-
 function object_to_array($obj)
 {
     $obj = is_object($obj) ? (array)$obj : $obj;
@@ -53,7 +50,7 @@ function object_to_array($obj)
     if (is_array($obj)) {
         $new = [];
         foreach ($obj as $key => $val) {
-            $key2 = str_replace("\0", "", $key);
+            $key2 = str_replace("\0", '', $key);
             $new[$key2] = object_to_array($val);
         }
     } else {
@@ -65,12 +62,12 @@ function object_to_array($obj)
 
 /**
  * Wyszukiwanie ciagu zdania za pozmoca wilcardu
- * ala ma kota -> ala * kota == TRUE
+ * ala ma kota -> ala * kota == TRUE.
  */
-
 function stringMatchWithWildcard($source, $pattern)
 {
     $pattern = preg_quote($pattern, '/');
     $pattern = str_replace('\*', '.*', $pattern);
+
     return preg_match('/^' . $pattern . '$/i', $source);
 }

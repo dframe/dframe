@@ -2,7 +2,7 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
@@ -13,7 +13,7 @@ use Dframe\Config;
 use Dframe\View\Exceptions\ViewException;
 
 /**
- * Twig View
+ * Twig View.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
@@ -26,14 +26,14 @@ class TwigView implements \Dframe\View\ViewInterface
         $twig = new \Twig_Environment(
             $loader,
             [
-                'cache' => $twigConfig->get('setCompileDir')
+                'cache' => $twigConfig->get('setCompileDir'),
             ]
         );
         $this->twig = $twig;
     }
 
     /**
-     * Set the var to the template
+     * Set the var to the template.
      *
      * @param string $name
      * @param string $value
@@ -55,11 +55,12 @@ class TwigView implements \Dframe\View\ViewInterface
                 Trace: ' . $e->getTraceAsString();
             exit();
         }
+
         return $assign;
     }
 
     /**
-     * Return code
+     * Return code.
      *
      * @param string $name Filename
      * @param string $path Alternative Path
@@ -72,7 +73,7 @@ class TwigView implements \Dframe\View\ViewInterface
     }
 
     /**
-     * Przekazuje kod do szablonu Smarty
+     * Przekazuje kod do szablonu Smarty.
      *
      * @param string $name
      * @param string $path
@@ -87,6 +88,7 @@ class TwigView implements \Dframe\View\ViewInterface
         $name = $pathFile[1];
 
         $path = $twigConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name . $twigConfig->get('fileExtension', '.twig');
+
         try {
             if (!is_file($path)) {
                 throw new ViewException('Can not open template ' . $name . ' in: ' . $path);

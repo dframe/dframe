@@ -1,8 +1,9 @@
 <?php
+
 namespace Dframe\tests;
 
-use PHPUnit\Framework\TestCase;
 use Dframe\Router;
+use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase
 {
@@ -13,8 +14,8 @@ class RouterTest extends TestCase
         $this->router->addRoute([
             'page/:page' => [
                 'page/[page]/',
-                'task=page&action=[page]'
-            ]
+                'task=page&action=[page]',
+            ],
         ]);
 
         $this->router->addRoute([
@@ -22,9 +23,9 @@ class RouterTest extends TestCase
                 'error/[code]/',
                 'task=page&action=error&type=[code]',
                 'args' => [
-                    'code' => '[code]'
+                    'code' => '[code]',
                 ],
-            ]
+            ],
         ]);
         $this->router->addRoute([
             'default' => [
@@ -33,9 +34,9 @@ class RouterTest extends TestCase
                 'params' => '(.*)',
                 '_params' => [
                     '[name]/[value]/',
-                    '[name]=[value]'
-                ]
-            ]
+                    '[name]=[value]',
+                ],
+            ],
         ]);
     }
 

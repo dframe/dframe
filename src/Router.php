@@ -2,19 +2,18 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 namespace Dframe;
 
-use Dframe\Router\Response;
-
 use Dframe\Router\Exceptions\InvalidArgumentException;
 use Dframe\Router\Exceptions\RuntimeException;
+use Dframe\Router\Response;
 
 /**
- * Router class
+ * Router class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
@@ -36,12 +35,12 @@ class Router
     private $sURI;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $subdomain = false;
 
     /**
-     * Delay Redirect
+     * Delay Redirect.
      */
     public $delay = null;
 
@@ -107,10 +106,10 @@ class Router
                         'params' => '(.*)',
                         '_params' => [
                             '[name]/[value]/',
-                            '[name]=[value]'
-                        ]
+                            '[name]=[value]',
+                        ],
                     ],
-                ]
+                ],
             ]; // For url
         }
 
@@ -123,7 +122,7 @@ class Router
             if (isset($_SERVER['REQUEST_SCHEME']) and ((!empty($_SERVER['REQUEST_SCHEME']) and $_SERVER['REQUEST_SCHEME'] === 'http'))) {
                 return Response::create()->headers(
                     [
-                        'Refresh' => $this->requestPrefix . $this->domain . '/' . $_SERVER['REQUEST_URI']
+                        'Refresh' => $this->requestPrefix . $this->domain . '/' . $_SERVER['REQUEST_URI'],
                     ]
                 )->display();
             }
@@ -165,7 +164,7 @@ class Router
 
                 $this->controllerDirs = [];
                 foreach ($controllerDirs as $d) {
-                    $realPath = realPath($d);
+                    $realPath = realpath($d);
                     if ($realPath !== false) {
                         $this->controllerDirs[] = $realPath;
                     }
@@ -213,7 +212,6 @@ class Router
      * @param boolen $option
      *
      */
-
     public function setHttps($option = false)
     {
         if (!in_array($option, [true, false])) {
@@ -229,8 +227,8 @@ class Router
             }
         }
 
-
         $this->https = $option;
+
         return $this;
     }
 
@@ -251,10 +249,6 @@ class Router
     }
 
     /**
-     * Gerenate full url for files
-     *
-     * @param string $sUrl
-     * @param string $path
      *
      * @return string
      */
@@ -320,7 +314,7 @@ class Router
                     if (isset($this->aRouting['routes'][$findKey]['_params'])) {
                         $sExpressionUrl = str_replace('[params]', $this->parseParams($this->aRouting['routes'][$findKey]['_params'][0], $aParams), $sExpressionUrl);
                     } elseif (!empty($aParams)) {
-                        $sExpressionUrl = $sExpressionUrl . "?" . http_build_query($aParams);
+                        $sExpressionUrl = $sExpressionUrl . '?' . http_build_query($aParams);
                     }
                 }
             } else {
@@ -383,7 +377,6 @@ class Router
         $sUrl .= $sExpressionUrl;
         $sUrl = rtrim($sUrl, '/');
 
-
         unset($this->subdomain);
         $this->domain = HTTP_HOST;
         //$this->setHttps($this->routerConfig->get('https', false));
@@ -411,7 +404,7 @@ class Router
     }
 
     /**
-     * Parse request
+     * Parse request.
      */
     public function parseGets()
     {
@@ -440,7 +433,6 @@ class Router
         $_GET['action'] = $this->action;
     }
 
-
     /**
      * Return Current path
      *
@@ -459,7 +451,6 @@ class Router
         } else {
             $sGets = $_SERVER['QUERY_STRING'];
         }
-
 
         return $sGets;
     }
@@ -581,9 +572,9 @@ class Router
     }
 
     /**
-     * Redirect
+     * Redirect.
      *
-     * @param string $url The URI
+     * @param string $url    The URI
      * @param string $status
      *
      * @return object
@@ -594,7 +585,7 @@ class Router
     }
 
     /**
-     * Redirect delay
+     * Redirect delay.
      *
      * @param string $delay time in seconds
      *
@@ -603,11 +594,12 @@ class Router
     public function delay(int $delay)
     {
         $this->delay = $delay;
+
         return $this;
     }
 
     /**
-     * Set up subdomain prefix
+     * Set up subdomain prefix.
      *
      * @param string $subdomain
      *
@@ -616,11 +608,12 @@ class Router
     public function subdomain($subdomain)
     {
         $this->subdomain = $subdomain;
+
         return $this;
     }
 
     /**
-     * Set up domain
+     * Set up domain.
      *
      * @param string $domain
      *
@@ -629,11 +622,12 @@ class Router
     public function domain($domain)
     {
         $this->domain = $domain;
+
         return $this;
     }
 
     /**
-     * Set up new route
+     * Set up new route.
      *
      * @param string $newRoute
      *
@@ -651,7 +645,7 @@ class Router
     }
 
     /**
-     * Annotations parser
+     * Annotations parser.
      */
     private function generateRoutes()
     {
@@ -719,14 +713,14 @@ class Router
                 $routesFileContent = rtrim($routesFileContent, ',' . "\r\n");
                 $routesFileContent .= "\r\n" . "];";
                 file_put_contents($this->cacheDir . $this->routesFile, $routesFileContent);
-                $usedControllers = (count($controllerFiles) > 0) ? '$this->usedControllers = [\'' . join('\',\'', $controllerFiles) . '\'];' : '';
+                $usedControllers = (count($controllerFiles) > 0) ? '$this->usedControllers = [\'' . implode('\',\'', $controllerFiles) . '\'];' : '';
                 file_put_contents($this->cacheDir . $this->controllersFile, $controllersFileContent . $usedControllers);
             }
         }
     }
 
     /**
-     * Find all file in controller dir
+     * Find all file in controller dir.
      */
     private function findControllerFiles()
     {
@@ -739,6 +733,7 @@ class Router
                 $result[$k] = filemtime($k);
             }
         }
+
         return $result;
     }
 
@@ -777,7 +772,7 @@ class Router
             $className = ($namespace !== null) ? $namespace . '\\' . $matches[1] : $matches[1];
             // We find class infos
             $path = str_replace('Controller.php', '.php', $className . '.php');
-            $path = APP_DIR . str_replace('\\', "/", $path);
+            $path = APP_DIR . str_replace('\\', '/', $path);
             if (is_file($path)) {
                 include_once $path;
             }
@@ -811,7 +806,7 @@ class Router
                     $routePath = ltrim($routePath, '/');
                     $lChar = substr($routePath, -1);
                     if ($lChar == ']') {
-                        $routePath = $routePath . "/";
+                        $routePath = $routePath . '/';
                     }
                     preg_match_all('!\[(.+?)\]!i', $routePath, $aExpression_);
                     $iCount = count($aExpression_[0]);
@@ -825,7 +820,7 @@ class Router
                         'routePath' => $routePath,
                         'task' => $task,
                         'action' => $m->name,
-                        'substring' => $sVars
+                        'substring' => $sVars,
                     ];
                 }
             }

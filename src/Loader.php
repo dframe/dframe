@@ -2,7 +2,7 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
@@ -13,7 +13,7 @@ use Dframe\Router\Response;
 use Dframe\Loader\Exceptions\LoaderException;
 
 /**
- * Loader Class
+ * Loader Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
@@ -70,7 +70,7 @@ class Loader
 
 
     /**
-     * Metoda do includowania pliku modelu i wywołanie objektu przez namespace
+     * Metoda do includowania pliku modelu i wywołanie objektu przez namespace.
      *
      * @param string $name
      *
@@ -82,7 +82,7 @@ class Loader
     }
 
     /**
-     * Metoda do includowania pliku widoku i wywołanie objektu przez namespace
+     * Metoda do includowania pliku widoku i wywołanie objektu przez namespace.
      *
      * @param string $name
      *
@@ -94,7 +94,7 @@ class Loader
     }
 
     /**
-     * Metoda do includowania pliku widoku i wywołanie objektu przez namespace
+     * Metoda do includowania pliku widoku i wywołanie objektu przez namespace.
      *
      * @param string $name
      * @param string $type
@@ -171,7 +171,6 @@ class Loader
                 exit($msg);
             }
 
-
             $routerConfig = Config::load('router');
             $routes = $routerConfig->get('routes');
 
@@ -185,9 +184,8 @@ class Loader
         return $ob;
     }
 
-
     /**
-     * Establish the requested controller as an object
+     * Establish the requested controller as an object.
      *
      * @param string $controller
      */
@@ -195,7 +193,7 @@ class Loader
     public function loadController($controller, $namespace = null)
     {
         $subControler = null;
-        if (strstr($controller, ",") !== false) {
+        if (strstr($controller, ',') !== false) {
             $url = explode(',', $controller);
             $urlCount = count($url) - 1;
             $subControler = '';
@@ -229,7 +227,6 @@ class Loader
 
 
         $path = str_replace($this->namespaceSeparator, DIRECTORY_SEPARATOR, APP_DIR . 'Controller' . DIRECTORY_SEPARATOR . $subControler . $controller . '.php');
-
 
         try {
             if (!is_file($path)) {
@@ -282,12 +279,12 @@ class Loader
 
         return $this;
     }
+
     /**
-     *
-     * @param string  $string
-     * @param boolean $classFormat
-     * @param boolean $public
-     * @param boolean $strict
+     * @param string $string
+     * @param bool   $classFormat
+     * @param bool   $public
+     * @param bool   $strict
      */
     public static function isCamelCaps($string, $classFormat = false, $public = true, $strict = true)
     {
@@ -328,17 +325,14 @@ class Loader
             $lastCharWasCaps = $classFormat;
 
             for ($i = 1; $i < $length; $i++) {
-                $ascii = ord($string {
-                    $i});
+                $ascii = ord($string[$i]);
                 if ($ascii >= 48 and $ascii <= 57) {
                     // The character is a number, so it cant be a capital.
                     $isCaps = false;
                 } else {
                     if (strtoupper(
-                        $string {
-                            $i}
-                    ) === $string {
-                        $i}) {
+                        $string[$i]
+                    ) === $string[$i]) {
                         $isCaps = true;
                     } else {
                         $isCaps = false;
@@ -354,12 +348,13 @@ class Loader
         }//end if
 
         return true;
-    }//end isCamelCaps()
+    }
 
+    //end isCamelCaps()
 
     /**
      * Metoda
-     * init dzialajaca jak __construct wywoływana na poczatku kodu
+     * init dzialajaca jak __construct wywoływana na poczatku kodu.
      */
     public function init()
     {
@@ -367,7 +362,7 @@ class Loader
 
     /**
      * Metoda
-     * dzialajaca jak __destruct wywoływana na koncu kodu
+     * dzialajaca jak __destruct wywoływana na koncu kodu.
      */
     public function end()
     {

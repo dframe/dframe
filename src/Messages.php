@@ -2,7 +2,7 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
@@ -10,7 +10,7 @@
 namespace Dframe;
 
 /**
- * Message Class
+ * Message Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  * @author Mike Everhart <mike@plasticbrain.net>
@@ -21,9 +21,9 @@ class Messages
     public $msgTypes = ['help', 'info', 'warning', 'success', 'error'];
 
     /**
-     * Add a message to the queue
+     * Add a message to the queue.
      *
-     * @param Object $session
+     * @param object $session
      */
     public function __construct($driver)
     {
@@ -42,7 +42,7 @@ class Messages
     }
 
     /**
-     * Add a message to the queue
+     * Add a message to the queue.
      *
      * @param string $type     The type of message to add
      * @param string $message  The message
@@ -81,7 +81,6 @@ class Messages
 
                 $msg .= 'Current file Path: <b>' . $this->router->currentPath() . '</b><br>';
 
-
                 $msg .= 'File Exception: ' . $e->getFile() . ':' . $e->getLine() . '<br><br>';
                 $msg .= 'Trace: <br>' . $e->getTraceAsString() . '<br>';
                 $msg .= '</pre>';
@@ -104,7 +103,7 @@ class Messages
     }
 
     /**
-     * Display the queued messages
+     * Display the queued messages.
      *
      * @param string $type  Which messages to display
      * @param bool   $print True print the messages on the screen
@@ -153,9 +152,8 @@ class Messages
         }
     }
 
-
     /**
-     * Check to  see if there are any queued error messages
+     * Check to  see if there are any queued error messages.
      *
      * @return bool true There ARE error messages false There are NOT any error messages
      */
@@ -166,7 +164,7 @@ class Messages
     }
 
     /**
-     * Check to see if there are any ($type) messages queued
+     * Check to see if there are any ($type) messages queued.
      *
      * @param string $type The type of messages to check for
      *
@@ -192,7 +190,7 @@ class Messages
     }
 
     /**
-     * Clear messages from the session data
+     * Clear messages from the session data.
      *
      * @param string $type The type of messages to clear
      *
@@ -211,12 +209,9 @@ class Messages
         return true;
     }
 
-
     /**
-     *
      * @return bool
      */
-
     public function __toString()
     {
         return $this->hasMessages();

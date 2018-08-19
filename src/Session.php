@@ -2,7 +2,7 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
@@ -10,7 +10,7 @@
 namespace Dframe;
 
 /**
- * Session Class
+ * Session Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
@@ -56,9 +56,8 @@ class Session implements \Psr\SimpleCache\CacheInterface
     /**
      * Register the session.
      *
-     * @param integer $time.
+     * @param int $time.
      */
-
     public function register($time = 60)
     {
         $_SESSION['sessionId'] = session_id();
@@ -70,7 +69,6 @@ class Session implements \Psr\SimpleCache\CacheInterface
      *
      * @return bool
      */
-
     public function authLogin()
     {
         if (!empty($_SESSION['sessionId'])) {
@@ -94,7 +92,7 @@ class Session implements \Psr\SimpleCache\CacheInterface
     }
 
     /**
-     * Set session key
+     * Set session key.
      *
      * @param string $key
      * @param string $value
@@ -106,14 +104,13 @@ class Session implements \Psr\SimpleCache\CacheInterface
     }
 
     /**
-     * get session key
+     * get session key.
      *
      * @param string $key
      * @param string $or
      *
      * @return string|null
      */
-
     public function get($key, $or = null)
     {
         return isset($_SESSION[$key]) ? $_SESSION[$key] : $or;

@@ -2,7 +2,7 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
@@ -12,7 +12,7 @@ namespace Dframe;
 use Dframe\Router\Response;
 
 /**
- * Core Class
+ * Core Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */

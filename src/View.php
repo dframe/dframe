@@ -2,7 +2,7 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
@@ -13,14 +13,12 @@ use Dframe\View\Exception\ViewException;
 use Dframe\Router\Response;
 
 /**
- * View Class
+ * View Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-
 abstract class View extends Loader implements \Dframe\View\ViewInterface
 {
-
     /**
      * Defines template variables.
      *
@@ -75,13 +73,14 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
     }
 
     /**
-     * Include pliku
+     * Include pliku.
      */
     public function renderInclude($name, $path = null)
     {
         if (!isset($this->view)) {
             throw new ViewException('Please Define view engine in app/View.php', 500);
         }
+
         return $this->view->renderInclude($name, $path);
     }
 

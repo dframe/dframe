@@ -1,8 +1,9 @@
 <?php
+
 namespace Dframe\tests;
 
-use PHPUnit\Framework\TestCase;
 use Dframe\Router\Response;
+use PHPUnit\Framework\TestCase;
 
 class ResponseTest extends TestCase
 {

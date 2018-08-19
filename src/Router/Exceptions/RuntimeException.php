@@ -2,7 +2,7 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
@@ -10,7 +10,7 @@
 namespace Dframe\Router\Exceptions;
 
 /**
- * RuntimeException Class
+ * RuntimeException Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */

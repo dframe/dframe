@@ -1,9 +1,10 @@
 <?php
+
 namespace Dframe\tests;
 
-use PHPUnit\Framework\TestCase;
 use Dframe\Config;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
@@ -11,8 +12,8 @@ class ConfigTest extends TestCase
     {
         $directory = [
             'Config' => [
-                'test.php' => "<?php return ['create' => 'yes'];"
-            ]
+                'test.php' => "<?php return ['create' => 'yes'];",
+            ],
         ];
 
         $this->file_system = vfsStream::setup('root', 755, $directory);
