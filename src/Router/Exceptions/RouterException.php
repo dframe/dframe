@@ -14,7 +14,7 @@ namespace Dframe\Router\Exceptions;
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class RouterException extends \ErrorException
+class RouterException extends \Exception
 {
     public function __construct($messages = null, $code = 0, \Exception $previous = null)
     {

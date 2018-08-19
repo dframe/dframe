@@ -14,7 +14,7 @@ namespace Dframe\Asset\Exceptions;
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class AsseticException extends \ErrorException
+class AsseticException extends \Exception
 {
     public function __construct($messages = null, $code = 0, \Exception $previous = null)
     {

@@ -14,7 +14,7 @@ namespace Dframe\Loader\Exceptions;
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class LoaderException extends \ErrorException
+class LoaderException extends \Exception
 {
     public function __construct($messages = null, $code = 0, \Exception $previous = null)
     {
