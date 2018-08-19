@@ -1,4 +1,5 @@
 <?php
+
 namespace Dframe\tests;
 
 use PHPUnit\Framework\TestCase;
@@ -9,13 +10,11 @@ session_start();
 
 class RunTest extends TestCase
 {
-
     public function testCreateController()
     {
         $testController = new TestController();
         $this->assertEquals('Hello World', $testController->testHelloWorld());
     }
-
 }
 
 class TestController extends \Dframe\Controller

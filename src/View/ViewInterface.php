@@ -2,7 +2,7 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
@@ -10,16 +10,14 @@
 namespace Dframe\View;
 
 /**
- * View Interface
+ * View Interface.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-
 interface ViewInterface
 {
-
     /**
-     * Set the var to the template
+     * Set the var to the template.
      *
      * @param string $name
      * @param string $value
@@ -27,7 +25,7 @@ interface ViewInterface
     public function assign($name, $value);
 
     /**
-     * Return code
+     * Return code.
      *
      * @param string $name - Filename
      * @param string $path - Alternative Path
@@ -35,7 +33,7 @@ interface ViewInterface
     public function fetch($name, $path = null);
 
     /**
-     * Include File
+     * Include File.
      *
      * @param string $path
      */

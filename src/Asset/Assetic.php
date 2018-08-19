@@ -2,38 +2,32 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
 namespace Dframe\Asset;
 
-use Dframe\BaseException;
-use Dframe\Router;
+use Assetic\Asset\AssetCollection;
 use Assetic\Asset\FileAsset;
 use Assetic\Filter\CssImportFilter;
+use Assetic\Filter\CssMinFilter;
 use Assetic\Filter\CssRewriteFilter;
 use Assetic\Filter\PhpCssEmbedFilter;
-use Assetic\Filter\CssMinFilter;
-use Assetic\Filter;
-use Assetic\Asset\AssetCollection;
-use Assetic\Asset\AssetReference;
-use Assetic\Filter\GoogleClosure;
-use Patchwork\JSqueeze;
-
 use Dframe\Asset\Exceptions\AsseticException;
+use Dframe\Router;
+use Patchwork\JSqueeze;
 
 set_time_limit(120);
 
 /**
- * Short Description
+ * Short Description.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
 class Assetic extends Router
 {
-
     private function checkDir($path)
     {
         if (!is_dir($path)) {
@@ -67,11 +61,9 @@ class Assetic extends Router
 
             $pathinfo = pathinfo($dstPath);
             if (!file_exists($pathinfo['dirname'])) {
-
                 if (!mkdir($pathinfo['dirname'], 0777, true)) {
                     throw new AsseticException('Unable to create' . $path, '', 403);
                 }
-
             }
 
             $js = file_get_contents($srcPath);
@@ -82,7 +74,7 @@ class Assetic extends Router
 
             if (!file_put_contents($dstPath, $js)) {
                 $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: ' . $srcPath . ' TO ' . $dstPath . "\n";
-                $out = fopen(APP_DIR . '/View/logs/router.txt', "w");
+                $out = fopen(APP_DIR . '/View/logs/router.txt', 'w');
                 fwrite($out, $str);
                 fclose($out);
             }
@@ -111,7 +103,6 @@ class Assetic extends Router
         } else {
             $dstPath = $this->aRouting['assets']['cachePath'] . $path;
         }
-
 
         //Kopiowanie pliku jezeli nie istnieje
         if (!file_exists($dstPath)) {
@@ -160,7 +151,7 @@ class Assetic extends Router
 
                 if (!copy($srcPathinfo['dirname'] . '/' . $url, $pathinfo['dirname'] . '/' . $url)) {
                     $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: ' . $srcPathinfo['dirname'] . '/' . $url . ' TO ' . $pathinfo['dirname'] . '/' . $url . "\n";
-                    $out = fopen(APP_DIR . 'View/logs/router.txt', "w");
+                    $out = fopen(APP_DIR . 'View/logs/router.txt', 'w');
                     fwrite($out, $str);
                     fclose($out);
                 }
@@ -168,7 +159,7 @@ class Assetic extends Router
 
             if (!file_put_contents($dstPath, $css->dump())) {
                 $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: ' . $srcPath . ' TO ' . $dstPath . "\n";
-                $out = fopen(APP_DIR . '/View/logs/router.txt', "w");
+                $out = fopen(APP_DIR . '/View/logs/router.txt', 'w');
                 fwrite($out, $str);
                 fclose($out);
             }

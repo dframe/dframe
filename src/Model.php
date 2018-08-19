@@ -2,7 +2,7 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
@@ -10,19 +10,18 @@
 namespace Dframe;
 
 /**
- * Model Class
+ * Model Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
 abstract class Model extends Loader
 {
-
     /**
-     * Standard method for returning the result from the method
+     * Standard method for returning the result from the method.
      *
-     * @param boolean $type
+     * @param bool  $type
      * @param array $array
-     * 
+     *
      * @return array
      */
     public function methodResult($type, $array = null)
@@ -35,10 +34,10 @@ abstract class Model extends Loader
     }
 
     /**
-     * Standard method for returning  result from the method
+     * Standard method for returning  result from the method.
      *
      * @param array $errors
-     * 
+     *
      * @return array
      */
     public function methodFail($errors = null)
@@ -55,7 +54,7 @@ abstract class Model extends Loader
     }
 
     /**
-     * Init method
+     * Init method.
      */
     public function init()
     {

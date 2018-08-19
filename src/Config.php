@@ -2,30 +2,26 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
 namespace Dframe;
 
-use Dframe\BaseException;
-
 /**
- * Config Class
+ * Config Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
 class Config
 {
-
     protected static $cfg = [];
     private $file;
     public $path;
 
     public function __construct($file, $path = '')
     {
-
         $this->path = (isset($path) and !empty($path)) ? $path : APP_DIR . $path . 'Config' . DIRECTORY_SEPARATOR;
 
         $this->file = $file;
@@ -38,7 +34,7 @@ class Config
 
     public static function load($file, $path = null)
     {
-        return new Config($file, $path);
+        return new self($file, $path);
     }
 
     public function get($param = null, $or = null)

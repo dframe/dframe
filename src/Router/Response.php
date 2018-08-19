@@ -2,24 +2,22 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
 namespace Dframe\Router;
 
-use Dframe\Config;
 use Dframe\Router;
 
 /**
- * Short Description
+ * Short Description.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
 class Response extends Router
 {
-
     public $status = 200;
 
     private $body = '';
@@ -81,7 +79,7 @@ class Response extends Router
         506 => 'Variant Also Negotiates',
         507 => 'Insufficient Storage',
         509 => 'Bandwidth Limit Exceeded',
-        510 => 'Not Extended'
+        510 => 'Not Extended',
     ];
 
     public function __construct($body = null)
@@ -89,60 +87,62 @@ class Response extends Router
         if (isset($body)) {
             $this->body = $body;
         }
+
         return $this;
     }
 
     public static function create($body = null)
     {
-        return new Response($body);
+        return new self($body);
     }
 
     public static function render($body = null)
     {
-        return new Response($body);
+        return new self($body);
     }
 
     public static function renderJSON($body = null, $status = null)
     {
         $body = json_encode($body);
-        $Response = new Response($body);
+        $Response = new self($body);
 
         if (isset($status)) {
             $Response->status($status);
         }
 
         $Response->headers(['Content-Type' => 'application/json']);
+
         return $Response;
     }
 
     public static function renderJSONP($body = null, $status = null)
     {
-
         $callback = null;
         if (isset($_GET['callback'])) {
             $callback = $_GET['callback'];
         }
 
-        $Response = new Response($callback . '(' . json_encode($body) . ')');
+        $Response = new self($callback . '(' . json_encode($body) . ')');
 
         if (isset($status)) {
             $Response->status($status);
         }
 
         $Response->headers(['Content-Type' => 'application/jsonp']);
+
         return $Response;
     }
 
     /**
-     * Przekierowanie adresu
+     * Przekierowanie adresu.
      *
-     * @param  string $url CONTROLLER/MODEL?parametry
+     * @param string $url CONTROLLER/MODEL?parametry
+     *
      * @return void
      */
     public static function redirect($url = '', $status = 301, $headers = [])
     {
-
-        $Response = new Response();
+        $Response = new self();
         $Response->status($status);
 
         if (!empty($headers)) {
@@ -150,9 +150,8 @@ class Response extends Router
         }
 
         $Response->headers([
-            'Location' => (new Router)->makeUrl($url)
+            'Location' => (new Router())->makeUrl($url),
         ]);
-
 
         return $Response;
     }
@@ -161,12 +160,14 @@ class Response extends Router
     {
         $this->headers(['Content-Type' => 'application/json']);
         $this->body = json_encode($json);
+
         return $this;
     }
 
     public function status($code)
     {
         $this->status = $code;
+
         return $this;
     }
 
@@ -178,6 +179,7 @@ class Response extends Router
     public function headers($headers = false)
     {
         $this->headers = array_unique(array_merge($this->headers, $headers));
+
         return $this;
     }
 
@@ -189,6 +191,7 @@ class Response extends Router
     public function body($body = null)
     {
         $this->body = $body;
+
         return $this;
     }
 
@@ -199,7 +202,6 @@ class Response extends Router
 
     public function display()
     {
-
         if (!headers_sent()) {
             if (PHP_SAPI !== 'cli') {
                 $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1');

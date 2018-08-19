@@ -1,22 +1,21 @@
 <?php
+
 namespace Dframe\tests;
 
-use PHPUnit\Framework\TestCase;
 use Dframe\Router;
+use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase
 {
-
     public function setUp()
     {
-
         $this->router = new Router();
 
         $this->router->addRoute([
             'page/:page' => [
                 'page/[page]/',
-                'task=page&action=[page]'
-            ]
+                'task=page&action=[page]',
+            ],
         ]);
 
         $this->router->addRoute([
@@ -24,9 +23,9 @@ class RouterTest extends TestCase
                 'error/[code]/',
                 'task=page&action=error&type=[code]',
                 'args' => [
-                    'code' => '[code]'
+                    'code' => '[code]',
                 ],
-            ]
+            ],
         ]);
         $this->router->addRoute([
             'default' => [
@@ -35,9 +34,9 @@ class RouterTest extends TestCase
                 'params' => '(.*)',
                 '_params' => [
                     '[name]/[value]/',
-                    '[name]=[value]'
-                ]
-            ]
+                    '[name]=[value]',
+                ],
+            ],
         ]);
     }
 
@@ -62,5 +61,4 @@ class RouterTest extends TestCase
     //     $this->assertSame('https://dframeframework.com/page/index', $this->router->setHttps(true)->makeUrl('page/:page?page=index'));
     //     $this->assertSame('http://dframeframework.com/page/index', $this->router->makeUrl('page/:page?page=index'));
     // }
-
 }

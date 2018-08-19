@@ -2,7 +2,7 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
@@ -13,18 +13,17 @@ use Dframe\Config;
 use Dframe\View\Exceptions\ViewException;
 
 /**
- * Smarty View
+ * Smarty View.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
 class SmartyView implements \Dframe\View\ViewInterface
 {
-
     public function __construct()
     {
         $smartyConfig = Config::load('view/smarty');
 
-        $smarty = new \Smarty;
+        $smarty = new \Smarty();
         $smarty->debugging = $smartyConfig->get('debugging', false);
         $smarty->setTemplateDir($smartyConfig->get('setTemplateDir'))
             ->setCompileDir($smartyConfig->get('setCompileDir'))
@@ -34,7 +33,7 @@ class SmartyView implements \Dframe\View\ViewInterface
     }
 
     /**
-     * Set the var to the template
+     * Set the var to the template.
      *
      * @param string $name
      * @param string $value
@@ -61,7 +60,7 @@ class SmartyView implements \Dframe\View\ViewInterface
     }
 
     /**
-     * Return code
+     * Return code.
      *
      * @param string $name Filename
      * @param string $path Alternative Path
@@ -98,7 +97,7 @@ class SmartyView implements \Dframe\View\ViewInterface
     }
 
     /**
-     * Przekazuje kod do szablonu Smarty
+     * Przekazuje kod do szablonu Smarty.
      *
      * @param string $name
      * @param string $path
@@ -107,7 +106,6 @@ class SmartyView implements \Dframe\View\ViewInterface
      */
     public function renderInclude($name, $path = null)
     {
-
         $smartyConfig = Config::load('view/smarty');
 
         $pathFile = pathFile($name);

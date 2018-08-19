@@ -2,7 +2,7 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
@@ -10,14 +10,12 @@
 namespace Dframe;
 
 /**
- * Token Class
+ * Token Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-
 class Token
 {
-
     protected $driver;
     protected $token = [];
     protected $time = [];
@@ -28,7 +26,6 @@ class Token
      * @param string $driver
      * @param array  $config
      */
-
     public function __construct($session)
     {
         $this->driver = $session;
@@ -51,10 +48,9 @@ class Token
     /**
      * @param string $key
      * @param null   $default
-     * 
+     *
      * @return mixed
      */
-
     public function get($key, $default = null)
     {
         if (isset($this->token[$key]) and $this->getTime($key) >= time()) {
@@ -68,19 +64,19 @@ class Token
      * @param string $key
      * @param mixed  $value
      * @param null   $ttl
-     * 
+     *
      * @return bool
      */
     public function set($key, $value, $ttl = null)
     {
         $this->token[$key] = $value;
         $this->driver->set('token', $this->token);
+
         return $this;
     }
 
     public function delete($key)
     {
-
         if (isset($this->token[$key])) {
             unset($this->token[$key]);
         }
@@ -116,7 +112,7 @@ class Token
 
     /**
      * @param string $key
-     * 
+     *
      * @return bool
      */
     public function has($key)
@@ -124,11 +120,11 @@ class Token
         return $this->isValid($key);
     }
 
-
     public function generate($key)
     {
         $this->set($key, md5(uniqid(rand(), true)));
         $this->setTime($key, time() + 3600);
+
         return $this;
     }
 
@@ -167,26 +163,23 @@ class Token
      *
      * @return $this
      */
-
     public function getToken($key)
     {
         $caller = next(debug_backtrace());
-        trigger_error($message . ' in <strong>' . $caller['function'] . '</strong> called from <strong>' . $caller['file'] . '</strong> on line <strong>' . $caller['line'] . '</strong>' . "\n<br />error handler use get(" . $key . ")", E_USER_DEPRECATED);
+        trigger_error($message . ' in <strong>' . $caller['function'] . '</strong> called from <strong>' . $caller['file'] . '</strong> on line <strong>' . $caller['line'] . '</strong>' . "\n<br />error handler use get(" . $key . ')', E_USER_DEPRECATED);
 
         return $this->get($key);
     }
-
 
     /**
      * @deprecated
      *
      * @return $this
      */
-
     public function setToken($key, $value)
     {
         $caller = next(debug_backtrace());
-        trigger_error($message . ' in <strong>' . $caller['function'] . '</strong> called from <strong>' . $caller['file'] . '</strong> on line <strong>' . $caller['line'] . '</strong>' . "\n<br />error handler use set(" . $key . ")", E_USER_DEPRECATED);
+        trigger_error($message . ' in <strong>' . $caller['function'] . '</strong> called from <strong>' . $caller['file'] . '</strong> on line <strong>' . $caller['line'] . '</strong>' . "\n<br />error handler use set(" . $key . ')', E_USER_DEPRECATED);
 
         return $this->set($key, $value);
     }
@@ -196,10 +189,10 @@ class Token
      *
      * @return $this
      */
-
     public function remove($key)
     {
         trigger_error('Method ' . __METHOD__ . ' is deprecated use delete(' . $key . ')', E_USER_DEPRECATED);
+
         return $this->delete($key);
     }
 }

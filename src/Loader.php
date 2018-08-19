@@ -2,26 +2,22 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
 namespace Dframe;
 
-
-use Dframe\Config;
-use Dframe\Core;
-use Dframe\Router\Response;
 use Dframe\Loader\Exceptions\LoaderException;
+
 /**
- * Loader Class
+ * Loader Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
 class Loader extends Core
 {
-
     public $baseClass;
     public $router;
     private $fileExtension = '.php';
@@ -29,7 +25,6 @@ class Loader extends Core
 
     public function __construct($bootstrap = null)
     {
-
         if (!defined('APP_DIR')) {
             throw new LoaderException('Please Define appDir in Main config.php', 500);
         }
@@ -48,7 +43,7 @@ class Loader extends Core
     }
 
     /**
-     * Metoda do includowania pliku modelu i wywołanie objektu przez namespace
+     * Metoda do includowania pliku modelu i wywołanie objektu przez namespace.
      *
      * @param string $name
      *
@@ -60,7 +55,7 @@ class Loader extends Core
     }
 
     /**
-     * Metoda do includowania pliku widoku i wywołanie objektu przez namespace
+     * Metoda do includowania pliku widoku i wywołanie objektu przez namespace.
      *
      * @param string $name
      *
@@ -72,7 +67,7 @@ class Loader extends Core
     }
 
     /**
-     * Metoda do includowania pliku widoku i wywołanie objektu przez namespace
+     * Metoda do includowania pliku widoku i wywołanie objektu przez namespace.
      *
      * @param string $name
      * @param string $type
@@ -81,7 +76,6 @@ class Loader extends Core
      */
     private function loadObject($name, $type)
     {
-
         if (!in_array($type, (['Model', 'View']))) {
             return false;
         }
@@ -94,14 +88,13 @@ class Loader extends Core
         $path = str_replace($this->namespaceSeparator, DIRECTORY_SEPARATOR, APP_DIR . $type . '/' . $folder . $n . '.php');
 
         try {
-
             if (!$this->isCamelCaps($name, true)) {
                 if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE == true)) {
                     throw new LoaderException('Camel Sensitive is on. Can not use ' . $type . ' ' . $name . ' try to use StudlyCaps or CamelCase');
                 }
             }
 
-            $name = !empty($folder) ? $this->namespaceSeparator . $type . $this->namespaceSeparator . str_replace([$this->namespaceSeparator, '/'], $this->namespaceSeparator, $folder) . $name . $type : $this->namespaceSeparator . $type . $this->namespaceSeparator . $name . $type;;
+            $name = !empty($folder) ? $this->namespaceSeparator . $type . $this->namespaceSeparator . str_replace([$this->namespaceSeparator, '/'], $this->namespaceSeparator, $folder) . $name . $type : $this->namespaceSeparator . $type . $this->namespaceSeparator . $name . $type;
             if (!is_file($path)) {
                 throw new LoaderException('Can not open ' . $type . ' ' . $name . ' in: ' . $path);
             }
@@ -111,10 +104,9 @@ class Loader extends Core
             if (method_exists($ob, 'init')) {
                 $ob->init();
             }
-
         } catch (LoaderException $e) {
             $msg = null;
-            if (ini_get('display_errors') == "on") {
+            if (ini_get('display_errors') == 'on') {
                 $msg .= '<pre>';
                 $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
 
@@ -132,7 +124,6 @@ class Loader extends Core
                 exit($msg);
             }
 
-
             $routerConfig = Config::load('router');
 
             if (isset($routerConfig->get('error/400')[0])) {
@@ -147,18 +138,15 @@ class Loader extends Core
         return $ob;
     }
 
-
     /**
-     * Establish the requested controller as an object
+     * Establish the requested controller as an object.
      *
      * @param string $controller
      */
-
     public function loadController($controller)
     {
-
         $subControler = null;
-        if (strstr($controller, ",") !== false) {
+        if (strstr($controller, ',') !== false) {
             $url = explode(',', $controller);
             $urlCount = count($url) - 1;
             $subControler = '';
@@ -181,17 +169,16 @@ class Loader extends Core
         $controller = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $controller);
         $path = str_replace($this->namespaceSeparator, DIRECTORY_SEPARATOR, APP_DIR . 'Controller' . DIRECTORY_SEPARATOR . $subControler . $controller . '.php');
 
-
         try {
             if (!is_file($path)) {
                 throw new LoaderException('Can not open Controller ' . $controller . ' in: ' . $path);
             }
-            
-            if(isset($this->baseClass->router->debug)){
-                $this->baseClass->router->debug->addHeader(array('X-DF-Debug-File' => $path));
-                $this->baseClass->router->debug->addHeader(array('X-DF-Debug-Controller' => $controller));
+
+            if (isset($this->baseClass->router->debug)) {
+                $this->baseClass->router->debug->addHeader(['X-DF-Debug-File' => $path]);
+                $this->baseClass->router->debug->addHeader(['X-DF-Debug-Controller' => $controller]);
             }
-            
+
             include_once $path;
 
             $xsubControler = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $subControler);
@@ -234,12 +221,12 @@ class Loader extends Core
 
         return $this;
     }
+
     /**
-     *
-     * @param string  $string
-     * @param boolean $classFormat
-     * @param boolean $public
-     * @param boolean $strict
+     * @param string $string
+     * @param bool   $classFormat
+     * @param bool   $public
+     * @param bool   $strict
      */
     public static function isCamelCaps($string, $classFormat = false, $public = true, $strict = true)
     {
@@ -280,17 +267,14 @@ class Loader extends Core
             $lastCharWasCaps = $classFormat;
 
             for ($i = 1; $i < $length; $i++) {
-                $ascii = ord($string {
-                    $i});
+                $ascii = ord($string[$i]);
                 if ($ascii >= 48 and $ascii <= 57) {
                     // The character is a number, so it cant be a capital.
                     $isCaps = false;
                 } else {
                     if (strtoupper(
-                        $string {
-                            $i}
-                    ) === $string {
-                        $i}) {
+                        $string[$i]
+                    ) === $string[$i]) {
                         $isCaps = true;
                     } else {
                         $isCaps = false;
@@ -306,12 +290,13 @@ class Loader extends Core
         }//end if
 
         return true;
-    }//end isCamelCaps()
+    }
 
+    //end isCamelCaps()
 
     /**
      * Metoda
-     * init dzialajaca jak __construct wywoływana na poczatku kodu
+     * init dzialajaca jak __construct wywoływana na poczatku kodu.
      */
     public function init()
     {
@@ -319,10 +304,9 @@ class Loader extends Core
 
     /**
      * Metoda
-     * dzialajaca jak __destruct wywoływana na koncu kodu
+     * dzialajaca jak __destruct wywoływana na koncu kodu.
      */
     public function end()
     {
     }
-
 }

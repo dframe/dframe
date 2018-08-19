@@ -2,32 +2,29 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
 namespace Dframe;
 
-use Dframe\View\Exception\ViewException;
-use Dframe\Router;
 use Dframe\Router\Response;
+use Dframe\View\Exception\ViewException;
 
 /**
- * View Class
+ * View Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-
 abstract class View extends Loader implements \Dframe\View\ViewInterface
 {
-
     /**
-     * Defines template variables. 
-     * 
-     * @param string $name 
+     * Defines template variables.
+     *
+     * @param string $name
      * @param mixed  $value
-     * 
+     *
      * @return void
      */
     public function assign($name, $value)
@@ -41,15 +38,14 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
 
     /**
      * Generates the output of the templates with parsing all the template variables.
-     * 
-     * @param string $data 
+     *
+     * @param string $data
      * @param string $type
-     * 
+     *
      * @return mix
      */
     public function render($data, $type = null)
     {
-
         if (empty($type) or $type == 'html') {
             return $this->view->renderInclude($data);
         } elseif ($type == 'jsonp') {
@@ -77,13 +73,14 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
     }
 
     /**
-     * Include pliku
+     * Include pliku.
      */
     public function renderInclude($name, $path = null)
     {
         if (!isset($this->view)) {
             throw new ViewException('Please Define view engine in app/View.php', 500);
         }
+
         return $this->view->renderInclude($name, $path);
     }
 
