@@ -26,6 +26,8 @@ class Loader
 
     public function __construct($bootstrap = null)
     {
+        spl_autoload_register(array($this, 'autoload'));
+
         if (!defined('APP_DIR')) {
             throw new LoaderException('Please Define appDir in Main config.php', 500);
         }
@@ -69,6 +71,7 @@ class Loader
     }
 
 
+
     /**
      * Metoda do includowania pliku modelu i wywołanie objektu przez namespace.
      *
@@ -103,47 +106,26 @@ class Loader
      */
     private function loadObject($name, $type, $namespace = null)
     {
-        if (!in_array($type, (['Model', 'View']))) {
-            return false;
-        }
-
-        if (!empty($namespace)) {
-            $name = '\\' . $namespace . '\\' . $type . '\\' . $name;
-            $name = str_replace('/', $this->namespaceSeparator, $name);
-
-            $ob = new $name($this->baseClass);
-            if (method_exists($ob, 'start')) {
-                $ob->start();
-            }
-            if (method_exists($ob, 'init')) {
-                $ob->init();
-            }
-
-            return $ob;
-        }
-
-
-        $pathFile = pathFile($name);
-        $folder = $pathFile[0];
-        $name = $pathFile[1];
-
-        $n = str_replace($type, '', $name);
-        $path = str_replace($this->namespaceSeparator, DIRECTORY_SEPARATOR, APP_DIR . $type . '/' . $folder . $n . '.php');
 
         try {
+
             if (!$this->isCamelCaps($name, true)) {
                 if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
                     throw new LoaderException('Camel Sensitive is on. Can not use ' . $type . ' ' . $name . ' try to use StudlyCaps or CamelCase');
                 }
             }
 
-            $name = !empty($folder) ? $this->namespaceSeparator . $type . $this->namespaceSeparator . str_replace([$this->namespaceSeparator, '/'], $this->namespaceSeparator, $folder) . $name . $type : $this->namespaceSeparator . $type . $this->namespaceSeparator . $name . $type;
-            ;
-            if (!is_file($path)) {
-                throw new LoaderException('Can not open ' . $type . ' ' . $name . ' in: ' . $path);
+            if (!in_array($type, (['Model', 'View']))) {
+                return false;
             }
 
-            include_once $path;
+            if (!empty($namespace)) {
+                $name = '\\' . $namespace . '\\' . $type . '\\' . $name;
+                $name = str_replace('/', $this->namespaceSeparator, $name);
+            } else {
+                $name = $namespace . '\\' . $type . '\\' . $name . $type;
+            }
+
             $ob = new $name($this->baseClass);
             if (method_exists($ob, 'start')) {
                 $ob->start();
@@ -151,7 +133,9 @@ class Loader
             if (method_exists($ob, 'init')) {
                 $ob->init();
             }
+
         } catch (LoaderException $e) {
+
             $msg = null;
             if (ini_get('display_errors') === "on") {
                 $msg .= '<pre>';
@@ -184,6 +168,35 @@ class Loader
         return $ob;
     }
 
+    public static function autoload($class)
+    {
+
+        if (substr($class, -4) == "View") {
+            $class = substr($class, 0, -4);
+        } else if (substr($class, -5) == "Model") {
+            $class = substr($class, 0, -5);
+        } else if (substr($class, -10) == "Controller") {
+            $class = substr($class, 0, -10);
+        } else {
+            throw new LoaderException('Invalid class ' . func_get_arg(0));
+        }
+
+        $directory = explode('/', str_replace('\\', '/', ltrim($class, '\\')));
+
+        $class = array_pop($directory);
+        $directory = array_merge($directory, explode('/', str_replace('_', '/', $class)));
+        $class = array_pop($directory);
+
+        $namespace = APP_DIR . $namespace;
+        $directory = rtrim($namespace . '/' . join('/', $directory), '/');
+
+        if (is_file($path = $directory . '/' . $class . '.php')) {
+            return require_once $path;
+        }
+
+        throw new LoaderException('Couldn\'t locate ' . func_get_arg(0));
+    }
+
     /**
      * Establish the requested controller as an object.
      *
@@ -192,61 +205,43 @@ class Loader
 
     public function loadController($controller, $namespace = null)
     {
-        $subControler = null;
-        if (strstr($controller, ',') !== false) {
-            $url = explode(',', $controller);
-            $urlCount = count($url) - 1;
-            $subControler = '';
+        try {
 
-            for ($i = 0; $i < $urlCount; $i++) {
-                if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
-                    $subControler .= ucfirst($url[$i]) . DIRECTORY_SEPARATOR;
-                } else {
-                    $subControler .= $url[$i] . DIRECTORY_SEPARATOR;
+            $subControler = null;
+            if (strstr($controller, ',') !== false) {
+                $url = explode(',', $controller);
+                $urlCount = count($url) - 1;
+                $subControler = '';
+
+                for ($i = 0; $i < $urlCount; $i++) {
+                    if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
+                        $subControler .= ucfirst($url[$i]) . DIRECTORY_SEPARATOR;
+                    } else {
+                        $subControler .= $url[$i] . DIRECTORY_SEPARATOR;
+                    }
                 }
+
+                $controller = $url[$urlCount];
             }
 
-            $controller = $url[$urlCount];
-        }
+            if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
+                $controller = ucfirst($controller);
+            }
 
-        if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
-            $controller = ucfirst($controller);
-        }
+            $controller = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $controller);
 
-        $controller = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $controller);
-
-
-
-        if (!empty($namespace)) {
-            $class = '\\' . $namespace . '\\Controller\\' . $subControler . $controller;
-            $class = str_replace('/', $this->namespaceSeparator, $class);
-
-            $this->returnController = new $class($this->baseClass);
-            return $this;
-        }
-
-
-        $path = str_replace($this->namespaceSeparator, DIRECTORY_SEPARATOR, APP_DIR . 'Controller' . DIRECTORY_SEPARATOR . $subControler . $controller . '.php');
-
-        try {
-            if (!is_file($path)) {
-                throw new LoaderException('Can not open Controller ' . $controller . ' in: ' . $path);
+            if (!empty($namespace)) {
+                $class = '\\' . $namespace . '\\Controller\\' . $subControler . $controller;
+                $load = str_replace('/', $this->namespaceSeparator, $class);
+            } else {
+                $load = $this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $xsubControler . '' . $controller . 'Controller';
             }
 
             if (isset($this->debug)) {
-                $this->debug->addHeader(['X-DF-Debug-File' => $path]);
-                $this->debug->addHeader(['X-DF-Debug-Controller' => $controller]);
+                $this->debug->addHeader(['X-DF-Debug-Controller' => $load]);
             }
+            $this->returnController = new $load($this->baseClass);
 
-            include_once $path;
-
-            $xsubControler = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $subControler);
-            if (!class_exists($this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $xsubControler . '' . $controller . 'Controller')) {
-                throw new LoaderException('Bad controller error');
-            }
-
-            $controller = $this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $xsubControler . '' . $controller . 'Controller';
-            $this->returnController = new $controller($this->baseClass);
         } catch (LoaderException $e) {
             $msg = null;
             if (ini_get('display_errors') === 'on') {
