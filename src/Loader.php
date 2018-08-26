@@ -178,7 +178,7 @@ class Loader
         } else if (substr($class, -10) == "Controller") {
             $class = substr($class, 0, -10);
         } else {
-            throw new LoaderException('Invalid class ' . func_get_arg(0));
+            return;
         }
 
         $directory = explode('/', str_replace('\\', '/', ltrim($class, '\\')));
@@ -186,9 +186,7 @@ class Loader
         $class = array_pop($directory);
         $directory = array_merge($directory, explode('/', str_replace('_', '/', $class)));
         $class = array_pop($directory);
-
-        $namespace = APP_DIR . $namespace;
-        $directory = rtrim($namespace . '/' . join('/', $directory), '/');
+        $directory = rtrim(APP_DIR . '/' . join('/', $directory), '/');
 
         if (is_file($path = $directory . '/' . $class . '.php')) {
             return require_once $path;
