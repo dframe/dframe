@@ -20,6 +20,13 @@ use Dframe\Router\Response;
 abstract class View extends Loader implements \Dframe\View\ViewInterface
 {
     /**
+     * Path Templates
+     *
+     * @var string
+     */
+    public $dir;
+
+    /**
      * Defines template variables.
      *
      * @param string $name
@@ -47,7 +54,7 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
     public function render($data, $type = null)
     {
         if (empty($type) or $type === 'html') {
-            return Response::Create($this->view->renderInclude($data));
+            return Response::Create($this->renderInclude($data));
         } elseif ($type === 'jsonp') {
             return $this->renderJSONP($data);
         } else {
@@ -69,6 +76,10 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
             throw new ViewException('Please Define view engine in app/View.php', 500);
         }
 
+        if (!is_null($this->dir)) {
+            $this->view->setTemplateDir($this->dir);
+        }
+
         return $this->view->fetch($name, $path);
     }
 
@@ -79,6 +90,10 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
     {
         if (!isset($this->view)) {
             throw new ViewException('Please Define view engine in app/View.php', 500);
+        }
+
+        if (!is_null($this->dir)) {
+            $this->view->setTemplateDir($this->dir);
         }
 
         return $this->view->renderInclude($name, $path);

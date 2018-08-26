@@ -21,6 +21,7 @@ class SmartyView implements \Dframe\View\ViewInterface
 {
     public function __construct()
     {
+
         $this->smartyConfig = Config::load('view/smarty');
 
         $smarty = new \Smarty;
@@ -30,6 +31,13 @@ class SmartyView implements \Dframe\View\ViewInterface
             ->addPluginsDir($this->smartyConfig->get('addPluginsDir'));
 
         $this->smarty = $smarty;
+
+
+    }
+
+    public function setTemplateDir($dir)
+    {
+        $this->smarty->setTemplateDir($dir);
     }
 
     /**
