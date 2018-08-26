@@ -26,7 +26,7 @@ class Loader
 
     public function __construct($bootstrap = null)
     {
-        spl_autoload_register(array($this, 'autoload'));
+        spl_autoload_register([$this, 'autoload']);
 
         if (!defined('APP_DIR')) {
             throw new LoaderException('Please Define appDir in Main config.php', 500);
@@ -106,9 +106,7 @@ class Loader
      */
     private function loadObject($name, $type, $namespace = null)
     {
-
         try {
-
             if (!$this->isCamelCaps($name, true)) {
                 if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
                     throw new LoaderException('Camel Sensitive is on. Can not use ' . $type . ' ' . $name . ' try to use StudlyCaps or CamelCase');
@@ -133,9 +131,7 @@ class Loader
             if (method_exists($ob, 'init')) {
                 $ob->init();
             }
-
         } catch (LoaderException $e) {
-
             $msg = null;
             if (ini_get('display_errors') === "on") {
                 $msg .= '<pre>';
@@ -170,12 +166,11 @@ class Loader
 
     public static function autoload($class)
     {
-
         if (substr($class, -4) == "View") {
             $class = substr($class, 0, -4);
-        } else if (substr($class, -5) == "Model") {
+        } elseif (substr($class, -5) == "Model") {
             $class = substr($class, 0, -5);
-        } else if (substr($class, -10) == "Controller") {
+        } elseif (substr($class, -10) == "Controller") {
             $class = substr($class, 0, -10);
         } else {
             return;
@@ -204,7 +199,6 @@ class Loader
     public function loadController($controller, $namespace = null)
     {
         try {
-
             $subControler = null;
             if (strstr($controller, ',') !== false) {
                 $url = explode(',', $controller);
@@ -239,7 +233,6 @@ class Loader
                 $this->debug->addHeader(['X-DF-Debug-Controller' => $load]);
             }
             $this->returnController = new $load($this->baseClass);
-
         } catch (LoaderException $e) {
             $msg = null;
             if (ini_get('display_errors') === 'on') {
