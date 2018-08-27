@@ -6,6 +6,13 @@
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
+
+
+/**
+ * @param $path
+ *
+ * @return array
+ */
 function pathFile($path)
 {
     $folder = '';
@@ -26,6 +33,9 @@ function pathFile($path)
 
 /**
  * Randomowo generowany string.
+ *
+ * @param int $length
+ * @return string
  */
 function generateRandomString($length = 10)
 {
@@ -42,6 +52,10 @@ function generateRandomString($length = 10)
 
 /**
  * Zmiana Obiektu wielowymiaroa na tablice array.
+ *
+ * @param $obj
+ *
+ * @return array
  */
 function object_to_array($obj)
 {
@@ -63,6 +77,11 @@ function object_to_array($obj)
 /**
  * Wyszukiwanie ciagu zdania za pozmoca wilcardu
  * ala ma kota -> ala * kota == TRUE.
+ *
+ * @param $source
+ * @param $pattern
+ *
+ * @return false|int
  */
 function stringMatchWithWildcard($source, $pattern)
 {

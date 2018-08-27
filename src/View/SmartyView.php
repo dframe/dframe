@@ -43,7 +43,7 @@ class SmartyView implements \Dframe\View\ViewInterface
      * @param string $name
      * @param string $value
      *
-     * @return void
+     * @return mixed
      */
     public function assign($name, $value)
     {
@@ -70,7 +70,7 @@ class SmartyView implements \Dframe\View\ViewInterface
      * @param string $name Filename
      * @param string $path Alternative Path
      *
-     * @return void
+     * @return mixed
      */
     public function fetch($name, $path = null)
     {
@@ -105,7 +105,7 @@ class SmartyView implements \Dframe\View\ViewInterface
      * @param string $name
      * @param string $path
      *
-     * @return void
+     * @return mixed
      */
     public function renderInclude($name, $path = null)
     {

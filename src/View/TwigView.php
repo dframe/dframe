@@ -38,7 +38,7 @@ class TwigView implements \Dframe\View\ViewInterface
      * @param string $name
      * @param string $value
      *
-     * @return void
+     * @return mixed
      */
     public function assign($name, $value)
     {
@@ -78,7 +78,7 @@ class TwigView implements \Dframe\View\ViewInterface
      * @param string $name
      * @param string $path
      *
-     * @return void
+     * @return mixed
      */
     public function renderInclude($name, $path = null)
     {

@@ -32,7 +32,7 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
      * @param string $name
      * @param mixed  $value
      *
-     * @return void
+     * @return mix
      */
     public function assign($name, $value)
     {
@@ -49,7 +49,7 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
      * @param string $data
      * @param string $type
      *
-     * @return mix
+     * @return mix|Json|String
      */
     public function render($data, $type = null)
     {
@@ -68,7 +68,7 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
      * @param string $name
      * @param string $path
      *
-     * @return void
+     * @return mixed
      */
     public function fetch($name, $path = null)
     {
@@ -85,6 +85,11 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
 
     /**
      * Include pliku.
+     *
+     * @param string $name
+     * @param null $path
+     *
+     * @return mixed
      */
     public function renderInclude($name, $path = null)
     {
@@ -103,9 +108,7 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
      * Display JSON.
      *
      * @param array $data
-     * @param int   $status
-     *
-     * @return Json
+     * @param int $status
      */
     public function renderJSON($data, $status = 200)
     {
@@ -116,8 +119,6 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
      * Display JSONP.
      *
      * @param array $data
-     *
-     * @return Json with Calback
      */
     public function renderJSONP($data)
     {

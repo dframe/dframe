@@ -95,9 +95,11 @@ class Session implements \Psr\SimpleCache\CacheInterface
      * Set session key.
      *
      * @param string $key
-     * @param string $value
+     * @param mixed $value
+     * @param null $tll
+     *
+     * @return bool|void
      */
-
     public function set($key, $value, $tll = null)
     {
         $_SESSION[$key] = $value;

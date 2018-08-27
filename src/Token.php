@@ -24,9 +24,7 @@ class Token
      * constructor.
      *
      * @param string $driver
-     * @param array  $config
      */
-
     public function __construct($driver)
     {
         $this->driver = $driver;
@@ -63,9 +61,9 @@ class Token
     /**
      * @param string $key
      * @param mixed  $value
-     * @param null   $ttl
+     * @param null $ttl
      *
-     * @return bool
+     * @return $this
      */
     public function set($key, $value, $ttl = null)
     {
@@ -161,7 +159,8 @@ class Token
     /**
      * @deprecated
      *
-     * @return $this
+     * @param $key
+     * @return mixed
      */
     public function getToken($key)
     {
@@ -172,7 +171,8 @@ class Token
     }
 
     /**
-     * @deprecated
+     * @param $key
+     * @param $value
      *
      * @return $this
      */
@@ -187,7 +187,8 @@ class Token
     /**
      * @deprecated
      *
-     * @return $this
+     * @param $key
+     *
      */
     public function remove($key)
     {

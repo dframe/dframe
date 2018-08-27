@@ -7,6 +7,9 @@ namespace Dframe\Router;
  */
 class Request
 {
+    /**
+     * Request constructor.
+     */
     public function __construct()
     {
         // code...

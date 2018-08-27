@@ -44,7 +44,7 @@ class DefaultView implements \Dframe\View\ViewInterface
      * @param string $name Filename
      * @param string $path Alternative Path
      *
-     * @return void
+     * @return string
      */
     public function fetch($name, $path = null)
     {
@@ -79,7 +79,7 @@ class DefaultView implements \Dframe\View\ViewInterface
      * @param string $name
      * @param string $path
      *
-     * @return void
+     * @return mixed
      */
     public function renderInclude($name, $path = null)
     {

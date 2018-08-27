@@ -136,6 +136,9 @@ class Router
 
     /**
      * __construct Class
+     * @param $app
+     *
+     * @return $this
      */
     public function boot($app)
     {
@@ -209,8 +212,9 @@ class Router
     /**
      * Set up http/https
      *
-     * @param boolen $option
+     * @param bool $option
      *
+     * @return $this
      */
     public function setHttps($option = false)
     {
@@ -237,7 +241,7 @@ class Router
      *
      * @param string|array $url
      *
-     * @return boolen
+     * @return bool
      */
     public function isActive($url)
     {
@@ -249,8 +253,10 @@ class Router
     }
 
     /**
+     * @param null|string $sUrl
+     * @param null|string $path
      *
-     * @return string
+     * @return null|string
      */
     public function publicWeb($sUrl = null, $path = null)
     {
@@ -272,10 +278,10 @@ class Router
     /**
      * Gerenate url
      *
-     * @param string $sUrl
-     * @param string $onlyExt
+     * @param string|null $sUrl
+     * @param string|bool $onlyExt
      *
-     * @return string
+     * @return null|string
      */
     public function makeUrl(string $sUrl = null, $onlyExt = false)
     {
@@ -459,9 +465,9 @@ class Router
      * Match given request
      *
      * @param string $sRequest
-     * @param string $routingParse
+     * @param string|null $routingParse
      *
-     * @return string
+     * @return string|array
      */
     private function parseUrl($sRequest, $routingParse = null)
     {
@@ -575,9 +581,9 @@ class Router
      * Redirect.
      *
      * @param string $url    The URI
-     * @param string $status
+     * @param int $status
      *
-     * @return object
+     * @return Response|object
      */
     public static function redirect($url = '', $status = 301)
     {
@@ -587,9 +593,9 @@ class Router
     /**
      * Redirect delay.
      *
-     * @param string $delay time in seconds
+     * @param int $delay time in seconds
      *
-     * @return object
+     * @return $this
      */
     public function delay(int $delay)
     {
@@ -630,8 +636,6 @@ class Router
      * Set up new route.
      *
      * @param string $newRoute
-     *
-     * @return object
      */
     public function addRoute($newRoute)
     {
@@ -639,6 +643,9 @@ class Router
         $this->aRoutingParse = array_merge($this->aRoutingParse, $newRoute);
     }
 
+    /**
+     * @return Response
+     */
     public function response()
     {
         return new Response();
@@ -742,7 +749,7 @@ class Router
      *
      * @param string $file
      *
-     * @return string
+     * @return string|array
      */
     private function parseFile($file)
     {

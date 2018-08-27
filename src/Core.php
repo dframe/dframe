@@ -22,8 +22,11 @@ class Core extends Loader
     /**
      * Display Controller result
      *
-     * @param boolen|Response
+     * @param null $controller
+     * @param null $action
+     * @param array $args
      *
+     * @return bool|void|Response
      */
     public function run($controller = null, $action = null, $args = [])
     {

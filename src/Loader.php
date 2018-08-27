@@ -76,7 +76,7 @@ class Loader
      * Metoda do includowania pliku modelu i wywołanie objektu przez namespace.
      *
      * @param string $name
-     *
+     * @param null|string $namespace
      * @return object
      */
     public function loadModel($name, $namespace = null)
@@ -88,6 +88,7 @@ class Loader
      * Metoda do includowania pliku widoku i wywołanie objektu przez namespace.
      *
      * @param string $name
+     * @param null|string $namespace
      *
      * @return object
      */
@@ -101,6 +102,7 @@ class Loader
      *
      * @param string $name
      * @param string $type
+     * @param null|string $namespace
      *
      * @return object
      */
@@ -173,7 +175,7 @@ class Loader
         } elseif (substr($class, -10) == "Controller") {
             $class = substr($class, 0, -10);
         } else {
-            return;
+            return false;
         }
 
         $directory = explode('/', str_replace('\\', '/', ltrim($class, '\\')));
@@ -194,8 +196,10 @@ class Loader
      * Establish the requested controller as an object.
      *
      * @param string $controller
+     * @param null|string $namespace
+     *
+     * @return $this|string|void
      */
-
     public function loadController($controller, $namespace = null)
     {
         try {
@@ -271,6 +275,8 @@ class Loader
      * @param bool   $classFormat
      * @param bool   $public
      * @param bool   $strict
+     *
+     * @return bool
      */
     public static function isCamelCaps($string, $classFormat = false, $public = true, $strict = true)
     {

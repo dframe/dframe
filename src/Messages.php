@@ -23,7 +23,7 @@ class Messages
     /**
      * Add a message to the queue.
      *
-     * @param object $session
+     * @param $driver
      */
     public function __construct($driver)
     {
@@ -147,9 +147,10 @@ class Messages
         // Print everything to the screen or return the data
         if ($print) {
             echo $data;
-        } else {
-            return $data;
+            return;
         }
+
+        return $data;
     }
 
     /**
@@ -210,7 +211,7 @@ class Messages
     }
 
     /**
-     * @return bool
+     * @return string
      */
     public function __toString()
     {
