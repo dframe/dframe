@@ -9,7 +9,7 @@
 
 namespace Dframe;
 
-use Dframe\View\Exception\ViewException;
+use Dframe\View\Exceptions\ViewException;
 use Dframe\Router\Response;
 
 /**
