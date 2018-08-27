@@ -18,12 +18,24 @@ use Dframe\Router;
  */
 class Response extends Router
 {
+    /**
+     * @var int
+     */
     public $status = 200;
 
+    /**
+     * @var null|string
+     */
     private $body = '';
 
+    /**
+     * @var array
+     */
     private $headers = [];
 
+    /**
+     * @var array
+     */
     public static $code = [
         100 => 'Continue',
         101 => 'Switching Protocols',
@@ -82,6 +94,11 @@ class Response extends Router
         510 => 'Not Extended',
     ];
 
+    /**
+     * Response constructor.
+     *
+     * @param null $body
+     */
     public function __construct($body = null)
     {
         if (isset($body)) {
@@ -91,16 +108,32 @@ class Response extends Router
         return $this;
     }
 
+    /**
+     * @param null $body
+     *
+     * @return Response
+     */
     public static function create($body = null)
     {
         return new self($body);
     }
 
+    /**
+     * @param null $body
+     *
+     * @return Response
+     */
     public static function render($body = null)
     {
         return new self($body);
     }
 
+    /**
+     * @param null $body
+     * @param null $status
+     *
+     * @return Response
+     */
     public static function renderJSON($body = null, $status = null)
     {
         $body = json_encode($body);
@@ -115,6 +148,12 @@ class Response extends Router
         return $Response;
     }
 
+    /**
+     * @param null $body
+     * @param null $status
+     *
+     * @return Response
+     */
     public static function renderJSONP($body = null, $status = null)
     {
         $callback = null;
@@ -136,9 +175,11 @@ class Response extends Router
     /**
      * Przekierowanie adresu.
      *
-     * @param string $url CONTROLLER/MODEL?parametry
+     * @param string $url
+     * @param int $status
+     * @param array $headers
      *
-     * @return void
+     * @return Response|object
      */
     public static function redirect($url = '', $status = 301, $headers = [])
     {
@@ -156,6 +197,10 @@ class Response extends Router
         return $Response;
     }
 
+    /**
+     * @param $json
+     * @return $this
+     */
     public function json($json)
     {
         $this->headers(['Content-Type' => 'application/json']);
@@ -164,6 +209,11 @@ class Response extends Router
         return $this;
     }
 
+    /**
+     * @param $code
+     *
+     * @return $this
+     */
     public function status($code)
     {
         $this->status = $code;
@@ -171,11 +221,19 @@ class Response extends Router
         return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getStatus()
     {
         return $this->status;
     }
 
+    /**
+     * @param bool $headers
+     *
+     * @return $this
+     */
     public function headers($headers = false)
     {
         $this->headers = array_unique(array_merge($this->headers, $headers));
@@ -183,11 +241,19 @@ class Response extends Router
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getHeaders()
     {
         return $this->headers;
     }
 
+    /**
+     * @param null $body
+     *
+     * @return $this
+     */
     public function body($body = null)
     {
         $this->body = $body;
@@ -195,6 +261,9 @@ class Response extends Router
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getBody()
     {
         return $this->body;
@@ -228,6 +297,9 @@ class Response extends Router
         }
     }
 
+    /**
+     * @return null|string
+     */
     public function __toString()
     {
         return $this->body;
