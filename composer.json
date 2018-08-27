@@ -26,7 +26,7 @@
         "ptachoire/cssembed": "^1.0",
         "natxet/CssMin": "^3.0"
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "Dframe\\": "src"
