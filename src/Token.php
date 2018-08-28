@@ -45,7 +45,7 @@ class Token
 
     /**
      * @param string $key
-     * @param null   $default
+     * @param null $default
      *
      * @return mixed
      */
@@ -60,7 +60,7 @@ class Token
 
     /**
      * @param string $key
-     * @param mixed  $value
+     * @param mixed $value
      * @param null $ttl
      *
      * @return $this
@@ -156,44 +156,4 @@ class Token
         return false;
     }
 
-    /**
-     * @deprecated
-     *
-     * @param $key
-     * @return mixed
-     */
-    public function getToken($key)
-    {
-        $caller = next(debug_backtrace());
-        trigger_error($message . ' in <strong>' . $caller['function'] . '</strong> called from <strong>' . $caller['file'] . '</strong> on line <strong>' . $caller['line'] . '</strong>' . "\n<br />error handler use get(" . $key . ')', E_USER_DEPRECATED);
-
-        return $this->get($key);
-    }
-
-    /**
-     * @param $key
-     * @param $value
-     *
-     * @return $this
-     */
-    public function setToken($key, $value)
-    {
-        $caller = next(debug_backtrace());
-        trigger_error($message . ' in <strong>' . $caller['function'] . '</strong> called from <strong>' . $caller['file'] . '</strong> on line <strong>' . $caller['line'] . '</strong>' . "\n<br />error handler use set(" . $key . ')', E_USER_DEPRECATED);
-
-        return $this->set($key, $value);
-    }
-
-    /**
-     * @deprecated
-     *
-     * @param $key
-     *
-     */
-    public function remove($key)
-    {
-        trigger_error('Method ' . __METHOD__ . ' is deprecated use delete(' . $key . ')', E_USER_DEPRECATED);
-
-        return $this->delete($key);
-    }
 }
