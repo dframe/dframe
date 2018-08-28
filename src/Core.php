@@ -26,7 +26,7 @@ class Core extends Loader
      * @param null $action
      * @param array $args
      *
-     * @return bool|void|Response
+     * @return mixed
      */
     public function run($controller = null, $action = null, $args = [])
     {
@@ -41,7 +41,6 @@ class Core extends Loader
 
         $arg = $this->router->parseArgs;
 
-        $response = [];
         $loader = new Loader($this->baseClass);
         $loadController = $loader->loadController($controller, $namespace); // Loading Controller class
 

@@ -198,7 +198,7 @@ class Loader
      * @param string $controller
      * @param null|string $namespace
      *
-     * @return $this|string|void
+     * @return mixed
      */
     public function loadController($controller, $namespace = null)
     {

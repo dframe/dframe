@@ -147,7 +147,7 @@ class Messages
         // Print everything to the screen or return the data
         if ($print) {
             echo $data;
-            return;
+            return null;
         }
 
         return $data;

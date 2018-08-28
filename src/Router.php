@@ -74,6 +74,9 @@ class Router
      */
     private $cacheDir = APP_DIR . 'View/cache/';
 
+    /**
+     * Router constructor.
+     */
     public function __construct()
     {
         if (!defined('HTTP_HOST') and isset($_SERVER['HTTP_HOST'])) {
@@ -132,6 +135,8 @@ class Router
                 $this->requestPrefix = 'https://';
             }
         }
+
+        return null;
     }
 
     /**
@@ -834,5 +839,7 @@ class Router
 
             return $routes;
         }
+
+        return null;
     }
 }
