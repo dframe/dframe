@@ -13,7 +13,6 @@ use Dframe\Router\Response;
 use Dframe\View\Exceptions\ViewException;
 use Dframe\View\ViewInterface;
 
-
 /**
  * View Class.
  *

@@ -155,5 +155,4 @@ class Token
 
         return false;
     }
-
 }
