@@ -17,7 +17,7 @@ use Dframe\View\Exceptions\ViewException;
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class SmartyView implements \Dframe\View\ViewInterface
+class SmartyView implements ViewInterface
 {
     public function __construct()
     {

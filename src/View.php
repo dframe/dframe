@@ -9,15 +9,17 @@
 
 namespace Dframe;
 
-use Dframe\View\Exceptions\ViewException;
 use Dframe\Router\Response;
+use Dframe\View\Exceptions\ViewException;
+use Dframe\View\ViewInterface;
+
 
 /**
  * View Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-abstract class View extends Loader implements \Dframe\View\ViewInterface
+abstract class View extends Loader implements ViewInterface
 {
     /**
      * Path Templates

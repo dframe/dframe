@@ -17,7 +17,7 @@ use Dframe\View\Exceptions\ViewException;
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class TwigView implements \Dframe\View\ViewInterface
+class TwigView implements ViewInterface
 {
     public function __construct()
     {

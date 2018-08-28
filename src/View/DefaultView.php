@@ -18,7 +18,7 @@ use Dframe\View\Exceptions\ViewException;
  * @author Sławomir Kaleta <slaszka@gmail.com>
  * @author Amadeusz Dzięcioł <amadeusz.xd@gmail.com>
  */
-class DefaultView implements \Dframe\View\ViewInterface
+class DefaultView implements ViewInterface
 {
     public function __construct()
     {
