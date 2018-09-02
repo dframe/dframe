@@ -25,14 +25,14 @@ abstract class Task extends \Dframe\Controller
         }
     }
 
-    protected function lockTime($key, $ttl = 3600)
+    protected function lockTime($key, $ttl = 59)
     {
         $dir = $dirLog = APP_DIR . 'View/cache/logs/';
         $file = $key . '.txt';
         $this->checkDir($dir);
         $dirLog = $dir . $file;
 
-        if (file_exists($dirLog) and filemtime($dirLog) + 59 > time()) {
+        if (file_exists($dirLog) and filemtime($dirLog) + $ttl > time()) {
             return false;
         }
 
