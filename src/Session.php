@@ -18,6 +18,8 @@ namespace Dframe;
 class Session implements \Psr\SimpleCache\CacheInterface
 {
     protected $name;
+    protected $ipAddress;
+    protected $userAgent;
 
     /**
      * Session constructor.
@@ -26,7 +28,7 @@ class Session implements \Psr\SimpleCache\CacheInterface
      */
     public function __construct($app = [])
     {
-        $options = $this->app->config['session'] ?? '';
+        $options = $this->app->config['session'] ?? [];
         $this->name = APP_NAME ?? '_sessionName';
 
         if (!isset($_SESSION)) {
@@ -102,14 +104,14 @@ class Session implements \Psr\SimpleCache\CacheInterface
     }
 
     /**
-     * @param      $key
-     * @param bool $in
+     * @param       $key
+     * @param array $in
      *
      * @return bool
      */
-    public function keyExists($key, $in = false)
+    public function keyExists($key, $in = [])
     {
-        if (isset($in)) {
+        if (empty($in)) {
             $in = $_SESSION;
         }
 
