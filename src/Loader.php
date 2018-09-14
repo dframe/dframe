@@ -168,6 +168,7 @@ class Loader
 
     public static function autoload($class)
     {
+
         if (substr($class, -4) == "View") {
             $class = substr($class, 0, -4);
         } elseif (substr($class, -5) == "Model") {
@@ -183,13 +184,17 @@ class Loader
         $class = array_pop($directory);
         $directory = array_merge($directory, explode('/', str_replace('_', '/', $class)));
         $class = array_pop($directory);
-        $directory = rtrim(APP_DIR . '/' . join('/', $directory), '/');
+        $directory = rtrim(APP_DIR . join('/', $directory), '/');
 
-        if (is_file($path = $directory . '/' . $class . '.php')) {
-            return require_once $path;
+        if (!empty($class)) {
+
+            if (is_file($path = $directory . '/' . $class . '.php')) {
+                return require_once $path;
+            }
+
+            throw new LoaderException('Couldn\'t locate ' . $class . '' . implode(', ', func_get_args()));
+
         }
-
-        throw new LoaderException('Couldn\'t locate ' . func_get_arg(0));
     }
 
     /**
