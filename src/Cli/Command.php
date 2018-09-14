@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * DframeFramework
+ * Copyright (c) Sławomir Kaleta.
+ *
+ * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
+ */
+
 namespace Dframe\Cli;
 
 /**
@@ -9,6 +16,19 @@ namespace Dframe\Cli;
  */
 class Command extends \Dframe\Loader
 {
+
+    /**
+     * @param $args
+     *
+     * @return mixed
+     */
+    public function run($args)
+    {
+        $start = $this->start($args);
+
+        $class = '\Command\\' . $start['commands'][0] . 'Command';
+        return call_user_func_array([new $class, $start['commands'][1]], $start['options']);
+    }
 
     /**
      * @param $args
@@ -41,8 +61,7 @@ class Command extends \Dframe\Loader
 
                 // is it the end of options flag?
                 if (!isset($arg[3])) {
-                    $endofoptions = true;
-                    ; // end of options;
+                    $endofoptions = true; // end of options;
                     continue;
                 }
 
@@ -82,18 +101,5 @@ class Command extends \Dframe\Loader
         }
 
         return $ret;
-    }
-
-    /**
-     * @param $args
-     *
-     * @return mixed
-     */
-    public function run($args)
-    {
-        $start = $this->start($args);
-
-        $class = '\Command\\' . $start['commands'][0] . 'Command';
-        return call_user_func_array([new $class, $start['commands'][1]], $start['options']);
     }
 }
