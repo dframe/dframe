@@ -17,7 +17,6 @@ class Command extends \Dframe\Loader
      */
     public function start($args)
     {
-
         array_shift($args);
         $endofoptions = false;
 
@@ -42,7 +41,8 @@ class Command extends \Dframe\Loader
 
                 // is it the end of options flag?
                 if (!isset($arg[3])) {
-                    $endofoptions = true;; // end of options;
+                    $endofoptions = true;
+                    ; // end of options;
                     continue;
                 }
 
@@ -52,7 +52,6 @@ class Command extends \Dframe\Loader
                 // is it the syntax '--option=argument'?
                 if (strpos($com, '=')) {
                     list($com, $value) = explode("=", $com, 2);
-
                 } elseif (strpos($args[0], '-') !== 0) { // is the option not followed by another option but by arguments
                     while (strpos($args[0], '-') !== 0) {
                         $value .= array_shift($args) . ' ';
@@ -62,7 +61,6 @@ class Command extends \Dframe\Loader
 
                 $ret['options'][$com] = !empty($value) ? $value : true;
                 continue;
-
             }
 
             // Is it a flag or a serial of flags? (prefixed with -)

@@ -129,7 +129,7 @@ class Messages
 
             // Clear the viewed messages
             $this->clear($type);
-            // Print ALL queued messages
+        // Print ALL queued messages
         } elseif ($type === 'all') {
             $flashMessages = $this->driver->get('flash_messages');
             foreach ($flashMessages as $type => $msgArray) {
@@ -142,7 +142,7 @@ class Messages
 
             // Clear ALL of the messages
             $this->clear();
-            // Invalid Message Type?
+        // Invalid Message Type?
         } else {
             return false;
         }
