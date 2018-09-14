@@ -230,7 +230,7 @@ class Loader
                 $class = '\\' . $namespace . '\\Controller\\' . $subControler . $controller;
                 $load = str_replace('/', $this->namespaceSeparator, $class);
             } else {
-                $load = $this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $subControler. $controller . 'Controller';
+                $load = $this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $subControler . $controller . 'Controller';
                 $load = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $load);
             }
 
