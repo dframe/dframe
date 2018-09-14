@@ -73,6 +73,9 @@ class Token
         return $this;
     }
 
+    /**
+     * @param $key
+     */
     public function delete($key)
     {
         if (isset($this->token[$key])) {
@@ -96,14 +99,25 @@ class Token
         $this->driver->set('timeToken', $this->time);
     }
 
+    /**
+     * @param      $keys
+     * @param null $default
+     */
     public function getMultiple($keys, $default = null)
     {
     }
 
+    /**
+     * @param      $values
+     * @param null $ttl
+     */
     public function setMultiple($values, $ttl = null)
     {
     }
 
+    /**
+     * @param $keys
+     */
     public function deleteMultiple($keys)
     {
     }
@@ -118,6 +132,11 @@ class Token
         return $this->isValid($key);
     }
 
+    /**
+     * @param $key
+     *
+     * @return $this
+     */
     public function generate($key)
     {
         $this->set($key, md5(uniqid(rand(), true)));
@@ -126,6 +145,12 @@ class Token
         return $this;
     }
 
+    /**
+     * @param $key
+     * @param $time
+     *
+     * @return $this
+     */
     public function setTime($key, $time)
     {
         if (isset($this->token[$key])) {
@@ -136,11 +161,23 @@ class Token
         return $this;
     }
 
+    /**
+     * @param $key
+     *
+     * @return mixed|null
+     */
     public function getTime($key)
     {
         return isset($this->time[$key]) ? $this->time[$key] : null;
     }
 
+    /**
+     * @param      $key
+     * @param      $token
+     * @param bool $delete
+     *
+     * @return bool
+     */
     public function isValid($key, $token, $delete = false)
     {
         $getToken = $this->get($key);

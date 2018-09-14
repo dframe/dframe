@@ -9,8 +9,8 @@
 
 namespace Dframe;
 
-use Dframe\Router\Response;
 use Dframe\Loader\Exceptions\LoaderException;
+use Dframe\Router\Response;
 
 /**
  * Loader Class.
@@ -19,17 +19,44 @@ use Dframe\Loader\Exceptions\LoaderException;
  */
 class Loader
 {
+    /**
+     * @var \Dframe\Router
+     */
     public $router;
-    private $fileExtension = '.php';
-    private $namespaceSeparator = '\\';
+
+    /**
+     * @var
+     */
     public $config;
 
+    /**
+     * @var \Bootstrap|null
+     */
+    public $baseClass;
+
+    /**
+     * @var string
+     */
+    protected $fileExtension = '.php';
+
+    /**
+     * @var string
+     */
+    protected $namespaceSeparator = '\\';
+
+    /**
+     * Loader constructor.
+     *
+     * @param null $bootstrap
+     *
+     * @throws LoaderException
+     */
     public function __construct($bootstrap = null)
     {
         spl_autoload_register([$this, 'autoload']);
 
         if (!defined('APP_DIR')) {
-            throw new LoaderException('Please Define appDir in Main config.php', 500);
+            throw new LoaderException('Please Define APP_DIR in Main config.php', 500);
         }
         if (!defined('SALT')) {
             throw new LoaderException('Please Define SALT in Main config.php', 500);
@@ -70,13 +97,49 @@ class Loader
         return $this;
     }
 
+    /**
+     * @param $class
+     *
+     * @return bool|mixed
+     * @throws LoaderException
+     */
+    public static function autoload($class)
+    {
 
+        if (substr($class, -4) == "View") {
+            $class = substr($class, 0, -4);
+        } elseif (substr($class, -5) == "Model") {
+            $class = substr($class, 0, -5);
+        } elseif (substr($class, -10) == "Controller") {
+            $class = substr($class, 0, -10);
+        } else {
+            return false;
+        }
+
+        $directory = explode('/', str_replace('\\', '/', ltrim($class, '\\')));
+
+        $class = array_pop($directory);
+        $directory = array_merge($directory, explode('/', str_replace('_', '/', $class)));
+        $class = array_pop($directory);
+        $directory = rtrim(APP_DIR . join('/', $directory), '/');
+
+        if (!empty($class)) {
+
+            if (is_file($path = $directory . '/' . $class . '.php')) {
+                return require_once $path;
+            }
+
+            throw new LoaderException('Couldn\'t locate ' . $class . '' . implode(', ', func_get_args()));
+
+        }
+    }
 
     /**
      * Metoda do includowania pliku modelu i wywołanie objektu przez namespace.
      *
-     * @param string $name
+     * @param string      $name
      * @param null|string $namespace
+     *
      * @return object
      */
     public function loadModel($name, $namespace = null)
@@ -87,24 +150,11 @@ class Loader
     /**
      * Metoda do includowania pliku widoku i wywołanie objektu przez namespace.
      *
-     * @param string $name
+     * @param string      $name
+     * @param string      $type
      * @param null|string $namespace
      *
-     * @return object
-     */
-    public function loadView($name, $namespace = null)
-    {
-        return $this->loadObject($name, 'View', $namespace);
-    }
-
-    /**
-     * Metoda do includowania pliku widoku i wywołanie objektu przez namespace.
-     *
-     * @param string $name
-     * @param string $type
-     * @param null|string $namespace
-     *
-     * @return object
+     * @return object|bool
      */
     private function loadObject($name, $type, $namespace = null)
     {
@@ -166,116 +216,6 @@ class Loader
         return $ob;
     }
 
-    public static function autoload($class)
-    {
-
-        if (substr($class, -4) == "View") {
-            $class = substr($class, 0, -4);
-        } elseif (substr($class, -5) == "Model") {
-            $class = substr($class, 0, -5);
-        } elseif (substr($class, -10) == "Controller") {
-            $class = substr($class, 0, -10);
-        } else {
-            return false;
-        }
-
-        $directory = explode('/', str_replace('\\', '/', ltrim($class, '\\')));
-
-        $class = array_pop($directory);
-        $directory = array_merge($directory, explode('/', str_replace('_', '/', $class)));
-        $class = array_pop($directory);
-        $directory = rtrim(APP_DIR . join('/', $directory), '/');
-
-        if (!empty($class)) {
-
-            if (is_file($path = $directory . '/' . $class . '.php')) {
-                return require_once $path;
-            }
-
-            throw new LoaderException('Couldn\'t locate ' . $class . '' . implode(', ', func_get_args()));
-
-        }
-    }
-
-    /**
-     * Establish the requested controller as an object.
-     *
-     * @param string $controller
-     * @param null|string $namespace
-     *
-     * @return mixed
-     */
-    public function loadController($controller, $namespace = null)
-    {
-        try {
-            $subControler = null;
-            if (strstr($controller, ',') !== false) {
-                $url = explode(',', $controller);
-                $urlCount = count($url) - 1;
-                $subControler = '';
-
-                for ($i = 0; $i < $urlCount; $i++) {
-                    if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
-                        $subControler .= ucfirst($url[$i]) . DIRECTORY_SEPARATOR;
-                    } else {
-                        $subControler .= $url[$i] . DIRECTORY_SEPARATOR;
-                    }
-                }
-
-                $controller = $url[$urlCount];
-            }
-
-            if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
-                $controller = ucfirst($controller);
-            }
-
-            $controller = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $controller);
-
-            if (!empty($namespace)) {
-                $class = '\\' . $namespace . '\\Controller\\' . $subControler . $controller;
-                $load = str_replace('/', $this->namespaceSeparator, $class);
-            } else {
-                $load = $this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $subControler . $controller . 'Controller';
-                $load = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $load);
-            }
-
-            if (isset($this->debug)) {
-                $this->debug->addHeader(['X-DF-Debug-Controller' => $load]);
-            }
-            $this->returnController = new $load($this->baseClass);
-        } catch (LoaderException $e) {
-            $msg = null;
-            if (ini_get('display_errors') === 'on') {
-                $msg .= '<pre>';
-                $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
-
-                $msg .= 'Accept: ' . $_SERVER['HTTP_ACCEPT'] . '<br>';
-                if (isset($_SERVER['HTTP_REFERER'])) {
-                    $msg .= 'Referer: ' . $_SERVER['HTTP_REFERER'] . '<br><br>';
-                }
-
-                $msg .= 'Request Method: ' . $_SERVER['REQUEST_METHOD'] . '<br><br>';
-                $msg .= 'Current file Path: <b>' . $this->router->currentPath() . '</b><br>';
-                $msg .= 'File Exception: ' . $e->getFile() . ':' . $e->getLine() . '<br><br>';
-                $msg .= 'Trace: <br>' . $e->getTraceAsString() . '<br>';
-                $msg .= '</pre>';
-
-                exit($msg);
-            }
-
-            $routerConfig = Config::load('router');
-            $routes = $routerConfig->get('routes');
-
-            if (!empty($routes['error/:code'])) {
-                return Response::redirect('error/:code?code=400', 400)->display();
-            }
-
-            return 'loadController Error';
-        }
-
-        return $this;
-    }
-
     /**
      * @param string $string
      * @param bool   $classFormat
@@ -329,8 +269,8 @@ class Loader
                     $isCaps = false;
                 } else {
                     if (strtoupper(
-                        $string[$i]
-                    ) === $string[$i]) {
+                            $string[$i]
+                        ) === $string[$i]) {
                         $isCaps = true;
                     } else {
                         $isCaps = false;
@@ -346,6 +286,100 @@ class Loader
         }//end if
 
         return true;
+    }
+
+    /**
+     * Metoda do includowania pliku widoku i wywołanie objektu przez namespace.
+     *
+     * @param string      $name
+     * @param null|string $namespace
+     *
+     * @return object
+     */
+    public function loadView($name, $namespace = null)
+    {
+        return $this->loadObject($name, 'View', $namespace);
+    }
+
+    /**
+     * Establish the requested controller as an object.
+     *
+     * @param string      $controller
+     * @param null|string $namespace
+     *
+     * @return mixed
+     */
+    public function loadController($controller, $namespace = null)
+    {
+        try {
+            $subControler = null;
+            if (strstr($controller, ',') !== false) {
+                $url = explode(',', $controller);
+                $urlCount = count($url) - 1;
+                $subControler = '';
+
+                for ($i = 0; $i < $urlCount; $i++) {
+                    if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
+                        $subControler .= ucfirst($url[$i]) . DIRECTORY_SEPARATOR;
+                    } else {
+                        $subControler .= $url[$i] . DIRECTORY_SEPARATOR;
+                    }
+                }
+
+                $controller = $url[$urlCount];
+            }
+
+            if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
+                $controller = ucfirst($controller);
+            }
+
+            $controller = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $controller);
+
+            if (!empty($namespace)) {
+                $class = '\\' . $namespace . '\\Controller\\' . $subControler . $controller;
+                $load = str_replace('/', $this->namespaceSeparator, $class);
+            } else {
+                $load = $this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $subControler . $controller . 'Controller';
+                $load = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $load);
+            }
+
+            if (isset($this->debug)) {
+                $this->debug->addHeader(['X-DF-Debug-Controller' => $load]);
+            }
+
+            $this->returnController = new $load($this->baseClass);
+
+        } catch (LoaderException $e) {
+            $msg = null;
+            if (ini_get('display_errors') === 'on') {
+                $msg .= '<pre>';
+                $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
+
+                $msg .= 'Accept: ' . $_SERVER['HTTP_ACCEPT'] . '<br>';
+                if (isset($_SERVER['HTTP_REFERER'])) {
+                    $msg .= 'Referer: ' . $_SERVER['HTTP_REFERER'] . '<br><br>';
+                }
+
+                $msg .= 'Request Method: ' . $_SERVER['REQUEST_METHOD'] . '<br><br>';
+                $msg .= 'Current file Path: <b>' . $this->router->currentPath() . '</b><br>';
+                $msg .= 'File Exception: ' . $e->getFile() . ':' . $e->getLine() . '<br><br>';
+                $msg .= 'Trace: <br>' . $e->getTraceAsString() . '<br>';
+                $msg .= '</pre>';
+
+                exit($msg);
+            }
+
+            $routerConfig = Config::load('router');
+            $routes = $routerConfig->get('routes');
+
+            if (!empty($routes['error/:code'])) {
+                return Response::redirect('error/:code?code=400', 400)->display();
+            }
+
+            return 'loadController Error';
+        }
+
+        return $this;
     }
 
     //end isCamelCaps()

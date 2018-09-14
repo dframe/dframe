@@ -9,6 +9,8 @@
 
 namespace Dframe;
 
+use Dframe\Router\Response;
+
 /**
  * Message Class.
  *
@@ -19,6 +21,7 @@ class Messages
 {
     public $msgId;
     public $msgTypes = ['help', 'info', 'warning', 'success', 'error'];
+    protected $driver;
 
     /**
      * Add a message to the queue.
@@ -126,7 +129,7 @@ class Messages
 
             // Clear the viewed messages
             $this->clear($type);
-        // Print ALL queued messages
+            // Print ALL queued messages
         } elseif ($type === 'all') {
             $flashMessages = $this->driver->get('flash_messages');
             foreach ($flashMessages as $type => $msgArray) {
@@ -139,7 +142,7 @@ class Messages
 
             // Clear ALL of the messages
             $this->clear();
-        // Invalid Message Type?
+            // Invalid Message Type?
         } else {
             return false;
         }
@@ -154,6 +157,26 @@ class Messages
     }
 
     /**
+     * Clear messages from the session data.
+     *
+     * @param string $type The type of messages to clear
+     *
+     * @return bool
+     */
+    public function clear($type = 'all')
+    {
+        if ($type === 'all') {
+            $this->driver->remove('flash_messages');
+        } else {
+            $flashMessages = $this->driver->get('flash_messages');
+            unset($flashMessages[$type]);
+            $this->driver->set('flash_messages', $flashMessages);
+        }
+
+        return true;
+    }
+
+    /**
      * Check to  see if there are any queued error messages.
      *
      * @return bool true There ARE error messages false There are NOT any error messages
@@ -162,6 +185,14 @@ class Messages
     {
         $flashMessages = $this->driver->get('flash_messages');
         return empty($flashMessages['error']) ? false : true;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->hasMessages();
     }
 
     /**
@@ -188,33 +219,5 @@ class Messages
         }
 
         return false;
-    }
-
-    /**
-     * Clear messages from the session data.
-     *
-     * @param string $type The type of messages to clear
-     *
-     * @return bool
-     */
-    public function clear($type = 'all')
-    {
-        if ($type === 'all') {
-            $this->driver->remove('flash_messages');
-        } else {
-            $flashMessages = $this->driver->get('flash_messages');
-            unset($flashMessages[$type]);
-            $this->driver->set('flash_messages', $flashMessages);
-        }
-
-        return true;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->hasMessages();
     }
 }

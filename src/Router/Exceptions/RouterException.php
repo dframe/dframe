@@ -16,6 +16,13 @@ namespace Dframe\Router\Exceptions;
  */
 class RouterException extends \Exception
 {
+    /**
+     * RouterException constructor.
+     *
+     * @param null            $messages
+     * @param int             $code
+     * @param \Exception|null $previous
+     */
     public function __construct($messages = null, $code = 0, \Exception $previous = null)
     {
         parent::__construct($messages, $code, $previous);

@@ -16,6 +16,11 @@ namespace Dframe\Cron;
  */
 abstract class Task extends \Dframe\Controller
 {
+    /**
+     * @param $path
+     *
+     * @throws \Exception
+     */
     private function checkDir($path)
     {
         if (!is_dir($path)) {
@@ -25,6 +30,13 @@ abstract class Task extends \Dframe\Controller
         }
     }
 
+    /**
+     * @param     $key
+     * @param int $ttl
+     *
+     * @return bool
+     * @throws \Exception
+     */
     protected function lockTime($key, $ttl = 59)
     {
         $dir = $dirLog = APP_DIR . 'View/cache/logs/';
@@ -43,6 +55,15 @@ abstract class Task extends \Dframe\Controller
         return true;
     }
 
+    /**
+     * @param       $key
+     * @param       $callback
+     * @param array $bind
+     * @param int   $ttl
+     *
+     * @return array
+     * @throws \Exception
+     */
     protected function inLock($key, $callback, array $bind = [], $ttl = 3600)
     {
         $dir = APP_DIR . 'View/cache/logs/';

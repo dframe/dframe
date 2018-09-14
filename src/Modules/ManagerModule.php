@@ -19,6 +19,11 @@ class ManagerModule
 {
     public $app;
 
+    /**
+     * ManagerModule constructor.
+     *
+     * @param $app
+     */
     public function __construct($app)
     {
         $this->app = $app;

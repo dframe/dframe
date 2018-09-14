@@ -2,9 +2,19 @@
 
 namespace Dframe\Cli;
 
+/**
+ * Class Command
+ *
+ * @package Dframe\Cli
+ */
 class Command extends \Dframe\Loader
 {
 
+    /**
+     * @param $args
+     *
+     * @return array
+     */
     public function start($args)
     {
 
@@ -76,6 +86,11 @@ class Command extends \Dframe\Loader
         return $ret;
     }
 
+    /**
+     * @param $args
+     *
+     * @return mixed
+     */
     public function run($args)
     {
         $start = $this->start($args);

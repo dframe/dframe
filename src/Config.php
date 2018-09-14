@@ -17,9 +17,15 @@ namespace Dframe;
 class Config
 {
     protected static $cfg = [];
-    private $file;
+    protected $file;
     public $path;
 
+    /**
+     * Config constructor.
+     *
+     * @param        $file
+     * @param string $path
+     */
     public function __construct($file, $path = '')
     {
         $this->path = (isset($path) and !empty($path)) ? $path : APP_DIR . $path . 'Config' . DIRECTORY_SEPARATOR;
@@ -32,11 +38,23 @@ class Config
         }
     }
 
+    /**
+     * @param      $file
+     * @param null $path
+     *
+     * @return Config
+     */
     public static function load($file, $path = null)
     {
         return new self($file, $path);
     }
 
+    /**
+     * @param null $param
+     * @param null $or
+     *
+     * @return mixed|null
+     */
     public function get($param = null, $or = null)
     {
         if ($param === null) {

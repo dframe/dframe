@@ -26,12 +26,12 @@ class Response extends Router
     /**
      * @var null|string
      */
-    private $body = '';
+    protected $body = '';
 
     /**
      * @var array
      */
-    private $headers = [];
+    protected $headers = [];
 
     /**
      * @var array

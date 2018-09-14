@@ -16,8 +16,13 @@ namespace Dframe;
  */
 class Debug
 {
-    private $headers = [];
+    protected $headers = [];
 
+    /**
+     * @param $headers
+     *
+     * @return $this
+     */
     public function addHeader($headers)
     {
         $this->headers = array_unique(array_merge($this->headers, $headers));
@@ -25,6 +30,9 @@ class Debug
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getHeader()
     {
         return $this->headers;

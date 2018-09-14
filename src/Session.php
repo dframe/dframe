@@ -17,6 +17,13 @@ namespace Dframe;
 
 class Session implements \Psr\SimpleCache\CacheInterface
 {
+    protected $name;
+
+    /**
+     * Session constructor.
+     *
+     * @param array $app
+     */
     public function __construct($app = [])
     {
         $options = $this->app->config['session'] ?? '';
@@ -48,6 +55,22 @@ class Session implements \Psr\SimpleCache\CacheInterface
         }
     }
 
+    /**
+     * @return bool
+     */
+    public function isValidFingerprint()
+    {
+        $_fingerprint = $this->getFingerprint();
+        if (isset($_SESSION['_fingerprint']) and $_SESSION['_fingerprint'] === $_fingerprint) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return string
+     */
     private function getFingerprint()
     {
         return md5($this->ipAddress . $this->userAgent . $this->name);
@@ -56,7 +79,7 @@ class Session implements \Psr\SimpleCache\CacheInterface
     /**
      * Register the session.
      *
-     * @param int $time.
+     * @param int $time .
      */
     public function register($time = 60)
     {
@@ -78,6 +101,12 @@ class Session implements \Psr\SimpleCache\CacheInterface
         return false;
     }
 
+    /**
+     * @param      $key
+     * @param bool $in
+     *
+     * @return bool
+     */
     public function keyExists($key, $in = false)
     {
         if (isset($in)) {
@@ -95,8 +124,8 @@ class Session implements \Psr\SimpleCache\CacheInterface
      * Set session key.
      *
      * @param string $key
-     * @param mixed $value
-     * @param null $tll
+     * @param mixed  $value
+     * @param null   $tll
      *
      * @return bool|void
      */
@@ -118,11 +147,19 @@ class Session implements \Psr\SimpleCache\CacheInterface
         return isset($_SESSION[$key]) ? $_SESSION[$key] : $or;
     }
 
+    /**
+     * @param $key
+     */
     public function remove($key)
     {
         $this->delete($key);
     }
 
+    /**
+     * @param string $key
+     *
+     * @return bool|void
+     */
     public function delete($key)
     {
         if (isset($_SESSION[$key])) {
@@ -135,40 +172,54 @@ class Session implements \Psr\SimpleCache\CacheInterface
         $this->clear();
     }
 
-    public function isValidFingerprint()
+    /**
+     * @return bool|void
+     */
+    public function clear()
     {
-        $_fingerprint = $this->getFingerprint();
-        if (isset($_SESSION['_fingerprint']) and $_SESSION['_fingerprint'] === $_fingerprint) {
-            return true;
-        }
-
-        return false;
+        session_destroy();
+        $_SESSION = [];
     }
 
-
+    /**
+     * @param iterable $values
+     * @param null     $ttl
+     *
+     * @return bool|void
+     */
     public function setMultiple($values, $ttl = null)
     {
         //todo
     }
 
+    /**
+     * @param iterable $keys
+     * @param null     $default
+     *
+     * @return iterable|void
+     */
     public function getMultiple($keys, $default = null)
     {
         //todo
     }
 
+    /**
+     * @param iterable $keys
+     *
+     * @return bool|void
+     */
     public function deleteMultiple($keys)
     {
         //todo
     }
 
+    /**
+     * @param string $key
+     *
+     * @return bool|void
+     */
     public function has($key)
     {
         //todo
-    }
-
-    public function clear()
-    {
-        session_destroy();
-        $_SESSION = [];
     }
 }

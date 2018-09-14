@@ -28,6 +28,11 @@ set_time_limit(120);
  */
 class Assetic extends Router
 {
+    /**
+     * @param $path
+     *
+     * @throws AsseticException
+     */
     private function checkDir($path)
     {
         if (!is_dir($path)) {
@@ -37,6 +42,14 @@ class Assetic extends Router
         }
     }
 
+    /**
+     * @param null $sUrl
+     * @param null $path
+     * @param bool $compress
+     *
+     * @return null|string
+     * @throws AsseticException
+     */
     public function assetJs($sUrl = null, $path = null, $compress = true)
     {
 
@@ -88,6 +101,14 @@ class Assetic extends Router
         return $sUrl;
     }
 
+    /**
+     * @param null $sUrl
+     * @param null $path
+     * @param bool $compress
+     *
+     * @return null|string
+     * @throws AsseticException
+     */
     public function assetCss($sUrl = null, $path = null, $compress = true)
     {
 
