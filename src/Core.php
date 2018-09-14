@@ -22,8 +22,8 @@ class Core extends Loader
     /**
      * Display Controller result
      *
-     * @param null $controller
-     * @param null $action
+     * @param null  $controller
+     * @param null  $action
      * @param array $args
      *
      * @return mixed

@@ -6,8 +6,15 @@ use Dframe\Config;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ConfigTest
+ *
+ * @package Dframe\Tests
+ */
 class ConfigTest extends TestCase
 {
+    private $file_system;
+
     protected function setUp()
     {
         $directory = [

@@ -5,6 +5,11 @@ namespace Dframe\Tests;
 use Dframe\Router;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class RouterTest
+ *
+ * @package Dframe\Tests
+ */
 class RouterTest extends TestCase
 {
     public function setUp()

@@ -19,6 +19,8 @@ use Dframe\View\Exceptions\ViewException;
  */
 class TwigView implements ViewInterface
 {
+    public $twig;
+
     public function __construct()
     {
         $twigConfig = Config::load('view/twig');

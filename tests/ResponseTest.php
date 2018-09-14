@@ -5,6 +5,11 @@ namespace Dframe\Tests;
 use Dframe\Router\Response;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ResponseTest
+ *
+ * @package Dframe\Tests
+ */
 class ResponseTest extends TestCase
 {
     public function testResponseConstruct()

@@ -33,7 +33,7 @@ abstract class View extends Loader implements ViewInterface
      * @param string $name
      * @param mixed  $value
      *
-     * @return mix
+     * @return mixed
      */
     public function assign($name, $value)
     {
@@ -50,7 +50,7 @@ abstract class View extends Loader implements ViewInterface
      * @param string $data
      * @param string $type
      *
-     * @return mix|Json|String
+     * @return mixed
      */
     public function render($data, $type = null)
     {
@@ -61,6 +61,53 @@ abstract class View extends Loader implements ViewInterface
         } else {
             return $this->renderJSON($data);
         }
+    }
+
+    /**
+     * Include pliku.
+     *
+     * @param string $name
+     * @param null   $path
+     *
+     * @return mixed
+     */
+    public function renderInclude($name, $path = null)
+    {
+        if (!isset($this->view)) {
+            throw new ViewException('Please Define view engine in app/View.php', 500);
+        }
+
+        if (!is_null($this->dir)) {
+            $this->view->setTemplateDir($this->dir);
+        }
+
+        return $this->view->renderInclude($name, $path);
+    }
+
+    /**
+     * Display JSONP.
+     *
+     * @param array $data
+     */
+    public function renderJSONP($data)
+    {
+        $callback = null;
+        if (isset($_GET['callback'])) {
+            $callback = $_GET['callback'];
+        }
+
+        exit(Response::Create($callback . '(' . json_encode($data) . ')')->headers(['Content-Type' => 'application/jsonp'])->display());
+    }
+
+    /**
+     * Display JSON.
+     *
+     * @param array $data
+     * @param int   $status
+     */
+    public function renderJSON($data, $status = 200)
+    {
+        exit(Response::Create(json_encode($data))->status($status)->headers(['Content-Type' => 'application/json'])->display());
     }
 
     /**
@@ -82,52 +129,5 @@ abstract class View extends Loader implements ViewInterface
         }
 
         return $this->view->fetch($name, $path);
-    }
-
-    /**
-     * Include pliku.
-     *
-     * @param string $name
-     * @param null $path
-     *
-     * @return mixed
-     */
-    public function renderInclude($name, $path = null)
-    {
-        if (!isset($this->view)) {
-            throw new ViewException('Please Define view engine in app/View.php', 500);
-        }
-
-        if (!is_null($this->dir)) {
-            $this->view->setTemplateDir($this->dir);
-        }
-
-        return $this->view->renderInclude($name, $path);
-    }
-
-    /**
-     * Display JSON.
-     *
-     * @param array $data
-     * @param int $status
-     */
-    public function renderJSON($data, $status = 200)
-    {
-        exit(Response::Create(json_encode($data))->status($status)->headers(['Content-Type' => 'application/json'])->display());
-    }
-
-    /**
-     * Display JSONP.
-     *
-     * @param array $data
-     */
-    public function renderJSONP($data)
-    {
-        $callback = null;
-        if (isset($_GET['callback'])) {
-            $callback = $_GET['callback'];
-        }
-
-        exit(Response::Create($callback . '(' . json_encode($data) . ')')->headers(['Content-Type' => 'application/jsonp'])->display());
     }
 }

@@ -20,6 +20,14 @@ use Dframe\View\Exceptions\ViewException;
  */
 class DefaultView implements ViewInterface
 {
+    /**
+     * @var Config
+     */
+    private $templateConfig;
+
+    /**
+     * DefaultView constructor.
+     */
     public function __construct()
     {
         $this->templateConfig = Config::load('view/default');

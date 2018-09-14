@@ -19,6 +19,9 @@ use Dframe\View\Exceptions\ViewException;
  */
 class SmartyView implements ViewInterface
 {
+    public $smarty;
+    protected $smartyConfig;
+
     public function __construct()
     {
         $this->smartyConfig = Config::load('view/smarty');
@@ -91,7 +94,7 @@ class SmartyView implements ViewInterface
             }
 
             $fetch = $this->smarty->fetch($path); // Ładowanie widoku
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />

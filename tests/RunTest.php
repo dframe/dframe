@@ -8,6 +8,11 @@ ini_set('session.use_cookies', 0);
 
 session_start();
 
+/**
+ * Class RunTest
+ *
+ * @package Dframe\Tests
+ */
 class RunTest extends TestCase
 {
     public function testCreateController()
@@ -17,8 +22,16 @@ class RunTest extends TestCase
     }
 }
 
+/**
+ * Class TestController
+ *
+ * @package Dframe\Tests
+ */
 class TestController extends \Dframe\Controller
 {
+    /**
+     * @return string
+     */
     public function testHelloWorld()
     {
         return 'Hello World';

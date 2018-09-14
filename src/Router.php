@@ -24,26 +24,70 @@ class Router
      * @var string[]
      */
     public $aRouting = [];
+
     /**
      * Delay Redirect.
+     *
+     * @var mixed
      */
     public $delay = null;
+
     /**
      * @var string[]
      */
     public $parseArgs = [];
+
+    /**
+     * @var string
+     */
+    public $routerConfig;
+
+    /**
+     * @var bool
+     */
+    public $https;
+
+    /**
+     * @var string
+     */
+    public $requestPrefix;
+
+    /**
+     * @var object
+     */
+
+    public $app;
+
+    /**
+     * @var string
+     */
+    public $namespace;
+
+    /**
+     * @var string
+     */
+    public $controller;
+
+    /**
+     * @var
+     */
+    public $action;
+
     /**
      * @var string[]
      */
     protected $aRoutingParse = [];
+
     /**
      * @var string
      */
     protected $sURI;
+
     /**
      * @var bool
      */
     protected $subdomain = false;
+
     /**
      * @var string
      */
@@ -73,26 +117,6 @@ class Router
      * @var string
      */
     protected $domain;
-
-    /**
-     * @var string
-     */
-    protected $routerConfig;
-
-    /**
-     * @var bool
-     */
-    protected $https;
-
-    /**
-     * @var string
-     */
-    protected $requestPrefix;
-
-    /**
-     * @var object
-     */
-    protected $app;
 
     /**
      * Router constructor.
@@ -677,6 +701,7 @@ class Router
     private function parseUrl($sRequest, $routingParse = null)
     {
         $sVars = null;
+        $v = [];
 
         if ($routingParse === null) {
             $routingParse = $this->aRoutingParse;

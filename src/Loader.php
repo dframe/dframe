@@ -45,6 +45,11 @@ class Loader
     protected $namespaceSeparator = '\\';
 
     /**
+     * @var object
+     */
+    protected $returnController;
+
+    /**
      * Loader constructor.
      *
      * @param null $bootstrap

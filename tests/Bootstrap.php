@@ -19,6 +19,21 @@ class Bootstrap
     public $modules;
 
     /**
+     * @var \Dframe\Session
+     */
+    public $session;
+
+    /**
+     * @var \Dframe\Messages
+     */
+    public $msg;
+
+    /**
+     * @var \Dframe\Token
+     */
+    public $token;
+
+    /**
      * Bootstrap constructor.
      *
      * @throws Exception
