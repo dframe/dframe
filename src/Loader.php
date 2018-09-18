@@ -173,10 +173,11 @@ class Loader
 
             if (!empty($namespace)) {
                 $name = '\\' . $namespace . '\\' . $type . '\\' . $name;
-                $name = str_replace('/', $this->namespaceSeparator, $name);
             } else {
                 $name = $namespace . '\\' . $type . '\\' . $name . $type;
             }
+            
+            $name = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $name);
 
             $ob = new $name($this->baseClass);
             if (method_exists($ob, 'start')) {
