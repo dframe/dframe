@@ -161,6 +161,7 @@ class Loader
     private function loadObject($name, $type, $namespace = null)
     {
         try {
+
             if (!$this->isCamelCaps($name, true)) {
                 if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
                     throw new LoaderException('Camel Sensitive is on. Can not use ' . $type . ' ' . $name . ' try to use StudlyCaps or CamelCase');
@@ -176,8 +177,9 @@ class Loader
             } else {
                 $name = $namespace . '\\' . $type . '\\' . $name . $type;
             }
-            
+
             $name = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $name);
+            $name = str_replace('/', $this->namespaceSeparator, $name);
 
             $ob = new $name($this->baseClass);
             if (method_exists($ob, 'start')) {
@@ -186,6 +188,7 @@ class Loader
             if (method_exists($ob, 'init')) {
                 $ob->init();
             }
+
         } catch (LoaderException $e) {
             $msg = null;
             if (ini_get('display_errors') === "on") {
@@ -254,8 +257,8 @@ class Loader
         }
 
         // Check that the name only contains legal characters.
-        $legalChars = 'a-zA-Z0-9';
-        if (preg_match("|[^$legalChars]|", substr($string, 1)) > 0) {
+        $legalChars = '[^a-zA-Z0-9\/]';
+        if (preg_match("|$legalChars|", substr($string, 1)) > 0) {
             return false;
         }
 
@@ -267,13 +270,12 @@ class Loader
 
             for ($i = 1; $i < $length; $i++) {
                 $ascii = ord($string[$i]);
-                if ($ascii >= 48 and $ascii <= 57) {
+
+                if (($ascii >= 48 and $ascii <= 57) OR $ascii === 47) {
                     // The character is a number, so it cant be a capital.
                     $isCaps = false;
                 } else {
-                    if (strtoupper(
-                            $string[$i]
-                        ) === $string[$i]) {
+                    if (strtoupper($string[$i]) === $string[$i]) {
                         $isCaps = true;
                     } else {
                         $isCaps = false;
