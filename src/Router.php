@@ -106,12 +106,12 @@ class Router
     /**
      * @var string
      */
-    protected $controllerDirs = [APP_DIR . 'Controller/'];
+    protected $controllerDirs;
 
     /**
      * @var string
      */
-    protected $cacheDir = APP_DIR . 'View/cache/';
+    protected $cacheDir;
 
     /**
      * @var string
