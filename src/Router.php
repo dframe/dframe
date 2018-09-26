@@ -287,7 +287,7 @@ class Router
     /**
      * Annotations parser.
      */
-    private function generateRoutes()
+    protected function generateRoutes()
     {
         $parsingNeeded = !file_exists($this->cacheDir . $this->routesFile);
         // We look for controller files
@@ -362,7 +362,7 @@ class Router
     /**
      * Find all file in controller dir.
      */
-    private function findControllerFiles()
+    protected function findControllerFiles()
     {
         $result = [];
         foreach ($this->controllerDirs as $dir) {
@@ -384,7 +384,7 @@ class Router
      *
      * @return string|array
      */
-    private function parseFile($file)
+    protected function parseFile($file)
     {
         $result = '';
         $routes = [];
@@ -626,7 +626,7 @@ class Router
      *
      * @return string
      */
-    private function parseParams($sRouting, $aParams)
+    protected function parseParams($sRouting, $aParams)
     {
         $sReturn = null;
 
@@ -698,7 +698,7 @@ class Router
      *
      * @return string|array
      */
-    private function parseUrl($sRequest, $routingParse = null)
+    protected function parseUrl($sRequest, $routingParse = null)
     {
         $sVars = null;
         $v = [];
@@ -798,7 +798,7 @@ class Router
      *
      * @return string
      */
-    private function transformParam($sParam, $k)
+    protected function transformParam($sParam, $k)
     {
         if (isset($this->aRoutingParse[$k][$sParam]) and !is_array($this->aRoutingParse[$k][$sParam])) {
             return $this->aRoutingParse[$k][$sParam];
