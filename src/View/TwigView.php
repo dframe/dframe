@@ -19,8 +19,19 @@ use Dframe\View\Exceptions\ViewException;
  */
 class TwigView implements ViewInterface
 {
+    /**
+     * @var \Twig_Environment
+     */
     public $twig;
 
+    /**
+     * @var array
+     */
+    public $assign;
+
+    /**
+     * TwigView constructor.
+     */
     public function __construct()
     {
         $twigConfig = Config::load('view/twig');
@@ -45,11 +56,11 @@ class TwigView implements ViewInterface
     public function assign($name, $value)
     {
         try {
-            if (isset($this->assigns[$name])) {
+            if (isset($this->assign[$name])) {
                 throw new ViewException('You can\'t assign "' . $name . '" in Twig');
             }
 
-            $assign = $this->assigns[$name] = $value;
+            $assign = $this->assign[$name] = $value;
         } catch (ViewException $e) {
             echo $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />

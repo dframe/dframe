@@ -47,7 +47,7 @@ abstract class View extends Loader implements ViewInterface
     /**
      * Generates the output of the templates with parsing all the template variables.
      *
-     * @param string $data
+     * @param string|array $data
      * @param string $type
      *
      * @return mixed
