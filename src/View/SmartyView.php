@@ -130,7 +130,6 @@ class SmartyView implements ViewInterface
             }
 
             return $this->smarty->fetch($path); // Loading view
-
         } catch (ViewException $e) {
             echo $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
