@@ -173,7 +173,7 @@ class Response extends Router
     }
 
     /**
-     * Przekierowanie adresu.
+     * Address redirection.
      *
      * @param string $url
      * @param int $status

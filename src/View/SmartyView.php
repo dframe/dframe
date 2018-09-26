@@ -93,7 +93,8 @@ class SmartyView implements ViewInterface
                 throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
             }
 
-            $fetch = $this->smarty->fetch($path); // Ładowanie widoku
+            // Loading view
+            $fetch = $this->smarty->fetch($path);
         } catch (\Exception $e) {
             echo $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
@@ -106,7 +107,7 @@ class SmartyView implements ViewInterface
     }
 
     /**
-     * Przekazuje kod do szablonu Smarty.
+     * Transfers the code to the Smarty template.
      *
      * @param string $name
      * @param string $path
@@ -128,7 +129,8 @@ class SmartyView implements ViewInterface
                 throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
             }
 
-            return $this->smarty->fetch($path); // Ładowanie widoku
+            return $this->smarty->fetch($path); // Loading view
+
         } catch (ViewException $e) {
             echo $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />

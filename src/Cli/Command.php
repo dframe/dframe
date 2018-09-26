@@ -38,7 +38,7 @@ class Command extends \Dframe\Loader
     public function start($args)
     {
         array_shift($args);
-        $endofoptions = false;
+        $endOfOptions = false;
 
         $ret = [
             'commands' => [],
@@ -50,8 +50,8 @@ class Command extends \Dframe\Loader
         while ($arg = array_shift($args)) {
 
             // if we have reached end of options,
-            //we cast all remaining argvs as arguments
-            if ($endofoptions) {
+            // we cast all remaining argv's as arguments
+            if ($endOfOptions) {
                 $ret['arguments'][] = $arg;
                 continue;
             }
@@ -61,7 +61,7 @@ class Command extends \Dframe\Loader
 
                 // is it the end of options flag?
                 if (!isset($arg[3])) {
-                    $endofoptions = true; // end of options;
+                    $endOfOptions = true; // end of options;
                     continue;
                 }
 

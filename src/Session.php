@@ -37,10 +37,10 @@ class Session implements \Psr\SimpleCache\CacheInterface
                 'path' => $options['cookie']['path'] ?? '/',
                 'domain' => $options['cookie']['domain'] ?? null,
                 'secure' => $options['cookie']['secure'] ?? ($_SERVER['HTTPS'] ?? null),
-                'httponly' => $options['cookie']['httponly'] ?? false,
+                'httpOnly' => $options['cookie']['httpOnly'] ?? false,
             ];
 
-            session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly']);
+            session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httpOnly']);
             session_name($this->name);
             session_start();
         }

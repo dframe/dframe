@@ -53,7 +53,7 @@ class Assetic extends Router
     public function assetJs($sUrl = null, $path = null, $compress = true)
     {
 
-        //Podstawowe sciezki
+        // Basic paths
         $srcPath = $this->aRouting['assets']['assetsPath'] . $this->aRouting['assets']['assetsDir'] . '/' . $sUrl;
         if (is_null($path)) {
             $path = 'assets';
@@ -66,15 +66,15 @@ class Assetic extends Router
             $dstPath = $this->aRouting['assets']['cachePath'] . $path;
         }
 
-        //Kopiowanie pliku jezeli nie istnieje
+        // Copying a file if it does not exist
         if (!file_exists($dstPath)) {
             if (!file_exists($srcPath)) {
                 return $srcPath;
             }
 
-            $pathinfo = pathinfo($dstPath);
-            if (!file_exists($pathinfo['dirname'])) {
-                if (!mkdir($pathinfo['dirname'], 0777, true)) {
+            $pathInfo = pathinfo($dstPath);
+            if (!file_exists($pathInfo['dirname'])) {
+                if (!mkdir($pathInfo['dirname'], 0777, true)) {
                     throw new AsseticException('Unable to create' . $path, '', 403);
                 }
             }
@@ -93,7 +93,7 @@ class Assetic extends Router
             }
         }
 
-        //Zwrocenie linku do kopii
+        // Return the link to the copy
         $sExpressionUrl = $sUrl;
         $sUrl = $this->requestPrefix . $this->aRouting['assets']['cacheUrl'] . $path . '/';
         $sUrl .= $sExpressionUrl;
@@ -112,7 +112,7 @@ class Assetic extends Router
     public function assetCss($sUrl = null, $path = null, $compress = true)
     {
 
-        //Podstawowe sciezki
+        // Basic paths
         $srcPath = $this->aRouting['assets']['assetsPath'] . $this->aRouting['assets']['assetsDir'] . '/' . $sUrl;
         if (is_null($path)) {
             $path = 'assets';
@@ -125,15 +125,15 @@ class Assetic extends Router
             $dstPath = $this->aRouting['assets']['cachePath'] . $path;
         }
 
-        //Kopiowanie pliku jezeli nie istnieje
+        // Copying a file if it does not exist
         if (!file_exists($dstPath)) {
             if (!file_exists($srcPath)) {
                 return '';
             }
 
-            $pathinfo = pathinfo($dstPath);
-            if (!file_exists($pathinfo['dirname'])) {
-                if (!mkdir($pathinfo['dirname'], 0777, true)) {
+            $pathInfo = pathinfo($dstPath);
+            if (!file_exists($pathInfo['dirname'])) {
+                if (!mkdir($pathInfo['dirname'], 0777, true)) {
                     throw new AsseticException('Unable to create' . $path, '', 403);
                 }
             }
@@ -160,18 +160,18 @@ class Assetic extends Router
 
             preg_match_all('/url\("([^\)]+?\.(woff2|woff|eot|ttf|svg|png|jpg|jpeg|gif))/', $css->dump(), $m);
 
-            $srcPathinfo = pathinfo($srcPath);
+            $srcPathInfo = pathinfo($srcPath);
 
             foreach ($m['1'] as $key => $url) {
-                $subPathinfo = pathinfo($pathinfo['dirname'] . '/' . $url);
-                if (!file_exists($subPathinfo['dirname'])) {
-                    if (!mkdir($subPathinfo['dirname'], 0777, true)) {
+                $subPathInfo = pathinfo($pathInfo['dirname'] . '/' . $url);
+                if (!file_exists($subPathInfo['dirname'])) {
+                    if (!mkdir($subPathInfo['dirname'], 0777, true)) {
                         throw new AsseticException('Unable to create' . $path, '', 403);
                     }
                 }
 
-                if (!copy($srcPathinfo['dirname'] . '/' . $url, $pathinfo['dirname'] . '/' . $url)) {
-                    $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: ' . $srcPathinfo['dirname'] . '/' . $url . ' TO ' . $pathinfo['dirname'] . '/' . $url . "\n";
+                if (!copy($srcPathInfo['dirname'] . '/' . $url, $pathInfo['dirname'] . '/' . $url)) {
+                    $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: ' . $srcPathInfo['dirname'] . '/' . $url . ' TO ' . $pathInfo['dirname'] . '/' . $url . "\n";
                     $out = fopen(APP_DIR . 'View/logs/router.txt', 'w');
                     fwrite($out, $msg);
                     fclose($out);
@@ -186,7 +186,7 @@ class Assetic extends Router
             }
         }
 
-        //Zwrocenie linku do kopii
+        // Return the link to the copy
         $sExpressionUrl = $sUrl;
         $sUrl = $this->requestPrefix . $this->aRouting['assets']['cacheUrl'] . $path . '/';
         $sUrl .= $sExpressionUrl;

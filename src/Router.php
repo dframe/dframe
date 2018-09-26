@@ -193,7 +193,7 @@ class Router
     public function setHttps($option = false)
     {
         if (!in_array($option, [true, false])) {
-            throw new InvalidArgumentException('Incorect option', 403);
+            throw new InvalidArgumentException('Incorrect option', 403);
         }
 
         if ($option === true) {
@@ -410,7 +410,7 @@ class Router
         // We look for class name
         if (preg_match('/class\s+([\w_-]+)/', $content, $matches) === 1) {
             $className = ($namespace !== null) ? $namespace . '\\' . $matches[1] : $matches[1];
-            // We find class infos
+            // We find class info's
             $path = str_replace('Controller.php', '.php', $className . '.php');
             $path = APP_DIR . str_replace('\\', '/', $path);
             if (is_file($path)) {
@@ -438,7 +438,7 @@ class Router
                         $routeName = $matches[1];
                     }
                     if (empty($routeName)) {
-                        throw new InvalidArgumentException('Incorect name', 403);
+                        throw new InvalidArgumentException('Incorrect name', 403);
                     }
 
                     $routePath = trim($route2[0][0], '"');
@@ -504,7 +504,7 @@ class Router
     }
 
     /**
-     * Gerenate url
+     * Generate url
      *
      * @param string|null $sUrl
      * @param string|bool $onlyExt

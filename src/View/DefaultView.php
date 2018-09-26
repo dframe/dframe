@@ -82,7 +82,7 @@ class DefaultView implements ViewInterface
     }
 
     /**
-     * Przekazuje kod do szablonu Smarty.
+     * Return code to the Smarty template.
      *
      * @param string $name
      * @param string $path

@@ -137,7 +137,7 @@ class Loader
     }
 
     /**
-     * Metoda do includowania pliku modelu i wywołanie objektu przez namespace.
+     * Model Loader
      *
      * @param string      $name
      * @param null|string $namespace
@@ -150,7 +150,7 @@ class Loader
     }
 
     /**
-     * Metoda do includowania pliku widoku i wywołanie objektu przez namespace.
+     * Loading files
      *
      * @param string      $name
      * @param string      $type
@@ -292,7 +292,7 @@ class Loader
     }
 
     /**
-     * Metoda do includowania pliku widoku i wywołanie objektu przez namespace.
+     * View Loader
      *
      * @param string      $name
      * @param null|string $namespace
@@ -315,17 +315,17 @@ class Loader
     public function loadController($controller, $namespace = null)
     {
         try {
-            $subControler = null;
+            $subController = null;
             if (strstr($controller, ',') !== false) {
                 $url = explode(',', $controller);
                 $urlCount = count($url) - 1;
-                $subControler = '';
+                $subController = '';
 
                 for ($i = 0; $i < $urlCount; $i++) {
                     if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
-                        $subControler .= ucfirst($url[$i]) . DIRECTORY_SEPARATOR;
+                        $subController .= ucfirst($url[$i]) . DIRECTORY_SEPARATOR;
                     } else {
-                        $subControler .= $url[$i] . DIRECTORY_SEPARATOR;
+                        $subController .= $url[$i] . DIRECTORY_SEPARATOR;
                     }
                 }
 
@@ -339,10 +339,10 @@ class Loader
             $controller = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $controller);
 
             if (!empty($namespace)) {
-                $class = '\\' . $namespace . '\\Controller\\' . $subControler . $controller;
+                $class = '\\' . $namespace . '\\Controller\\' . $subController . $controller;
                 $load = str_replace('/', $this->namespaceSeparator, $class);
             } else {
-                $load = $this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $subControler . $controller . 'Controller';
+                $load = $this->namespaceSeparator . 'Controller' . $this->namespaceSeparator . $subController . $controller . 'Controller';
                 $load = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $load);
             }
 
@@ -387,16 +387,14 @@ class Loader
     //end isCamelCaps()
 
     /**
-     * Metoda
-     * init dzialajaca jak __construct wywoływana na poczatku kodu.
+     * Method init that works like __construct called at the beginning of the code.
      */
     public function init()
     {
     }
 
     /**
-     * Metoda
-     * dzialajaca jak __destruct wywoływana na koncu kodu.
+     * A method that works like __destruct called at the end of the code.
      */
     public function end()
     {

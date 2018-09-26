@@ -64,7 +64,7 @@ abstract class View extends Loader implements ViewInterface
     }
 
     /**
-     * Include pliku.
+     * File including
      *
      * @param string $name
      * @param null   $path

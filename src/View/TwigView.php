@@ -71,11 +71,11 @@ class TwigView implements ViewInterface
      */
     public function fetch($name, $path = null)
     {
-        //return throw new \Exception('This module dont have fetch');
+        //return throw new \Exception('This module don't have fetch');
     }
 
     /**
-     * Przekazuje kod do szablonu Smarty.
+     * Transfers the code to the Smarty template.
      *
      * @param string $name
      * @param string $path
