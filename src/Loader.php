@@ -161,7 +161,6 @@ class Loader
     private function loadObject($name, $type, $namespace = null)
     {
         try {
-
             if (!$this->isCamelCaps($name, true)) {
                 if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
                     throw new LoaderException('Camel Sensitive is on. Can not use ' . $type . ' ' . $name . ' try to use StudlyCaps or CamelCase');
@@ -188,7 +187,6 @@ class Loader
             if (method_exists($ob, 'init')) {
                 $ob->init();
             }
-
         } catch (LoaderException $e) {
             $msg = null;
             if (ini_get('display_errors') === "on") {
@@ -271,7 +269,7 @@ class Loader
             for ($i = 1; $i < $length; $i++) {
                 $ascii = ord($string[$i]);
 
-                if (($ascii >= 48 and $ascii <= 57) OR $ascii === 47) {
+                if (($ascii >= 48 and $ascii <= 57) or $ascii === 47) {
                     // The character is a number, so it cant be a capital.
                     $isCaps = false;
                 } else {
