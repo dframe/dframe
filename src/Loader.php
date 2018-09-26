@@ -47,7 +47,7 @@ class Loader
     /**
      * @var object
      */
-    protected $returnController;
+    public $returnController;
 
     /**
      * Loader constructor.
