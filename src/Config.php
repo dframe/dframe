@@ -16,9 +16,20 @@ namespace Dframe;
  */
 class Config
 {
+    /**
+     * @var array
+     */
     protected static $cfg = [];
-    protected $file;
+
+    /**
+     * @var string
+     */
     public $path;
+
+    /**
+     * @var string
+     */
+    protected $file;
 
     /**
      * Config constructor.

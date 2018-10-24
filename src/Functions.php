@@ -35,6 +35,7 @@ function pathFile($path)
  * Randomly generated string.
  *
  * @param int $length
+ *
  * @return string
  */
 function generateRandomString($length = 10)

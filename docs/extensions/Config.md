@@ -10,7 +10,8 @@ return [
     'key2' => ['value'],
     'key3' => [
         'key1' => 'value'
-    ];
+    ]
+];
 ````
 
 Usage in controller

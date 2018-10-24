@@ -9,15 +9,15 @@
 
 namespace Dframe\Asset;
 
-use Dframe\Router;
+use Assetic\Asset\AssetCollection;
 use Assetic\Asset\FileAsset;
 use Assetic\Filter\CssImportFilter;
 use Assetic\Filter\CssMinFilter;
 use Assetic\Filter\CssRewriteFilter;
 use Assetic\Filter\PhpCssEmbedFilter;
-use Assetic\Asset\AssetCollection;
-use Patchwork\JSqueeze;
 use Dframe\Asset\Exceptions\AsseticException;
+use Dframe\Router;
+use Patchwork\JSqueeze;
 
 set_time_limit(120);
 

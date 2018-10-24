@@ -16,8 +16,19 @@ namespace Dframe;
  */
 class Token
 {
+    /**
+     * @var string
+     */
     protected $driver;
+
+    /**
+     * @var array
+     */
     protected $token = [];
+
+    /**
+     * @var array
+     */
     protected $time = [];
 
     /**
@@ -44,52 +55,8 @@ class Token
     }
 
     /**
-     * @param string $key
-     * @param null $default
      *
-     * @return mixed
      */
-    public function get($key, $default = null)
-    {
-        if (isset($this->token[$key]) and $this->getTime($key) >= time()) {
-            return $this->token[$key];
-        }
-
-        return $this->generate($key)->token[$key];
-    }
-
-    /**
-     * @param string $key
-     * @param mixed $value
-     * @param null $ttl
-     *
-     * @return $this
-     */
-    public function set($key, $value, $ttl = null)
-    {
-        $this->token[$key] = $value;
-        $this->driver->set('token', $this->token);
-
-        return $this;
-    }
-
-    /**
-     * @param $key
-     */
-    public function delete($key)
-    {
-        if (isset($this->token[$key])) {
-            unset($this->token[$key]);
-        }
-
-        if (isset($this->time[$key])) {
-            unset($this->time[$key]);
-        }
-
-        $this->driver->set('token', $this->token);
-        $this->driver->set('timeToken', $this->time);
-    }
-
     public function clear()
     {
         $this->token = [];
@@ -133,16 +100,50 @@ class Token
     }
 
     /**
+     * @param      $key
+     * @param      $token
+     * @param bool $delete
+     *
+     * @return bool
+     */
+    public function isValid($key, $token, $delete = false)
+    {
+        $getToken = $this->get($key);
+
+        if ($delete === true) {
+            $this->delete($key);
+        }
+
+        if ($getToken === $token) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $key
+     * @param null   $default
+     *
+     * @return mixed
+     */
+    public function get($key, $default = null)
+    {
+        if (isset($this->token[$key]) and $this->getTime($key) >= time()) {
+            return $this->token[$key];
+        }
+
+        return $this->generate($key)->token[$key];
+    }
+
+    /**
      * @param $key
      *
-     * @return $this
+     * @return mixed|null
      */
-    public function generate($key)
+    public function getTime($key)
     {
-        $this->set($key, md5(uniqid(rand(), true)));
-        $this->setTime($key, time() + 3600);
-
-        return $this;
+        return isset($this->time[$key]) ? $this->time[$key] : null;
     }
 
     /**
@@ -164,32 +165,45 @@ class Token
     /**
      * @param $key
      *
-     * @return mixed|null
+     * @return $this
      */
-    public function getTime($key)
+    public function generate($key)
     {
-        return isset($this->time[$key]) ? $this->time[$key] : null;
+        $this->set($key, md5(uniqid(rand(), true)));
+        $this->setTime($key, time() + 3600);
+
+        return $this;
     }
 
     /**
-     * @param      $key
-     * @param      $token
-     * @param bool $delete
+     * @param string $key
+     * @param mixed  $value
+     * @param null   $ttl
      *
-     * @return bool
+     * @return $this
      */
-    public function isValid($key, $token, $delete = false)
+    public function set($key, $value, $ttl = null)
     {
-        $getToken = $this->get($key);
+        $this->token[$key] = $value;
+        $this->driver->set('token', $this->token);
 
-        if ($delete === true) {
-            $this->delete($key);
+        return $this;
+    }
+
+    /**
+     * @param $key
+     */
+    public function delete($key)
+    {
+        if (isset($this->token[$key])) {
+            unset($this->token[$key]);
         }
 
-        if ($getToken === $token) {
-            return true;
+        if (isset($this->time[$key])) {
+            unset($this->time[$key]);
         }
 
-        return false;
+        $this->driver->set('token', $this->token);
+        $this->driver->set('timeToken', $this->time);
     }
 }

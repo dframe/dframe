@@ -35,6 +35,11 @@ class Loader
     public $baseClass;
 
     /**
+     * @var object
+     */
+    public $returnController;
+
+    /**
      * @var string
      */
     protected $fileExtension = '.php';
@@ -43,11 +48,6 @@ class Loader
      * @var string
      */
     protected $namespaceSeparator = '\\';
-
-    /**
-     * @var object
-     */
-    public $returnController;
 
     /**
      * Loader constructor.

@@ -32,7 +32,8 @@ class ManagerModule
     /**
      * Load router.
      *
-     * @param  string  $path
+     * @param  string $path
+     *
      * @return void
      */
     protected function loadRoutes($path)
@@ -44,7 +45,8 @@ class ManagerModule
     /**
      * Load model.
      *
-     * @param  array  $path
+     * @param  array $path
+     *
      * @return void
      */
     protected function loadModels($path)
@@ -55,7 +57,8 @@ class ManagerModule
     /**
      * Load controller.
      *
-     * @param  array  $path
+     * @param  array $path
+     *
      * @return void
      */
     protected function loadControllers($path)

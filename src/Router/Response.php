@@ -176,8 +176,8 @@ class Response extends Router
      * Address redirection.
      *
      * @param string $url
-     * @param int $status
-     * @param array $headers
+     * @param int    $status
+     * @param array  $headers
      *
      * @return Response|object
      */
@@ -199,6 +199,7 @@ class Response extends Router
 
     /**
      * @param $json
+     *
      * @return $this
      */
     public function json($json)

@@ -17,23 +17,6 @@ namespace Dframe;
 abstract class Model extends Loader
 {
     /**
-     * Standard method for returning the result from the method.
-     *
-     * @param bool  $type
-     * @param array $array
-     *
-     * @return array
-     */
-    public function methodResult($type, $array = null)
-    {
-        if (!is_null($array)) {
-            return array_merge(['return' => $type], $array);
-        }
-
-        return ['return' => $type];
-    }
-
-    /**
      * Standard method for returning  result from the method.
      *
      * @param array $errors
@@ -51,6 +34,23 @@ abstract class Model extends Loader
         }
 
         return $this->methodResult(false, ['errors' => $errors]);
+    }
+
+    /**
+     * Standard method for returning the result from the method.
+     *
+     * @param bool  $type
+     * @param array $array
+     *
+     * @return array
+     */
+    public function methodResult($type, $array = null)
+    {
+        if (!is_null($array)) {
+            return array_merge(['return' => $type], $array);
+        }
+
+        return ['return' => $type];
     }
 
     /**

@@ -105,6 +105,7 @@ class IndexView extends \View\View
         if(isset($this->router)){
             $this->assign('router', $this->router);
         }
+    
 ```
 If you use [Dframe\Message](../extensions/Messages.md) add
 ```php

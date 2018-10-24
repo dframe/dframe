@@ -14,11 +14,21 @@ namespace Dframe;
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-
 class Session implements \Psr\SimpleCache\CacheInterface
 {
+    /**
+     * @var string
+     */
     protected $name;
+
+    /**
+     * @var string
+     */
     protected $ipAddress;
+
+    /**
+     * @var string
+     */
     protected $userAgent;
 
     /**
@@ -169,6 +179,9 @@ class Session implements \Psr\SimpleCache\CacheInterface
         }
     }
 
+    /**
+     *
+     */
     public function end()
     {
         $this->clear();

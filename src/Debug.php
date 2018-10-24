@@ -16,6 +16,9 @@ namespace Dframe;
  */
 class Debug
 {
+    /**
+     * @var array
+     */
     protected $headers = [];
 
     /**

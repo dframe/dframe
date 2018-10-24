@@ -19,9 +19,19 @@ use Dframe\View\Exceptions\ViewException;
  */
 class SmartyView implements ViewInterface
 {
+    /**
+     * @var \Smarty
+     */
     public $smarty;
+
+    /**
+     * @var Config
+     */
     protected $smartyConfig;
 
+    /**
+     * SmartyView constructor.
+     */
     public function __construct()
     {
         $this->smartyConfig = Config::load('view/smarty');
