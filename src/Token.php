@@ -9,6 +9,8 @@
 
 namespace Dframe;
 
+use Psr\SimpleCache\CacheInterface;
+
 /**
  * Token Class.
  *
@@ -17,7 +19,7 @@ namespace Dframe;
 class Token
 {
     /**
-     * @var string
+     * @var CacheInterface
      */
     protected $driver;
 
@@ -39,7 +41,7 @@ class Token
     public function __construct($driver)
     {
         $this->driver = $driver;
-        if (!($this->driver instanceof \Psr\SimpleCache\CacheInterface) === true) {
+        if (!($this->driver instanceof CacheInterface) === true) {
             throw new \Exception("This class Require instance Of Dframe\Session", 1);
         }
 
@@ -83,7 +85,7 @@ class Token
     }
 
     /**
-     * @param $keys
+     * @param string $keys
      */
     public function deleteMultiple($keys)
     {
@@ -122,8 +124,8 @@ class Token
     }
 
     /**
-     * @param string $key
-     * @param null   $default
+     * @param string      $key
+     * @param null|string $default
      *
      * @return mixed
      */
@@ -137,7 +139,7 @@ class Token
     }
 
     /**
-     * @param $key
+     * @param string $key
      *
      * @return mixed|null
      */
@@ -147,8 +149,8 @@ class Token
     }
 
     /**
-     * @param $key
-     * @param $time
+     * @param string $key
+     * @param        $time
      *
      * @return $this
      */
@@ -163,7 +165,7 @@ class Token
     }
 
     /**
-     * @param $key
+     * @param string $key
      *
      * @return $this
      */
@@ -191,7 +193,7 @@ class Token
     }
 
     /**
-     * @param $key
+     * @param string $key
      */
     public function delete($key)
     {
