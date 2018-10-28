@@ -622,7 +622,7 @@ class Router
      * Parse url params into a 'request'
      *
      * @param string $sRouting
-     * @param string $aParams
+     * @param array $aParams
      *
      * @return string
      */
@@ -874,7 +874,7 @@ class Router
     /**
      * Set up new route.
      *
-     * @param string $newRoute
+     * @param array $newRoute
      */
     public function addRoute($newRoute)
     {
