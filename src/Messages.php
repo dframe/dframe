@@ -134,8 +134,10 @@ class Messages
         $messages = '';
         $data = '';
 
-        // Print a certain type of message?
+
         if (in_array($type, $this->msgTypes)) {
+            // Print a certain type of message?
+
             $flashMessages = $this->driver->get('flash_messages');
             foreach ($flashMessages[$type] as $msg) {
                 $messages .= $msg;
@@ -145,8 +147,10 @@ class Messages
 
             // Clear the viewed messages
             $this->clear($type);
-            // Print ALL queued messages
+
         } elseif ($type === 'all') {
+
+            // Print ALL queued messages
             $flashMessages = $this->driver->get('flash_messages');
             foreach ($flashMessages as $type => $msgArray) {
                 $messages = '';
@@ -158,8 +162,10 @@ class Messages
 
             // Clear ALL of the messages
             $this->clear();
-            // Invalid Message Type?
+
         } else {
+
+            // Invalid Message Type?
             return false;
         }
 
