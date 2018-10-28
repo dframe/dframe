@@ -147,7 +147,6 @@ class Messages
 
             // Clear the viewed messages
             $this->clear($type);
-
         } elseif ($type === 'all') {
 
             // Print ALL queued messages
@@ -162,7 +161,6 @@ class Messages
 
             // Clear ALL of the messages
             $this->clear();
-
         } else {
 
             // Invalid Message Type?
