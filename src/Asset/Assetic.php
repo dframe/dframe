@@ -43,27 +43,27 @@ class Assetic extends Router
     }
 
     /**
-     * @param null $sUrl
+     * @param null $url
      * @param null $path
      * @param bool $compress
      *
      * @return null|string
      * @throws AsseticException
      */
-    public function assetJs($sUrl = null, $path = null, $compress = true)
+    public function assetJs($url = null, $path = null, $compress = true)
     {
 
         // Basic paths
-        $srcPath = $this->aRouting['assets']['assetsPath'] . $this->aRouting['assets']['assetsDir'] . '/' . $sUrl;
+        $srcPath = $this->routeMap['assets']['assetsPath'] . $this->routeMap['assets']['assetsDir'] . '/' . $url;
         if (is_null($path)) {
             $path = 'assets';
-            if (isset($this->aRouting['assets']['assetsDir']) and !empty($this->aRouting['assets']['assetsDir'])) {
-                $path = $this->aRouting['assets']['assetsDir'];
+            if (isset($this->routeMap['assets']['assetsDir']) and !empty($this->routeMap['assets']['assetsDir'])) {
+                $path = $this->routeMap['assets']['assetsDir'];
                 $this->checkDir($path);
             }
-            $dstPath = $this->aRouting['assets']['cachePath'] . $path . '/' . $sUrl;
+            $dstPath = $this->routeMap['assets']['cachePath'] . $path . '/' . $url;
         } else {
-            $dstPath = $this->aRouting['assets']['cachePath'] . $path;
+            $dstPath = $this->routeMap['assets']['cachePath'] . $path;
         }
 
         // Copying a file if it does not exist
@@ -80,7 +80,7 @@ class Assetic extends Router
             }
 
             $js = file_get_contents($srcPath);
-            if ($compress === true and $this->aRouting['assets']['minifyJsEnabled'] == true) {
+            if ($compress === true and $this->routeMap['assets']['minifyJsEnabled'] == true) {
                 $jSqueeze = new JSqueeze();
                 $js = $jSqueeze->squeeze($js, true, true, false);
             }
@@ -94,35 +94,35 @@ class Assetic extends Router
         }
 
         // Return the link to the copy
-        $sExpressionUrl = $sUrl;
-        $sUrl = $this->requestPrefix . $this->aRouting['assets']['cacheUrl'] . $path . '/';
-        $sUrl .= $sExpressionUrl;
+        $expressionUrl = $url;
+        $url = $this->requestPrefix . $this->routeMap['assets']['cacheUrl'] . $path . '/';
+        $url .= $expressionUrl;
 
-        return $sUrl;
+        return $url;
     }
 
     /**
-     * @param null $sUrl
+     * @param null $url
      * @param null $path
      * @param bool $compress
      *
      * @return null|string
      * @throws AsseticException
      */
-    public function assetCss($sUrl = null, $path = null, $compress = true)
+    public function assetCss($url = null, $path = null, $compress = true)
     {
 
         // Basic paths
-        $srcPath = $this->aRouting['assets']['assetsPath'] . $this->aRouting['assets']['assetsDir'] . '/' . $sUrl;
+        $srcPath = $this->routeMap['assets']['assetsPath'] . $this->routeMap['assets']['assetsDir'] . '/' . $url;
         if (is_null($path)) {
             $path = 'assets';
-            if (isset($this->aRouting['assets']['assetsDir']) and !empty($this->aRouting['assets']['assetsDir'])) {
-                $path = $this->aRouting['assets']['assetsDir'];
+            if (isset($this->routeMap['assets']['assetsDir']) and !empty($this->routeMap['assets']['assetsDir'])) {
+                $path = $this->routeMap['assets']['assetsDir'];
                 $this->checkDir($path);
             }
-            $dstPath = $this->aRouting['assets']['cachePath'] . $path . '/' . $sUrl;
+            $dstPath = $this->routeMap['assets']['cachePath'] . $path . '/' . $url;
         } else {
-            $dstPath = $this->aRouting['assets']['cachePath'] . $path;
+            $dstPath = $this->routeMap['assets']['cachePath'] . $path;
         }
 
         // Copying a file if it does not exist
@@ -142,7 +142,7 @@ class Assetic extends Router
             //$args[] = new Yui\CssCompressorFilter('C:\yuicompressor-2.4.7\build\yuicompressor-2.4.7.jar', 'java'),
 
             if ($compress == true) {
-                if ($this->aRouting['assets']['minifyCssEnabled'] == true) {
+                if ($this->routeMap['assets']['minifyCssEnabled'] == true) {
                     $args[] = new CssMinFilter();
                 }
 
@@ -187,10 +187,10 @@ class Assetic extends Router
         }
 
         // Return the link to the copy
-        $sExpressionUrl = $sUrl;
-        $sUrl = $this->requestPrefix . $this->aRouting['assets']['cacheUrl'] . $path . '/';
-        $sUrl .= $sExpressionUrl;
+        $expressionUrl = $url;
+        $url = $this->requestPrefix . $this->routeMap['assets']['cacheUrl'] . $path . '/';
+        $url .= $expressionUrl;
 
-        return $sUrl;
+        return $url;
     }
 }

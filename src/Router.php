@@ -21,9 +21,9 @@ use Dframe\Router\Response;
 class Router
 {
     /**
-     * @var string[]
+     * @var array
      */
-    public $aRouting = [];
+    public $routeMap = [];
 
     /**
      * Delay Redirect.
@@ -69,19 +69,19 @@ class Router
     public $controller;
 
     /**
-     * @var
+     * @var string
      */
     public $action;
 
     /**
-     * @var string[]
+     * @var array
      */
-    protected $aRoutingParse = [];
+    protected $routeMapParse = [];
 
     /**
      * @var string
      */
-    protected $sURI;
+    protected $uri;
 
     /**
      * @var bool
@@ -104,7 +104,7 @@ class Router
     protected $usedControllers = [];
 
     /**
-     * @var string
+     * @var array
      */
     protected $controllerDirs;
 
@@ -130,17 +130,17 @@ class Router
         }
 
         $this->domain = HTTP_HOST;
-        $aURI = explode('/', $_SERVER['SCRIPT_NAME']);
-        array_pop($aURI);
-        $this->sURI = implode('/', $aURI) . '/';
-        $this->sURI = str_replace('/web/', '/', $this->sURI);
+        $uri = explode('/', $_SERVER['SCRIPT_NAME']);
+        array_pop($uri);
+        $this->uri = implode('/', $uri) . '/';
+        $this->uri = str_replace('/web/', '/', $this->uri);
 
         $this->routerConfig = Config::load('router');
 
         $this->setHttps($this->routerConfig->get('https', false));
-        $this->aRouting = $this->routerConfig->get();
-        if (empty($this->aRouting)) {
-            $this->aRouting = [
+        $this->routeMap = $this->routerConfig->get();
+        if (empty($this->routeMap)) {
+            $this->routeMap = [
                 'https' => false,
                 'NAME_CONTROLLER' => 'page',
                 'NAME_METHOD' => 'login',
@@ -160,7 +160,7 @@ class Router
             ]; // For url
         }
 
-        $this->aRoutingParse = $this->routerConfig->get('routes', $this->aRouting['routes']); // For parsing array
+        $this->routeMapParse = $this->routerConfig->get('routes', $this->routeMap['routes']); // For parsing array
 
         // Check forced HTTPS
         if ($this->https === true) {
@@ -235,8 +235,8 @@ class Router
         $this->app = $app;
 
         $routerConfig = $this->app->config['router'] ?? [];
-        $this->aRouting['routes'] = array_merge($this->aRouting['routes'] ?? [], $routerConfig['routes'] ?? []);
-        $this->aRoutingParse = array_merge($routerConfig['routes'] ?? [], $this->aRoutingParse ?? []);
+        $this->routeMap['routes'] = array_merge($this->routeMap['routes'] ?? [], $routerConfig['routes'] ?? []);
+        $this->routeMapParse = array_merge($routerConfig['routes'] ?? [], $this->routeMapParse ?? []);
 
         $annotationRoute = $this->routerConfig->get('annotation', false);
         if ($annotationRoute === true) {
@@ -275,8 +275,8 @@ class Router
 
                 $routesConfig = Config::load('routes', APP_DIR . 'View/cache/')->get();
                 if (!empty($routesConfig)) {
-                    $this->aRoutingParse = array_merge($routesConfig, $this->aRoutingParse);
-                    $this->aRouting['routes'] = array_merge($routesConfig, $this->aRouting['routes']);
+                    $this->routeMapParse = array_merge($routesConfig, $this->routeMapParse);
+                    $this->routeMap['routes'] = array_merge($routesConfig, $this->routeMap['routes']);
                 }
             }
         }
@@ -424,9 +424,9 @@ class Router
             $methods = $reflector->getMethods(\ReflectionMethod::IS_PUBLIC);
             $result = '';
 
-            $sVars = null;
+            $vars = null;
             foreach ($methods as $m) {
-                $sVars = null;
+                $vars = null;
                 if ($m->isStatic()) {
                     continue;
                 }
@@ -448,11 +448,11 @@ class Router
                     if ($lChar == ']') {
                         $routePath = $routePath . '/';
                     }
-                    preg_match_all('!\[(.+?)\]!i', $routePath, $aExpression_);
-                    $iCount = count($aExpression_[0]);
+                    preg_match_all('!\[(.+?)\]!i', $routePath, $expression_);
+                    $iCount = count($expression_[0]);
                     for ($i = 0; $i < $iCount; $i++) {
-                        if ($aExpression_[0][$i] != '[params]') {
-                            $sVars .= '&' . $aExpression_[1][$i] . '=' . $aExpression_[0][$i];
+                        if ($expression_[0][$i] != '[params]') {
+                            $vars .= '&' . $expression_[1][$i] . '=' . $expression_[0][$i];
                         }
                     }
                     $routes[$routePath] = [
@@ -460,7 +460,7 @@ class Router
                         'routePath' => $routePath,
                         'task' => $task,
                         'action' => $m->name,
-                        'substring' => $sVars,
+                        'substring' => $vars,
                     ];
                 }
             }
@@ -476,7 +476,7 @@ class Router
      */
     public function getRoutes()
     {
-        return $this->aRouting;
+        return $this->routeMap;
     }
 
     /**
@@ -484,7 +484,7 @@ class Router
      */
     public function setRoutes($routes)
     {
-        $this->aRouting = array_merge($this->aRouting, $routes);
+        $this->routeMap = array_merge($this->routeMap, $routes);
     }
 
     /**
@@ -496,7 +496,7 @@ class Router
      */
     public function isActive($url)
     {
-        if ($this->makeUrl($url, true) === str_replace($this->sURI, '', $_SERVER['REQUEST_URI'])) {
+        if ($this->makeUrl($url, true) === str_replace($this->uri, '', $_SERVER['REQUEST_URI'])) {
             return true;
         }
 
@@ -506,87 +506,87 @@ class Router
     /**
      * Generate url
      *
-     * @param string|null $sUrl
+     * @param string|null $url
      * @param string|bool $onlyExt
      *
      * @return null|string
      */
-    public function makeUrl(string $sUrl = null, $onlyExt = false)
+    public function makeUrl(string $url = null, $onlyExt = false)
     {
-        $aParamsHook = explode('#', $sUrl);
-        $aParams = explode('?', $aParamsHook[0]);
-        $aParams_ = explode('/', $aParams[0]);
-        $sTask = $aParams_[0];
-        $sAction = null;
+        $paramsHook = explode('#', $url);
+        $params = explode('?', $paramsHook[0]);
+        $params_ = explode('/', $params[0]);
+        $task = $params_[0];
+        $action = null;
 
-        if (isset($aParams_[1]) and !empty($aParams_[1])) {
-            $sAction = $aParams_[1];
+        if (isset($params_[1]) and !empty($params_[1])) {
+            $action = $params_[1];
         }
 
-        if (isset($aParams[1])) {
-            parse_str($aParams[1], $aParams);
+        if (isset($params[1])) {
+            parse_str($params[1], $params);
         } else {
-            $aParams = [];
+            $params = [];
         }
 
-        $findKey = explode('?', $sUrl);
+        $findKey = explode('?', $url);
         if (isset($findKey[0])) {
             $findKey = $findKey[0];
         }
 
         if (defined('MOD_REWRITE') and MOD_REWRITE === true) {
-            if (isset($this->aRouting['routes'][$findKey])) {
-                $sExpressionUrl = $this->aRouting['routes'][$findKey][0];
-                foreach ($aParams as $key => $value) {
-                    $sExpressionUrl = str_replace('[' . $key . ']', $value, $sExpressionUrl, $count);
+            if (isset($this->routeMap['routes'][$findKey])) {
+                $expressionUrl = $this->routeMap['routes'][$findKey][0];
+                foreach ($params as $key => $value) {
+                    $expressionUrl = str_replace('[' . $key . ']', $value, $expressionUrl, $count);
                     if ($count > 0) {
-                        unset($aParams[$key]);
+                        unset($params[$key]);
                     }
                 }
 
-                if (isset($aParams)) {
-                    if (isset($this->aRouting['routes'][$findKey]['_params'])) {
-                        $sExpressionUrl = str_replace('[params]', $this->parseParams($this->aRouting['routes'][$findKey]['_params'][0], $aParams), $sExpressionUrl);
-                    } elseif (!empty($aParams)) {
-                        $sExpressionUrl = $sExpressionUrl . '?' . http_build_query($aParams);
+                if (isset($params)) {
+                    if (isset($this->routeMap['routes'][$findKey]['_params'])) {
+                        $expressionUrl = str_replace('[params]', $this->parseParams($this->routeMap['routes'][$findKey]['_params'][0], $params), $expressionUrl);
+                    } elseif (!empty($params)) {
+                        $expressionUrl = $expressionUrl . '?' . http_build_query($params);
                     }
                 }
             } else {
-                $sExpressionUrl = $this->aRouting['routes']['default'][0];
-                $sExpressionUrl = str_replace('[task]', $sTask, $sExpressionUrl);
-                $sExpressionUrl = str_replace('[action]', $sAction, $sExpressionUrl);
-                if (isset($aParams)) {
-                    $sExpressionUrl = str_replace('[params]', $this->parseParams($this->aRouting['routes']['default']['_params'][0], $aParams), $sExpressionUrl);
+                $expressionUrl = $this->routeMap['routes']['default'][0];
+                $expressionUrl = str_replace('[task]', $task, $expressionUrl);
+                $expressionUrl = str_replace('[action]', $action, $expressionUrl);
+                if (isset($params)) {
+                    $expressionUrl = str_replace('[params]', $this->parseParams($this->routeMap['routes']['default']['_params'][0], $params), $expressionUrl);
                 }
             }
         } else {
-            if (empty($sTask)) {
-                $sExpressionUrl = '';
+            if (empty($task)) {
+                $expressionUrl = '';
             } else {
-                if (isset($this->aRouting['routes'][$findKey])) {
-                    $sExpressionUrl0 = $this->aRouting['routes'][$findKey][1];
-                    foreach ($aParams as $key => $value) {
-                        $sExpressionUrl0 = str_replace('[' . $key . ']', $value, $sExpressionUrl0, $count);
+                if (isset($this->routeMap['routes'][$findKey])) {
+                    $expressionUrl0 = $this->routeMap['routes'][$findKey][1];
+                    foreach ($params as $key => $value) {
+                        $expressionUrl0 = str_replace('[' . $key . ']', $value, $expressionUrl0, $count);
                         if ($count > 0) {
-                            unset($aParams[$key]);
+                            unset($params[$key]);
                         }
                     }
 
-                    $sExpressionUrl = $sExpressionUrl0;
+                    $expressionUrl = $expressionUrl0;
                 } else {
-                    $sExpressionUrl = 'task=' . $sTask;
-                    if (!empty($sAction)) {
-                        $sExpressionUrl = 'task=' . $sTask . '&action=' . $sAction;
+                    $expressionUrl = 'task=' . $task;
+                    if (!empty($action)) {
+                        $expressionUrl = 'task=' . $task . '&action=' . $action;
                     }
                 }
 
-                if (!empty($aParams)) {
-                    if (!empty($sExpressionUrl)) {
-                        $sExpressionUrl .= '&';
+                if (!empty($params)) {
+                    if (!empty($expressionUrl)) {
+                        $expressionUrl .= '&';
                     }
-                    $sExpressionUrl = $sExpressionUrl . http_build_query($aParams);
+                    $expressionUrl = $expressionUrl . http_build_query($params);
                 }
-                $sExpressionUrl = 'index.php?' . $sExpressionUrl;
+                $expressionUrl = 'index.php?' . $expressionUrl;
             }
         }
 
@@ -603,61 +603,61 @@ class Router
             $HTTP_HOST = $this->subdomain . '.' . $this->domain;
         }
 
-        $sUrl = null;
+        $url = null;
         if ($onlyExt === false) {
-            $sUrl = $this->requestPrefix . $HTTP_HOST . '/';
+            $url = $this->requestPrefix . $HTTP_HOST . '/';
         }
 
-        $sUrl .= $sExpressionUrl;
-        $sUrl = rtrim($sUrl, '/');
+        $url .= $expressionUrl;
+        $url = rtrim($url, '/');
 
         unset($this->subdomain);
         $this->domain = HTTP_HOST;
         //$this->setHttps($this->routerConfig->get('https', false));
 
-        return $sUrl;
+        return $url;
     }
 
     /**
      * Parse url params into a 'request'
      *
-     * @param string $sRouting
-     * @param array $aParams
+     * @param string $routing
+     * @param array  $params
      *
      * @return string
      */
-    protected function parseParams($sRouting, $aParams)
+    protected function parseParams($routing, $params)
     {
-        $sReturn = null;
+        $return = null;
 
-        foreach ($aParams as $key => $value) {
-            $sReturn .= str_replace(['[name]', '[value]'], [$key, $value], $sRouting);
+        foreach ($params as $key => $value) {
+            $return .= str_replace(['[name]', '[value]'], [$key, $value], $routing);
         }
 
-        return $sReturn;
+        return $return;
     }
 
     /**
-     * @param null|string $sUrl
+     * @param null|string $url
      * @param null|string $path
      *
      * @return null|string
      */
-    public function publicWeb($sUrl = null, $path = null)
+    public function publicWeb($url = null, $path = null)
     {
         if (is_null($path)) {
-            $path = $this->aRouting['publicWeb'];
+            $path = $this->routeMap['publicWeb'];
         }
 
-        $sExpressionUrl = $sUrl;
-        $sUrl = $this->requestPrefix . $this->domain . '/' . $path;
-        $sUrl .= $sExpressionUrl;
+        $expressionUrl = $url;
+        $url = $this->requestPrefix . $this->domain . '/' . $path;
+        $url .= $expressionUrl;
 
         unset($this->subdomain);
         $this->domain = HTTP_HOST;
         //$this->setHttps($this->routerConfig->get('https', false));
 
-        return $sUrl;
+        return $url;
     }
 
     /**
@@ -665,25 +665,25 @@ class Router
      */
     public function parseGets()
     {
-        $sRequest = preg_replace('!' . $this->sURI . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
+        $request = preg_replace('!' . $this->uri . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
         if (defined('MOD_REWRITE') and MOD_REWRITE === true) {
-            if (substr($sRequest, -1) != '/') {
-                $sRequest .= '/';
+            if (substr($request, -1) != '/') {
+                $request .= '/';
             }
 
-            $parseUrl = $this->parseUrl($sRequest);
+            $parseUrl = $this->parseUrl($request);
             $this->namespace = $parseUrl['v']['namespace'] ?? '';
-            parse_str($parseUrl['sVars'], $aGets);
+            parse_str($parseUrl['sVars'], $gets);
 
-            $this->controller = !empty($aGets['task']) ? $aGets['task'] : $this->aRouting['NAME_CONTROLLER'];
-            unset($aGets['task']);
+            $this->controller = !empty($gets['task']) ? $gets['task'] : $this->routeMap['NAME_CONTROLLER'];
+            unset($gets['task']);
 
-            $this->action = !empty($aGets['action']) ? $aGets['action'] : $this->aRouting['NAME_METHOD'];
-            unset($aGets['action']);
-            $_GET = array_merge($_GET, $aGets);
+            $this->action = !empty($gets['action']) ? $gets['action'] : $this->routeMap['NAME_METHOD'];
+            unset($gets['action']);
+            $_GET = array_merge($_GET, $gets);
         } else {
-            $this->controller = !empty($_GET['task']) ? $_GET['task'] : $this->aRouting['NAME_CONTROLLER'];
-            $this->action = !empty($_GET['action']) ? $_GET['action'] : $this->aRouting['NAME_METHOD'];
+            $this->controller = !empty($_GET['task']) ? $_GET['task'] : $this->routeMap['NAME_CONTROLLER'];
+            $this->action = !empty($_GET['action']) ? $_GET['action'] : $this->routeMap['NAME_METHOD'];
         }
 
         $_GET['task'] = $this->controller;
@@ -693,34 +693,34 @@ class Router
     /**
      * Match given request
      *
-     * @param string      $sRequest
+     * @param string      $request
      * @param string|null $routingParse
      *
      * @return string|array
      */
-    protected function parseUrl($sRequest, $routingParse = null)
+    protected function parseUrl($request, $routingParse = null)
     {
-        $sVars = null;
+        $vars = null;
         $v = [];
 
         if ($routingParse === null) {
-            $routingParse = $this->aRoutingParse;
+            $routingParse = $this->routeMapParse;
         }
 
-        $pos = strpos($sRequest, '?task=');
+        $pos = strpos($request, '?task=');
         if ($pos !== false) {
-            $sRequest = substr_replace($sRequest, '/?task=', $pos, strlen('?task='));
+            $request = substr_replace($request, '/?task=', $pos, strlen('?task='));
         }
 
-        $sRequest = str_replace('?', '&', $sRequest);
+        $request = str_replace('?', '&', $request);
 
         foreach ($routingParse as $k => $v) {
             if (!is_array($v)) {
                 continue;
             }
 
-            preg_match_all('!\[(.+?)\]!i', $v[0], $aExpression_);
-            $sExpression = preg_replace_callback(
+            preg_match_all('!\[(.+?)\]!i', $v[0], $expression_);
+            $expressionMatch = preg_replace_callback(
                 '!\[(.+?)\]!i',
                 function ($m) use ($k) {
                     return $this->transformParam($m[1], $k);
@@ -728,42 +728,42 @@ class Router
                 $v[0]
             );
 
-            if (preg_match_all('!' . $sExpression . '!i', $sRequest, $aExpression__)) {
+            if (preg_match_all('!' . $expressionMatch . '!i', $request, $expression__)) {
                 $args = [];
 
                 if (isset($v['args'])) {
                     $args = $v['args'];
                 }
 
-                foreach ($aExpression__ as $k_ => $v_) {
+                foreach ($expression__ as $k_ => $v_) {
                     foreach ($v_ as $kkk => $vvv) {
-                        if (!isset($aExpression_[1][$k_ - 1])) {
-                            $aExpression_[1][$k_ - 1] = null;
+                        if (!isset($expression_[1][$k_ - 1])) {
+                            $expression_[1][$k_ - 1] = null;
                         }
 
                         if ($kkk > 0) {
-                            $aExpression[] = [$aExpression_[1][$k_ - 1] . '_' . $kkk, $vvv];
+                            $expression[] = [$expression_[1][$k_ - 1] . '_' . $kkk, $vvv];
                         } else {
-                            $aExpression[] = [$aExpression_[1][$k_ - 1], $vvv];
+                            $expression[] = [$expression_[1][$k_ - 1], $vvv];
                         }
                     }
                 }
-                unset($aExpression[0]);
-                $iCount = count($aExpression__[0]);
+                unset($expression[0]);
+                $iCount = count($expression__[0]);
 
                 if ($iCount > 1) {
                     for ($i = 0; $i < $iCount; $i++) {
                         if ($i > 0) {
-                            $sVars .= '&' . preg_replace('!\[(.+?)\]!i', '[$1_' . $i . ']', $v[1]);
+                            $vars .= '&' . preg_replace('!\[(.+?)\]!i', '[$1_' . $i . ']', $v[1]);
                         } else {
-                            $sVars = '&' . $v[1];
+                            $vars = '&' . $v[1];
                         }
                     }
                 } else {
-                    $sVars = '&' . $v[1];
+                    $vars = '&' . $v[1];
                 }
 
-                foreach ($aExpression as $v_) {
+                foreach ($expression as $v_) {
                     if (!isset($v['_' . $v_[0]])) {
                         $v['_' . $v_[0]] = null;
                     }
@@ -772,9 +772,9 @@ class Router
                         foreach ($args as $key => $value) {
                             $args[$key] = str_replace('[' . $v_[0] . ']', $v_[1], $args[$key]);
                         }
-                        $sVars = str_replace('[' . $v_[0] . ']', $v_[1], $sVars);
+                        $vars = str_replace('[' . $v_[0] . ']', $v_[1], $vars);
                     } else {
-                        $sVars = $sVars . $this->parseUrl($v_[1], [$v['_' . $v_[0]]])['sVars'];
+                        $vars = $vars . $this->parseUrl($v_[1], [$v['_' . $v_[0]]])['sVars'];
                     }
                 }
                 $this->parseArgs = $args;
@@ -784,24 +784,24 @@ class Router
 
 
         if (isset($this->app->debug)) {
-            $this->app->debug->addHeader(['X-DF-Debug-sVars' => $sVars]);
+            $this->app->debug->addHeader(['X-DF-Debug-sVars' => $vars]);
         }
 
-        return ['v' => $v, 'sVars' => $sVars];
+        return ['v' => $v, 'sVars' => $vars];
     }
 
     /**
      * Prepares the regexp
      *
-     * @param string $sParam
+     * @param string $param
      * @param string $k
      *
      * @return string
      */
-    protected function transformParam($sParam, $k)
+    protected function transformParam($param, $k)
     {
-        if (isset($this->aRoutingParse[$k][$sParam]) and !is_array($this->aRoutingParse[$k][$sParam])) {
-            return $this->aRoutingParse[$k][$sParam];
+        if (isset($this->routeMapParse[$k][$param]) and !is_array($this->routeMapParse[$k][$param])) {
+            return $this->routeMapParse[$k][$param];
         } else {
             return '(.+?)';
         }
@@ -814,19 +814,19 @@ class Router
      */
     public function currentPath()
     {
-        $sRequest = preg_replace('!' . $this->sURI . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
+        $request = preg_replace('!' . $this->uri . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
         if (defined('MOD_REWRITE') and MOD_REWRITE === true) {
-            if (substr($sRequest, -1) != '/') {
-                $sRequest .= '/';
+            if (substr($request, -1) != '/') {
+                $request .= '/';
             }
 
-            $parseUrl = $this->parseUrl($sRequest);
-            $sGets = $parseUrl['sVars'];
+            $parseUrl = $this->parseUrl($request);
+            $gets = $parseUrl['sVars'];
         } else {
-            $sGets = $_SERVER['QUERY_STRING'];
+            $gets = $_SERVER['QUERY_STRING'];
         }
 
-        return $sGets;
+        return $gets;
     }
 
     /**
@@ -878,8 +878,8 @@ class Router
      */
     public function addRoute($newRoute)
     {
-        $this->aRouting['routes'] = array_merge($this->aRouting['routes'], $newRoute);
-        $this->aRoutingParse = array_merge($this->aRoutingParse, $newRoute);
+        $this->routeMap['routes'] = array_merge($this->routeMap['routes'], $newRoute);
+        $this->routeMapParse = array_merge($this->routeMapParse, $newRoute);
     }
 
     /**
