@@ -28,6 +28,7 @@
         "natxet/CssMin": "^3.0"
     },
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Dframe\\": "src"
@@ -48,7 +49,8 @@
         "kriswallsmith/assetic": "^1.4",
         "patchwork/jsqueeze": "^2.0",
         "ptachoire/cssembed": "^1.0",
-        "natxet/CssMin": "^3.0"
+        "natxet/CssMin": "^3.0",
+        "twig/twig": "^2.5"
     },
     "scripts": {
         "test": [
