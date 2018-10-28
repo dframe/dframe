@@ -4,7 +4,9 @@
     "keywords": [
         "framework",
         "dframe",
-        "mvc"
+        "mvc",
+        "hmvc",
+        "php"
     ],
     "homepage": "https://dframeframework.com",
     "type": "library",
