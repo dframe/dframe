@@ -4,8 +4,10 @@ os:
 - linux
 
 php:
+  - 7.0
   - 7.1
   - 7.2
+  - 7.3
 
 # We don't want to run linux commands as super user
 sudo: false
