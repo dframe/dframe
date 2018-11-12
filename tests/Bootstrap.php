@@ -40,14 +40,16 @@ class Bootstrap
      */
     public function __construct()
     {
-        $this->providers['core'] = [
-            'router' => \Dframe\Router::class,
-            //'debug' => \Dframe\Debug::class,
+        $this->providers = [
+            'core' => [
+                'router' => \Dframe\Router::class
+                //'debug' => \Dframe\Debug::class,
+            ]
         ];
 
-        $this->session = new \Dframe\Session('Test'); // Best to set projec
+        $this->session = new \Dframe\Session('Test'); // Best to set project name
         $this->msg = new \Dframe\Messages($this->session);     // Default notify cl
-        $this->token = new \Dframe\Token($this->session);     // Default csrf token
+        $this->token = new \Dframe\Token($this->session);     // Default CSRF token
 
 
         return $this;

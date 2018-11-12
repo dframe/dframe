@@ -12,6 +12,14 @@ use PHPUnit\Framework\TestCase;
  */
 class RouterTest extends TestCase
 {
+    /**
+     * @var Router
+     */
+    protected $router;
+
+    /**
+     *
+     */
     public function setUp()
     {
         $this->router = new Router();
@@ -45,6 +53,9 @@ class RouterTest extends TestCase
         ]);
     }
 
+    /**
+     *
+     */
     public function testRouterIsActive()
     {
         $_SERVER['REQUEST_URI'] = '';
@@ -52,6 +63,9 @@ class RouterTest extends TestCase
         $this->assertSame(false, $this->router->isActive('this-is-not-page-that-you-looking-for'));
     }
 
+    /**
+     *
+     */
     public function testPublicWeb()
     {
         $this->assertSame('http://dframeframework.com/css/example.css', $this->router->publicWeb('css/example.css'));

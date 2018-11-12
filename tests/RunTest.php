@@ -2,6 +2,7 @@
 
 namespace Dframe\Tests;
 
+use Dframe\Controller;
 use PHPUnit\Framework\TestCase;
 
 ini_set('session.use_cookies', 0);
@@ -27,7 +28,7 @@ class RunTest extends TestCase
  *
  * @package Dframe\Tests
  */
-class TestController extends \Dframe\Controller
+class TestController extends Controller
 {
     /**
      * @return string
