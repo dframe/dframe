@@ -1,8 +1,9 @@
 <?php
+
 namespace Dframe\tests;
 
-use PHPUnit\Framework\TestCase;
 use Dframe\Session;
+use PHPUnit\Framework\TestCase;
 
 class SessionTest extends TestCase
 {
@@ -28,7 +29,7 @@ class SessionTest extends TestCase
             'httponly' => false,
         ];
 
-        if(isset($sessionGetCookieParams['samesite'])){
+        if (isset($sessionGetCookieParams['samesite'])) {
             $check['samesite'] = '';
         }
 
