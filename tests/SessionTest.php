@@ -16,13 +16,23 @@ class SessionTest extends TestCase
     public function testConstructor()
     {
         $this->assertInstanceOf(Session::class, new Session());
-        $this->assertEquals([
+
+
+        $sessionGetCookieParams = session_get_cookie_params();
+
+        $check = [
             'lifetime' => 0,
             'path' => '/',
             'domain' => '',
             'secure' => false,
             'httponly' => false,
-        ], session_get_cookie_params());
+        ];
+
+        if(isset($sessionGetCookieParams['samesite'])){
+            $check['samesite'] = '';
+        }
+
+        $this->assertEquals($check, $sessionGetCookieParams);
     }
 
     public function testRegister()
