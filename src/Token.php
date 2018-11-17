@@ -98,7 +98,11 @@ class Token
      */
     public function has($key)
     {
-        return $this->isValid($key);
+        if (isset($this->token[$key]) and $this->getTime($key) >= time()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
