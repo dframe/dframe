@@ -42,7 +42,7 @@ class Core extends Loader
         $arg = $this->router->parseArgs;
 
         $loader = new Loader($this->baseClass);
-        $loadController = $loader->loadController($controller, $namespace); // Loading Controller class
+        $loadController = $loader->loadController($controller, $namespace ?? '\\'); // Loading Controller class
 
         if (isset($loadController->returnController)) {
             $controllerObject = $loadController->returnController;
