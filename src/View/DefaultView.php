@@ -2,7 +2,7 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
@@ -10,23 +10,31 @@
 namespace Dframe\View;
 
 use Dframe\Config;
+use Dframe\View\Exceptions\ViewException;
 
 /**
- * Short Description
+ * Default View.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  * @author Amadeusz Dzięcioł <amadeusz.xd@gmail.com>
  */
-class DefaultView implements \Dframe\View\ViewInterface
+class DefaultView implements ViewInterface
 {
+    /**
+     * @var Config
+     */
+    private $templateConfig;
 
+    /**
+     * DefaultView constructor.
+     */
     public function __construct()
     {
         $this->templateConfig = Config::load('view/default');
     }
 
     /**
-     * Set the var to the template
+     * Set the var to the template.
      *
      * @param string $name
      * @param string $value
@@ -39,12 +47,12 @@ class DefaultView implements \Dframe\View\ViewInterface
     }
 
     /**
-     * Return code
+     * Return code.
      *
      * @param string $name Filename
      * @param string $path Alternative Path
      *
-     * @return void
+     * @return string
      */
     public function fetch($name, $path = null)
     {
@@ -52,17 +60,17 @@ class DefaultView implements \Dframe\View\ViewInterface
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
-        if ($path == null) {
+        if ($path === null) {
             $path = $this->templateConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name . $this->templateConfig->get('fileExtension', '.html.php');
         }
 
         try {
             if (!is_file($path)) {
-                throw new \Exception('Can not open template ' . $name . ' in: ' . $path);
+                throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
             }
             ob_start();
             include $path;
-        } catch (Exception $e) {
+        } catch (ViewException $e) {
             echo $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />
@@ -74,31 +82,30 @@ class DefaultView implements \Dframe\View\ViewInterface
     }
 
     /**
-     * Przekazuje kod do szablonu Smarty
+     * Return code to the Smarty template.
      *
      * @param string $name
      * @param string $path
      *
-     * @return void
+     * @return mixed
      */
     public function renderInclude($name, $path = null)
     {
-
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
         $name = $pathFile[1];
 
-        if ($path == null) {
+        if ($path === null) {
             $path = $this->templateConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name . $this->templateConfig->get('fileExtension', '.html.php');
         }
 
         try {
             if (!is_file($path)) {
-                throw new \Exception('Can not open template ' . $name . ' in: ' . $path);
+                throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
             }
 
             $renderInclude = include $path;
-        } catch (Exception $e) {
+        } catch (ViewException $e) {
             echo $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />

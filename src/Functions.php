@@ -2,11 +2,17 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
+
+/**
+ * @param $path
+ *
+ * @return array
+ */
 function pathFile($path)
 {
     $folder = '';
@@ -22,13 +28,16 @@ function pathFile($path)
         $name = $path[$pathCount];
     }
 
-    return array($folder, $name);
+    return [$folder, $name];
 }
 
 /**
- * Randomowo generowany string
+ * Randomly generated string.
+ *
+ * @param int $length
+ *
+ * @return string
  */
-
 function generateRandomString($length = 10)
 {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -43,18 +52,20 @@ function generateRandomString($length = 10)
 }
 
 /**
- * Zmiana Obiektu wielowymiaroa na tablice array
+ * Changing a multi-variable object into arrays
+ *
+ * @param $obj
+ *
+ * @return array
  */
-
 function object_to_array($obj)
 {
-
     $obj = is_object($obj) ? (array)$obj : $obj;
 
     if (is_array($obj)) {
-        $new = array();
+        $new = [];
         foreach ($obj as $key => $val) {
-            $key2 = str_replace("\0", "", $key);
+            $key2 = str_replace("\0", '', $key);
             $new[$key2] = object_to_array($val);
         }
     } else {
@@ -65,13 +76,18 @@ function object_to_array($obj)
 }
 
 /**
- * Wyszukiwanie ciagu zdania za pozmoca wilcardu
- * ala ma kota -> ala * kota == TRUE
+ * Searching for a sentence using wildcard
+ * ala ma kota -> ala * kota == TRUE.
+ *
+ * @param $source
+ * @param $pattern
+ *
+ * @return false|int
  */
-
 function stringMatchWithWildcard($source, $pattern)
 {
     $pattern = preg_quote($pattern, '/');
     $pattern = str_replace('\*', '.*', $pattern);
+
     return preg_match('/^' . $pattern . '$/i', $source);
 }

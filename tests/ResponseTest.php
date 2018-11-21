@@ -1,9 +1,15 @@
 <?php
-namespace Dframe\tests;
 
-use PHPUnit\Framework\TestCase;
+namespace Dframe\Tests;
+
 use Dframe\Router\Response;
+use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ResponseTest
+ *
+ * @package Dframe\Tests
+ */
 class ResponseTest extends TestCase
 {
     public function testResponseConstruct()
@@ -39,7 +45,7 @@ class ResponseTest extends TestCase
     public function testResponseRedirect()
     {
         $response = Response::redirect();
-        $this->assertSame(array('Location' => 'http://dframeframework.com'), $response->getHeaders());
+        $this->assertSame(['Location' => 'http://dframeframework.com'], $response->getHeaders());
     }
 
     public function testResponseStatus()
@@ -49,5 +55,4 @@ class ResponseTest extends TestCase
         $response->status(403);
         $this->assertSame(403, $response->getStatus());
     }
-
 }

@@ -2,7 +2,7 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
@@ -10,56 +10,70 @@
 namespace Dframe\View;
 
 use Dframe\Config;
+use Dframe\View\Exceptions\ViewException;
 
 /**
- * Short Description
+ * Twig View.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class TwigView implements \Dframe\View\ViewInterface
+class TwigView implements ViewInterface
 {
+    /**
+     * @var \Twig_Environment
+     */
+    public $twig;
 
+    /**
+     * @var array
+     */
+    public $assign;
+
+    /**
+     * TwigView constructor.
+     */
     public function __construct()
     {
         $twigConfig = Config::load('view/twig');
         $loader = new \Twig_Loader_Filesystem($twigConfig->get('setTemplateDir'));
         $twig = new \Twig_Environment(
             $loader,
-            array(
-                'cache' => $twigConfig->get('setCompileDir')
-            )
+            [
+                'cache' => $twigConfig->get('setCompileDir'),
+            ]
         );
         $this->twig = $twig;
     }
 
     /**
-     * Set the var to the template
+     * Set the var to the template.
      *
      * @param string $name
      * @param string $value
      *
-     * @return void
+     * @return mixed
      */
     public function assign($name, $value)
     {
         try {
-            if (isset($this->assigns[$name])) {
-                throw new \Exception('You can\'t assign "' . $name . '" in Twig');
+            if (isset($this->assign[$name])) {
+                throw new ViewException('You can\'t assign "' . $name . '" in Twig');
             }
 
-            $assign = $this->assigns[$name] = $value;
-        } catch (\Exception $e) {
+            $assign = $this->assign[$name] = $value;
+        } catch (ViewException $e) {
             echo $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />
                 Trace: ' . $e->getTraceAsString();
             exit();
         }
+
         return $assign;
     }
 
     /**
-     * Return code
+     * Return code.
      *
      * @param string $name Filename
      * @param string $path Alternative Path
@@ -68,16 +82,16 @@ class TwigView implements \Dframe\View\ViewInterface
      */
     public function fetch($name, $path = null)
     {
-        //return throw new \Exception('This module dont have fetch');
+        //return throw new \Exception('This module don't have fetch');
     }
 
     /**
-     * Przekazuje kod do szablonu Smarty
+     * Transfers the code to the Smarty template.
      *
      * @param string $name
      * @param string $path
      *
-     * @return void
+     * @return mixed
      */
     public function renderInclude($name, $path = null)
     {
@@ -87,13 +101,14 @@ class TwigView implements \Dframe\View\ViewInterface
         $name = $pathFile[1];
 
         $path = $twigConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name . $twigConfig->get('fileExtension', '.twig');
+
         try {
             if (!is_file($path)) {
-                throw new \Exception('Can not open template ' . $name . ' in: ' . $path);
+                throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
             }
 
             $renderInclude = $this->twig->render($name, $this->assign);
-        } catch (\Exception $e) {
+        } catch (ViewException $e) {
             echo $e->getMessage() . '<br />
                         File: ' . $e->getFile() . '<br />
                         Code line: ' . $e->getLine() . '<br />

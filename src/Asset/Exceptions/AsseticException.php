@@ -7,17 +7,17 @@
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
-namespace Dframe;
+namespace Dframe\Asset\Exceptions;
 
 /**
- * BaseException Class.
+ * AsseticException Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class BaseException extends \Exception
+class AsseticException extends \Exception
 {
     /**
-     * BaseException constructor.
+     * AsseticException constructor.
      *
      * @param null            $messages
      * @param int             $code

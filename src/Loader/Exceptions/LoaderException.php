@@ -7,17 +7,17 @@
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
-namespace Dframe;
+namespace Dframe\Loader\Exceptions;
 
 /**
- * BaseException Class.
+ * LoaderException Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class BaseException extends \Exception
+class LoaderException extends \Exception
 {
     /**
-     * BaseException constructor.
+     * LoaderException constructor.
      *
      * @param null            $messages
      * @param int             $code

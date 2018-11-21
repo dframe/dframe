@@ -2,31 +2,41 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
 namespace Dframe\Router;
 
-use Dframe\Config;
 use Dframe\Router;
 
 /**
- * Short Description
+ * Short Description.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
 class Response extends Router
 {
-
+    /**
+     * @var int
+     */
     public $status = 200;
 
-    private $_body = '';
+    /**
+     * @var null|string
+     */
+    protected $body = '';
 
-    private $_headers = array();
+    /**
+     * @var array
+     */
+    protected $headers = [];
 
-    public static $code = array(
+    /**
+     * @var array
+     */
+    public static $code = [
         100 => 'Continue',
         101 => 'Switching Protocols',
         102 => 'Processing',
@@ -81,67 +91,98 @@ class Response extends Router
         506 => 'Variant Also Negotiates',
         507 => 'Insufficient Storage',
         509 => 'Bandwidth Limit Exceeded',
-        510 => 'Not Extended'
-    );
+        510 => 'Not Extended',
+    ];
 
+    /**
+     * Response constructor.
+     *
+     * @param null $body
+     */
     public function __construct($body = null)
     {
         if (isset($body)) {
-            $this->_body = $body;
+            $this->body = $body;
         }
+
         return $this;
     }
 
+    /**
+     * @param null $body
+     *
+     * @return Response
+     */
     public static function create($body = null)
     {
-        return new Response($body);
+        return new self($body);
     }
 
+    /**
+     * @param null $body
+     *
+     * @return Response
+     */
     public static function render($body = null)
     {
-        return new Response($body);
+        return new self($body);
     }
 
+    /**
+     * @param null $body
+     * @param null $status
+     *
+     * @return Response
+     */
     public static function renderJSON($body = null, $status = null)
     {
         $body = json_encode($body);
-        $Response = new Response($body);
+        $Response = new self($body);
 
         if (isset($status)) {
             $Response->status($status);
         }
 
-        $Response->headers(array('Content-Type' => 'application/json'));
+        $Response->headers(['Content-Type' => 'application/json']);
+
         return $Response;
     }
 
+    /**
+     * @param null $body
+     * @param null $status
+     *
+     * @return Response
+     */
     public static function renderJSONP($body = null, $status = null)
     {
-
         $callback = null;
         if (isset($_GET['callback'])) {
             $callback = $_GET['callback'];
         }
 
-        $Response = new Response($callback . '(' . json_encode($body) . ')');
+        $Response = new self($callback . '(' . json_encode($body) . ')');
 
         if (isset($status)) {
             $Response->status($status);
         }
 
-        $Response->headers(array('Content-Type' => 'application/jsonp'));
+        $Response->headers(['Content-Type' => 'application/jsonp']);
+
         return $Response;
     }
 
     /**
-     * Przekierowanie adresu
+     * Address redirection.
      *
-     * @param  string $url CONTROLLER/MODEL?parametry
-     * @return void
+     * @param string $url
+     * @param int    $status
+     * @param array  $headers
+     *
+     * @return Response|object
      */
-    public static function redirect($url = '', $status = 301, $headers = array())
+    public static function redirect($url = '', $status = 301, $headers = [])
     {
-
         $Response = new Response();
         $Response->status($status);
 
@@ -149,57 +190,88 @@ class Response extends Router
             $Response->headers($headers);
         }
 
-        $Response->headers(array(
-            'Location' => (new Router)->makeUrl($url)
-        ));
-
+        $Response->headers([
+            'Location' => (new Router())->makeUrl($url),
+        ]);
 
         return $Response;
     }
 
+    /**
+     * @param $json
+     *
+     * @return $this
+     */
     public function json($json)
     {
-        $this->headers(array('Content-Type' => 'application/json'));
-        $this->_body = json_encode($json);
+        $this->headers(['Content-Type' => 'application/json']);
+        $this->body = json_encode($json);
+
         return $this;
     }
 
+    /**
+     * @param $code
+     *
+     * @return $this
+     */
     public function status($code)
     {
         $this->status = $code;
+
         return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getStatus()
     {
         return $this->status;
     }
 
+    /**
+     * @param bool $headers
+     *
+     * @return $this
+     */
     public function headers($headers = false)
     {
-        $this->_headers = array_unique(array_merge($this->_headers, $headers));
+        $this->headers = array_unique(array_merge($this->headers, $headers));
+
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getHeaders()
     {
-        return $this->_headers;
+        return $this->headers;
     }
 
+    /**
+     * @param null $body
+     *
+     * @return $this
+     */
     public function body($body = null)
     {
-        $this->_body = $body;
+        $this->body = $body;
+
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getBody()
     {
-        return $this->_body;
+        return $this->body;
     }
 
     public function display()
     {
-
         if (!headers_sent()) {
             if (PHP_SAPI !== 'cli') {
                 $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1');
@@ -207,8 +279,8 @@ class Response extends Router
                 $string = sprintf('%s %d %s', $protocol, $status, self::$code[$status]);
 
                 header($string, true, $status); // Default header
-                if (!empty($this->_headers)) {
-                    foreach ($this->_headers as $field => $value) {
+                if (!empty($this->headers)) {
+                    foreach ($this->headers as $field => $value) {
                         if (is_array($value)) {
                             foreach ($value as $v) {
                                 header("$field" . ': ' . $v, false);
@@ -226,8 +298,11 @@ class Response extends Router
         }
     }
 
+    /**
+     * @return null|string
+     */
     public function __toString()
     {
-        return $this->_body;
+        return $this->body;
     }
 }

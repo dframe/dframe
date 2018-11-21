@@ -2,56 +2,61 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
 namespace Dframe;
 
-use Dframe\BaseException;
-use Dframe\Router;
 use Dframe\Router\Response;
+use Dframe\View\Exceptions\ViewException;
+use Dframe\View\ViewInterface;
 
 /**
- * View Class
+ * View Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-
-abstract class View extends Loader implements \Dframe\View\ViewInterface
+abstract class View extends Loader implements ViewInterface
 {
+    /**
+     * Path Templates
+     *
+     * @var string
+     */
+    public $dir;
 
     /**
-     * Defines template variables. 
-     * 
-     * @param string $name 
+     * Defines template variables.
+     *
+     * @param string $name
      * @param mixed  $value
-     * 
-     * @return void
+     *
+     * @return mixed
      */
     public function assign($name, $value)
     {
         if (!isset($this->view)) {
-            throw new BaseException('Please Define view engine in app/View.php', 500);
+            throw new ViewException('Please Define view engine in app/View.php', 500);
         }
+
         return $this->view->assign($name, $value);
     }
 
     /**
      * Generates the output of the templates with parsing all the template variables.
-     * 
-     * @param string $data 
-     * @param string $type
-     * 
-     * @return mix
+     *
+     * @param string|array $data
+     * @param string       $type
+     *
+     * @return mixed
      */
     public function render($data, $type = null)
     {
-
-        if (empty($type) or $type == 'html') {
-            return $this->view->renderInclude($data);
-        } elseif ($type == 'jsonp') {
+        if (empty($type) or $type === 'html') {
+            return Response::Create($this->renderInclude($data));
+        } elseif ($type === 'jsonp') {
             return $this->renderJSONP($data);
         } else {
             return $this->renderJSON($data);
@@ -59,52 +64,30 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
     }
 
     /**
-     * Fetch the output of the templates with parsing all the template variables.
+     * File including
      *
      * @param string $name
-     * @param string $path
+     * @param null   $path
      *
-     * @return void
-     */
-    public function fetch($name, $path = null)
-    {
-        if (!isset($this->view)) {
-            throw new BaseException('Please Define view engine in app/View.php', 500);
-        }
-
-        return $this->view->fetch($name, $path);
-    }
-
-    /**
-     * Include pliku
+     * @return mixed
      */
     public function renderInclude($name, $path = null)
     {
         if (!isset($this->view)) {
-            throw new BaseException('Please Define view engine in app/View.php', 500);
+            throw new ViewException('Please Define view engine in app/View.php', 500);
         }
-        return $this->view->renderInclude($name, $path);
-    }
 
-    /**
-     * Display JSON.
-     *
-     * @param array $data
-     * @param int   $status
-     *
-     * @return Json
-     */
-    public function renderJSON($data, $status = 200)
-    {
-        exit(Response::Create(json_encode($data))->status($status)->headers(array('Content-Type' => 'application/json'))->display());
+        if (!is_null($this->dir)) {
+            $this->view->setTemplateDir($this->dir);
+        }
+
+        return $this->view->renderInclude($name, $path);
     }
 
     /**
      * Display JSONP.
      *
      * @param array $data
-     *
-     * @return Json with Calback
      */
     public function renderJSONP($data)
     {
@@ -113,6 +96,38 @@ abstract class View extends Loader implements \Dframe\View\ViewInterface
             $callback = $_GET['callback'];
         }
 
-        exit(Response::Create($callback . '(' . json_encode($data) . ')')->headers(array('Content-Type' => 'application/jsonp'))->display());
+        exit(Response::Create($callback . '(' . json_encode($data) . ')')->headers(['Content-Type' => 'application/jsonp'])->display());
+    }
+
+    /**
+     * Display JSON.
+     *
+     * @param array $data
+     * @param int   $status
+     */
+    public function renderJSON($data, $status = 200)
+    {
+        exit(Response::Create(json_encode($data))->status($status)->headers(['Content-Type' => 'application/json'])->display());
+    }
+
+    /**
+     * Fetch the output of the templates with parsing all the template variables.
+     *
+     * @param string $name
+     * @param string $path
+     *
+     * @return mixed
+     */
+    public function fetch($name, $path = null)
+    {
+        if (!isset($this->view)) {
+            throw new ViewException('Please Define view engine in app/View.php', 500);
+        }
+
+        if (!is_null($this->dir)) {
+            $this->view->setTemplateDir($this->dir);
+        }
+
+        return $this->view->fetch($name, $path);
     }
 }

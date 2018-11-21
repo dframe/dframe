@@ -64,7 +64,7 @@ public function myProcetedAndPostMethod(){
     }
 
     if (!isset($_POST['someValue']) AND !empty($_POST['someValue'])) {
-        return Response::renderJSON(array('return' => '1', 'response' => 'empty someVlue Post'));
+        return Response::renderJSON(['code' => '400', 'response' => 'empty someVlue Post'])->status(400);
     }
 
     $firstModel = $this->loadModel('First');
@@ -105,6 +105,7 @@ class IndexView extends \View\View
         if(isset($this->router)){
             $this->assign('router', $this->router);
         }
+    
 ```
 If you use [Dframe\Message](../extensions/Messages.md) add
 ```php

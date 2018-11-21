@@ -2,7 +2,7 @@
 
 /**
  * DframeFramework
- * Copyright (c) Sławomir Kaleta
+ * Copyright (c) Sławomir Kaleta.
  *
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
@@ -10,48 +10,80 @@
 namespace Dframe;
 
 /**
- * Session Class
+ * Session Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-
-class Session
+class Session implements \Psr\SimpleCache\CacheInterface
 {
+    /**
+     * @var string
+     */
+    protected $name;
 
-    function __construct()
+    /**
+     * @var string
+     */
+    protected $ipAddress;
+
+    /**
+     * @var string
+     */
+    protected $userAgent;
+
+    /**
+     * Session constructor.
+     *
+     * @param array $app
+     */
+    public function __construct($app = [])
     {
-        $name = '_sessionName';
-        $options = [];
-
-        $this->name = $name;
+        $options = $this->app->config['session'] ?? [];
+        $this->name = APP_NAME ?? '_sessionName';
 
         if (!isset($_SESSION)) {
-            $cookie = array(
-                'lifetime' => isset($options['cookie']['lifetime']) ? $options['cookie']['lifetime'] : 0,
-                'path' => isset($options['cookie']['path']) ? $options['cookie']['path'] : '/',
-                'domain' => isset($options['cookie']['domain']) ? $options['cookie']['domain'] : null,
-                'secure' => isset($options['cookie']['secure']) ? $options['cookie']['secure'] : isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : null,
-                'httponly' => isset($options['cookie']['httponly']) ? $options['cookie']['httponly'] : false,
-            );
+            $cookie = [
+                'lifetime' => $options['cookie']['lifetime'] ?? 0,
+                'path' => $options['cookie']['path'] ?? '/',
+                'domain' => $options['cookie']['domain'] ?? null,
+                'secure' => $options['cookie']['secure'] ?? ($_SERVER['HTTPS'] ?? null),
+                'httpOnly' => $options['cookie']['httpOnly'] ?? false,
+            ];
 
-            session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly']);
+            session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httpOnly']);
             session_name($this->name);
             session_start();
         }
 
         if (php_sapi_name() != 'cli') {
-            $this->ipAddress = isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
-            $this->userAgent = isset($_SERVER["HTTP_USER_AGENT"]) ? $_SERVER["HTTP_USER_AGENT"] : 'unknown';
+            $this->ipAddress = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'];
+            $this->userAgent = $_SERVER["HTTP_USER_AGENT"] ?? 'unknown';
 
             if ($this->isValidFingerprint() != true) {
                 // Refresh Session
-                $_SESSION = array();
-                $_SESSION['_fingerprint'] = $this->_getFingerprint();
+                $_SESSION = [];
+                $_SESSION['_fingerprint'] = $this->getFingerprint();
             }
         }
     }
 
-    private function _getFingerprint()
+    /**
+     * @return bool
+     */
+    public function isValidFingerprint()
+    {
+        $_fingerprint = $this->getFingerprint();
+        if (isset($_SESSION['_fingerprint']) and $_SESSION['_fingerprint'] === $_fingerprint) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return string
+     */
+    private function getFingerprint()
     {
         return md5($this->ipAddress . $this->userAgent . $this->name);
     }
@@ -59,9 +91,8 @@ class Session
     /**
      * Register the session.
      *
-     * @param integer $time.
+     * @param int $time .
      */
-
     public function register($time = 60)
     {
         $_SESSION['sessionId'] = session_id();
@@ -73,23 +104,9 @@ class Session
      *
      * @return bool
      */
-
     public function authLogin()
     {
         if (!empty($_SESSION['sessionId'])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public function keyExists($key, $in = false)
-    {
-        if (isset($in)) {
-            $in = $_SESSION;
-        }
-
-        if (array_key_exists($key, $in) == true) {
             return true;
         }
 
@@ -97,52 +114,127 @@ class Session
     }
 
     /**
-     * Set session key
+     * @param       $key
+     * @param array $in
+     *
+     * @return bool
+     */
+    public function keyExists($key, $in = [])
+    {
+        if (empty($in)) {
+            $in = $_SESSION;
+        }
+
+        if (array_key_exists($key, $in) === true) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Set session key.
      *
      * @param string $key
-     * @param string $value
+     * @param mixed  $value
+     * @param null   $tll
+     *
+     * @return bool|void
      */
-
-    public function set($key, $value)
+    public function set($key, $value, $tll = null)
     {
         $_SESSION[$key] = $value;
     }
 
     /**
-     * get session key
+     * get session key.
      *
      * @param string $key
      * @param string $or
      *
      * @return string|null
      */
-
     public function get($key, $or = null)
     {
         return isset($_SESSION[$key]) ? $_SESSION[$key] : $or;
     }
 
+    /**
+     * @param $key
+     */
     public function remove($key)
+    {
+        $this->delete($key);
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return bool|void
+     */
+    public function delete($key)
     {
         if (isset($_SESSION[$key])) {
             unset($_SESSION[$key]);
         }
     }
 
+    /**
+     *
+     */
     public function end()
     {
-        session_destroy();
-        $_SESSION = array();
+        $this->clear();
     }
 
-    public function isValidFingerprint()
+    /**
+     * @return bool|void
+     */
+    public function clear()
     {
+        session_destroy();
+        $_SESSION = [];
+    }
 
-        $_fingerprint = $this->_getFingerprint();
-        if (isset($_SESSION['_fingerprint']) and $_SESSION['_fingerprint'] == $_fingerprint) {
-            return true;
-        }
+    /**
+     * @param iterable $values
+     * @param null     $ttl
+     *
+     * @return bool|void
+     */
+    public function setMultiple($values, $ttl = null)
+    {
+        //todo
+    }
 
-        return false;
+    /**
+     * @param iterable $keys
+     * @param null     $default
+     *
+     * @return iterable|void
+     */
+    public function getMultiple($keys, $default = null)
+    {
+        //todo
+    }
+
+    /**
+     * @param iterable $keys
+     *
+     * @return bool|void
+     */
+    public function deleteMultiple($keys)
+    {
+        //todo
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return bool|void
+     */
+    public function has($key)
+    {
+        //todo
     }
 }

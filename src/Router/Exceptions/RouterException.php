@@ -7,17 +7,17 @@
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
-namespace Dframe;
+namespace Dframe\Router\Exceptions;
 
 /**
- * BaseException Class.
+ * RouterException Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class BaseException extends \Exception
+class RouterException extends \Exception
 {
     /**
-     * BaseException constructor.
+     * RouterException constructor.
      *
      * @param null            $messages
      * @param int             $code

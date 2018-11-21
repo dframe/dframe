@@ -1,46 +1,61 @@
 <?php
-namespace Dframe\tests;
 
-use PHPUnit\Framework\TestCase;
+namespace Dframe\Tests;
+
 use Dframe\Router;
+use PHPUnit\Framework\TestCase;
 
+/**
+ * Class RouterTest
+ *
+ * @package Dframe\Tests
+ */
 class RouterTest extends TestCase
 {
+    /**
+     * @var Router
+     */
+    protected $router;
 
+    /**
+     *
+     */
     public function setUp()
     {
-
         $this->router = new Router();
 
-        $this->router->addRoute(array(
-            'page/:page' => array(
+        $this->router->addRoute([
+            'page/:page' => [
                 'page/[page]/',
-                'task=page&action=[page]'
-            )
-        ));
+                'task=page&action=[page]',
+            ],
+        ]);
 
-        $this->router->addRoute(array(
-            'error/:code' => array(
+        $this->router->addRoute([
+            'error/:code' => [
                 'error/[code]/',
                 'task=page&action=error&type=[code]',
-                'args' => array(
-                    'code' => '[code]'
-                ),
-            )
-        ));
-        $this->router->addRoute(array(
-            'default' => array(
+                'args' => [
+                    'code' => '[code]',
+                ],
+            ],
+        ]);
+        $this->router->addRoute([
+            'default' => [
                 '[task]/[action]/[params]',
                 'task=[task]&action=[action]',
                 'params' => '(.*)',
-                '_params' => array(
+                '_params' => [
                     '[name]/[value]/',
-                    '[name]=[value]'
-                )
-            )
-        ));
+                    '[name]=[value]',
+                ],
+            ],
+        ]);
     }
 
+    /**
+     *
+     */
     public function testRouterIsActive()
     {
         $_SERVER['REQUEST_URI'] = '';
@@ -48,6 +63,9 @@ class RouterTest extends TestCase
         $this->assertSame(false, $this->router->isActive('this-is-not-page-that-you-looking-for'));
     }
 
+    /**
+     *
+     */
     public function testPublicWeb()
     {
         $this->assertSame('http://dframeframework.com/css/example.css', $this->router->publicWeb('css/example.css'));
@@ -62,5 +80,4 @@ class RouterTest extends TestCase
     //     $this->assertSame('https://dframeframework.com/page/index', $this->router->setHttps(true)->makeUrl('page/:page?page=index'));
     //     $this->assertSame('http://dframeframework.com/page/index', $this->router->makeUrl('page/:page?page=index'));
     // }
-
 }

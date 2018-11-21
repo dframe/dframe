@@ -7,17 +7,17 @@
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
-namespace Dframe;
+namespace Dframe\View\Exceptions;
 
 /**
- * BaseException Class.
+ * ViewException Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class BaseException extends \Exception
+class ViewException extends \Exception
 {
     /**
-     * BaseException constructor.
+     * ViewException constructor.
      *
      * @param null            $messages
      * @param int             $code
