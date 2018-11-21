@@ -312,7 +312,7 @@ class Loader
      *
      * @return mixed
      */
-    public function loadController($controller, $namespace == null)
+    public function loadController($controller, $namespace = null)
     {
         try {
             $subController = null;
@@ -338,7 +338,7 @@ class Loader
 
             $controller = str_replace(DIRECTORY_SEPARATOR, $this->namespaceSeparator, $controller);
 
-            if (!empty($namespace) && $namespace = '\\') {
+            if (!empty($namespace) && $namespace == '\\') {
                 $load = $controller;
             } elseif (!empty($namespace)) {
                 $class = '\\' . $namespace . '\\Controller\\' . $subController . $controller;
