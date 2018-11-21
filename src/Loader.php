@@ -312,7 +312,7 @@ class Loader
      *
      * @return mixed
      */
-    public function loadController($controller, $namespace = null)
+    public function loadController($controller, $namespace == null)
     {
         try {
             $subController = null;
