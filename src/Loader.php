@@ -25,19 +25,9 @@ class Loader
     public $router;
 
     /**
-     * @var
-     */
-    public $config;
-
-    /**
      * @var \Bootstrap|null
      */
     public $baseClass;
-
-    /**
-     * @var object
-     */
-    public $returnController;
 
     /**
      * @var string
@@ -188,8 +178,9 @@ class Loader
                 $ob->init();
             }
         } catch (LoaderException $e) {
-            $msg = null;
+
             if (ini_get('display_errors') === "on") {
+                $msg = null;
                 $msg .= '<pre>';
                 $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
 
@@ -204,17 +195,15 @@ class Loader
                 $msg .= 'Trace: <br>' . $e->getTraceAsString() . '<br>';
                 $msg .= '</pre>';
 
-                exit($msg);
+                return Response::create($msg)->display();
             }
 
-            $routerConfig = Config::load('router');
-            $routes = $routerConfig->get('routes');
-
+            $routes = Config::load('router')->get('routes');
             if (!empty($routes['error/:code'])) {
                 return Response::redirect('error/:code?code=400', 400)->display();
             }
 
-            return 'loadObject Error';
+            return Response::create()->status(500)->display();
         }
 
         return $ob;
@@ -352,10 +341,11 @@ class Loader
                 $this->debug->addHeader(['X-DF-Debug-Controller' => $load]);
             }
 
-            $this->returnController = new $load($this->baseClass);
-        } catch (LoaderException $e) {
-            $msg = null;
+            $controller = new $load($this->baseClass);
+        } catch (\Exception $e) {
+
             if (ini_get('display_errors') === 'on') {
+                $msg = null;
                 $msg .= '<pre>';
                 $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
 
@@ -370,20 +360,18 @@ class Loader
                 $msg .= 'Trace: <br>' . $e->getTraceAsString() . '<br>';
                 $msg .= '</pre>';
 
-                exit($msg);
+                return Response::create($msg)->display();
             }
 
-            $routerConfig = Config::load('router');
-            $routes = $routerConfig->get('routes');
-
+            $routes = Config::load('router')->get('routes');
             if (!empty($routes['error/:code'])) {
                 return Response::redirect('error/:code?code=400', 400)->display();
             }
 
-            return 'loadController Error';
+            return Response::create()->status(500)->display();
         }
 
-        return $this;
+        return $controller;
     }
 
     //end isCamelCaps()
