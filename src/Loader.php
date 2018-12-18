@@ -178,7 +178,6 @@ class Loader
                 $ob->init();
             }
         } catch (LoaderException $e) {
-
             if (ini_get('display_errors') === "on") {
                 $msg = null;
                 $msg .= '<pre>';
@@ -343,7 +342,6 @@ class Loader
 
             $controller = new $load($this->baseClass);
         } catch (\Exception $e) {
-
             if (ini_get('display_errors') === 'on') {
                 $msg = null;
                 $msg .= '<pre>';
