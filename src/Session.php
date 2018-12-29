@@ -231,10 +231,10 @@ class Session implements \Psr\SimpleCache\CacheInterface
     /**
      * @param string $key
      *
-     * @return bool|void
+     * @return bool
      */
     public function has($key)
     {
-        //todo
+        return $this->keyExists($key);
     }
 }
