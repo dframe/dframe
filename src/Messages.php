@@ -48,14 +48,14 @@ class Messages
     {
         $this->driver = $driver;
         if (!($this->driver instanceof \Psr\SimpleCache\CacheInterface) === true) {
-            throw new \Exception("This class Require instance Of Dframe\Session", 1);
+            throw new \Exception("This class Require instance Of Psr\SimpleCache\CacheInterface", 1);
         }
 
         // Generate a unique ID for this user and session
         $this->msgId = md5(uniqid());
 
-        $keyExists = $this->driver->keyExists('flash_messages');
-        if ($keyExists === false) {
+        $has = $this->driver->has('flash_messages');
+        if ($has === false) {
             $this->driver->set('flash_messages', []);
         }
     }
