@@ -37,7 +37,7 @@ class Assetic extends Router
     {
         if (!is_dir($path)) {
             if (!mkdir($path, 0777, true)) {
-                throw new AsseticException('Unable to create' . $path,403);
+                throw new AsseticException('Unable to create' . $path, 403);
             }
         }
     }
@@ -75,7 +75,7 @@ class Assetic extends Router
             $pathInfo = pathinfo($dstPath);
             if (!file_exists($pathInfo['dirname'])) {
                 if (!mkdir($pathInfo['dirname'], 0777, true)) {
-                    throw new AsseticException('Unable to create' . $path,403);
+                    throw new AsseticException('Unable to create' . $path, 403);
                 }
             }
 
@@ -166,7 +166,7 @@ class Assetic extends Router
                 $subPathInfo = pathinfo($pathInfo['dirname'] . '/' . $url);
                 if (!file_exists($subPathInfo['dirname'])) {
                     if (!mkdir($subPathInfo['dirname'], 0777, true)) {
-                        throw new AsseticException('Unable to create' . $path,403);
+                        throw new AsseticException('Unable to create' . $path, 403);
                     }
                 }
 
