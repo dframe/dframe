@@ -68,27 +68,37 @@ class Token
         $this->driver->set('timeToken', $this->time);
     }
 
-    /**
-     * @param      $keys
-     * @param null $default
-     */
     public function getMultiple($keys, $default = null)
     {
-    }
+        $cache = [];
+        foreach ($keys as $key) {
+            $cache[$key] = $this->get($key, $default);
+        }
 
-    /**
-     * @param      $values
-     * @param null $ttl
-     */
-    public function setMultiple($values, $ttl = null)
+        return $cache;
+    }
+	/**
+	/*Format like: $arrays = [
+            ['key' => 'name','value' => 'SomeName'],
+			.....*/
+			
+	*/
+    public function setMultiple($caches, $ttl = null)
     {
+        foreach ($caches as $value) {
+            $this->set($value['key'], $value['value'], $ttl);
+        }
+
+        return $this;
     }
 
-    /**
-     * @param string $keys
-     */
     public function deleteMultiple($keys)
     {
+		foreach ($keys as $key) {
+			$this->delete($key);
+		}
+		
+		return $this;
     }
 
     /**
