@@ -16,7 +16,7 @@ use Psr\SimpleCache\CacheInterface;
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class Token
+class Token implements CacheInterface
 {
     /**
      * @var CacheInterface
@@ -56,8 +56,9 @@ class Token
         }
     }
 
+
     /**
-     *
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function clear()
     {
@@ -69,32 +70,45 @@ class Token
     }
 
     /**
-     * @param      $keys
-     * @param null $default
+     * @param iterable $keys
+     * @param null     $default
+     *
+     * @return iterable|void
      */
     public function getMultiple($keys, $default = null)
     {
+        $cache = [];
+        foreach ($keys as $key) {
+            $cache[$key] = $this->get($key, $default);
+        }
+
+        return $cache;
     }
 
     /**
-     * @param      $values
-     * @param null $ttl
+     * {@inheritdoc}
      */
     public function setMultiple($values, $ttl = null)
     {
+        foreach ($values as $value) {
+            $this->set($value['key'], $value['value'], $ttl);
+        }
     }
 
     /**
-     * @param string $keys
+     * {@inheritdoc}
      */
     public function deleteMultiple($keys)
     {
+        foreach ($keys as $key) {
+            $this->delete($key);
+        }
+
+        return $this;
     }
 
     /**
-     * @param string $key
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function has($key)
     {
