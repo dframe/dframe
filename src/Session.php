@@ -199,7 +199,6 @@ class Session implements CacheInterface
         foreach ($values as $value) {
             $this->set($value['key'], $value['value'], $ttl);
         }
-
     }
 
     /**
