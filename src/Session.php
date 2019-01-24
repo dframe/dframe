@@ -9,12 +9,14 @@
 
 namespace Dframe;
 
+use Psr\SimpleCache\CacheInterface;
+
 /**
  * Session Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class Session implements \Psr\SimpleCache\CacheInterface
+class Session implements CacheInterface
 {
     /**
      * @var string
@@ -50,7 +52,13 @@ class Session implements \Psr\SimpleCache\CacheInterface
                 'httpOnly' => $options['cookie']['httpOnly'] ?? false,
             ];
 
-            session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httpOnly']);
+            session_set_cookie_params(
+                $cookie['lifetime'],
+                $cookie['path'],
+                $cookie['domain'],
+                $cookie['secure'],
+                $cookie['httpOnly']
+            );
             session_name($this->name);
             session_start();
         }
@@ -133,13 +141,7 @@ class Session implements \Psr\SimpleCache\CacheInterface
     }
 
     /**
-     * Set session key.
-     *
-     * @param string $key
-     * @param mixed  $value
-     * @param null   $tll
-     *
-     * @return bool|void
+     * {@inheritdoc}
      */
     public function set($key, $value, $tll = null)
     {
@@ -147,12 +149,7 @@ class Session implements \Psr\SimpleCache\CacheInterface
     }
 
     /**
-     * get session key.
-     *
-     * @param string $key
-     * @param string $or
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
     public function get($key, $or = null)
     {
@@ -168,9 +165,7 @@ class Session implements \Psr\SimpleCache\CacheInterface
     }
 
     /**
-     * @param string $key
-     *
-     * @return bool|void
+     * {@inheritdoc}
      */
     public function delete($key)
     {
@@ -188,7 +183,7 @@ class Session implements \Psr\SimpleCache\CacheInterface
     }
 
     /**
-     * @return bool|void
+     * {@inheritdoc}
      */
     public function clear()
     {
@@ -197,41 +192,43 @@ class Session implements \Psr\SimpleCache\CacheInterface
     }
 
     /**
-     * @param iterable $values
-     * @param null     $ttl
-     *
-     * @return bool|void
+     * {@inheritdoc}
      */
     public function setMultiple($values, $ttl = null)
     {
-        //todo
+        foreach ($values as $value) {
+            $this->set($value['key'], $value['value'], $ttl);
+        }
+
     }
 
     /**
-     * @param iterable $keys
-     * @param null     $default
-     *
-     * @return iterable|void
+     * {@inheritdoc}
      */
     public function getMultiple($keys, $default = null)
     {
-        //todo
+        $cache = [];
+        foreach ($keys as $key) {
+            $cache[$key] = $this->get($key, $default);
+        }
+
+        return $cache;
     }
 
     /**
-     * @param iterable $keys
-     *
-     * @return bool|void
+     * {@inheritdoc}
      */
     public function deleteMultiple($keys)
     {
-        //todo
+        foreach ($keys as $key) {
+            $this->delete($key);
+        }
+
+        return true;
     }
 
     /**
-     * @param string $key
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function has($key)
     {

@@ -16,7 +16,7 @@ use Psr\SimpleCache\CacheInterface;
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class Token
+class Token implements CacheInterface
 {
     /**
      * @var CacheInterface
@@ -56,8 +56,9 @@ class Token
         }
     }
 
+
     /**
-     *
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function clear()
     {
@@ -68,6 +69,12 @@ class Token
         $this->driver->set('timeToken', $this->time);
     }
 
+    /**
+     * @param iterable $keys
+     * @param null     $default
+     *
+     * @return iterable|void
+     */
     public function getMultiple($keys, $default = null)
     {
         $cache = [];
@@ -77,34 +84,31 @@ class Token
 
         return $cache;
     }
-	/**
-	/*Format like: $arrays = [
-            ['key' => 'name','value' => 'SomeName'],
-			.....*/
-			
-	*/
-    public function setMultiple($caches, $ttl = null)
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setMultiple($values, $ttl = null)
     {
-        foreach ($caches as $value) {
+        foreach ($values as $value) {
             $this->set($value['key'], $value['value'], $ttl);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteMultiple($keys)
+    {
+        foreach ($keys as $key) {
+            $this->delete($key);
         }
 
         return $this;
     }
 
-    public function deleteMultiple($keys)
-    {
-		foreach ($keys as $key) {
-			$this->delete($key);
-		}
-		
-		return $this;
-    }
-
     /**
-     * @param string $key
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function has($key)
     {
