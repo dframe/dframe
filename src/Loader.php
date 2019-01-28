@@ -42,7 +42,7 @@ class Loader
     /**
      * Loader constructor.
      *
-     * @param null $bootstrap
+     * @param null|object|\Bootstrap $bootstrap
      *
      * @throws LoaderException
      */
