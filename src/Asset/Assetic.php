@@ -141,7 +141,7 @@ class Assetic extends Router
             $args = [];
             //$args[] = new Yui\CssCompressorFilter('C:\yuicompressor-2.4.7\build\yuicompressor-2.4.7.jar', 'java'),
 
-            if ($compress == true) {
+            if ($compress === true) {
                 if ($this->routeMap['assets']['minifyCssEnabled'] == true) {
                     $args[] = new CssMinFilter();
                 }
