@@ -38,7 +38,7 @@ class Router
     public $parseArgs = [];
 
     /**
-     * @var string
+     * @var Config
      */
     public $routerConfig;
 
@@ -330,7 +330,8 @@ class Router
                     if (strlen($a['routePath']) === strlen($b['routePath'])) {
                         return 0;
                     }
-                    return strcmp($b['routePath'], $a['routePath']) ?: strlen($b['routePath']) - strlen($a['routePath']);
+                    return strcmp($b['routePath'],
+                        $a['routePath']) ?: strlen($b['routePath']) - strlen($a['routePath']);
                 }
             );
 
@@ -353,7 +354,8 @@ class Router
                 $routesFileContent = rtrim($routesFileContent, ',' . "\r\n");
                 $routesFileContent .= "\r\n" . "];";
                 file_put_contents($this->cacheDir . $this->routesFile, $routesFileContent);
-                $usedControllers = (count($controllerFiles) > 0) ? '$this->usedControllers = [\'' . implode('\',\'', $controllerFiles) . '\'];' : '';
+                $usedControllers = (count($controllerFiles) > 0) ? '$this->usedControllers = [\'' . implode('\',\'',
+                        $controllerFiles) . '\'];' : '';
                 file_put_contents($this->cacheDir . $this->controllersFile, $controllersFileContent . $usedControllers);
             }
         }
@@ -392,7 +394,8 @@ class Router
         //Windows
         $appDir = str_replace('web/../app/', '', APP_DIR);
         //All
-        $appDir = str_replace('web' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . '', '', APP_DIR);
+        $appDir = str_replace('web' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . '',
+            '', APP_DIR);
 
         $task = str_replace($appDir . 'app' . DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR . '', '', $file);
         $task = rtrim($task, '.php');
@@ -418,7 +421,8 @@ class Router
             }
             $reflector = new \ReflectionClass($className);
             $prefix = '';
-            if (preg_match('/@RoutePrefix\(["\'](((?!(["\'])).)*)["\']\)/', $reflector->getDocComment(), $matches) === 1) {
+            if (preg_match('/@RoutePrefix\(["\'](((?!(["\'])).)*)["\']\)/', $reflector->getDocComment(),
+                    $matches) === 1) {
                 $prefix = $matches[1];
             }
             $methods = $reflector->getMethods(\ReflectionMethod::IS_PUBLIC);
@@ -546,7 +550,9 @@ class Router
 
                 if (isset($params)) {
                     if (isset($this->routeMap['routes'][$findKey]['_params'])) {
-                        $expressionUrl = str_replace('[params]', $this->parseParams($this->routeMap['routes'][$findKey]['_params'][0], $params), $expressionUrl);
+                        $expressionUrl = str_replace('[params]',
+                            $this->parseParams($this->routeMap['routes'][$findKey]['_params'][0], $params),
+                            $expressionUrl);
                     } elseif (!empty($params)) {
                         $expressionUrl = $expressionUrl . '?' . http_build_query($params);
                     }
@@ -556,7 +562,9 @@ class Router
                 $expressionUrl = str_replace('[task]', $task, $expressionUrl);
                 $expressionUrl = str_replace('[action]', $action, $expressionUrl);
                 if (isset($params)) {
-                    $expressionUrl = str_replace('[params]', $this->parseParams($this->routeMap['routes']['default']['_params'][0], $params), $expressionUrl);
+                    $expressionUrl = str_replace('[params]',
+                        $this->parseParams($this->routeMap['routes']['default']['_params'][0], $params),
+                        $expressionUrl);
                 }
             }
         } else {
