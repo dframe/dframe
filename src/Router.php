@@ -84,9 +84,9 @@ class Router
     protected $uri;
 
     /**
-     * @var bool
+     * @var string|null
      */
-    protected $subdomain = false;
+    protected $subdomain = null;
 
     /**
      * @var string
