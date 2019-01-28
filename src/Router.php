@@ -494,11 +494,11 @@ class Router
     /**
      * Check current active page
      *
-     * @param string|array $url
+     * @param string $url
      *
      * @return bool
      */
-    public function isActive($url)
+    public function isActive(string $url)
     {
         if ($this->makeUrl($url, true) === str_replace($this->uri, '', $_SERVER['REQUEST_URI'])) {
             return true;
