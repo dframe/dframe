@@ -136,7 +136,7 @@ class Response extends Router
      */
     public static function renderJSON($body = null, $status = null)
     {
-        $body = json_encode($body);
+        $body = json_encode($body, JSON_NUMERIC_CHECK);
         $Response = new self($body);
 
         if (isset($status)) {
