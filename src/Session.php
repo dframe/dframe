@@ -104,7 +104,7 @@ class Session implements CacheInterface
     public function register($time = 60)
     {
         $_SESSION['sessionId'] = session_id();
-        $_SESSION['sessionTime'] = intval($time);
+        $_SESSION['sessionTime'] = (int) $time;
     }
 
     /**
