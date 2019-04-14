@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class SessionTest extends TestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         if (empty($_SESSION)) {
             $_SESSION = [];
