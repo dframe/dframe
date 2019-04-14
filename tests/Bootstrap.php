@@ -4,6 +4,11 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 define('APP_NAME', 'Dframe');
 
+use Dframe\Router;
+use Dframe\Session;
+use Dframe\Messages;
+use Dframe\Token;
+
 /**
  * Class Bootstrap
  */
@@ -42,15 +47,14 @@ class Bootstrap
     {
         $this->providers = [
             'core' => [
-                'router' => \Dframe\Router::class
+                'router' => Router::class
                 //'debug' => \Dframe\Debug::class,
             ]
         ];
 
-        $this->session = new \Dframe\Session('Test'); // Best to set project name
-        $this->msg = new \Dframe\Messages($this->session);     // Default notify cl
-        $this->token = new \Dframe\Token($this->session);     // Default CSRF token
-
+        $this->session = new Session('Test'); // Best to set project name
+        $this->msg = new Messages($this->session);     // Default notify cl
+        $this->token = new Token($this->session);     // Default CSRF token
 
         return $this;
     }
