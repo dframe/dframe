@@ -94,7 +94,8 @@ class SmartyView implements ViewInterface
         $name = $pathFile[1];
 
         if ($path === null) {
-            $path = $this->smarty->getTemplateDir(0) . DIRECTORY_SEPARATOR . $folder . $name . $this->smartyConfig->get('fileExtension', '.html.php');
+            $path = $this->smarty->getTemplateDir(0) . DIRECTORY_SEPARATOR . $folder . $name .
+                $this->smartyConfig->get('fileExtension', '.html.php');
         }
 
         try {
@@ -129,7 +130,8 @@ class SmartyView implements ViewInterface
         $name = $pathFile[1];
 
         if ($path === null) {
-            $path = $this->smarty->getTemplateDir(0) . DIRECTORY_SEPARATOR . $folder . $name . $this->smartyConfig->get('fileExtension', '.html.php');
+            $path = $this->smarty->getTemplateDir(0) . DIRECTORY_SEPARATOR . $folder . $name .
+                $this->smartyConfig->get('fileExtension', '.html.php');
         }
 
         try {

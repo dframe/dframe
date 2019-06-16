@@ -14,7 +14,6 @@ namespace Dframe\Modules;
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-
 class ManagerModule
 {
     public $app;
@@ -32,20 +31,22 @@ class ManagerModule
     /**
      * Load router.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return void
      */
     protected function loadRoutes($path)
     {
-        $this->app->config['router']['routes'] = array_merge($this->app->config['router']['routes'] ?? [], (require $path)['routes']);
+        $this->app->config['router']['routes'] = array_merge(
+            $this->app->config['router']['routes'] ?? [],
+            (require $path)['routes']);
     }
 
 
     /**
      * Load model.
      *
-     * @param  array $path
+     * @param array $path
      *
      * @return void
      */
@@ -57,7 +58,7 @@ class ManagerModule
     /**
      * Load controller.
      *
-     * @param  array $path
+     * @param array $path
      *
      * @return void
      */

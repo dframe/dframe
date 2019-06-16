@@ -61,7 +61,8 @@ class DefaultView implements ViewInterface
         $name = $pathFile[1];
 
         if ($path === null) {
-            $path = $this->templateConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name . $this->templateConfig->get('fileExtension', '.html.php');
+            $path = $this->templateConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name .
+                $this->templateConfig->get('fileExtension', '.html.php');
         }
 
         try {
@@ -95,7 +96,8 @@ class DefaultView implements ViewInterface
         $name = $pathFile[1];
 
         if ($path === null) {
-            $path = $this->templateConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name . $this->templateConfig->get('fileExtension', '.html.php');
+            $path = $this->templateConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name .
+                $this->templateConfig->get('fileExtension', '.html.php');
         }
 
         try {
