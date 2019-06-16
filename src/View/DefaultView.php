@@ -71,11 +71,10 @@ class DefaultView implements ViewInterface
             ob_start();
             include $path;
         } catch (ViewException $e) {
-            echo $e->getMessage() . '<br />
+            die($e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />
-                Trace: ' . $e->getTraceAsString();
-            exit();
+                Trace: ' . $e->getTraceAsString());
         }
 
         return ob_get_clean();
@@ -106,11 +105,10 @@ class DefaultView implements ViewInterface
 
             $renderInclude = include $path;
         } catch (ViewException $e) {
-            echo $e->getMessage() . '<br />
+            die($e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />
-                Trace: ' . $e->getTraceAsString();
-            exit();
+                Trace: ' . $e->getTraceAsString());
         }
 
         return $renderInclude;
