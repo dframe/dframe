@@ -67,7 +67,7 @@ class Session implements CacheInterface
             $this->ipAddress = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'];
             $this->userAgent = $_SERVER["HTTP_USER_AGENT"] ?? 'unknown';
 
-            if ($this->isValidFingerprint() != true) {
+            if ($this->isValidFingerprint() !== true) {
                 // Refresh Session
                 $_SESSION = [];
                 $_SESSION['_fingerprint'] = $this->getFingerprint();
