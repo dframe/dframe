@@ -33,7 +33,8 @@ class Core extends Loader
         $this->router = $this->router->boot($this);
 
         if (is_null($controller ?? null) and is_null($action ?? null)) {
-            $this->router->parseGets();
+            $parseGets = $this->router->parseGets();
+            $args = $parseGets['args'];
             $controller = $this->router->controller;
             $action = $this->router->action;
             $namespace = $this->router->namespace;
@@ -69,7 +70,6 @@ class Core extends Loader
 
                     $run->headers($this->debug->getHeader());
                 }
-
                 return $run->display();
             }
         }

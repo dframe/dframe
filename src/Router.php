@@ -33,11 +33,6 @@ class Router
     public $delay = null;
 
     /**
-     * @var string[]
-     */
-    public $parseArgs = [];
-
-    /**
      * @var Config
      */
     public $routerConfig;
@@ -670,6 +665,8 @@ class Router
 
     /**
      * Parse request.
+     *
+     * @return array
      */
     public function parseGets()
     {
@@ -696,6 +693,8 @@ class Router
 
         $_GET['task'] = $this->controller;
         $_GET['action'] = $this->action;
+
+        return $parseUrl ?? [];
     }
 
     /**
@@ -709,6 +708,7 @@ class Router
     protected function parseUrl($request, $routingParse = null)
     {
         $vars = null;
+        $args = [];
         $v = [];
 
         if ($routingParse === null) {
@@ -780,12 +780,14 @@ class Router
                         foreach ($args as $key => $value) {
                             $args[$key] = str_replace('[' . $v_[0] . ']', $v_[1], $args[$key]);
                         }
+
                         $vars = str_replace('[' . $v_[0] . ']', $v_[1], $vars);
                     } else {
                         $vars = $vars . $this->parseUrl($v_[1], [$v['_' . $v_[0]]])['sVars'];
                     }
                 }
-                $this->parseArgs = $args;
+
+
                 break;
             }
         }
@@ -795,7 +797,8 @@ class Router
             $this->app->debug->addHeader(['X-DF-Debug-sVars' => $vars]);
         }
 
-        return ['v' => $v, 'sVars' => $vars];
+
+        return ['v' => $v, 'sVars' => $vars, 'args' => $args];
     }
 
     /**
