@@ -26,7 +26,7 @@ class Response extends Router
     /**
      * @var null|string
      */
-    protected $body = '';
+    protected $body = null;
 
     /**
      * @var array
@@ -270,6 +270,11 @@ class Response extends Router
         return $this->body;
     }
 
+    /**
+     * Display string and return int
+     *
+     * @return int
+     */
     public function display()
     {
         if (!headers_sent()) {
@@ -293,9 +298,7 @@ class Response extends Router
             }
         }
 
-        if (!empty($this->getBody())) {
-            echo $this->getBody();
-        }
+        return print $this->getBody();
     }
 
     /**
