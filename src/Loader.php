@@ -343,22 +343,26 @@ class Loader
             $controller = new $load($this->baseClass);
         } catch (\Exception $e) {
             if (ini_get('display_errors') === 'on') {
-                $msg = null;
-                $msg .= '<pre>';
-                $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
+                if (PHP_SAPI === 'cli') {
+                    throw new \Exception($e->getMessage());
+                } else {
+                    $msg = null;
+                    $msg .= '<pre>';
+                    $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
 
-                $msg .= 'Accept: ' . $_SERVER['HTTP_ACCEPT'] . '<br>';
-                if (isset($_SERVER['HTTP_REFERER'])) {
-                    $msg .= 'Referer: ' . $_SERVER['HTTP_REFERER'] . '<br><br>';
+                    $msg .= 'Accept: ' . $_SERVER['HTTP_ACCEPT'] . '<br>';
+                    if (isset($_SERVER['HTTP_REFERER'])) {
+                        $msg .= 'Referer: ' . $_SERVER['HTTP_REFERER'] . '<br><br>';
+                    }
+
+                    $msg .= 'Request Method: ' . $_SERVER['REQUEST_METHOD'] . '<br><br>';
+                    $msg .= 'Current file Path: <b>' . $this->router->currentPath() . '</b><br>';
+                    $msg .= 'File Exception: ' . $e->getFile() . ':' . $e->getLine() . '<br><br>';
+                    $msg .= 'Trace: <br>' . $e->getTraceAsString() . '<br>';
+                    $msg .= '</pre>';
+
+                    return Response::create($msg)->display();
                 }
-
-                $msg .= 'Request Method: ' . $_SERVER['REQUEST_METHOD'] . '<br><br>';
-                $msg .= 'Current file Path: <b>' . $this->router->currentPath() . '</b><br>';
-                $msg .= 'File Exception: ' . $e->getFile() . ':' . $e->getLine() . '<br><br>';
-                $msg .= 'Trace: <br>' . $e->getTraceAsString() . '<br>';
-                $msg .= '</pre>';
-
-                return Response::create($msg)->display();
             }
 
             $routes = Config::load('router')->get('routes');
