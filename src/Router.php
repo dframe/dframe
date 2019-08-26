@@ -638,7 +638,7 @@ class Router
 
         unset($this->subdomain);
         $this->domain = HTTP_HOST;
-        //$this->setHttps($this->routerConfig->get('https', false));
+        $this->setHttps($this->routerConfig->get('https', false));
 
         return $url;
     }
