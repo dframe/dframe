@@ -1,5 +1,8 @@
+# Ignore files that are auto-generated
 vendor
 composer.lock
+
+# Ignore IDE
 .project
 .vscode/
 .idea/

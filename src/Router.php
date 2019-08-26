@@ -33,11 +33,6 @@ class Router
     public $delay = null;
 
     /**
-     * @var string[]
-     */
-    public $parseArgs = [];
-
-    /**
      * @var Config
      */
     public $routerConfig;
@@ -241,15 +236,12 @@ class Router
         $annotationRoute = $this->routerConfig->get('annotation', false);
         if ($annotationRoute === true) {
             if (PHP_SAPI !== 'cli') {
-                $routesFile = 'routes.php';
-                $controllersFile = 'controllers.php';
-                $usedControllers = [];
+                if (!defined('APP_DIR')) {
+                    throw new RuntimeException('APP_DIR is not defined');
+                }
+
                 $controllerDirs = [APP_DIR . 'Controller/'];
                 $cacheDir = APP_DIR . 'View/cache/';
-
-                if (!is_array($controllerDirs)) {
-                    throw new InvalidArgumentException('Controllers directory must be either string or array');
-                }
 
                 $this->controllerDirs = [];
                 foreach ($controllerDirs as $d) {
@@ -284,6 +276,41 @@ class Router
         return $this;
     }
 
+    protected function regenerateRouts($routs)
+    {
+        usort(
+            $routes,
+            function ($a, $b) {
+                if (strlen($a['routePath']) === strlen($b['routePath'])) {
+                    return 0;
+                }
+                return strcmp($b['routePath'],
+                    $a['routePath']) ?: strlen($b['routePath']) - strlen($a['routePath']);
+            }
+        );
+
+        $controllerFiles = [];
+        $commonFileContent = '<?php' . "\r\n" . '/**' . "\r\n" . ' * annotations router %s cache file, create ' . date('c') . "\r\n" . ' */' . "\r\n\r\n";
+        $routesFileContent = sprintf($commonFileContent, 'routes');
+        $controllersFileContent = sprintf($commonFileContent, 'controllers');
+        $routesFileContent .= 'return [';
+
+        foreach ($routes as $key => $route) {
+            $routesFileContent .= "\r\n";
+            $routesFileContent .= "    '" . $route['routeName'] . "' => [" . "\r\n";
+            $routesFileContent .= "        '" . $route['routePath'] . "'," . "\r\n";
+            $routesFileContent .= "        'task=" . $route['task'] . "&action=" . $route['action'] . $route['substring'] . "'," . "\r\n";
+            $routesFileContent .= "    ]," . "\r\n";
+        }
+
+        $routesFileContent = rtrim($routesFileContent, ',' . "\r\n");
+        $routesFileContent .= "\r\n" . "];";
+        file_put_contents($this->cacheDir . $this->routesFile, $routesFileContent);
+        $usedControllers = (count($controllerFiles) > 0) ? '$this->usedControllers = [\'' . implode('\',\'',
+                $controllerFiles) . '\'];' : '';
+        file_put_contents($this->cacheDir . $this->controllersFile, $controllersFileContent . $usedControllers);
+    }
+
     /**
      * Annotations parser.
      */
@@ -296,6 +323,7 @@ class Router
         // We check if there has been modifications since last cache generation
         if (!$parsingNeeded) {
             $routesCacheMtime = filemtime($this->cacheDir . $this->routesFile);
+
             foreach ($files as $file => $mtime) {
                 if ($mtime > $routesCacheMtime) {
                     $parsingNeeded = true;
@@ -307,6 +335,7 @@ class Router
         // We look for deleted controller files
         if (!$parsingNeeded and file_exists($this->cacheDir . $this->controllersFile)) {
             include_once $this->cacheDir . $this->controllersFile;
+
             foreach ($this->usedControllers as $controllerFile) {
                 if (!file_exists($controllerFile)) {
                     $parsingNeeded = true;
@@ -316,6 +345,7 @@ class Router
         }
 
         $routes = [];
+
         foreach ($files as $file => $mtime) {
             $parseFile = $this->parseFile($file);
             if (!empty($parseFile)) {
@@ -323,41 +353,8 @@ class Router
             }
         }
 
-        if (!empty($routes)) {
-            usort(
-                $routes,
-                function ($a, $b) {
-                    if (strlen($a['routePath']) === strlen($b['routePath'])) {
-                        return 0;
-                    }
-                    return strcmp($b['routePath'],
-                        $a['routePath']) ?: strlen($b['routePath']) - strlen($a['routePath']);
-                }
-            );
-
-            // We regenerate cache file if needed
-            if ($parsingNeeded) {
-                $controllerFiles = [];
-                $commonFileContent = '<?php' . "\r\n" . '/**' . "\r\n" . ' * annotations router %s cache file, create ' . date('c') . "\r\n" . ' */' . "\r\n\r\n";
-                $routesFileContent = sprintf($commonFileContent, 'routes');
-                $controllersFileContent = sprintf($commonFileContent, 'controllers');
-                $routesFileContent .= 'return [';
-
-                foreach ($routes as $key => $route) {
-                    $routesFileContent .= "\r\n";
-                    $routesFileContent .= "    '" . $route['routeName'] . "' => [" . "\r\n";
-                    $routesFileContent .= "        '" . $route['routePath'] . "'," . "\r\n";
-                    $routesFileContent .= "        'task=" . $route['task'] . "&action=" . $route['action'] . $route['substring'] . "'," . "\r\n";
-                    $routesFileContent .= "    ]," . "\r\n";
-                }
-
-                $routesFileContent = rtrim($routesFileContent, ',' . "\r\n");
-                $routesFileContent .= "\r\n" . "];";
-                file_put_contents($this->cacheDir . $this->routesFile, $routesFileContent);
-                $usedControllers = (count($controllerFiles) > 0) ? '$this->usedControllers = [\'' . implode('\',\'',
-                        $controllerFiles) . '\'];' : '';
-                file_put_contents($this->cacheDir . $this->controllersFile, $controllersFileContent . $usedControllers);
-            }
+        if (!empty($routes) && $parsingNeeded) {
+            $this->regenerateRouts($routes);
         }
     }
 
@@ -388,12 +385,8 @@ class Router
      */
     protected function parseFile($file)
     {
-        $result = '';
         $routes = [];
 
-        //Windows
-        $appDir = str_replace('web/../app/', '', APP_DIR);
-        //All
         $appDir = str_replace('web' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . '',
             '', APP_DIR);
 
@@ -420,17 +413,11 @@ class Router
                 include_once $path;
             }
             $reflector = new \ReflectionClass($className);
-            $prefix = '';
-            if (preg_match('/@RoutePrefix\(["\'](((?!(["\'])).)*)["\']\)/', $reflector->getDocComment(),
-                    $matches) === 1) {
-                $prefix = $matches[1];
-            }
-            $methods = $reflector->getMethods(\ReflectionMethod::IS_PUBLIC);
-            $result = '';
 
-            $vars = null;
+            $methods = $reflector->getMethods(\ReflectionMethod::IS_PUBLIC);
+
             foreach ($methods as $m) {
-                $vars = null;
+                $vars = '';
                 if ($m->isStatic()) {
                     continue;
                 }
@@ -508,6 +495,90 @@ class Router
     }
 
     /**
+     * @param string $findKey
+     * @param array $params
+     * @param string $task
+     * @param string $action
+     *
+     * @return mixed|string
+     */
+    private function expressionUrlWithModRewrite($findKey, $params, $task, $action)
+    {
+        if (isset($this->routeMap['routes'][$findKey])) {
+            $expressionUrl = $this->routeMap['routes'][$findKey][0];
+            foreach ($params as $key => $value) {
+                $expressionUrl = str_replace('[' . $key . ']', $value, $expressionUrl, $count);
+                if ($count > 0) {
+                    unset($params[$key]);
+                }
+            }
+
+            if (isset($params)) {
+                if (isset($this->routeMap['routes'][$findKey]['_params'])) {
+                    $expressionUrl = str_replace('[params]',
+                        $this->parseParams($this->routeMap['routes'][$findKey]['_params'][0], $params),
+                        $expressionUrl);
+                } elseif (!empty($params)) {
+                    $expressionUrl = $expressionUrl . '?' . http_build_query($params);
+                }
+            }
+        } else {
+            $expressionUrl = $this->routeMap['routes']['default'][0];
+            $expressionUrl = str_replace('[task]', $task, $expressionUrl);
+            $expressionUrl = str_replace('[action]', $action, $expressionUrl);
+            if (isset($params)) {
+                $expressionUrl = str_replace('[params]',
+                    $this->parseParams($this->routeMap['routes']['default']['_params'][0], $params),
+                    $expressionUrl);
+            }
+        }
+
+        return $expressionUrl;
+    }
+
+    /**
+     * @param string $findKey
+     * @param array $params
+     * @param string $task
+     * @param string $action
+     *
+     * @return mixed|string
+     */
+    private function expressionUrlWithoutModRewrite($findKey, $params, $task, $action)
+    {
+        if (empty($task)) {
+            $expressionUrl = '';
+        } else {
+            if (isset($this->routeMap['routes'][$findKey])) {
+                $expressionUrl0 = $this->routeMap['routes'][$findKey][1];
+                foreach ($params as $key => $value) {
+                    $expressionUrl0 = str_replace('[' . $key . ']', $value, $expressionUrl0, $count);
+                    if ($count > 0) {
+                        unset($params[$key]);
+                    }
+                }
+
+                $expressionUrl = $expressionUrl0;
+            } else {
+                $expressionUrl = 'task=' . $task;
+                if (!empty($action)) {
+                    $expressionUrl = 'task=' . $task . '&action=' . $action;
+                }
+            }
+
+            if (!empty($params)) {
+                if (!empty($expressionUrl)) {
+                    $expressionUrl .= '&';
+                }
+                $expressionUrl = $expressionUrl . http_build_query($params);
+            }
+            $expressionUrl = 'index.php?' . $expressionUrl;
+        }
+
+        return $expressionUrl;
+    }
+
+    /**
      * Generate url
      *
      * @param string|null $url
@@ -539,63 +610,9 @@ class Router
         }
 
         if (defined('MOD_REWRITE') and MOD_REWRITE === true) {
-            if (isset($this->routeMap['routes'][$findKey])) {
-                $expressionUrl = $this->routeMap['routes'][$findKey][0];
-                foreach ($params as $key => $value) {
-                    $expressionUrl = str_replace('[' . $key . ']', $value, $expressionUrl, $count);
-                    if ($count > 0) {
-                        unset($params[$key]);
-                    }
-                }
-
-                if (isset($params)) {
-                    if (isset($this->routeMap['routes'][$findKey]['_params'])) {
-                        $expressionUrl = str_replace('[params]',
-                            $this->parseParams($this->routeMap['routes'][$findKey]['_params'][0], $params),
-                            $expressionUrl);
-                    } elseif (!empty($params)) {
-                        $expressionUrl = $expressionUrl . '?' . http_build_query($params);
-                    }
-                }
-            } else {
-                $expressionUrl = $this->routeMap['routes']['default'][0];
-                $expressionUrl = str_replace('[task]', $task, $expressionUrl);
-                $expressionUrl = str_replace('[action]', $action, $expressionUrl);
-                if (isset($params)) {
-                    $expressionUrl = str_replace('[params]',
-                        $this->parseParams($this->routeMap['routes']['default']['_params'][0], $params),
-                        $expressionUrl);
-                }
-            }
+            $expressionUrl = $this->expressionUrlWithModRewrite($findKey, $params, $task, $action);
         } else {
-            if (empty($task)) {
-                $expressionUrl = '';
-            } else {
-                if (isset($this->routeMap['routes'][$findKey])) {
-                    $expressionUrl0 = $this->routeMap['routes'][$findKey][1];
-                    foreach ($params as $key => $value) {
-                        $expressionUrl0 = str_replace('[' . $key . ']', $value, $expressionUrl0, $count);
-                        if ($count > 0) {
-                            unset($params[$key]);
-                        }
-                    }
-
-                    $expressionUrl = $expressionUrl0;
-                } else {
-                    $expressionUrl = 'task=' . $task;
-                    if (!empty($action)) {
-                        $expressionUrl = 'task=' . $task . '&action=' . $action;
-                    }
-                }
-
-                if (!empty($params)) {
-                    if (!empty($expressionUrl)) {
-                        $expressionUrl .= '&';
-                    }
-                    $expressionUrl = $expressionUrl . http_build_query($params);
-                }
-                $expressionUrl = 'index.php?' . $expressionUrl;
-            }
+            $expressionUrl = $this->expressionUrlWithoutModRewrite($findKey, $params, $task, $action);
         }
 
         $parsedUrl = \parse_url($this->domain);
@@ -670,6 +687,8 @@ class Router
 
     /**
      * Parse request.
+     *
+     * @return array
      */
     public function parseGets()
     {
@@ -696,6 +715,8 @@ class Router
 
         $_GET['task'] = $this->controller;
         $_GET['action'] = $this->action;
+
+        return $parseUrl ?? [];
     }
 
     /**
@@ -704,11 +725,12 @@ class Router
      * @param string      $request
      * @param string|null $routingParse
      *
-     * @return string|array
+     * @return array
      */
     protected function parseUrl($request, $routingParse = null)
     {
         $vars = null;
+        $args = [];
         $v = [];
 
         if ($routingParse === null) {
@@ -738,6 +760,7 @@ class Router
 
             if (preg_match_all('!' . $expressionMatch . '!i', $request, $expression__)) {
                 $args = [];
+                $expression = [];
 
                 if (isset($v['args'])) {
                     $args = $v['args'];
@@ -780,22 +803,22 @@ class Router
                         foreach ($args as $key => $value) {
                             $args[$key] = str_replace('[' . $v_[0] . ']', $v_[1], $args[$key]);
                         }
+
                         $vars = str_replace('[' . $v_[0] . ']', $v_[1], $vars);
                     } else {
                         $vars = $vars . $this->parseUrl($v_[1], [$v['_' . $v_[0]]])['sVars'];
                     }
                 }
-                $this->parseArgs = $args;
+
                 break;
             }
         }
-
 
         if (isset($this->app->debug)) {
             $this->app->debug->addHeader(['X-DF-Debug-sVars' => $vars]);
         }
 
-        return ['v' => $v, 'sVars' => $vars];
+        return ['v' => $v, 'sVars' => $vars, 'args' => $args];
     }
 
     /**

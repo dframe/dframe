@@ -26,7 +26,7 @@ class Response extends Router
     /**
      * @var null|string
      */
-    protected $body = '';
+    protected $body = null;
 
     /**
      * @var array
@@ -231,13 +231,15 @@ class Response extends Router
     }
 
     /**
-     * @param bool $headers
+     * @param array $headers
      *
      * @return $this
      */
-    public function headers($headers = false)
+    public function headers($headers = [])
     {
-        $this->headers = array_unique(array_merge($this->headers, $headers));
+        if (!empty($headers)) {
+            $this->headers = array_unique(array_merge($this->headers, $headers));
+        }
 
         return $this;
     }
@@ -270,6 +272,11 @@ class Response extends Router
         return $this->body;
     }
 
+    /**
+     * Display string and return int
+     *
+     * @return null|string
+     */
     public function display()
     {
         if (!headers_sent()) {
@@ -293,9 +300,7 @@ class Response extends Router
             }
         }
 
-        if (!empty($this->getBody())) {
-            echo $this->getBody();
-        }
+        return print $this->getBody() ? $this->getBody() : null;
     }
 
     /**
