@@ -132,7 +132,7 @@ class Loader
      * @param string      $name
      * @param null|string $namespace
      *
-     * @return object
+     * @return mixed
      */
     public function loadModel($name, $namespace = null)
     {
@@ -146,7 +146,7 @@ class Loader
      * @param string      $type
      * @param null|string $namespace
      *
-     * @return object|bool
+     * @return mixed
      */
     private function loadObject($name, $type, $namespace = null)
     {
