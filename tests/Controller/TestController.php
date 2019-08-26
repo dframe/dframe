@@ -3,7 +3,6 @@
 
 namespace Dframe\Tests\Controller;
 
-
 use Dframe\Controller;
 
 class TestController extends Controller

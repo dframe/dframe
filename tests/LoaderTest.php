@@ -2,8 +2,6 @@
 
 namespace Dframe\Tests;
 
-use Dframe\Config;
-use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -42,9 +40,9 @@ class LoaderTest extends TestCase
     {
         $loaderTest = new \Dframe\Loader();
 
-        $this->assertTrue($loaderTest->loadController('TestController','Dframe\Tests')->test());
-        $this->assertTrue($loaderTest->loadController('Sub,SubTestController','Dframe\Tests')->test());
-        $this->assertTrue($loaderTest->loadController('Sub\SubTestController','Dframe\Tests')->test());
-        $this->assertTrue($loaderTest->loadController('Sub/SubTestController','Dframe\Tests')->test());
+        $this->assertTrue($loaderTest->loadController('TestController', 'Dframe\Tests')->test());
+        $this->assertTrue($loaderTest->loadController('Sub,SubTestController', 'Dframe\Tests')->test());
+        $this->assertTrue($loaderTest->loadController('Sub\SubTestController', 'Dframe\Tests')->test());
+        $this->assertTrue($loaderTest->loadController('Sub/SubTestController', 'Dframe\Tests')->test());
     }
 }
