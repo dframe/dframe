@@ -99,6 +99,8 @@ class Loader
      */
     public static function autoload($class)
     {
+        $args = $class;
+
         if (substr($class, -4) == "View") {
             $class = substr($class, 0, -4);
         } elseif (substr($class, -5) == "Model") {
@@ -120,7 +122,7 @@ class Loader
                 return require_once $path;
             }
 
-            throw new LoaderException('Couldn\'t locate ' . $class . '' . implode(', ', func_get_args()));
+            throw new LoaderException('Couldn\'t locate ' . $args);
         }
     }
 
