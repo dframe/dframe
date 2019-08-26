@@ -231,7 +231,7 @@ class Response extends Router
     }
 
     /**
-     * @param bool $headers
+     * @param bool|array $headers
      *
      * @return $this
      */
