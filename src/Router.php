@@ -236,15 +236,12 @@ class Router
         $annotationRoute = $this->routerConfig->get('annotation', false);
         if ($annotationRoute === true) {
             if (PHP_SAPI !== 'cli') {
-                $routesFile = 'routes.php';
-                $controllersFile = 'controllers.php';
-                $usedControllers = [];
+                if (!defined('APP_DIR')) {
+                    throw new RuntimeException('APP_DIR is not defined');
+                }
+
                 $controllerDirs = [APP_DIR . 'Controller/'];
                 $cacheDir = APP_DIR . 'View/cache/';
-
-                if (!is_array($controllerDirs)) {
-                    throw new InvalidArgumentException('Controllers directory must be either string or array');
-                }
 
                 $this->controllerDirs = [];
                 foreach ($controllerDirs as $d) {
