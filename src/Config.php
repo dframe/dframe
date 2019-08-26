@@ -42,7 +42,7 @@ class Config
         $this->path = (isset($path) and !empty($path)) ? $path : APP_DIR . $path . 'Config' . DIRECTORY_SEPARATOR;
 
         $this->file = $file;
-        if (file_exists($this->path . $this->file . '.php') != true) {
+        if (file_exists($this->path . $this->file . '.php') !== true) {
             self::$cfg[$file] = [];
         } else {
             self::$cfg[$file] = isset(self::$cfg[$file]) ? self::$cfg[$file] : include $this->path . $this->file . '.php';
