@@ -811,7 +811,7 @@ class Router
         if (isset($this->routeMapParse[$k][$param]) and !is_array($this->routeMapParse[$k][$param])) {
             return $this->routeMapParse[$k][$param];
         } else {
-            return '(.+?)';
+            return '([a-zA-Z0-(-_%]+)';
         }
     }
 
