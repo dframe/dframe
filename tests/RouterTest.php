@@ -78,6 +78,6 @@ class RouterTest extends TestCase
         $this->assertSame('http://test.com/page/index', $this->router->domain('test.com')->makeUrl('page/:page?page=index'));
         $this->assertSame('http://test.dframeframework.com/page/index', $this->router->subdomain('test')->makeUrl('page/:page?page=index'));
         $this->assertSame('https://dframeframework.com/page/index', $this->router->setHttps(true)->makeUrl('page/:page?page=index'));
-        $this->assertSame('http://dframeframework.com/page/index', $this->router->setHttps(false)->makeUrl('page/:page?page=index'));
+        $this->assertSame('http://dframeframework.com/page/index', $this->router->makeUrl('page/:page?page=index'));
     }
 }
