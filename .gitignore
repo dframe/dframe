@@ -1,6 +1,7 @@
 # Ignore files that are auto-generated
 vendor
 composer.lock
+.phpunit.result.cache
 
 # Ignore IDE
 .project

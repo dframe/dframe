@@ -20,7 +20,7 @@ class RouterTest extends TestCase
     /**
      *
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->router = new Router();
 
