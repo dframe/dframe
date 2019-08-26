@@ -285,7 +285,7 @@ class Loader
      * @param string      $name
      * @param null|string $namespace
      *
-     * @return object
+     * @return mixed
      */
     public function loadView($name, $namespace = null)
     {
