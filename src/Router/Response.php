@@ -231,13 +231,15 @@ class Response extends Router
     }
 
     /**
-     * @param bool|array $headers
+     * @param array $headers
      *
      * @return $this
      */
-    public function headers($headers = false)
+    public function headers($headers = [])
     {
-        $this->headers = array_unique(array_merge($this->headers, $headers));
+        if (!empty($headers)) {
+            $this->headers = array_unique(array_merge($this->headers, $headers));
+        }
 
         return $this;
     }
