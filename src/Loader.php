@@ -132,7 +132,7 @@ class Loader
      * @param string      $name
      * @param null|string $namespace
      *
-     * @return object
+     * @return mixed
      */
     public function loadModel($name, $namespace = null)
     {
@@ -146,7 +146,7 @@ class Loader
      * @param string      $type
      * @param null|string $namespace
      *
-     * @return object|bool
+     * @return mixed
      */
     private function loadObject($name, $type, $namespace = null)
     {
@@ -178,7 +178,7 @@ class Loader
                 $ob->init();
             }
         } catch (LoaderException $e) {
-            if (ini_get('display_errors') === "on") {
+            if (ini_get('display_errors') === "1") {
                 $msg = null;
                 $msg .= '<pre>';
                 $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
@@ -285,7 +285,7 @@ class Loader
      * @param string      $name
      * @param null|string $namespace
      *
-     * @return object
+     * @return mixed
      */
     public function loadView($name, $namespace = null)
     {
@@ -342,7 +342,7 @@ class Loader
 
             $controller = new $load($this->baseClass);
         } catch (\Exception $e) {
-            if (ini_get('display_errors') === 'on') {
+            if (ini_get('display_errors') === "1") {
                 if (PHP_SAPI === 'cli') {
                     throw new \Exception($e->getMessage());
                 } else {
