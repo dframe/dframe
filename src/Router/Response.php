@@ -273,7 +273,7 @@ class Response extends Router
     /**
      * Display string and return int
      *
-     * @return int
+     * @return null|string
      */
     public function display()
     {
@@ -298,7 +298,7 @@ class Response extends Router
             }
         }
 
-        return print $this->getBody();
+        return print $this->getBody() ? $this->getBody() : null;
     }
 
     /**
