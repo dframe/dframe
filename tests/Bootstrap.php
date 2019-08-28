@@ -53,6 +53,9 @@ class Bootstrap
         ];
 
         $this->session = new Session('Test'); // Best to set project name
+        $this->session->set('token', ['THIS_IS_TOKEN']);
+        $this->session->set('timeToken', ['THIS_IS_TIME_TOKEN']);
+
         $this->msg = new Messages($this->session);     // Default notify cl
         $this->token = new Token($this->session);     // Default CSRF token
 
