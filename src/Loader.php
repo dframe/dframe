@@ -151,7 +151,7 @@ class Loader
     private function loadObject($name, $type, $namespace = null)
     {
         try {
-            if (!$this->isCodeStyleNamespace($name)) {
+            if (!$this->isCamelCaps($name)) {
                 if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
                     throw new LoaderException('Camel Sensitive is on. Can not use ' . $type . ' ' . $name . ' try to use StudlyCaps or CamelCase');
                 }
@@ -213,11 +213,11 @@ class Loader
      *
      * @return bool
      */
-    public static function isCodeStyleNamespace($string)
+    public static function isCamelCaps($string)
     {
-        preg_match_all('/^(?\'namespace\'(([A-Z]|\\\\[A-Z])[a-zA-Z]+)+)$/', $string, $matches);
+        preg_match_all('/^(?\'isCamelCaps\'(([A-Z]|([\\\\|\/\/][A-Z]))[a-zA-Z]+)+)$/', $string, $matches);
 
-        return !empty($matches['namespace']);
+        return !empty($matches['isCamelCaps']);
     }
 
     /**
