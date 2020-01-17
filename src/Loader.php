@@ -59,7 +59,7 @@ class Loader
 
         $this->baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
 
-        $baseClass = new \Bootstrap();
+        $baseClass = $this->baseClass;
         foreach ($baseClass->providers['core'] ?? [] as $key => $value) {
             $this->$key = new $value($this);
             if (method_exists($this->$key, 'boot') or is_callable([$this->$key, 'boot'])) {
