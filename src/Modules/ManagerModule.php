@@ -39,7 +39,8 @@ class ManagerModule
     {
         $this->app->config['router']['routes'] = array_merge(
             $this->app->config['router']['routes'] ?? [],
-            (require $path)['routes']);
+            (require $path)['routes']
+        );
     }
 
 

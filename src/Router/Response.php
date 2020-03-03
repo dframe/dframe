@@ -19,21 +19,6 @@ use Dframe\Router;
 class Response extends Router
 {
     /**
-     * @var int
-     */
-    public $status = 200;
-
-    /**
-     * @var null|string
-     */
-    protected $body = null;
-
-    /**
-     * @var array
-     */
-    protected $headers = [];
-
-    /**
      * @var array
      */
     public static $code = [
@@ -95,6 +80,21 @@ class Response extends Router
     ];
 
     /**
+     * @var int
+     */
+    public $status = 200;
+
+    /**
+     * @var null|string
+     */
+    protected $body = null;
+
+    /**
+     * @var array
+     */
+    protected $headers = [];
+
+    /**
      * Response constructor.
      *
      * @param null $body
@@ -149,6 +149,32 @@ class Response extends Router
     }
 
     /**
+     * @param $code
+     *
+     * @return $this
+     */
+    public function status($code)
+    {
+        $this->status = $code;
+
+        return $this;
+    }
+
+    /**
+     * @param array $headers
+     *
+     * @return $this
+     */
+    public function headers($headers = [])
+    {
+        if (!empty($headers)) {
+            $this->headers = array_unique(array_merge($this->headers, $headers));
+        }
+
+        return $this;
+    }
+
+    /**
      * @param null $body
      * @param null $status
      *
@@ -190,9 +216,11 @@ class Response extends Router
             $Response->headers($headers);
         }
 
-        $Response->headers([
-            'Location' => (new Router())->makeUrl($url),
-        ]);
+        $Response->headers(
+            [
+                'Location' => (new Router())->makeUrl($url),
+            ]
+        );
 
         return $Response;
     }
@@ -211,37 +239,11 @@ class Response extends Router
     }
 
     /**
-     * @param $code
-     *
-     * @return $this
-     */
-    public function status($code)
-    {
-        $this->status = $code;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getStatus()
     {
         return $this->status;
-    }
-
-    /**
-     * @param array $headers
-     *
-     * @return $this
-     */
-    public function headers($headers = [])
-    {
-        if (!empty($headers)) {
-            $this->headers = array_unique(array_merge($this->headers, $headers));
-        }
-
-        return $this;
     }
 
     /**
@@ -262,14 +264,6 @@ class Response extends Router
         $this->body = $body;
 
         return $this;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getBody()
-    {
-        return $this->body;
     }
 
     /**
@@ -301,6 +295,14 @@ class Response extends Router
         }
 
         return print $this->getBody() ? $this->getBody() : null;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getBody()
+    {
+        return $this->body;
     }
 
     /**

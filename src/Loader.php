@@ -153,7 +153,9 @@ class Loader
         try {
             if (!$this->isCamelCaps($name)) {
                 if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
-                    throw new LoaderException('Camel Sensitive is on. Can not use ' . $type . ' ' . $name . ' try to use StudlyCaps or CamelCase');
+                    throw new LoaderException(
+                        'Camel Sensitive is on. Can not use ' . $type . ' ' . $name . ' try to use StudlyCaps or CamelCase'
+                    );
                 }
             }
 
@@ -233,39 +235,6 @@ class Loader
         return $this->loadObject($name, 'View', $namespace);
     }
 
-    private function processLoadControllerException($e)
-    {
-        if (ini_get('display_errors') === "1") {
-            if (PHP_SAPI === 'cli') {
-                throw new \Exception($e->getMessage());
-            } else {
-                $msg = '<pre>';
-                $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
-
-                $msg .= 'Accept: ' . $_SERVER['HTTP_ACCEPT'] . '<br>';
-                if (isset($_SERVER['HTTP_REFERER'])) {
-                    $msg .= 'Referer: ' . $_SERVER['HTTP_REFERER'] . '<br><br>';
-                }
-
-                $msg .= 'Request Method: ' . $_SERVER['REQUEST_METHOD'] . '<br><br>';
-                $msg .= 'Current file Path: <b>' . $this->router->currentPath() . '</b><br>';
-                $msg .= 'File Exception: ' . $e->getFile() . ':' . $e->getLine() . '<br><br>';
-                $msg .= 'Trace: <br>' . $e->getTraceAsString() . '<br>';
-                $msg .= '</pre>';
-
-                return Response::create($msg)->display();
-            }
-        }
-
-        $routes = Config::load('router')->get('routes');
-
-        if (!empty($routes['error/:code'])) {
-            return Response::redirect('error/:code?code=400', 400)->display();
-        }
-
-        return Response::create()->status(500)->display();
-    }
-
     /**
      * Establish the requested controller as an object.
      *
@@ -285,7 +254,9 @@ class Loader
                 $subController = '';
 
                 for ($i = 0; $i < $urlCount; $i++) {
-                    $subController .= (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) ?
+                    $subController .= (!defined('CODING_STYLE') or (defined(
+                                'CODING_STYLE'
+                            ) and CODING_STYLE === true)) ?
                         ucfirst($url[$i]) . DIRECTORY_SEPARATOR :
                         $url[$i] . DIRECTORY_SEPARATOR;
                 }
@@ -319,6 +290,39 @@ class Loader
         }
 
         return $controller;
+    }
+
+    private function processLoadControllerException($e)
+    {
+        if (ini_get('display_errors') === "1") {
+            if (PHP_SAPI === 'cli') {
+                throw new \Exception($e->getMessage());
+            } else {
+                $msg = '<pre>';
+                $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
+
+                $msg .= 'Accept: ' . $_SERVER['HTTP_ACCEPT'] . '<br>';
+                if (isset($_SERVER['HTTP_REFERER'])) {
+                    $msg .= 'Referer: ' . $_SERVER['HTTP_REFERER'] . '<br><br>';
+                }
+
+                $msg .= 'Request Method: ' . $_SERVER['REQUEST_METHOD'] . '<br><br>';
+                $msg .= 'Current file Path: <b>' . $this->router->currentPath() . '</b><br>';
+                $msg .= 'File Exception: ' . $e->getFile() . ':' . $e->getLine() . '<br><br>';
+                $msg .= 'Trace: <br>' . $e->getTraceAsString() . '<br>';
+                $msg .= '</pre>';
+
+                return Response::create($msg)->display();
+            }
+        }
+
+        $routes = Config::load('router')->get('routes');
+
+        if (!empty($routes['error/:code'])) {
+            return Response::redirect('error/:code?code=400', 400)->display();
+        }
+
+        return Response::create()->status(500)->display();
     }
 
     /**

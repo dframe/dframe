@@ -122,41 +122,6 @@ class Session implements CacheInterface
     }
 
     /**
-     * @param       $key
-     * @param array $in
-     *
-     * @return bool
-     */
-    public function keyExists($key, $in = [])
-    {
-        if (empty($in)) {
-            $in = $_SESSION;
-        }
-
-        if (array_key_exists($key, $in) === true) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function set($key, $value, $tll = null)
-    {
-        $_SESSION[$key] = $value;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function get($key, $or = null)
-    {
-        return isset($_SESSION[$key]) ? $_SESSION[$key] : $or;
-    }
-
-    /**
      * @param $key
      */
     public function remove($key)
@@ -204,6 +169,14 @@ class Session implements CacheInterface
     /**
      * {@inheritdoc}
      */
+    public function set($key, $value, $tll = null)
+    {
+        $_SESSION[$key] = $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getMultiple($keys, $default = null)
     {
         $cache = [];
@@ -212,6 +185,14 @@ class Session implements CacheInterface
         }
 
         return $cache;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function get($key, $or = null)
+    {
+        return isset($_SESSION[$key]) ? $_SESSION[$key] : $or;
     }
 
     /**
@@ -232,5 +213,24 @@ class Session implements CacheInterface
     public function has($key)
     {
         return $this->keyExists($key);
+    }
+
+    /**
+     * @param       $key
+     * @param array $in
+     *
+     * @return bool
+     */
+    public function keyExists($key, $in = [])
+    {
+        if (empty($in)) {
+            $in = $_SESSION;
+        }
+
+        if (array_key_exists($key, $in) === true) {
+            return true;
+        }
+
+        return false;
     }
 }

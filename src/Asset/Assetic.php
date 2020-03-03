@@ -29,20 +29,6 @@ set_time_limit(120);
 class Assetic extends Router
 {
     /**
-     * @param $path
-     *
-     * @throws AsseticException
-     */
-    private function checkDir($path)
-    {
-        if (!is_dir($path)) {
-            if (!mkdir($path, 0777, true)) {
-                throw new AsseticException('Unable to create' . $path, 403);
-            }
-        }
-    }
-
-    /**
      * @param null $url
      * @param null $path
      * @param bool $compress
@@ -52,7 +38,6 @@ class Assetic extends Router
      */
     public function assetJs($url = null, $path = null, $compress = true)
     {
-
         // Basic paths
         $srcPath = $this->routeMap['assets']['assetsPath'] . $this->routeMap['assets']['assetsDir'] . '/' . $url;
         if (is_null($path)) {
@@ -102,6 +87,20 @@ class Assetic extends Router
     }
 
     /**
+     * @param $path
+     *
+     * @throws AsseticException
+     */
+    private function checkDir($path)
+    {
+        if (!is_dir($path)) {
+            if (!mkdir($path, 0777, true)) {
+                throw new AsseticException('Unable to create' . $path, 403);
+            }
+        }
+    }
+
+    /**
      * @param null $url
      * @param null $path
      * @param bool $compress
@@ -111,7 +110,6 @@ class Assetic extends Router
      */
     public function assetCss($url = null, $path = null, $compress = true)
     {
-
         // Basic paths
         $srcPath = $this->routeMap['assets']['assetsPath'] . $this->routeMap['assets']['assetsDir'] . '/' . $url;
         if (is_null($path)) {
@@ -171,7 +169,9 @@ class Assetic extends Router
                 }
 
                 if (!copy($srcPathInfo['dirname'] . '/' . $url, $pathInfo['dirname'] . '/' . $url)) {
-                    $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: ' . $srcPathInfo['dirname'] . '/' . $url . ' TO ' . $pathInfo['dirname'] . '/' . $url . "\n";
+                    $msg = date(
+                            'Y-m-d h:m:s'
+                        ) . ' :: Unable to copy an asset From: ' . $srcPathInfo['dirname'] . '/' . $url . ' TO ' . $pathInfo['dirname'] . '/' . $url . "\n";
                     $out = fopen(APP_DIR . 'View/logs/router.txt', 'w');
                     fwrite($out, $msg);
                     fclose($out);

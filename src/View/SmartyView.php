@@ -70,10 +70,12 @@ class SmartyView implements ViewInterface
 
             $assign = $this->smarty->assign($name, $value);
         } catch (ViewException $e) {
-            die($e->getMessage() . '<br />
+            die(
+                $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />
-                Trace: ' . $e->getTraceAsString());
+                Trace: ' . $e->getTraceAsString()
+            );
         }
 
         return $assign;
@@ -106,10 +108,12 @@ class SmartyView implements ViewInterface
             // Loading view
             $fetch = $this->smarty->fetch($path);
         } catch (\Exception $e) {
-            die($e->getMessage() . '<br />
+            die(
+                $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />
-                Trace: ' . $e->getTraceAsString());
+                Trace: ' . $e->getTraceAsString()
+            );
         }
 
         return $fetch;
@@ -141,10 +145,12 @@ class SmartyView implements ViewInterface
 
             return $this->smarty->fetch($path); // Loading view
         } catch (ViewException $e) {
-            die($e->getMessage() . '<br />
+            die(
+                $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />
-                Trace: ' . $e->getTraceAsString());
+                Trace: ' . $e->getTraceAsString()
+            );
         }
     }
 }

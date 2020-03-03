@@ -86,62 +86,6 @@ class Token implements CacheInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function setMultiple($values, $ttl = null)
-    {
-        foreach ($values as $value) {
-            $this->set($value['key'], $value['value'], $ttl);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteMultiple($keys)
-    {
-        foreach ($keys as $key) {
-            $this->delete($key);
-        }
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function has($key)
-    {
-        if (isset($this->token[$key]) and $this->getTime($key) >= time()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param      $key
-     * @param      $token
-     * @param bool $delete
-     *
-     * @return bool
-     */
-    public function isValid($key, $token, $delete = false)
-    {
-        $getToken = $this->get($key);
-
-        if ($delete === true) {
-            $this->delete($key);
-        }
-
-        if ($getToken === $token) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * @param string      $key
      * @param null|string $default
      *
@@ -211,6 +155,28 @@ class Token implements CacheInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setMultiple($values, $ttl = null)
+    {
+        foreach ($values as $value) {
+            $this->set($value['key'], $value['value'], $ttl);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteMultiple($keys)
+    {
+        foreach ($keys as $key) {
+            $this->delete($key);
+        }
+
+        return $this;
+    }
+
+    /**
      * @param string $key
      */
     public function delete($key)
@@ -225,5 +191,39 @@ class Token implements CacheInterface
 
         $this->driver->set('token', $this->token);
         $this->driver->set('timeToken', $this->time);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function has($key)
+    {
+        if (isset($this->token[$key]) and $this->getTime($key) >= time()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param      $key
+     * @param      $token
+     * @param bool $delete
+     *
+     * @return bool
+     */
+    public function isValid($key, $token, $delete = false)
+    {
+        $getToken = $this->get($key);
+
+        if ($delete === true) {
+            $this->delete($key);
+        }
+
+        if ($getToken === $token) {
+            return true;
+        }
+
+        return false;
     }
 }
