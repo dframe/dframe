@@ -1,7 +1,7 @@
 # Dframe - PHP Framework 
 [![Build Status](https://travis-ci.org/dframe/dframe.svg?branch=master)](https://travis-ci.org/dframe/dframe) [![Latest Stable Version](https://poser.pugx.org/dframe/dframe/v/stable)](https://packagist.org/packages/dframe/dframe) [![Total Downloads](https://poser.pugx.org/dframe/dframe/downloads)](https://packagist.org/packages/dframe/dframe) [![Latest Unstable Version](https://poser.pugx.org/dframe/dframe/v/unstable)](https://packagist.org/packages/dframe/dframe) [![License](https://poser.pugx.org/dframe/dframe/license)](https://packagist.org/packages/dframe/dframe)
 
-![Dframe Logo](https://dframeframework.com/img/logo_full.png)
+![php framework dframe logo](https://dframeframework.com/img/logo_full.png)
 
 The basic framework to help you build MVC project.
 
@@ -18,12 +18,13 @@ The basic framework to help you build MVC project.
 
 
 ## What's included?
- * ClassLoader
- * Routing
+ * [Class Loader PHP](https://dframeframework.com/en/docs/dframe/master/installation/overview) 
+ * [Router PHP](https://dframeframework.com/en/docs/dframe/master/routing/overview) 
  * Sessions
- * Config
+ * [Config PHP](https://dframeframework.com/en/docs/dframe/master/routing/overview) 
  * Tokens
- * Templating
+ * [Template PHP](https://dframeframework.com/en/docs/dframe/master/routing/overview)
+ * [Cron PHP](https://dframeframework.com/en/docs/dframe/master/cron/overview)
 
 ### Requirements
  
@@ -48,3 +49,4 @@ License
 ----
 
 Open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+
