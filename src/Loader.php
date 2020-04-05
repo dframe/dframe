@@ -9,8 +9,10 @@
 
 namespace Dframe;
 
+use Bootstrap;
 use Dframe\Loader\Exceptions\LoaderException;
 use Dframe\Router\Response;
+use Exception;
 
 /**
  * Loader Class.
@@ -57,7 +59,7 @@ class Loader
             throw new LoaderException('Please Define SALT in Main config.php', 500);
         }
 
-        $this->baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
+        $this->baseClass = empty($bootstrap) ? new Bootstrap() : $bootstrap;
 
         $baseClass = $this->baseClass;
         foreach ($baseClass->providers['core'] ?? [] as $key => $value) {
@@ -285,7 +287,7 @@ class Loader
             }
 
             $controller = new $load($this->baseClass);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->processLoadControllerException($e);
         }
 
@@ -296,7 +298,7 @@ class Loader
     {
         if (ini_get('display_errors') === "1") {
             if (PHP_SAPI === 'cli') {
-                throw new \Exception($e->getMessage());
+                throw new Exception($e->getMessage());
             } else {
                 $msg = '<pre>';
                 $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';

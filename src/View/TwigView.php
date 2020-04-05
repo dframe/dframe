@@ -11,6 +11,8 @@ namespace Dframe\View;
 
 use Dframe\Config;
 use Dframe\View\Exceptions\ViewException;
+use Twig_Environment;
+use Twig_Loader_Filesystem;
 
 /**
  * Twig View.
@@ -35,8 +37,8 @@ class TwigView implements ViewInterface
     public function __construct()
     {
         $twigConfig = Config::load('view/twig');
-        $loader = new \Twig_Loader_Filesystem($twigConfig->get('setTemplateDir'));
-        $twig = new \Twig_Environment(
+        $loader = new Twig_Loader_Filesystem($twigConfig->get('setTemplateDir'));
+        $twig = new Twig_Environment(
             $loader,
             [
                 'cache' => $twigConfig->get('setCompileDir'),

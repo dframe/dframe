@@ -9,12 +9,14 @@
 
 namespace Dframe\View\Exceptions;
 
+use Exception;
+
 /**
  * ViewException Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class ViewException extends \Exception
+class ViewException extends Exception
 {
     /**
      * ViewException constructor.
@@ -23,7 +25,7 @@ class ViewException extends \Exception
      * @param int             $code
      * @param \Exception|null $previous
      */
-    public function __construct($messages = null, $code = 0, \Exception $previous = null)
+    public function __construct($messages = null, $code = 0, Exception $previous = null)
     {
         parent::__construct($messages, $code, $previous);
     }

@@ -13,6 +13,8 @@ use Dframe\Router\Exceptions\InvalidArgumentException;
 use Dframe\Router\Exceptions\RuntimeException;
 use Dframe\Router\Response;
 
+use function parse_url;
+
 /**
  * Router class.
  *
@@ -540,7 +542,7 @@ class Router
             $expressionUrl = $this->expressionUrlWithoutModRewrite($findKey, $params, $task, $action);
         }
 
-        $parsedUrl = \parse_url($this->domain);
+        $parsedUrl = parse_url($this->domain);
 
         if (isset($parsedUrl['scheme'])) {
             $this->requestPrefix = $parsedUrl['scheme'] . '://';
@@ -735,7 +737,7 @@ class Router
     /**
      * Match given request
      *
-     * @param string $request
+     * @param string      $request
      * @param string|null $routingParse
      *
      * @return array

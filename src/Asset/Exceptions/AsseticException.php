@@ -9,12 +9,14 @@
 
 namespace Dframe\Asset\Exceptions;
 
+use Exception;
+
 /**
  * AsseticException Class.
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-class AsseticException extends \Exception
+class AsseticException extends Exception
 {
     /**
      * AsseticException constructor.
@@ -23,7 +25,7 @@ class AsseticException extends \Exception
      * @param int             $code
      * @param \Exception|null $previous
      */
-    public function __construct($messages = null, $code = 0, \Exception $previous = null)
+    public function __construct($messages = null, $code = 0, Exception $previous = null)
     {
         parent::__construct($messages, $code, $previous);
     }
