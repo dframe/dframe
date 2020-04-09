@@ -12,7 +12,6 @@ The basic framework to help you build MVC project.
     - [Good Practice](docs/overview/GoodPractice.md)
 - [Extensions](#)
     - [Router](docs/extensions/Router.md)
-    - [Session](docs/extensions/Session.md)
 - [License](#license)
 
 
