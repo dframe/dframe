@@ -13,7 +13,6 @@ The basic framework to help you build MVC project.
 - [Extensions](#)
     - [Router](docs/extensions/Router.md)
     - [Session](docs/extensions/Session.md)
-    - [Messages](docs/extensions/Messages.md)
 - [License](#license)
 
 
