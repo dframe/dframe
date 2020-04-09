@@ -21,7 +21,6 @@ The basic framework to help you build MVC project.
  * [Router PHP](https://dframeframework.com/en/docs/dframe/master/routing/overview) 
  * Sessions
  * [Config PHP](https://dframeframework.com/en/docs/dframe/master/routing/overview) 
- * Tokens
  * [Template PHP](https://dframeframework.com/en/docs/dframe/master/routing/overview)
  * [Cron PHP](https://dframeframework.com/en/docs/dframe/master/cron/overview)
 
