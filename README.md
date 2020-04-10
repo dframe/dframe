@@ -18,14 +18,13 @@ The basic framework to help you build MVC project.
 ## What's included?
  * [Class Loader PHP](https://dframeframework.com/en/docs/dframe/master/installation/overview) 
  * [Router PHP](https://dframeframework.com/en/docs/dframe/master/routing/overview) 
- * Sessions
  * [Template PHP](https://dframeframework.com/en/docs/dframe/master/routing/overview)
  * [Cron PHP](https://dframeframework.com/en/docs/dframe/master/cron/overview)
 
 ### Requirements
  
- - PHP >= 7.0
- - Rewrite Module (nginix/apache2)
+ - PHP >= 7.3
+ - Rewrite Module (Nginx/Apache )
  - Composer
  
 
