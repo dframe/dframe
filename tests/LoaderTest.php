@@ -5,7 +5,7 @@ namespace Dframe\Tests;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class ConfigTest
+ * Class LoaderTest
  *
  * @package Dframe\Tests
  */

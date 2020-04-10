@@ -9,6 +9,7 @@
 
 namespace Dframe;
 
+use Dframe\Component\Config\Config;
 use Dframe\Router\Exceptions\InvalidArgumentException;
 use Dframe\Router\Exceptions\RuntimeException;
 use Dframe\Router\Response;

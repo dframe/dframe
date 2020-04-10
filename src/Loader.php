@@ -10,6 +10,7 @@
 namespace Dframe;
 
 use Bootstrap;
+use Dframe\Component\Config\Config;
 use Dframe\Loader\Exceptions\LoaderException;
 use Dframe\Router\Response;
 use Exception;

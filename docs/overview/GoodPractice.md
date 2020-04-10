@@ -42,7 +42,6 @@ In view not a lot is happend. In standard View/index.php should be assign should
 ```php
 <?php
 namespace View;
-use Dframe\Config;
 
 class IndexView extends \View\View
 {

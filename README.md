@@ -19,7 +19,6 @@ The basic framework to help you build MVC project.
  * [Class Loader PHP](https://dframeframework.com/en/docs/dframe/master/installation/overview) 
  * [Router PHP](https://dframeframework.com/en/docs/dframe/master/routing/overview) 
  * Sessions
- * [Config PHP](https://dframeframework.com/en/docs/dframe/master/routing/overview) 
  * [Template PHP](https://dframeframework.com/en/docs/dframe/master/routing/overview)
  * [Cron PHP](https://dframeframework.com/en/docs/dframe/master/cron/overview)
 

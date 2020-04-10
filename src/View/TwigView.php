@@ -9,7 +9,7 @@
 
 namespace Dframe\View;
 
-use Dframe\Config;
+use Dframe\Component\Config\Config;
 use Dframe\View\Exceptions\ViewException;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
