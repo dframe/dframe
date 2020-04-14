@@ -22,7 +22,7 @@ class RouterTest extends TestCase
      */
     public function setUp()
     {
-        $this->router = new Router();
+        $this->router = (new Router())->boot();
 
         $this->router->addRoute([
             'page/:page' => [
