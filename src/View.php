@@ -66,8 +66,8 @@ abstract class View extends Loader implements ViewInterface
     /**
      * File including
      *
-     * @param string $name
-     * @param null   $path
+     * @param string      $name
+     * @param null|string $path
      *
      * @return mixed
      */

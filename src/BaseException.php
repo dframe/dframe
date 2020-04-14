@@ -21,7 +21,7 @@ class BaseException extends Exception
     /**
      * BaseException constructor.
      *
-     * @param null            $messages
+     * @param string          $messages
      * @param int             $code
      * @param \Exception|null $previous
      */

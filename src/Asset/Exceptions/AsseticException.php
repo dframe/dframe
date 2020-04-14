@@ -21,12 +21,12 @@ class AsseticException extends Exception
     /**
      * AsseticException constructor.
      *
-     * @param null            $messages
+     * @param string          $message
      * @param int             $code
      * @param \Exception|null $previous
      */
-    public function __construct($messages = null, $code = 0, Exception $previous = null)
+    public function __construct($message = "", $code = 0, Exception $previous = null)
     {
-        parent::__construct($messages, $code, $previous);
+        parent::__construct($message, $code, $previous);
     }
 }
