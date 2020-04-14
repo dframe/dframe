@@ -19,7 +19,7 @@ abstract class Model extends Loader
     /**
      * Standard method for returning  result from the method.
      *
-     * @param array $errors
+     * @param array|null $errors
      *
      * @return array
      */
@@ -39,8 +39,8 @@ abstract class Model extends Loader
     /**
      * Standard method for returning the result from the method.
      *
-     * @param bool  $type
-     * @param array $array
+     * @param bool       $type
+     * @param array|null $array
      *
      * @return array
      */
