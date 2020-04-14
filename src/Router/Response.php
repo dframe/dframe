@@ -218,7 +218,7 @@ class Response extends Router
 
         $Response->headers(
             [
-                'Location' => (new Router())->makeUrl($url),
+                'Location' => ((new Router())->boot())->makeUrl($url),
             ]
         );
 

@@ -117,9 +117,13 @@ class Router
     protected $domain;
 
     /**
-     * Router constructor.
+     * __construct Class
+     *
+     * @param $app
+     *
+     * @return $this | string
      */
-    public function __construct()
+    public function boot()
     {
         if (!defined('HTTP_HOST') and isset($_SERVER['HTTP_HOST'])) {
             define('HTTP_HOST', $_SERVER['HTTP_HOST']);
@@ -178,61 +182,8 @@ class Router
             }
         }
 
-        return null;
-    }
-
-    /**
-     * Set up http/https
-     *
-     * @param bool $option
-     *
-     * @return $this
-     */
-    public function setHttps($option = false)
-    {
-        if (!in_array($option, [true, false])) {
-            throw new InvalidArgumentException('Incorrect option', 403);
-        }
-
-        if ($option === true) {
-            $this->requestPrefix = 'https://';
-        } else {
-            $this->requestPrefix = 'http://';
-            if ((isset($_SERVER['REQUEST_SCHEME']) and (!empty($_SERVER['REQUEST_SCHEME']) and ($_SERVER['REQUEST_SCHEME'] === 'https') or !empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] === 'on') or (!empty($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] === '443'))) {
-                $this->requestPrefix = 'https://';
-            }
-        }
-
-        $this->https = $option;
-
-        return $this;
-    }
-
-    /**
-     * Redirect.
-     *
-     * @param string $url The URI
-     * @param int    $status
-     *
-     * @return Response|object
-     */
-    public static function redirect($url = '', $status = 301)
-    {
-        return Response::redirect($url, $status);
-    }
-
-    /**
-     * __construct Class
-     *
-     * @param $app
-     *
-     * @return $this
-     */
-    public function boot($app)
-    {
-        $this->app = $app;
-
         $routerConfig = $this->app->config['router'] ?? [];
+
         $this->routeMap['routes'] = array_merge($this->routeMap['routes'] ?? [], $routerConfig['routes'] ?? []);
         $this->routeMapParse = array_merge($routerConfig['routes'] ?? [], $this->routeMapParse ?? []);
 
@@ -278,6 +229,47 @@ class Router
 
         return $this;
     }
+
+    /**
+     * Set up http/https
+     *
+     * @param bool $option
+     *
+     * @return $this
+     */
+    public function setHttps($option = false)
+    {
+        if (!in_array($option, [true, false])) {
+            throw new InvalidArgumentException('Incorrect option', 403);
+        }
+
+        if ($option === true) {
+            $this->requestPrefix = 'https://';
+        } else {
+            $this->requestPrefix = 'http://';
+            if ((isset($_SERVER['REQUEST_SCHEME']) and (!empty($_SERVER['REQUEST_SCHEME']) and ($_SERVER['REQUEST_SCHEME'] === 'https') or !empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] === 'on') or (!empty($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] === '443'))) {
+                $this->requestPrefix = 'https://';
+            }
+        }
+
+        $this->https = $option;
+
+        return $this;
+    }
+
+    /**
+     * Redirect.
+     *
+     * @param string $url The URI
+     * @param int    $status
+     *
+     * @return Response|object
+     */
+    public static function redirect($url = '', $status = 301)
+    {
+        return Response::redirect($url, $status);
+    }
+
 
     /**
      * Annotations parser.
