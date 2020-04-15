@@ -9,7 +9,7 @@
 
 namespace Dframe\View;
 
-use Dframe\Config;
+use Dframe\Component\Config\Config;
 use Dframe\View\Exceptions\ViewException;
 
 /**
@@ -72,10 +72,12 @@ class DefaultView implements ViewInterface
             ob_start();
             include $path;
         } catch (ViewException $e) {
-            die($e->getMessage() . '<br />
+            die(
+                $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />
-                Trace: ' . $e->getTraceAsString());
+                Trace: ' . $e->getTraceAsString()
+            );
         }
 
         return ob_get_clean();
@@ -107,10 +109,12 @@ class DefaultView implements ViewInterface
 
             $renderInclude = include $path;
         } catch (ViewException $e) {
-            die($e->getMessage() . '<br />
+            die(
+                $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />
-                Trace: ' . $e->getTraceAsString());
+                Trace: ' . $e->getTraceAsString()
+            );
         }
 
         return $renderInclude;

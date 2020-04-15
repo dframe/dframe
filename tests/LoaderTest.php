@@ -5,7 +5,7 @@ namespace Dframe\Tests;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class ConfigTest
+ * Class LoaderTest
  *
  * @package Dframe\Tests
  */
@@ -19,21 +19,21 @@ class LoaderTest extends TestCase
     {
         $loaderTest = new \Dframe\Loader();
 
-        $this->assertTrue($loaderTest->isCodeStyleNamespace('Namespace'));
-        $this->assertTrue($loaderTest->isCodeStyleNamespace('\Namespace'));
-        $this->assertTrue($loaderTest->isCodeStyleNamespace('Namespace\SubNamespace'));
-        $this->assertTrue($loaderTest->isCodeStyleNamespace('\Namespace\SubNamespace'));
-        $this->assertTrue($loaderTest->isCodeStyleNamespace('Namespace\SubNamespace\SubNamespace'));
+        $this->assertTrue($loaderTest->isCamelCaps('Namespace'));
+        $this->assertTrue($loaderTest->isCamelCaps('\Namespace'));
+        $this->assertTrue($loaderTest->isCamelCaps('Namespace\SubNamespace'));
+        $this->assertTrue($loaderTest->isCamelCaps('\Namespace\SubNamespace'));
+        $this->assertTrue($loaderTest->isCamelCaps('Namespace\SubNamespace\SubNamespace'));
 
-        $this->assertFalse($loaderTest->isCodeStyleNamespace('namespace'));
-        $this->assertFalse($loaderTest->isCodeStyleNamespace('\namespace'));
-        $this->assertFalse($loaderTest->isCodeStyleNamespace('Namespace\\'));
-        $this->assertFalse($loaderTest->isCodeStyleNamespace('\namespace\SubNamespace'));
-        $this->assertFalse($loaderTest->isCodeStyleNamespace('namespace\SubNamespace'));
-        $this->assertFalse($loaderTest->isCodeStyleNamespace('Namespace\subNamespace'));
-        $this->assertFalse($loaderTest->isCodeStyleNamespace('\Namespace\subNamespace'));
-        $this->assertFalse($loaderTest->isCodeStyleNamespace('Namespace\SubNamespace\subNamespace'));
-        $this->assertFalse($loaderTest->isCodeStyleNamespace('Namespace\subNamespace\SubNamespace'));
+        $this->assertFalse($loaderTest->isCamelCaps('namespace'));
+        $this->assertFalse($loaderTest->isCamelCaps('\namespace'));
+        $this->assertFalse($loaderTest->isCamelCaps('Namespace\\'));
+        $this->assertFalse($loaderTest->isCamelCaps('\namespace\SubNamespace'));
+        $this->assertFalse($loaderTest->isCamelCaps('namespace\SubNamespace'));
+        $this->assertFalse($loaderTest->isCamelCaps('Namespace\subNamespace'));
+        $this->assertFalse($loaderTest->isCamelCaps('\Namespace\subNamespace'));
+        $this->assertFalse($loaderTest->isCamelCaps('Namespace\SubNamespace\subNamespace'));
+        $this->assertFalse($loaderTest->isCamelCaps('Namespace\subNamespace\SubNamespace'));
     }
 
     public function testLoadController()

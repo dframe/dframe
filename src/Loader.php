@@ -9,8 +9,11 @@
 
 namespace Dframe;
 
+use Bootstrap;
+use Dframe\Component\Config\Config;
 use Dframe\Loader\Exceptions\LoaderException;
 use Dframe\Router\Response;
+use Exception;
 
 /**
  * Loader Class.
@@ -57,9 +60,9 @@ class Loader
             throw new LoaderException('Please Define SALT in Main config.php', 500);
         }
 
-        $this->baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
+        $this->baseClass = empty($bootstrap) ? new Bootstrap() : $bootstrap;
 
-        $baseClass = new \Bootstrap();
+        $baseClass = $this->baseClass;
         foreach ($baseClass->providers['core'] ?? [] as $key => $value) {
             $this->$key = new $value($this);
             if (method_exists($this->$key, 'boot') or is_callable([$this->$key, 'boot'])) {
@@ -151,9 +154,11 @@ class Loader
     private function loadObject($name, $type, $namespace = null)
     {
         try {
-            if (!$this->isCodeStyleNamespace($name)) {
+            if (!$this->isCamelCaps($name)) {
                 if (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) {
-                    throw new LoaderException('Camel Sensitive is on. Can not use ' . $type . ' ' . $name . ' try to use StudlyCaps or CamelCase');
+                    throw new LoaderException(
+                        'Camel Sensitive is on. Can not use ' . $type . ' ' . $name . ' try to use StudlyCaps or CamelCase'
+                    );
                 }
             }
 
@@ -213,11 +218,11 @@ class Loader
      *
      * @return bool
      */
-    public static function isCodeStyleNamespace($string)
+    public static function isCamelCaps($string)
     {
-        preg_match_all('/^(?\'namespace\'(([A-Z]|\\\\[A-Z])[a-zA-Z]+)+)$/', $string, $matches);
+        preg_match_all('/^(?\'isCamelCaps\'(([A-Z]|([\\\\|\/\/][A-Z]))[a-zA-Z]+)+)$/', $string, $matches);
 
-        return !empty($matches['namespace']);
+        return !empty($matches['isCamelCaps']);
     }
 
     /**
@@ -231,39 +236,6 @@ class Loader
     public function loadView($name, $namespace = null)
     {
         return $this->loadObject($name, 'View', $namespace);
-    }
-
-    private function processLoadControllerException($e)
-    {
-        if (ini_get('display_errors') === "1") {
-            if (PHP_SAPI === 'cli') {
-                throw new \Exception($e->getMessage());
-            } else {
-                $msg = '<pre>';
-                $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
-
-                $msg .= 'Accept: ' . $_SERVER['HTTP_ACCEPT'] . '<br>';
-                if (isset($_SERVER['HTTP_REFERER'])) {
-                    $msg .= 'Referer: ' . $_SERVER['HTTP_REFERER'] . '<br><br>';
-                }
-
-                $msg .= 'Request Method: ' . $_SERVER['REQUEST_METHOD'] . '<br><br>';
-                $msg .= 'Current file Path: <b>' . $this->router->currentPath() . '</b><br>';
-                $msg .= 'File Exception: ' . $e->getFile() . ':' . $e->getLine() . '<br><br>';
-                $msg .= 'Trace: <br>' . $e->getTraceAsString() . '<br>';
-                $msg .= '</pre>';
-
-                return Response::create($msg)->display();
-            }
-        }
-
-        $routes = Config::load('router')->get('routes');
-
-        if (!empty($routes['error/:code'])) {
-            return Response::redirect('error/:code?code=400', 400)->display();
-        }
-
-        return Response::create()->status(500)->display();
     }
 
     /**
@@ -285,7 +257,9 @@ class Loader
                 $subController = '';
 
                 for ($i = 0; $i < $urlCount; $i++) {
-                    $subController .= (!defined('CODING_STYLE') or (defined('CODING_STYLE') and CODING_STYLE === true)) ?
+                    $subController .= (!defined('CODING_STYLE') or (defined(
+                                'CODING_STYLE'
+                            ) and CODING_STYLE === true)) ?
                         ucfirst($url[$i]) . DIRECTORY_SEPARATOR :
                         $url[$i] . DIRECTORY_SEPARATOR;
                 }
@@ -314,11 +288,44 @@ class Loader
             }
 
             $controller = new $load($this->baseClass);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->processLoadControllerException($e);
         }
 
         return $controller;
+    }
+
+    private function processLoadControllerException($e)
+    {
+        if (ini_get('display_errors') === "1") {
+            if (PHP_SAPI === 'cli') {
+                throw new Exception($e->getMessage());
+            } else {
+                $msg = '<pre>';
+                $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
+
+                $msg .= 'Accept: ' . $_SERVER['HTTP_ACCEPT'] . '<br>';
+                if (isset($_SERVER['HTTP_REFERER'])) {
+                    $msg .= 'Referer: ' . $_SERVER['HTTP_REFERER'] . '<br><br>';
+                }
+
+                $msg .= 'Request Method: ' . $_SERVER['REQUEST_METHOD'] . '<br><br>';
+                $msg .= 'Current file Path: <b>' . $this->router->currentPath() . '</b><br>';
+                $msg .= 'File Exception: ' . $e->getFile() . ':' . $e->getLine() . '<br><br>';
+                $msg .= 'Trace: <br>' . $e->getTraceAsString() . '<br>';
+                $msg .= '</pre>';
+
+                return Response::create($msg)->display();
+            }
+        }
+
+        $routes = Config::load('router')->get('routes');
+
+        if (!empty($routes['error/:code'])) {
+            return Response::redirect('error/:code?code=400', 400)->display();
+        }
+
+        return Response::create()->status(500)->display();
     }
 
     /**

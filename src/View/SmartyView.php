@@ -9,8 +9,10 @@
 
 namespace Dframe\View;
 
-use Dframe\Config;
+use Dframe\Component\Config\Config;
 use Dframe\View\Exceptions\ViewException;
+use Exception;
+use Smarty;
 
 /**
  * Smarty View.
@@ -36,7 +38,7 @@ class SmartyView implements ViewInterface
     {
         $this->smartyConfig = Config::load('view/smarty');
 
-        $smarty = new \Smarty;
+        $smarty = new Smarty();
         $smarty->debugging = $this->smartyConfig->get('debugging', false);
         $smarty->setTemplateDir($this->smartyConfig->get('setTemplateDir'))
             ->setCompileDir($this->smartyConfig->get('setCompileDir'))
@@ -70,10 +72,12 @@ class SmartyView implements ViewInterface
 
             $assign = $this->smarty->assign($name, $value);
         } catch (ViewException $e) {
-            die($e->getMessage() . '<br />
+            die(
+                $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />
-                Trace: ' . $e->getTraceAsString());
+                Trace: ' . $e->getTraceAsString()
+            );
         }
 
         return $assign;
@@ -105,11 +109,13 @@ class SmartyView implements ViewInterface
 
             // Loading view
             $fetch = $this->smarty->fetch($path);
-        } catch (\Exception $e) {
-            die($e->getMessage() . '<br />
+        } catch (Exception $e) {
+            die(
+                $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />
-                Trace: ' . $e->getTraceAsString());
+                Trace: ' . $e->getTraceAsString()
+            );
         }
 
         return $fetch;
@@ -141,10 +147,12 @@ class SmartyView implements ViewInterface
 
             return $this->smarty->fetch($path); // Loading view
         } catch (ViewException $e) {
-            die($e->getMessage() . '<br />
+            die(
+                $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />
-                Trace: ' . $e->getTraceAsString());
+                Trace: ' . $e->getTraceAsString()
+            );
         }
     }
 }

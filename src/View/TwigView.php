@@ -9,8 +9,10 @@
 
 namespace Dframe\View;
 
-use Dframe\Config;
+use Dframe\Component\Config\Config;
 use Dframe\View\Exceptions\ViewException;
+use Twig_Environment;
+use Twig_Loader_Filesystem;
 
 /**
  * Twig View.
@@ -35,8 +37,8 @@ class TwigView implements ViewInterface
     public function __construct()
     {
         $twigConfig = Config::load('view/twig');
-        $loader = new \Twig_Loader_Filesystem($twigConfig->get('setTemplateDir'));
-        $twig = new \Twig_Environment(
+        $loader = new Twig_Loader_Filesystem($twigConfig->get('setTemplateDir'));
+        $twig = new Twig_Environment(
             $loader,
             [
                 'cache' => $twigConfig->get('setCompileDir'),
@@ -62,10 +64,12 @@ class TwigView implements ViewInterface
 
             $assign = $this->assign[$name] = $value;
         } catch (ViewException $e) {
-            die($e->getMessage() . '<br />
+            die(
+                $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />
                 Code line: ' . $e->getLine() . '<br />
-                Trace: ' . $e->getTraceAsString());
+                Trace: ' . $e->getTraceAsString()
+            );
         }
 
         return $assign;
@@ -109,10 +113,12 @@ class TwigView implements ViewInterface
 
             $renderInclude = $this->twig->render($name, $this->assign);
         } catch (ViewException $e) {
-            die($e->getMessage() . '<br />
+            die(
+                $e->getMessage() . '<br />
                         File: ' . $e->getFile() . '<br />
                         Code line: ' . $e->getLine() . '<br />
-                        Trace: ' . $e->getTraceAsString());
+                        Trace: ' . $e->getTraceAsString()
+            );
         }
 
         return $renderInclude;

@@ -9,9 +9,12 @@
 
 namespace Dframe;
 
+use Dframe\Component\Config\Config;
 use Dframe\Router\Exceptions\InvalidArgumentException;
 use Dframe\Router\Exceptions\RuntimeException;
 use Dframe\Router\Response;
+
+use function parse_url;
 
 /**
  * Router class.
@@ -114,9 +117,13 @@ class Router
     protected $domain;
 
     /**
-     * Router constructor.
+     * __construct Class
+     *
+     * @param $app
+     *
+     * @return $this | string
      */
-    public function __construct()
+    public function boot()
     {
         if (!defined('HTTP_HOST') and isset($_SERVER['HTTP_HOST'])) {
             define('HTTP_HOST', $_SERVER['HTTP_HOST']);
@@ -175,61 +182,8 @@ class Router
             }
         }
 
-        return null;
-    }
-
-    /**
-     * Set up http/https
-     *
-     * @param bool $option
-     *
-     * @return $this
-     */
-    public function setHttps($option = false)
-    {
-        if (!in_array($option, [true, false])) {
-            throw new InvalidArgumentException('Incorrect option', 403);
-        }
-
-        if ($option === true) {
-            $this->requestPrefix = 'https://';
-        } else {
-            $this->requestPrefix = 'http://';
-            if ((isset($_SERVER['REQUEST_SCHEME']) and (!empty($_SERVER['REQUEST_SCHEME']) and ($_SERVER['REQUEST_SCHEME'] === 'https') or !empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] === 'on') or (!empty($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] === '443'))) {
-                $this->requestPrefix = 'https://';
-            }
-        }
-
-        $this->https = $option;
-
-        return $this;
-    }
-
-    /**
-     * Redirect.
-     *
-     * @param string $url The URI
-     * @param int    $status
-     *
-     * @return Response|object
-     */
-    public static function redirect($url = '', $status = 301)
-    {
-        return Response::redirect($url, $status);
-    }
-
-    /**
-     * __construct Class
-     *
-     * @param $app
-     *
-     * @return $this
-     */
-    public function boot($app)
-    {
-        $this->app = $app;
-
         $routerConfig = $this->app->config['router'] ?? [];
+
         $this->routeMap['routes'] = array_merge($this->routeMap['routes'] ?? [], $routerConfig['routes'] ?? []);
         $this->routeMapParse = array_merge($routerConfig['routes'] ?? [], $this->routeMapParse ?? []);
 
@@ -276,40 +230,46 @@ class Router
         return $this;
     }
 
-    protected function regenerateRouts($routs)
+    /**
+     * Set up http/https
+     *
+     * @param bool $option
+     *
+     * @return $this
+     */
+    public function setHttps($option = false)
     {
-        usort(
-            $routes,
-            function ($a, $b) {
-                if (strlen($a['routePath']) === strlen($b['routePath'])) {
-                    return 0;
-                }
-                return strcmp($b['routePath'],
-                    $a['routePath']) ?: strlen($b['routePath']) - strlen($a['routePath']);
-            }
-        );
-
-        $controllerFiles = [];
-        $commonFileContent = '<?php' . "\r\n" . '/**' . "\r\n" . ' * annotations router %s cache file, create ' . date('c') . "\r\n" . ' */' . "\r\n\r\n";
-        $routesFileContent = sprintf($commonFileContent, 'routes');
-        $controllersFileContent = sprintf($commonFileContent, 'controllers');
-        $routesFileContent .= 'return [';
-
-        foreach ($routes as $key => $route) {
-            $routesFileContent .= "\r\n";
-            $routesFileContent .= "    '" . $route['routeName'] . "' => [" . "\r\n";
-            $routesFileContent .= "        '" . $route['routePath'] . "'," . "\r\n";
-            $routesFileContent .= "        'task=" . $route['task'] . "&action=" . $route['action'] . $route['substring'] . "'," . "\r\n";
-            $routesFileContent .= "    ]," . "\r\n";
+        if (!in_array($option, [true, false])) {
+            throw new InvalidArgumentException('Incorrect option', 403);
         }
 
-        $routesFileContent = rtrim($routesFileContent, ',' . "\r\n");
-        $routesFileContent .= "\r\n" . "];";
-        file_put_contents($this->cacheDir . $this->routesFile, $routesFileContent);
-        $usedControllers = (count($controllerFiles) > 0) ? '$this->usedControllers = [\'' . implode('\',\'',
-                $controllerFiles) . '\'];' : '';
-        file_put_contents($this->cacheDir . $this->controllersFile, $controllersFileContent . $usedControllers);
+        if ($option === true) {
+            $this->requestPrefix = 'https://';
+        } else {
+            $this->requestPrefix = 'http://';
+            if ((isset($_SERVER['REQUEST_SCHEME']) and (!empty($_SERVER['REQUEST_SCHEME']) and ($_SERVER['REQUEST_SCHEME'] === 'https') or !empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] === 'on') or (!empty($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] === '443'))) {
+                $this->requestPrefix = 'https://';
+            }
+        }
+
+        $this->https = $option;
+
+        return $this;
     }
+
+    /**
+     * Redirect.
+     *
+     * @param string $url The URI
+     * @param int    $status
+     *
+     * @return Response|object
+     */
+    public static function redirect($url = '', $status = 301)
+    {
+        return Response::redirect($url, $status);
+    }
+
 
     /**
      * Annotations parser.
@@ -387,8 +347,11 @@ class Router
     {
         $routes = [];
 
-        $appDir = str_replace('web' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . '',
-            '', APP_DIR);
+        $appDir = str_replace(
+            'web' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . '',
+            '',
+            APP_DIR
+        );
 
         $task = str_replace($appDir . 'app' . DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR . '', '', $file);
         $task = rtrim($task, '.php');
@@ -462,6 +425,47 @@ class Router
         return null;
     }
 
+    protected function regenerateRouts($routs)
+    {
+        usort(
+            $routes,
+            function ($a, $b) {
+                if (strlen($a['routePath']) === strlen($b['routePath'])) {
+                    return 0;
+                }
+                return strcmp(
+                    $b['routePath'],
+                    $a['routePath']
+                ) ?: strlen($b['routePath']) - strlen($a['routePath']);
+            }
+        );
+
+        $controllerFiles = [];
+        $commonFileContent = '<?php' . "\r\n" . '/**' . "\r\n" . ' * annotations router %s cache file, create ' . date(
+                'c'
+            ) . "\r\n" . ' */' . "\r\n\r\n";
+        $routesFileContent = sprintf($commonFileContent, 'routes');
+        $controllersFileContent = sprintf($commonFileContent, 'controllers');
+        $routesFileContent .= 'return [';
+
+        foreach ($routes as $key => $route) {
+            $routesFileContent .= "\r\n";
+            $routesFileContent .= "    '" . $route['routeName'] . "' => [" . "\r\n";
+            $routesFileContent .= "        '" . $route['routePath'] . "'," . "\r\n";
+            $routesFileContent .= "        'task=" . $route['task'] . "&action=" . $route['action'] . $route['substring'] . "'," . "\r\n";
+            $routesFileContent .= "    ]," . "\r\n";
+        }
+
+        $routesFileContent = rtrim($routesFileContent, ',' . "\r\n");
+        $routesFileContent .= "\r\n" . "];";
+        file_put_contents($this->cacheDir . $this->routesFile, $routesFileContent);
+        $usedControllers = (count($controllerFiles) > 0) ? '$this->usedControllers = [\'' . implode(
+                '\',\'',
+                $controllerFiles
+            ) . '\'];' : '';
+        file_put_contents($this->cacheDir . $this->controllersFile, $controllersFileContent . $usedControllers);
+    }
+
     /**
      * @return array|string[]
      */
@@ -492,90 +496,6 @@ class Router
         }
 
         return false;
-    }
-
-    /**
-     * @param string $findKey
-     * @param array $params
-     * @param string $task
-     * @param string $action
-     *
-     * @return mixed|string
-     */
-    private function expressionUrlWithModRewrite($findKey, $params, $task, $action)
-    {
-        if (isset($this->routeMap['routes'][$findKey])) {
-            $expressionUrl = $this->routeMap['routes'][$findKey][0];
-            foreach ($params as $key => $value) {
-                $expressionUrl = str_replace('[' . $key . ']', $value, $expressionUrl, $count);
-                if ($count > 0) {
-                    unset($params[$key]);
-                }
-            }
-
-            if (isset($params)) {
-                if (isset($this->routeMap['routes'][$findKey]['_params'])) {
-                    $expressionUrl = str_replace('[params]',
-                        $this->parseParams($this->routeMap['routes'][$findKey]['_params'][0], $params),
-                        $expressionUrl);
-                } elseif (!empty($params)) {
-                    $expressionUrl = $expressionUrl . '?' . http_build_query($params);
-                }
-            }
-        } else {
-            $expressionUrl = $this->routeMap['routes']['default'][0];
-            $expressionUrl = str_replace('[task]', $task, $expressionUrl);
-            $expressionUrl = str_replace('[action]', $action, $expressionUrl);
-            if (isset($params)) {
-                $expressionUrl = str_replace('[params]',
-                    $this->parseParams($this->routeMap['routes']['default']['_params'][0], $params),
-                    $expressionUrl);
-            }
-        }
-
-        return $expressionUrl;
-    }
-
-    /**
-     * @param string $findKey
-     * @param array $params
-     * @param string $task
-     * @param string $action
-     *
-     * @return mixed|string
-     */
-    private function expressionUrlWithoutModRewrite($findKey, $params, $task, $action)
-    {
-        if (empty($task)) {
-            $expressionUrl = '';
-        } else {
-            if (isset($this->routeMap['routes'][$findKey])) {
-                $expressionUrl0 = $this->routeMap['routes'][$findKey][1];
-                foreach ($params as $key => $value) {
-                    $expressionUrl0 = str_replace('[' . $key . ']', $value, $expressionUrl0, $count);
-                    if ($count > 0) {
-                        unset($params[$key]);
-                    }
-                }
-
-                $expressionUrl = $expressionUrl0;
-            } else {
-                $expressionUrl = 'task=' . $task;
-                if (!empty($action)) {
-                    $expressionUrl = 'task=' . $task . '&action=' . $action;
-                }
-            }
-
-            if (!empty($params)) {
-                if (!empty($expressionUrl)) {
-                    $expressionUrl .= '&';
-                }
-                $expressionUrl = $expressionUrl . http_build_query($params);
-            }
-            $expressionUrl = 'index.php?' . $expressionUrl;
-        }
-
-        return $expressionUrl;
     }
 
     /**
@@ -615,7 +535,7 @@ class Router
             $expressionUrl = $this->expressionUrlWithoutModRewrite($findKey, $params, $task, $action);
         }
 
-        $parsedUrl = \parse_url($this->domain);
+        $parsedUrl = parse_url($this->domain);
 
         if (isset($parsedUrl['scheme'])) {
             $this->requestPrefix = $parsedUrl['scheme'] . '://';
@@ -644,6 +564,52 @@ class Router
     }
 
     /**
+     * @param string $findKey
+     * @param array  $params
+     * @param string $task
+     * @param string $action
+     *
+     * @return mixed|string
+     */
+    private function expressionUrlWithModRewrite($findKey, $params, $task, $action)
+    {
+        if (isset($this->routeMap['routes'][$findKey])) {
+            $expressionUrl = $this->routeMap['routes'][$findKey][0];
+            foreach ($params as $key => $value) {
+                $expressionUrl = str_replace('[' . $key . ']', $value, $expressionUrl, $count);
+                if ($count > 0) {
+                    unset($params[$key]);
+                }
+            }
+
+            if (isset($params)) {
+                if (isset($this->routeMap['routes'][$findKey]['_params'])) {
+                    $expressionUrl = str_replace(
+                        '[params]',
+                        $this->parseParams($this->routeMap['routes'][$findKey]['_params'][0], $params),
+                        $expressionUrl
+                    );
+                } elseif (!empty($params)) {
+                    $expressionUrl = $expressionUrl . '?' . http_build_query($params);
+                }
+            }
+        } else {
+            $expressionUrl = $this->routeMap['routes']['default'][0];
+            $expressionUrl = str_replace('[task]', $task, $expressionUrl);
+            $expressionUrl = str_replace('[action]', $action, $expressionUrl);
+            if (isset($params)) {
+                $expressionUrl = str_replace(
+                    '[params]',
+                    $this->parseParams($this->routeMap['routes']['default']['_params'][0], $params),
+                    $expressionUrl
+                );
+            }
+        }
+
+        return $expressionUrl;
+    }
+
+    /**
      * Parse url params into a 'request'
      *
      * @param string $routing
@@ -660,6 +626,48 @@ class Router
         }
 
         return $return;
+    }
+
+    /**
+     * @param string $findKey
+     * @param array  $params
+     * @param string $task
+     * @param string $action
+     *
+     * @return mixed|string
+     */
+    private function expressionUrlWithoutModRewrite($findKey, $params, $task, $action)
+    {
+        if (empty($task)) {
+            $expressionUrl = '';
+        } else {
+            if (isset($this->routeMap['routes'][$findKey])) {
+                $expressionUrl0 = $this->routeMap['routes'][$findKey][1];
+                foreach ($params as $key => $value) {
+                    $expressionUrl0 = str_replace('[' . $key . ']', $value, $expressionUrl0, $count);
+                    if ($count > 0) {
+                        unset($params[$key]);
+                    }
+                }
+
+                $expressionUrl = $expressionUrl0;
+            } else {
+                $expressionUrl = 'task=' . $task;
+                if (!empty($action)) {
+                    $expressionUrl = 'task=' . $task . '&action=' . $action;
+                }
+            }
+
+            if (!empty($params)) {
+                if (!empty($expressionUrl)) {
+                    $expressionUrl .= '&';
+                }
+                $expressionUrl = $expressionUrl . http_build_query($params);
+            }
+            $expressionUrl = 'index.php?' . $expressionUrl;
+        }
+
+        return $expressionUrl;
     }
 
     /**
