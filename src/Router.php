@@ -117,6 +117,11 @@ class Router
     protected $domain;
 
     /**
+     * @var array
+     */
+    private $routesAdd = [];
+
+    /**
      * __construct Class
      *
      * @param $app
@@ -187,6 +192,19 @@ class Router
         $this->routeMap['routes'] = array_merge($this->routeMap['routes'] ?? [], $routerConfig['routes'] ?? []);
         $this->routeMapParse = array_merge($routerConfig['routes'] ?? [], $this->routeMapParse ?? []);
 
+        $cacheDir = APP_DIR . 'View/cache/';
+        $this->cacheDir = rtrim($cacheDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        // We save the cache dir
+        if (!is_dir($cacheDir)) {
+            if (!mkdir($cacheDir, 0777, true)) {
+                throw new RuntimeException('Can\'t create cache directory');
+            }
+        }
+
+        if (!is_writable($cacheDir)) {
+            throw new RuntimeException('Cache directory must be writable by web server');
+        }
+
         $annotationRoute = $this->routerConfig->get('annotation', false);
         if ($annotationRoute === true) {
             if (PHP_SAPI !== 'cli') {
@@ -195,8 +213,6 @@ class Router
                 }
 
                 $controllerDirs = [APP_DIR . 'Controller/'];
-                $cacheDir = APP_DIR . 'View/cache/';
-
                 $this->controllerDirs = [];
                 foreach ($controllerDirs as $d) {
                     $realPath = realpath($d);
@@ -205,29 +221,33 @@ class Router
                     }
                 }
 
-                // We save the cache dir
-                if (!is_dir($cacheDir)) {
-                    if (!mkdir($cacheDir, 0777, true)) {
-                        throw new RuntimeException('Can\'t create cache directory');
-                    }
-                }
-
-                if (!is_writable($cacheDir)) {
-                    throw new RuntimeException('Cache directory must be writable by web server');
-                }
-
-                $this->cacheDir = rtrim($cacheDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
                 $this->generateRoutes();
+            }
+        }
 
-                $routesConfig = Config::load('routes', APP_DIR . 'View/cache/')->get();
-                if (!empty($routesConfig)) {
-                    $this->routeMapParse = array_merge($routesConfig, $this->routeMapParse);
-                    $this->routeMap['routes'] = array_merge($routesConfig, $this->routeMap['routes']);
+        $routesConfig = Config::load('routes', APP_DIR . 'View/cache/')->get();
+
+        if (!empty($routesConfig)) {
+            if (is_array($routesConfig) and $this->isAssoc($routesConfig) === false) {
+                foreach ($routesConfig as $value) {
+                    $this->routeMapParse = array_merge($value, $this->routeMapParse);
+                    $this->routeMap['routes'] = array_merge($value, $this->routeMap['routes']);
                 }
+            } elseif(is_array($routesConfig)) {
+                $this->routeMapParse = array_merge($routesConfig, $this->routeMapParse);
+                $this->routeMap['routes'] = array_merge($routesConfig, $this->routeMap['routes']);
             }
         }
 
         return $this;
+    }
+
+    public function isAssoc(array $arr)
+    {
+        if ([] === $arr) {
+            return false;
+        }
+        return array_keys($arr) !== range(0, count($arr) - 1);
     }
 
     /**
@@ -425,7 +445,7 @@ class Router
         return null;
     }
 
-    protected function regenerateRouts($routs)
+    public function regenerateRouts($routes)
     {
         usort(
             $routes,
@@ -919,6 +939,20 @@ class Router
     {
         $this->routeMap['routes'] = array_merge($this->routeMap['routes'], $newRoute);
         $this->routeMapParse = array_merge($this->routeMapParse, $newRoute);
+
+        foreach ($newRoute as $name => $value) {
+            $this->routesAdd[$value[0]] = $newRoute;
+        }
+
+        $return = '<?php return ';
+        $route = [];
+        foreach ($this->routesAdd as $value) {
+            $route[] = $value;
+        }
+        $return .= var_export($route, true);
+
+        $return .= ';';
+        file_put_contents($this->cacheDir . $this->routesFile, $return);
     }
 
     /**
