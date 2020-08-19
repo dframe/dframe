@@ -257,9 +257,8 @@ class Loader
                 $subController = '';
 
                 for ($i = 0; $i < $urlCount; $i++) {
-                    $subController .= (!defined('CODING_STYLE') or (defined(
-                                'CODING_STYLE'
-                            ) and CODING_STYLE === true)) ?
+                    $subController .= (!defined('CODING_STYLE') or
+                        (defined('CODING_STYLE') and CODING_STYLE === true)) ?
                         ucfirst($url[$i]) . DIRECTORY_SEPARATOR :
                         $url[$i] . DIRECTORY_SEPARATOR;
                 }
