@@ -22,7 +22,7 @@ use Twig_Loader_Filesystem;
 class TwigView implements ViewInterface
 {
     /**
-     * @var \Twig_Environment
+     * @var Twig_Environment
      */
     public $twig;
 

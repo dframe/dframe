@@ -23,12 +23,12 @@ use Exception;
 class Loader
 {
     /**
-     * @var \Dframe\Router
+     * @var Router
      */
     public $router;
 
     /**
-     * @var \Bootstrap|null
+     * @var Bootstrap|null
      */
     public $baseClass;
 
@@ -45,7 +45,7 @@ class Loader
     /**
      * Loader constructor.
      *
-     * @param null|object|\Bootstrap $bootstrap
+     * @param null|object|Bootstrap $bootstrap
      *
      * @throws LoaderException
      */

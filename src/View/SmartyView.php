@@ -22,7 +22,7 @@ use Smarty;
 class SmartyView implements ViewInterface
 {
     /**
-     * @var \Smarty
+     * @var Smarty
      */
     public $smarty;
 

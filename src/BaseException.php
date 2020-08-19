@@ -21,9 +21,9 @@ class BaseException extends Exception
     /**
      * BaseException constructor.
      *
-     * @param string          $messages
-     * @param int             $code
-     * @param \Exception|null $previous
+     * @param string         $messages
+     * @param int            $code
+     * @param Exception|null $previous
      */
     public function __construct($messages = null, $code = 0, Exception $previous = null)
     {

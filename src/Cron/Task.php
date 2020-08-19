@@ -27,7 +27,7 @@ abstract class Task extends Controller
      * @param int   $ttl
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     protected function inLock($key, $callback, array $bind = [], $ttl = 3600)
     {
@@ -57,7 +57,7 @@ abstract class Task extends Controller
     /**
      * @param $path
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function checkDir($path)
     {
@@ -73,7 +73,7 @@ abstract class Task extends Controller
      * @param int $ttl
      *
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     protected function lockTime($key, $ttl = 59)
     {
