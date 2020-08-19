@@ -233,7 +233,7 @@ class Router
                     $this->routeMapParse = array_merge($value, $this->routeMapParse);
                     $this->routeMap['routes'] = array_merge($value, $this->routeMap['routes']);
                 }
-            } elseif(is_array($routesConfig)) {
+            } elseif (is_array($routesConfig)) {
                 $this->routeMapParse = array_merge($routesConfig, $this->routeMapParse);
                 $this->routeMap['routes'] = array_merge($routesConfig, $this->routeMap['routes']);
             }
