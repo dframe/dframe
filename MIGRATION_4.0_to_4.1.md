@@ -10,8 +10,8 @@ use Dframe\Token;
 
 In to 
 ```php
-use Dframe\Component\Config\Config;
-use Dframe\Component\Session\Session;
-use Dframe\Component\Messages\Messages;
-use Dframe\Component\Token\Token;
+use Dframe\Config\Config;
+use Dframe\Session\Session;
+use Dframe\Messages\Messages;
+use Dframe\Token\Token;
 ```
