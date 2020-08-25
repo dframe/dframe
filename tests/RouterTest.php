@@ -2,7 +2,7 @@
 
 namespace Dframe\Tests;
 
-use Dframe\Router;
+use Dframe\Router\Router;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,9 +20,9 @@ class RouterTest extends TestCase
     /**
      *
      */
-    public function setUp()
+    public function setUp(): void
     {
-        $this->router = new Router();
+        $this->router = (new Router())->boot();
 
         $this->router->addRoute([
             'page/:page' => [

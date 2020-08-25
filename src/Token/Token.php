@@ -7,8 +7,9 @@
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
-namespace Dframe;
+namespace Dframe\Token;
 
+use Exception;
 use Psr\SimpleCache\CacheInterface;
 
 /**
@@ -42,7 +43,7 @@ class Token implements CacheInterface
     {
         $this->driver = $driver;
         if (!($this->driver instanceof CacheInterface) === true) {
-            throw new \Exception("This class Require instance Of Psr\SimpleCache\CacheInterface", 1);
+            throw new Exception("This class Require instance Of Psr\SimpleCache\CacheInterface", 1);
         }
 
         $token = $this->driver->get('token');

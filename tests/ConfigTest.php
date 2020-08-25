@@ -2,7 +2,7 @@
 
 namespace Dframe\Tests;
 
-use Dframe\Config;
+use Dframe\Config\Config;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 
@@ -21,7 +21,7 @@ class ConfigTest extends TestCase
     /**
      *
      */
-    protected function setUp()
+    protected function setUp() : void
     {
         $directory = [
             'Config' => [

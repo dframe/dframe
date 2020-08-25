@@ -3,7 +3,7 @@ namespace Dframe\Tests;
 
 use Exception;
 use Bootstrap;
-use Dframe\Token;
+use Dframe\Token\Token;
 use PHPUnit\Framework\TestCase;
 
 class TokenTest extends TestCase

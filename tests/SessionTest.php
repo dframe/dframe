@@ -2,12 +2,12 @@
 
 namespace Dframe\tests;
 
-use Dframe\Session;
+use Dframe\Session\Session;
 use PHPUnit\Framework\TestCase;
 
 class SessionTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp() :void
     {
         if (empty($_SESSION)) {
             $_SESSION = [];

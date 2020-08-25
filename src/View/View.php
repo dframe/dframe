@@ -7,8 +7,9 @@
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
-namespace Dframe;
+namespace Dframe\View;
 
+use Dframe\Loader\Loader;
 use Dframe\Router\Response;
 use Dframe\View\Exceptions\ViewException;
 use Dframe\View\ViewInterface;
@@ -66,8 +67,8 @@ abstract class View extends Loader implements ViewInterface
     /**
      * File including
      *
-     * @param string $name
-     * @param null   $path
+     * @param string      $name
+     * @param null|string $path
      *
      * @return mixed
      */

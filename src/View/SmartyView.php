@@ -9,8 +9,9 @@
 
 namespace Dframe\View;
 
-use Dframe\Config;
 use Dframe\View\Exceptions\ViewException;
+use Exception;
+use Smarty;
 
 /**
  * Smarty View.
@@ -20,7 +21,7 @@ use Dframe\View\Exceptions\ViewException;
 class SmartyView implements ViewInterface
 {
     /**
-     * @var \Smarty
+     * @var Smarty
      */
     public $smarty;
 
@@ -36,7 +37,7 @@ class SmartyView implements ViewInterface
     {
         $this->smartyConfig = Config::load('view/smarty');
 
-        $smarty = new \Smarty;
+        $smarty = new Smarty();
         $smarty->debugging = $this->smartyConfig->get('debugging', false);
         $smarty->setTemplateDir($this->smartyConfig->get('setTemplateDir'))
             ->setCompileDir($this->smartyConfig->get('setCompileDir'))
@@ -107,7 +108,7 @@ class SmartyView implements ViewInterface
 
             // Loading view
             $fetch = $this->smarty->fetch($path);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             die(
                 $e->getMessage() . '<br />
                 File: ' . $e->getFile() . '<br />

@@ -9,6 +9,8 @@
 
 namespace Dframe;
 
+use Dframe\Loader\Loader;
+
 /**
  * Controller Class.
  *

@@ -16,7 +16,7 @@ use Assetic\Filter\CssMinFilter;
 use Assetic\Filter\CssRewriteFilter;
 use Assetic\Filter\PhpCssEmbedFilter;
 use Dframe\Asset\Exceptions\AsseticException;
-use Dframe\Router;
+use Dframe\Router\Router;
 use Patchwork\JSqueeze;
 
 set_time_limit(120);
@@ -29,9 +29,9 @@ set_time_limit(120);
 class Assetic extends Router
 {
     /**
-     * @param null $url
-     * @param null $path
-     * @param bool $compress
+     * @param null|string $url
+     * @param null|string $path
+     * @param bool        $compress
      *
      * @return null|string
      * @throws AsseticException
@@ -101,9 +101,9 @@ class Assetic extends Router
     }
 
     /**
-     * @param null $url
-     * @param null $path
-     * @param bool $compress
+     * @param null|string $url
+     * @param null|string $path
+     * @param bool        $compress
      *
      * @return null|string
      * @throws AsseticException
@@ -170,8 +170,8 @@ class Assetic extends Router
 
                 if (!copy($srcPathInfo['dirname'] . '/' . $url, $pathInfo['dirname'] . '/' . $url)) {
                     $msg = date(
-                            'Y-m-d h:m:s'
-                        ) . ' :: Unable to copy an asset From: ' . $srcPathInfo['dirname'] . '/' . $url . ' TO ' . $pathInfo['dirname'] . '/' . $url . "\n";
+                        'Y-m-d h:m:s'
+                    ) . ' :: Unable to copy an asset From: ' . $srcPathInfo['dirname'] . '/' . $url . ' TO ' . $pathInfo['dirname'] . '/' . $url . "\n";
                     $out = fopen(APP_DIR . 'View/logs/router.txt', 'w');
                     fwrite($out, $msg);
                     fclose($out);

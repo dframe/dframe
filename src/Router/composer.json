@@ -1,0 +1,43 @@
+{
+    "name": "dframe/router",
+    "description": "Router component Dframe",
+    "keywords": [
+        "php config",
+        "dframe"
+    ],
+    "homepage": "https://dframeframework.com/en/docs/dframe/master/router/overview",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sławomir Kaleta",
+            "email": "slaszka@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.3",
+        "ext-json": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Dframe\\Router\\": ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dframe\\Router\\Tests\\": "tests"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.5",
+        "mikey179/vfsstream": "^1.6"
+    },
+    "scripts": {
+        "test": [
+            "@phpunit"
+        ],
+        "phpunit": "php vendor/bin/phpunit"
+    }
+}

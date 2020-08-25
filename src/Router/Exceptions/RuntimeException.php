@@ -19,12 +19,12 @@ class RuntimeException extends \RuntimeException
     /**
      * RuntimeException constructor.
      *
-     * @param null                   $messages
+     * @param string                 $message
      * @param int                    $code
      * @param \RuntimeException|null $previous
      */
-    public function __construct($messages = null, $code = 0, \RuntimeException $previous = null)
+    public function __construct($message = "", $code = 0, \RuntimeException $previous = null)
     {
-        parent::__construct($messages, $code, $previous);
+        parent::__construct($message, $code, $previous);
     }
 }

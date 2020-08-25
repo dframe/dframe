@@ -2,6 +2,7 @@
 
 namespace Dframe\Tests;
 
+use Dframe\Loader\Loader;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,7 +18,7 @@ class LoaderTest extends TestCase
      */
     public function testIsCamelCaps()
     {
-        $loaderTest = new \Dframe\Loader();
+        $loaderTest = new Loader();
 
         $this->assertTrue($loaderTest->isCamelCaps('Namespace'));
         $this->assertTrue($loaderTest->isCamelCaps('\Namespace'));
@@ -38,7 +39,7 @@ class LoaderTest extends TestCase
 
     public function testLoadController()
     {
-        $loaderTest = new \Dframe\Loader();
+        $loaderTest = new Loader();
 
         $this->assertTrue($loaderTest->loadController('TestController', 'Dframe\Tests')->test());
         $this->assertTrue($loaderTest->loadController('Sub,SubTestController', 'Dframe\Tests')->test());

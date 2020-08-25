@@ -9,12 +9,16 @@
 
 namespace Dframe\Cron;
 
+use Dframe\Controller;
+use Exception;
+use InvalidArgumentException;
+
 /**
  * Config Class
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-abstract class Task extends \Dframe\Controller
+abstract class Task extends Controller
 {
     /**
      * @param       $key
@@ -23,7 +27,7 @@ abstract class Task extends \Dframe\Controller
      * @param int   $ttl
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     protected function inLock($key, $callback, array $bind = [], $ttl = 3600)
     {
@@ -33,7 +37,7 @@ abstract class Task extends \Dframe\Controller
         $dirLog = $dir . $file;
 
         if (!is_callable($callback)) {
-            throw new \InvalidArgumentException;
+            throw new InvalidArgumentException();
         }
 
         $fp = fopen($dirLog, "w");
@@ -53,13 +57,13 @@ abstract class Task extends \Dframe\Controller
     /**
      * @param $path
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function checkDir($path)
     {
         if (!is_dir($path)) {
             if (!mkdir($path, 0777, true)) {
-                throw new \Exception('Unable to create' . $path, '', 403);
+                throw new Exception('Unable to create' . $path, '', 403);
             }
         }
     }
@@ -69,7 +73,7 @@ abstract class Task extends \Dframe\Controller
      * @param int $ttl
      *
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     protected function lockTime($key, $ttl = 59)
     {

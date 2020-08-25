@@ -9,7 +9,7 @@
 
 namespace Dframe\Router;
 
-use Dframe\Router;
+use Dframe\Router\Router;
 
 /**
  * Short Description.
@@ -97,7 +97,7 @@ class Response extends Router
     /**
      * Response constructor.
      *
-     * @param null $body
+     * @param mixed $body
      */
     public function __construct($body = null)
     {
@@ -109,7 +109,7 @@ class Response extends Router
     }
 
     /**
-     * @param null $body
+     * @param mixed $body
      *
      * @return Response
      */
@@ -119,7 +119,7 @@ class Response extends Router
     }
 
     /**
-     * @param null $body
+     * @param mixed $body
      *
      * @return Response
      */
@@ -129,8 +129,8 @@ class Response extends Router
     }
 
     /**
-     * @param null $body
-     * @param null $status
+     * @param mixed $body
+     * @param null|int $status
      *
      * @return Response
      */
@@ -175,8 +175,8 @@ class Response extends Router
     }
 
     /**
-     * @param null $body
-     * @param null $status
+     * @param mixed $body
+     * @param null|int $status
      *
      * @return Response
      */
@@ -218,7 +218,7 @@ class Response extends Router
 
         $Response->headers(
             [
-                'Location' => (new Router())->makeUrl($url),
+                'Location' => ((new Router())->boot())->makeUrl($url),
             ]
         );
 
@@ -255,7 +255,7 @@ class Response extends Router
     }
 
     /**
-     * @param null $body
+     * @param mixed $body
      *
      * @return $this
      */

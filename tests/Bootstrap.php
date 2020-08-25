@@ -4,10 +4,10 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 define('APP_NAME', 'Dframe');
 
-use Dframe\Router;
-use Dframe\Session;
+use Dframe\Router\Router;
+use Dframe\Session\Session;
 use Dframe\Messages;
-use Dframe\Token;
+use Dframe\Token\Token;
 
 /**
  * Class Bootstrap
@@ -27,6 +27,7 @@ class Bootstrap
      * @var \Dframe\Session
      */
     public $session;
+
 
     /**
      * @var \Dframe\Messages

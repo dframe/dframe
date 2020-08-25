@@ -10,6 +10,8 @@
 namespace Dframe;
 
 use Dframe\Router\Response;
+use Exception;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * Message Class.
@@ -47,8 +49,8 @@ class Messages
     public function __construct($driver)
     {
         $this->driver = $driver;
-        if (!($this->driver instanceof \Psr\SimpleCache\CacheInterface) === true) {
-            throw new \Exception("This class Require instance Of Psr\SimpleCache\CacheInterface", 1);
+        if (!($this->driver instanceof CacheInterface) === true) {
+            throw new Exception("This class Require instance Of Psr\SimpleCache\CacheInterface", 1);
         }
 
         // Generate a unique ID for this user and session

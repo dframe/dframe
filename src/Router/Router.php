@@ -7,11 +7,14 @@
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
-namespace Dframe;
+namespace Dframe\Router;
 
+use Dframe\Config\Config;
 use Dframe\Router\Exceptions\InvalidArgumentException;
 use Dframe\Router\Exceptions\RuntimeException;
 use Dframe\Router\Response;
+
+use function parse_url;
 
 /**
  * Router class.
@@ -114,9 +117,18 @@ class Router
     protected $domain;
 
     /**
-     * Router constructor.
+     * @var array
      */
-    public function __construct()
+    private $routesAdd = [];
+
+    /**
+     * __construct Class
+     *
+     * @param $app
+     *
+     * @return $this | string
+     */
+    public function boot()
     {
         if (!defined('HTTP_HOST') and isset($_SERVER['HTTP_HOST'])) {
             define('HTTP_HOST', $_SERVER['HTTP_HOST']);
@@ -175,7 +187,67 @@ class Router
             }
         }
 
-        return null;
+        $routerConfig = $this->app->config['router'] ?? [];
+
+        $this->routeMap['routes'] = array_merge($this->routeMap['routes'] ?? [], $routerConfig['routes'] ?? []);
+        $this->routeMapParse = array_merge($routerConfig['routes'] ?? [], $this->routeMapParse ?? []);
+
+        $cacheDir = APP_DIR . 'View/cache/';
+        $this->cacheDir = rtrim($cacheDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        // We save the cache dir
+        if (!is_dir($cacheDir)) {
+            if (!mkdir($cacheDir, 0777, true)) {
+                throw new RuntimeException('Can\'t create cache directory');
+            }
+        }
+
+        if (!is_writable($cacheDir)) {
+            throw new RuntimeException('Cache directory must be writable by web server');
+        }
+
+        $annotationRoute = $this->routerConfig->get('annotation', false);
+        if ($annotationRoute === true) {
+            if (PHP_SAPI !== 'cli') {
+                if (!defined('APP_DIR')) {
+                    throw new RuntimeException('APP_DIR is not defined');
+                }
+
+                $controllerDirs = [APP_DIR . 'Controller/'];
+                $this->controllerDirs = [];
+                foreach ($controllerDirs as $d) {
+                    $realPath = realpath($d);
+                    if ($realPath !== false) {
+                        $this->controllerDirs[] = $realPath;
+                    }
+                }
+
+                $this->generateRoutes();
+            }
+        }
+
+        $routesConfig = Config::load('routes', APP_DIR . 'View/cache/')->get();
+
+        if (!empty($routesConfig)) {
+            if (is_array($routesConfig) and $this->isAssoc($routesConfig) === false) {
+                foreach ($routesConfig as $value) {
+                    $this->routeMapParse = array_merge($value, $this->routeMapParse);
+                    $this->routeMap['routes'] = array_merge($value, $this->routeMap['routes']);
+                }
+            } elseif (is_array($routesConfig)) {
+                $this->routeMapParse = array_merge($routesConfig, $this->routeMapParse);
+                $this->routeMap['routes'] = array_merge($routesConfig, $this->routeMap['routes']);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isAssoc(array $arr)
+    {
+        if ([] === $arr) {
+            return false;
+        }
+        return array_keys($arr) !== range(0, count($arr) - 1);
     }
 
     /**
@@ -218,63 +290,6 @@ class Router
         return Response::redirect($url, $status);
     }
 
-    /**
-     * __construct Class
-     *
-     * @param $app
-     *
-     * @return $this
-     */
-    public function boot($app)
-    {
-        $this->app = $app;
-
-        $routerConfig = $this->app->config['router'] ?? [];
-        $this->routeMap['routes'] = array_merge($this->routeMap['routes'] ?? [], $routerConfig['routes'] ?? []);
-        $this->routeMapParse = array_merge($routerConfig['routes'] ?? [], $this->routeMapParse ?? []);
-
-        $annotationRoute = $this->routerConfig->get('annotation', false);
-        if ($annotationRoute === true) {
-            if (PHP_SAPI !== 'cli') {
-                if (!defined('APP_DIR')) {
-                    throw new RuntimeException('APP_DIR is not defined');
-                }
-
-                $controllerDirs = [APP_DIR . 'Controller/'];
-                $cacheDir = APP_DIR . 'View/cache/';
-
-                $this->controllerDirs = [];
-                foreach ($controllerDirs as $d) {
-                    $realPath = realpath($d);
-                    if ($realPath !== false) {
-                        $this->controllerDirs[] = $realPath;
-                    }
-                }
-
-                // We save the cache dir
-                if (!is_dir($cacheDir)) {
-                    if (!mkdir($cacheDir, 0777, true)) {
-                        throw new RuntimeException('Can\'t create cache directory');
-                    }
-                }
-
-                if (!is_writable($cacheDir)) {
-                    throw new RuntimeException('Cache directory must be writable by web server');
-                }
-
-                $this->cacheDir = rtrim($cacheDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-                $this->generateRoutes();
-
-                $routesConfig = Config::load('routes', APP_DIR . 'View/cache/')->get();
-                if (!empty($routesConfig)) {
-                    $this->routeMapParse = array_merge($routesConfig, $this->routeMapParse);
-                    $this->routeMap['routes'] = array_merge($routesConfig, $this->routeMap['routes']);
-                }
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * Annotations parser.
@@ -430,7 +445,7 @@ class Router
         return null;
     }
 
-    protected function regenerateRouts($routs)
+    public function regenerateRouts($routes)
     {
         usort(
             $routes,
@@ -447,8 +462,8 @@ class Router
 
         $controllerFiles = [];
         $commonFileContent = '<?php' . "\r\n" . '/**' . "\r\n" . ' * annotations router %s cache file, create ' . date(
-                'c'
-            ) . "\r\n" . ' */' . "\r\n\r\n";
+            'c'
+        ) . "\r\n" . ' */' . "\r\n\r\n";
         $routesFileContent = sprintf($commonFileContent, 'routes');
         $controllersFileContent = sprintf($commonFileContent, 'controllers');
         $routesFileContent .= 'return [';
@@ -465,9 +480,9 @@ class Router
         $routesFileContent .= "\r\n" . "];";
         file_put_contents($this->cacheDir . $this->routesFile, $routesFileContent);
         $usedControllers = (count($controllerFiles) > 0) ? '$this->usedControllers = [\'' . implode(
-                '\',\'',
-                $controllerFiles
-            ) . '\'];' : '';
+            '\',\'',
+            $controllerFiles
+        ) . '\'];' : '';
         file_put_contents($this->cacheDir . $this->controllersFile, $controllersFileContent . $usedControllers);
     }
 
@@ -540,7 +555,7 @@ class Router
             $expressionUrl = $this->expressionUrlWithoutModRewrite($findKey, $params, $task, $action);
         }
 
-        $parsedUrl = \parse_url($this->domain);
+        $parsedUrl = parse_url($this->domain);
 
         if (isset($parsedUrl['scheme'])) {
             $this->requestPrefix = $parsedUrl['scheme'] . '://';
@@ -735,7 +750,7 @@ class Router
     /**
      * Match given request
      *
-     * @param string $request
+     * @param string      $request
      * @param string|null $routingParse
      *
      * @return array
@@ -924,6 +939,20 @@ class Router
     {
         $this->routeMap['routes'] = array_merge($this->routeMap['routes'], $newRoute);
         $this->routeMapParse = array_merge($this->routeMapParse, $newRoute);
+
+        foreach ($newRoute as $name => $value) {
+            $this->routesAdd[$value[0]] = $newRoute;
+        }
+
+        $return = '<?php return ';
+        $route = [];
+        foreach ($this->routesAdd as $value) {
+            $route[] = $value;
+        }
+        $return .= var_export($route, true);
+
+        $return .= ';';
+        file_put_contents($this->cacheDir . $this->routesFile, $return);
     }
 
     /**

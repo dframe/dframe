@@ -9,6 +9,7 @@
 
 namespace Dframe;
 
+use Dframe\Loader\Loader;
 use Dframe\Router\Response;
 
 /**
@@ -22,15 +23,15 @@ class Core extends Loader
     /**
      * Display Controller result
      *
-     * @param null  $controller
-     * @param null  $action
-     * @param array $args
+     * @param null|string $controller
+     * @param null|string $action
+     * @param array       $args
      *
      * @return mixed
      */
     public function run($controller = null, $action = null, $args = [])
     {
-        $this->router = $this->router->boot($this);
+        $this->router = $this->router->boot();
 
         if (is_null($controller ?? null) and is_null($action ?? null)) {
             $parseGets = $this->router->parseGets();

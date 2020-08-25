@@ -7,10 +7,14 @@
  * @license https://github.com/dframe/dframe/blob/master/LICENCE (MIT)
  */
 
-namespace Dframe;
+namespace Dframe\Loader;
 
+use Bootstrap;
+use Dframe\Config\Config;
 use Dframe\Loader\Exceptions\LoaderException;
 use Dframe\Router\Response;
+use Dframe\Router\Router;
+use Exception;
 
 /**
  * Loader Class.
@@ -20,12 +24,12 @@ use Dframe\Router\Response;
 class Loader
 {
     /**
-     * @var \Dframe\Router
+     * @var Router
      */
     public $router;
 
     /**
-     * @var \Bootstrap|null
+     * @var Bootstrap|null
      */
     public $baseClass;
 
@@ -42,7 +46,7 @@ class Loader
     /**
      * Loader constructor.
      *
-     * @param null|object|\Bootstrap $bootstrap
+     * @param null|object|Bootstrap $bootstrap
      *
      * @throws LoaderException
      */
@@ -57,7 +61,7 @@ class Loader
             throw new LoaderException('Please Define SALT in Main config.php', 500);
         }
 
-        $this->baseClass = empty($bootstrap) ? new \Bootstrap() : $bootstrap;
+        $this->baseClass = empty($bootstrap) ? new Bootstrap() : $bootstrap;
 
         $baseClass = $this->baseClass;
         foreach ($baseClass->providers['core'] ?? [] as $key => $value) {
@@ -254,9 +258,8 @@ class Loader
                 $subController = '';
 
                 for ($i = 0; $i < $urlCount; $i++) {
-                    $subController .= (!defined('CODING_STYLE') or (defined(
-                                'CODING_STYLE'
-                            ) and CODING_STYLE === true)) ?
+                    $subController .= (!defined('CODING_STYLE') or
+                        (defined('CODING_STYLE') and CODING_STYLE === true)) ?
                         ucfirst($url[$i]) . DIRECTORY_SEPARATOR :
                         $url[$i] . DIRECTORY_SEPARATOR;
                 }
@@ -285,7 +288,7 @@ class Loader
             }
 
             $controller = new $load($this->baseClass);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->processLoadControllerException($e);
         }
 
@@ -296,7 +299,7 @@ class Loader
     {
         if (ini_get('display_errors') === "1") {
             if (PHP_SAPI === 'cli') {
-                throw new \Exception($e->getMessage());
+                throw new Exception($e->getMessage());
             } else {
                 $msg = '<pre>';
                 $msg .= 'Message: <b>' . $e->getMessage() . '</b><br><br>';
