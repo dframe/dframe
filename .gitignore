@@ -8,4 +8,5 @@ composer.lock
 .vscode/
 .idea/
 build
+!build/subsplit.sh
 View/
