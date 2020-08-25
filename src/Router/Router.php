@@ -12,7 +12,6 @@ namespace Dframe\Router;
 use Dframe\Config\Config;
 use Dframe\Router\Exceptions\InvalidArgumentException;
 use Dframe\Router\Exceptions\RuntimeException;
-use Dframe\Router\Response;
 
 use function parse_url;
 

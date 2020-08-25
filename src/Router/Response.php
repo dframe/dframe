@@ -9,8 +9,6 @@
 
 namespace Dframe\Router;
 
-use Dframe\Router\Router;
-
 /**
  * Short Description.
  *
