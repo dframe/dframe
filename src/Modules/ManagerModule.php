@@ -16,55 +16,55 @@ namespace Dframe\Modules;
  */
 class ManagerModule
 {
-   public $app;
+    public $app;
 
-   /**
-   * ManagerModule constructor.
-   *
-   * @param $app
-   */
-   public function __construct($app)
-   {
-     $this->app = $app;
-   }
+    /**
+     * ManagerModule constructor.
+     *
+     * @param $app
+     */
+    public function __construct($app)
+    {
+        $this->app = $app;
+    }
 
-   /**
-   * Load router.
-   *
-   * @param string $path
-   *
-   * @return void
-   */
-   protected function loadRoutes($path)
-   {
-     $this->app->config['router']['routes'] = array_merge(
-       $this->app->config['router']['routes'] ?? [],
-       (require $path)['routes']
-     );
-   }
+    /**
+     * Load router.
+     *
+     * @param string $path
+     *
+     * @return void
+     */
+    protected function loadRoutes($path)
+    {
+        $this->app->config['router']['routes'] = array_merge(
+            $this->app->config['router']['routes'] ?? [],
+            (require $path)['routes']
+        );
+    }
 
 
-   /**
-   * Load model.
-   *
-   * @param array $path
-   *
-   * @return void
-   */
-   protected function loadModels($path)
-   {
-     $this->app->config['model'] = array_unique(array_merge($this->app->config['model'] ?? [], $path));
-   }
+    /**
+     * Load model.
+     *
+     * @param array $path
+     *
+     * @return void
+     */
+    protected function loadModels($path)
+    {
+        $this->app->config['model'] = array_unique(array_merge($this->app->config['model'] ?? [], $path));
+    }
 
-   /**
-   * Load controller.
-   *
-   * @param array $path
-   *
-   * @return void
-   */
-   protected function loadControllers($path)
-   {
-     $this->app->config['controller'] = array_unique(array_merge($this->app->config['controller'] ?? [], $path));
-   }
+    /**
+     * Load controller.
+     *
+     * @param array $path
+     *
+     * @return void
+     */
+    protected function loadControllers($path)
+    {
+        $this->app->config['controller'] = array_unique(array_merge($this->app->config['controller'] ?? [], $path));
+    }
 }

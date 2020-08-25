@@ -1,44 +1,44 @@
 {
-   "name": "dframe/session",
-   "description": "Session component Dframe",
-   "keywords": [
-      "php messages",
-      "dframe"
-   ],
-   "homepage": "https://dframeframework.com",
-   "type": "library",
-   "license": "MIT",
-   "authors": [
-      {
-         "name": "Sławomir Kaleta",
-         "email": "slaszka@gmail.com"
-      }
-   ],
-   "require": {
-      "php": ">=7.3",
-      "ext-json": "*",
-      "psr/simple-cache": "^1.0"
-   },
-   "minimum-stability": "dev",
-   "prefer-stable": true,
-   "autoload": {
-      "psr-4": {
-         "Dframe\\Session\\": ""
-      }
-   },
-   "autoload-dev": {
-      "psr-4": {
-         "Dframe\\Tests\\": "tests"
-      }
-   },
-   "require-dev": {
-      "dframe/dframe": "^4.1",
-      "phpunit/phpunit": "^6.5"
-   },
-   "scripts": {
-      "test": [
-         "@phpunit"
-      ],
-      "phpunit": "php vendor/bin/phpunit"
-   }
+    "name": "dframe/session",
+    "description": "Session component Dframe",
+    "keywords": [
+        "php messages",
+        "dframe"
+    ],
+    "homepage": "https://dframeframework.com",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sławomir Kaleta",
+            "email": "slaszka@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.3",
+        "ext-json": "*",
+        "psr/simple-cache": "^1.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Dframe\\Session\\": ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dframe\\Tests\\": "tests"
+        }
+    },
+    "require-dev": {
+        "dframe/dframe": "^4.1",
+        "phpunit/phpunit": "^6.5"
+    },
+    "scripts": {
+        "test": [
+            "@phpunit"
+        ],
+        "phpunit": "php vendor/bin/phpunit"
+    }
 }

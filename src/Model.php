@@ -18,47 +18,47 @@ use Dframe\Loader\Loader;
  */
 abstract class Model extends Loader
 {
-   /**
-   * Standard method for returning  result from the method.
-   *
-   * @param array|null $errors
-   *
-   * @return array
-   */
-   public function methodFail($errors = null)
-   {
-     if ($errors === null) {
-       return $this->methodResult(false);
-     }
+    /**
+     * Standard method for returning  result from the method.
+     *
+     * @param array|null $errors
+     *
+     * @return array
+     */
+    public function methodFail($errors = null)
+    {
+        if ($errors === null) {
+            return $this->methodResult(false);
+        }
 
-     if (!is_array($errors)) {
-       $errors = [$errors];
-     }
+        if (!is_array($errors)) {
+            $errors = [$errors];
+        }
 
-     return $this->methodResult(false, ['errors' => $errors]);
-   }
+        return $this->methodResult(false, ['errors' => $errors]);
+    }
 
-   /**
-   * Standard method for returning the result from the method.
-   *
-   * @param bool     $type
-   * @param array|null $array
-   *
-   * @return array
-   */
-   public function methodResult($type, $array = null)
-   {
-     if (!is_null($array)) {
-       return array_merge(['return' => $type], $array);
-     }
+    /**
+     * Standard method for returning the result from the method.
+     *
+     * @param bool       $type
+     * @param array|null $array
+     *
+     * @return array
+     */
+    public function methodResult($type, $array = null)
+    {
+        if (!is_null($array)) {
+            return array_merge(['return' => $type], $array);
+        }
 
-     return ['return' => $type];
-   }
+        return ['return' => $type];
+    }
 
-   /**
-   * Init method.
-   */
-   public function init()
-   {
-   }
+    /**
+     * Init method.
+     */
+    public function init()
+    {
+    }
 }
