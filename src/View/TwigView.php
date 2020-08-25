@@ -21,106 +21,106 @@ use Twig_Loader_Filesystem;
  */
 class TwigView implements ViewInterface
 {
-    /**
-     * @var Twig_Environment
-     */
-    public $twig;
+   /**
+   * @var Twig_Environment
+   */
+   public $twig;
 
-    /**
-     * @var array
-     */
-    public $assign;
+   /**
+   * @var array
+   */
+   public $assign;
 
-    /**
-     * TwigView constructor.
-     */
-    public function __construct()
-    {
-        $twigConfig = Config::load('view/twig');
-        $loader = new Twig_Loader_Filesystem($twigConfig->get('setTemplateDir'));
-        $twig = new Twig_Environment(
-            $loader,
-            [
-                'cache' => $twigConfig->get('setCompileDir'),
-            ]
-        );
-        $this->twig = $twig;
-    }
+   /**
+   * TwigView constructor.
+   */
+   public function __construct()
+   {
+     $twigConfig = Config::load('view/twig');
+     $loader = new Twig_Loader_Filesystem($twigConfig->get('setTemplateDir'));
+     $twig = new Twig_Environment(
+       $loader,
+       [
+         'cache' => $twigConfig->get('setCompileDir'),
+       ]
+     );
+     $this->twig = $twig;
+   }
 
-    /**
-     * Set the var to the template.
-     *
-     * @param string $name
-     * @param string $value
-     *
-     * @return mixed
-     */
-    public function assign($name, $value)
-    {
-        try {
-            if (isset($this->assign[$name])) {
-                throw new ViewException('You can\'t assign "' . $name . '" in Twig');
-            }
+   /**
+   * Set the var to the template.
+   *
+   * @param string $name
+   * @param string $value
+   *
+   * @return mixed
+   */
+   public function assign($name, $value)
+   {
+     try {
+       if (isset($this->assign[$name])) {
+         throw new ViewException('You can\'t assign "' . $name . '" in Twig');
+       }
 
-            $assign = $this->assign[$name] = $value;
-        } catch (ViewException $e) {
-            die(
-                $e->getMessage() . '<br />
-                File: ' . $e->getFile() . '<br />
-                Code line: ' . $e->getLine() . '<br />
-                Trace: ' . $e->getTraceAsString()
-            );
-        }
+       $assign = $this->assign[$name] = $value;
+     } catch (ViewException $e) {
+       die(
+         $e->getMessage() . '<br />
+         File: ' . $e->getFile() . '<br />
+         Code line: ' . $e->getLine() . '<br />
+         Trace: ' . $e->getTraceAsString()
+       );
+     }
 
-        return $assign;
-    }
+     return $assign;
+   }
 
-    /**
-     * Return code.
-     *
-     * @param string $name Filename
-     * @param string $path Alternative Path
-     *
-     * @return void
-     */
-    public function fetch($name, $path = null)
-    {
-        //return throw new \Exception('This module don't have fetch');
-    }
+   /**
+   * Return code.
+   *
+   * @param string $name Filename
+   * @param string $path Alternative Path
+   *
+   * @return void
+   */
+   public function fetch($name, $path = null)
+   {
+     //return throw new \Exception('This module don't have fetch');
+   }
 
-    /**
-     * Transfers the code to the Smarty template.
-     *
-     * @param string $name
-     * @param string $path
-     *
-     * @return mixed
-     */
-    public function renderInclude($name, $path = null)
-    {
-        $twigConfig = Config::load('twig');
-        $pathFile = pathFile($name);
-        $folder = $pathFile[0];
-        $name = $pathFile[1];
+   /**
+   * Transfers the code to the Smarty template.
+   *
+   * @param string $name
+   * @param string $path
+   *
+   * @return mixed
+   */
+   public function renderInclude($name, $path = null)
+   {
+     $twigConfig = Config::load('twig');
+     $pathFile = pathFile($name);
+     $folder = $pathFile[0];
+     $name = $pathFile[1];
 
-        $path = $twigConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name .
-            $twigConfig->get('fileExtension', '.twig');
+     $path = $twigConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name .
+       $twigConfig->get('fileExtension', '.twig');
 
-        try {
-            if (!is_file($path)) {
-                throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
-            }
+     try {
+       if (!is_file($path)) {
+         throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
+       }
 
-            $renderInclude = $this->twig->render($name, $this->assign);
-        } catch (ViewException $e) {
-            die(
-                $e->getMessage() . '<br />
-                        File: ' . $e->getFile() . '<br />
-                        Code line: ' . $e->getLine() . '<br />
-                        Trace: ' . $e->getTraceAsString()
-            );
-        }
+       $renderInclude = $this->twig->render($name, $this->assign);
+     } catch (ViewException $e) {
+       die(
+         $e->getMessage() . '<br />
+              File: ' . $e->getFile() . '<br />
+              Code line: ' . $e->getLine() . '<br />
+              Trace: ' . $e->getTraceAsString()
+       );
+     }
 
-        return $renderInclude;
-    }
+     return $renderInclude;
+   }
 }

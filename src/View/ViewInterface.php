@@ -16,26 +16,26 @@ namespace Dframe\View;
  */
 interface ViewInterface
 {
-    /**
-     * Set the var to the template.
-     *
-     * @param string $name
-     * @param string $value
-     */
-    public function assign($name, $value);
+   /**
+   * Set the var to the template.
+   *
+   * @param string $name
+   * @param string $value
+   */
+   public function assign($name, $value);
 
-    /**
-     * Return code.
-     *
-     * @param string $name - Filename
-     * @param string $path - Alternative Path
-     */
-    public function fetch($name, $path = null);
+   /**
+   * Return code.
+   *
+   * @param string $name - Filename
+   * @param string $path - Alternative Path
+   */
+   public function fetch($name, $path = null);
 
-    /**
-     * Include File.
-     *
-     * @param string $path
-     */
-    public function renderInclude($path);
+   /**
+   * Include File.
+   *
+   * @param string $path
+   */
+   public function renderInclude($path);
 }

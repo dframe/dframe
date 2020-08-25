@@ -21,8 +21,8 @@ $driver = new \Dframe\Component\Session\Session('sessionName');
  */
 $token  = new \Dframe\Component\Token\Token($driver); 
 $key = $token->generate('evidenceToken')->get('evidenceToken');  // Generate hash
-$isValid = $token->isValid('evidenceToken', $key);               // Return true/false
-$has = $token->has('evidenceToken');               // Return true/false
+$isValid = $token->isValid('evidenceToken', $key);            // Return true/false
+$has = $token->has('evidenceToken');            // Return true/false
 ```
 
 License

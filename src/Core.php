@@ -20,62 +20,62 @@ use Dframe\Router\Response;
 class Core extends Loader
 {
 
-    /**
-     * Display Controller result
-     *
-     * @param null|string $controller
-     * @param null|string $action
-     * @param array       $args
-     *
-     * @return mixed
-     */
-    public function run($controller = null, $action = null, $args = [])
-    {
-        $this->router = $this->router->boot();
+   /**
+   * Display Controller result
+   *
+   * @param null|string $controller
+   * @param null|string $action
+   * @param array     $args
+   *
+   * @return mixed
+   */
+   public function run($controller = null, $action = null, $args = [])
+   {
+     $this->router = $this->router->boot();
 
-        if (is_null($controller ?? null) and is_null($action ?? null)) {
-            $parseGets = $this->router->parseGets();
-            $args = $parseGets['args'];
-            $controller = $this->router->controller;
-            $action = $this->router->action;
-            $namespace = $this->router->namespace;
-        }
+     if (is_null($controller ?? null) and is_null($action ?? null)) {
+       $parseGets = $this->router->parseGets();
+       $args = $parseGets['args'];
+       $controller = $this->router->controller;
+       $action = $this->router->action;
+       $namespace = $this->router->namespace;
+     }
 
-        $loader = new Loader($this->baseClass);
+     $loader = new Loader($this->baseClass);
 
-        $Controller = $loader->loadController($controller, $namespace ?? '\\');
-        $response = [];
+     $Controller = $loader->loadController($controller, $namespace ?? '\\');
+     $response = [];
 
-        if (method_exists($Controller, 'start')) {
-            $response[] = ['start', []];
-        }
+     if (method_exists($Controller, 'start')) {
+       $response[] = ['start', []];
+     }
 
-        if (method_exists($Controller, 'init')) {
-            $response[] = ['init', []];
-        }
+     if (method_exists($Controller, 'init')) {
+       $response[] = ['init', []];
+     }
 
-        if (method_exists($Controller, $action) or is_callable([$Controller, $action])) {
-            $response[] = [$action, $args];
-        }
+     if (method_exists($Controller, $action) or is_callable([$Controller, $action])) {
+       $response[] = [$action, $args];
+     }
 
-        if (method_exists($Controller, 'end')) {
-            $response[] = ['end', []];
-        }
+     if (method_exists($Controller, 'end')) {
+       $response[] = ['end', []];
+     }
 
-        foreach ($response as $key => $data) {
-            $run = call_user_func_array([$Controller, $data[0]], $data[1]);
-            if ($run instanceof Response) {
-                if (isset($this->debug)) {
-                    $this->debug->addHeader(['X-DF-Debug-Controller' => $controller]);
-                    $this->debug->addHeader(['X-DF-Debug-Method' => $action]);
+     foreach ($response as $key => $data) {
+       $run = call_user_func_array([$Controller, $data[0]], $data[1]);
+       if ($run instanceof Response) {
+         if (isset($this->debug)) {
+            $this->debug->addHeader(['X-DF-Debug-Controller' => $controller]);
+            $this->debug->addHeader(['X-DF-Debug-Method' => $action]);
 
-                    $run->headers($this->debug->getHeader());
-                }
-                return $run->display();
-            }
-        }
+            $run->headers($this->debug->getHeader());
+         }
+         return $run->display();
+       }
+     }
 
 
-        return true;
-    }
+     return true;
+   }
 }
