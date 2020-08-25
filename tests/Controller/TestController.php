@@ -7,8 +7,8 @@ use Dframe\Controller;
 
 class TestController extends Controller
 {
-    public function test()
-    {
-        return true;
-    }
+     public function test()
+     {
+          return true;
+     }
 }

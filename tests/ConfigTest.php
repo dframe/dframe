@@ -13,40 +13,40 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigTest extends TestCase
 {
-    /**
-     * @var vfsStream
-     */
-    private $fileSystem;
+     /**
+      * @var vfsStream
+      */
+     private $fileSystem;
 
-    /**
-     *
-     */
-    protected function setUp() : void
-    {
-        $directory = [
-            'Config' => [
-                'test.php' => "<?php return ['create' => 'yes'];",
-            ],
-        ];
+     /**
+      *
+      */
+     protected function setUp() : void
+     {
+          $directory = [
+                'Config' => [
+                     'test.php' => "<?php return ['create' => 'yes'];",
+                ],
+          ];
 
-        $this->fileSystem = vfsStream::setup('root', 755, $directory);
-    }
+          $this->fileSystem = vfsStream::setup('root', 755, $directory);
+     }
 
-    /**
-     *
-     */
-    public function testLoad()
-    {
-        $configTest = Config::load('test', $this->fileSystem->url('') . '/Config/');
-        $this->assertEquals('yes', $configTest->get('create'));
-    }
+     /**
+      *
+      */
+     public function testLoad()
+     {
+          $configTest = Config::load('test', $this->fileSystem->url('') . '/Config/');
+          $this->assertEquals('yes', $configTest->get('create'));
+     }
 
-    /**
-     *
-     */
-    public function testLoadIfNotExist()
-    {
-        $configTest = Config::load('test', $this->fileSystem->url('') . '/Config/');
-        $this->assertEquals('default_value', $configTest->get('not_exist', 'default_value'));
-    }
+     /**
+      *
+      */
+     public function testLoadIfNotExist()
+     {
+          $configTest = Config::load('test', $this->fileSystem->url('') . '/Config/');
+          $this->assertEquals('default_value', $configTest->get('not_exist', 'default_value'));
+     }
 }
