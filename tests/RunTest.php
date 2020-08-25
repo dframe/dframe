@@ -16,11 +16,11 @@ session_start();
  */
 class RunTest extends TestCase
 {
-     public function testCreateController()
-     {
-          $testController = new TestController();
-          $this->assertEquals('Hello World', $testController->testHelloWorld());
-     }
+    public function testCreateController()
+    {
+        $testController = new TestController();
+        $this->assertEquals('Hello World', $testController->testHelloWorld());
+    }
 }
 
 /**
@@ -30,11 +30,11 @@ class RunTest extends TestCase
  */
 class TestController extends Controller
 {
-     /**
-      * @return string
-      */
-     public function testHelloWorld()
-     {
-          return 'Hello World';
-     }
+    /**
+     * @return string
+     */
+    public function testHelloWorld()
+    {
+        return 'Hello World';
+    }
 }
