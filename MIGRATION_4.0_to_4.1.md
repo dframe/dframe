@@ -4,14 +4,14 @@ Replace
 ```php
 use Dframe\Config;
 use Dframe\Session;
-use Dframe\Messages;
 use Dframe\Token;
 ```
+
+Dframe\Messages is now separate repository
 
 In to 
 ```php
 use Dframe\Config\Config;
 use Dframe\Session\Session;
-use Dframe\Messages\Messages;
 use Dframe\Token\Token;
 ```
