@@ -14,7 +14,7 @@ $ composer require dframe/config
 ### Standalone
 
 ```php
-use Dframe\Component\Config\Config;
+use Dframe\Config\Config;
 
 include_once 'vendor/autoload.php';
 $configPath = __DIR__. DIRECTORY_SEPARATOR . 'config'. DIRECTORY_SEPARATOR;
