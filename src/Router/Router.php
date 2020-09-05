@@ -12,13 +12,11 @@ namespace Dframe\Router;
 use Dframe\Config\Config;
 use Dframe\Router\Exceptions\InvalidArgumentException;
 use Dframe\Router\Exceptions\RuntimeException;
-
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RecursiveRegexIterator;
 use ReflectionClass;
 use ReflectionMethod;
-
 use RegexIterator;
 
 use function parse_url;
