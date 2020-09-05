@@ -14,8 +14,8 @@ $ composer require dframe/session
 ### Standalone
 
 ```php
-$this->session = new \Dframe\Session('name');
-$session = new Session('HashSaltRandomForSession');
+$this->session = new \Dframe\Session\Session('name');
+$session = new \Dframe\Session\Session('HashSaltRandomForSession');
 $session->register();                        // Set session_id and session_time - default 60
 $session->authLogin();                        // Return true/false if session is registered
 $session->set($key, $value);                   // set $_SESSION[$key] = $value;

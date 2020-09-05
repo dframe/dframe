@@ -64,7 +64,7 @@ public function myProcetedAndPostMethod(){
     }
 
     if (!isset($_POST['someValue']) AND !empty($_POST['someValue'])) {
-        return Response::renderJSON(['code' => '400', 'response' => 'empty someVlue Post'])->status(400);
+        return Dframe\Router\Response::renderJSON(['code' => '400', 'response' => 'empty someVlue Post'])->status(400);
     }
 
     $firstModel = $this->loadModel('First');
@@ -78,7 +78,7 @@ Custom Response ?
     {
         $view = $this->loadView('Index');
         $view->assign('contents', 'Example assign');
-        return Response::create($view->fetch('index'))
+        return Dframe\Router\Response::create($view->fetch('index'))
             ->status(200)
             ->headers([
                 'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT', 
@@ -98,7 +98,7 @@ In view not a lot is happend. In standard View/index.php should be assign should
 namespace View;
 use Dframe\Config;
 
-class IndexView extends \View\View
+class IndexView extends \Dframe\View\View
 {
 
     public function init(){

@@ -9,6 +9,7 @@
 
 namespace Dframe\View;
 
+use Dframe\Config\Config;
 use Dframe\View\Exceptions\ViewException;
 use Exception;
 use Smarty;
