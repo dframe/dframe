@@ -29,17 +29,24 @@ set_time_limit(120);
 class Assetic extends Router
 {
     /**
-     * @param null|string $url
-     * @param null|string $path
-     * @param bool        $compress
+     * @param $url
      *
-     * @return null|string
+     * @return string
+     */
+    protected function srcPath($url)
+    {
+        return $this->routeMap['assets']['assetsPath'] . $this->routeMap['assets']['assetsDir'] . '/' . $url;
+    }
+
+    /**
+     * @param $url
+     * @param $path
+     *
+     * @return string
      * @throws AsseticException
      */
-    public function assetJs($url = null, $path = null, $compress = true)
+    protected function dstPath($url, $path)
     {
-        // Basic paths
-        $srcPath = $this->routeMap['assets']['assetsPath'] . $this->routeMap['assets']['assetsDir'] . '/' . $url;
         if (is_null($path)) {
             $path = 'assets';
             if (isset($this->routeMap['assets']['assetsDir']) and !empty($this->routeMap['assets']['assetsDir'])) {
@@ -50,6 +57,23 @@ class Assetic extends Router
         } else {
             $dstPath = $this->routeMap['assets']['cachePath'] . $path;
         }
+
+        return $dstPath;
+    }
+
+    /**
+     * @param null|string $url
+     * @param null|string $path
+     * @param bool        $compress
+     *
+     * @return null|string
+     * @throws AsseticException
+     */
+    public function assetJs($url = null, $path = null, $compress = true)
+    {
+        // Basic paths
+        $srcPath = $this->srcPath($url);
+        $dstPath = $this->dstPath($url, $path);
 
         // Copying a file if it does not exist
         if (!file_exists($dstPath)) {
@@ -91,7 +115,7 @@ class Assetic extends Router
      *
      * @throws AsseticException
      */
-    private function checkDir($path)
+    protected function checkDir($path)
     {
         if (!is_dir($path)) {
             if (!mkdir($path, 0777, true)) {
@@ -111,17 +135,8 @@ class Assetic extends Router
     public function assetCss($url = null, $path = null, $compress = true)
     {
         // Basic paths
-        $srcPath = $this->routeMap['assets']['assetsPath'] . $this->routeMap['assets']['assetsDir'] . '/' . $url;
-        if (is_null($path)) {
-            $path = 'assets';
-            if (isset($this->routeMap['assets']['assetsDir']) and !empty($this->routeMap['assets']['assetsDir'])) {
-                $path = $this->routeMap['assets']['assetsDir'];
-                $this->checkDir($path);
-            }
-            $dstPath = $this->routeMap['assets']['cachePath'] . $path . '/' . $url;
-        } else {
-            $dstPath = $this->routeMap['assets']['cachePath'] . $path;
-        }
+        $srcPath = $this->srcPath($url);
+        $dstPath = $this->dstPath($url, $path);
 
         // Copying a file if it does not exist
         if (!file_exists($dstPath)) {
@@ -149,12 +164,7 @@ class Assetic extends Router
                 $args[] = new CssImportFilter();
             }
 
-            $css = new AssetCollection(
-                [
-                    new FileAsset($srcPath),
-                ],
-                $args
-            );
+            $css = new AssetCollection([new FileAsset($srcPath),], $args);
 
             preg_match_all('/url\("([^\)]+?\.(woff2|woff|eot|ttf|svg|png|jpg|jpeg|gif))/', $css->dump(), $m);
 
@@ -170,8 +180,8 @@ class Assetic extends Router
 
                 if (!copy($srcPathInfo['dirname'] . '/' . $url, $pathInfo['dirname'] . '/' . $url)) {
                     $msg = date(
-                        'Y-m-d h:m:s'
-                    ) . ' :: Unable to copy an asset From: ' . $srcPathInfo['dirname'] . '/' . $url . ' TO ' . $pathInfo['dirname'] . '/' . $url . "\n";
+                            'Y-m-d h:m:s'
+                        ) . ' :: Unable to copy an asset From: ' . $srcPathInfo['dirname'] . '/' . $url . ' TO ' . $pathInfo['dirname'] . '/' . $url . "\n";
                     $out = fopen(APP_DIR . 'View/logs/router.txt', 'w');
                     fwrite($out, $msg);
                     fclose($out);

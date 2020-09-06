@@ -197,10 +197,7 @@ class Router
                 )->display();
             }
         } else {
-            $this->requestPrefix = 'http://';
-            if ((isset($_SERVER['REQUEST_SCHEME']) and (!empty($_SERVER['REQUEST_SCHEME']) and ($_SERVER['REQUEST_SCHEME'] === 'https') or !empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] === 'on') or (!empty($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] === '443'))) {
-                $this->requestPrefix = 'https://';
-            }
+            $this->requestPrefix = $this->getRequestPrefix(false);
         }
 
         $routerConfig = $this->app->config['router'] ?? [];
@@ -271,15 +268,7 @@ class Router
             throw new InvalidArgumentException('Incorrect option', 403);
         }
 
-        if ($option === true) {
-            $this->requestPrefix = 'https://';
-        } else {
-            $this->requestPrefix = 'http://';
-            if ((isset($_SERVER['REQUEST_SCHEME']) and (!empty($_SERVER['REQUEST_SCHEME']) and ($_SERVER['REQUEST_SCHEME'] === 'https') or !empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] === 'on') or (!empty($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] === '443'))) {
-                $this->requestPrefix = 'https://';
-            }
-        }
-
+        $this->requestPrefix = $this->getRequestPrefix($option);
         $this->https = $option;
 
         return $this;
@@ -459,8 +448,8 @@ class Router
 
         $controllerFiles = [];
         $commonFileContent = '<?php' . "\r\n" . '/**' . "\r\n" . ' * annotations router %s cache file, create ' . date(
-            'c'
-        ) . "\r\n" . ' */' . "\r\n\r\n";
+                'c'
+            ) . "\r\n" . ' */' . "\r\n\r\n";
         $routesFileContent = sprintf($commonFileContent, 'routes');
         $controllersFileContent = sprintf($commonFileContent, 'controllers');
         $routesFileContent .= 'return [';
@@ -477,9 +466,9 @@ class Router
         $routesFileContent .= "\r\n" . "];";
         file_put_contents($this->cacheDir . $this->routesFile, $routesFileContent);
         $usedControllers = (count($controllerFiles) > 0) ? '$this->usedControllers = [\'' . implode(
-            '\',\'',
-            $controllerFiles
-        ) . '\'];' : '';
+                '\',\'',
+                $controllerFiles
+            ) . '\'];' : '';
         file_put_contents($this->cacheDir . $this->controllersFile, $controllersFileContent . $usedControllers);
     }
 
@@ -971,5 +960,19 @@ class Router
     public function response()
     {
         return new Response();
+    }
+
+    protected function getRequestPrefix(bool $option)
+    {
+        if ($option === true) {
+            $requestPrefix = 'https://';
+        } else {
+            $requestPrefix = 'http://';
+            if ((isset($_SERVER['REQUEST_SCHEME']) and (!empty($_SERVER['REQUEST_SCHEME']) and ($_SERVER['REQUEST_SCHEME'] === 'https') or !empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] === 'on') or (!empty($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] === '443'))) {
+                $requestPrefix = 'https://';
+            }
+        }
+
+        return $requestPrefix;
     }
 }
