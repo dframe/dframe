@@ -1,0 +1,44 @@
+{
+    "name": "dframe/console",
+    "description": "PHP Framework - Dframe",
+    "keywords": [
+        "framework",
+        "dframe",
+        "cli",
+        "command",
+        "mvc"
+    ],
+    "homepage": "https://dframeframework.com",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sławomir Kaleta",
+            "email": "slaszka@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.3",
+        "dframe/dframe": "^v4.1"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Dframe\\Console\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dframe\\Tests\\": "tests"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.5"
+    },
+    "scripts": {
+        "test": [
+            "@phpunit"
+        ],
+        "phpunit": "php vendor/bin/phpunit"
+    }
+}
