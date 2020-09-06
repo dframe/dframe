@@ -16,6 +16,9 @@ namespace Dframe\Modules;
  */
 class ManagerModule
 {
+    /**
+     * @var object
+     */
     public $app;
 
     /**

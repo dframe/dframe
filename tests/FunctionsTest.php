@@ -33,6 +33,9 @@ class FunctionsTest extends TestCase
         $this->assertSame($expected, object_to_array($expected));
     }
 
+    /**
+     * @return array
+     */
     public function stringMatchWithWildcardProvider()
     {
         return [
@@ -44,6 +47,10 @@ class FunctionsTest extends TestCase
 
     /**
      * @dataProvider stringMatchWithWildcardProvider
+     *
+     * @param $source
+     * @param $pattern
+     * @param $expected
      */
     public function testStringMatchWithWildcard($source, $pattern, $expected)
     {

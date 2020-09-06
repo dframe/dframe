@@ -295,6 +295,12 @@ class Loader
         return $controller;
     }
 
+    /**
+     * @param $e \Exception
+     *
+     * @return string|null
+     * @throws Exception
+     */
     private function processLoadControllerException($e)
     {
         if (ini_get('display_errors') === "1") {

@@ -142,8 +142,6 @@ class Router
     /**
      * __construct Class
      *
-     * @param $app
-     *
      * @return $this | string
      */
     public function boot()
@@ -441,6 +439,9 @@ class Router
         return null;
     }
 
+    /**
+     * @param $routes
+     */
     public function regenerateRouts($routes)
     {
         usort(
@@ -482,6 +483,11 @@ class Router
         file_put_contents($this->cacheDir . $this->controllersFile, $controllersFileContent . $usedControllers);
     }
 
+    /**
+     * @param array $arr
+     *
+     * @return bool
+     */
     public function isAssoc(array $arr)
     {
         if ([] === $arr) {
