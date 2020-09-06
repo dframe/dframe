@@ -10,7 +10,7 @@
 namespace Dframe\Cron;
 
 use Dframe\Task\Exceptions\TaskException;
-use Dframe\Controller;
+use Dframe\Loader\Loader;
 use Exception;
 use InvalidArgumentException;
 
@@ -19,7 +19,7 @@ use InvalidArgumentException;
  *
  * @author Sławomir Kaleta <slaszka@gmail.com>
  */
-abstract class Task extends Controller
+abstract class Task extends Loader
 {
     /**
      * @param       $key
