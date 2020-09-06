@@ -16,7 +16,8 @@
     ],
     "require": {
         "php": ">=7.3",
-        "ext-json": "*"
+        "ext-json": "*",
+        "dframe/loader": "^v4.1"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
