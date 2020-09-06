@@ -9,6 +9,8 @@
 
 namespace Dframe\Config;
 
+use Dframe\Config\Exceptions\ConfigException;
+
 /**
  * Config Class.
  *
@@ -39,6 +41,10 @@ class Config
      */
     public function __construct($file, $path = '')
     {
+        if (!defined('APP_DIR')) {
+            throw new ConfigException('Please Define APP_DIR in Main config.php', 500);
+        }
+
         $this->path = (isset($path) and !empty($path)) ? $path : APP_DIR . $path . 'Config' . DIRECTORY_SEPARATOR;
 
         $this->file = $file;

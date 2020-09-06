@@ -11,6 +11,7 @@ namespace Dframe\Router;
 
 use Dframe\Config\Config;
 use Dframe\Router\Exceptions\InvalidArgumentException;
+use Dframe\Router\Exceptions\RouterException;
 use Dframe\Router\Exceptions\RuntimeException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -205,6 +206,10 @@ class Router
         $this->routeMap['routes'] = array_merge($this->routeMap['routes'] ?? [], $routerConfig['routes'] ?? []);
         $this->routeMapParse = array_merge($routerConfig['routes'] ?? [], $this->routeMapParse ?? []);
 
+        if (!defined('APP_DIR')) {
+            throw new RouterException('Please Define APP_DIR in Main config.php', 500);
+        }
+
         $cacheDir = APP_DIR . 'View/cache/';
         $this->cacheDir = rtrim($cacheDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         // We save the cache dir
@@ -221,10 +226,6 @@ class Router
         $annotationRoute = $this->routerConfig->get('annotation', false);
         if ($annotationRoute === true) {
             if (PHP_SAPI !== 'cli') {
-                if (!defined('APP_DIR')) {
-                    throw new RuntimeException('APP_DIR is not defined');
-                }
-
                 $controllerDirs = [APP_DIR . 'Controller/'];
                 $this->controllerDirs = [];
                 foreach ($controllerDirs as $d) {
@@ -350,16 +351,18 @@ class Router
     {
         $routes = [];
 
+        if (!defined('APP_DIR')) {
+            throw new RouterException('Please Define APP_DIR in Main config.php', 500);
+        }
+
         $appDir = str_replace(
             'web' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . '',
             '',
             APP_DIR
         );
-
         $task = str_replace($appDir . 'app' . DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR . '', '', $file);
         $task = rtrim($task, '.php');
         $task = str_replace(DIRECTORY_SEPARATOR, ',', $task);
-
         // We load file content
         $content = file_get_contents($file);
         // We search for namespace
@@ -375,9 +378,11 @@ class Router
             // We find class info's
             $path = str_replace('Controller.php', '.php', $className . '.php');
             $path = APP_DIR . str_replace('\\', '/', $path);
+
             if (is_file($path)) {
                 include_once $path;
             }
+
             $reflector = new ReflectionClass($className);
 
             $methods = $reflector->getMethods(ReflectionMethod::IS_PUBLIC);

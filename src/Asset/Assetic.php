@@ -95,6 +95,11 @@ class Assetic extends Router
             }
 
             if (!file_put_contents($dstPath, $js)) {
+
+                if (!defined('APP_DIR')) {
+                    throw new AsseticException('Please Define APP_DIR in Main config.php', 500);
+                }
+
                 $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: ' . $srcPath . ' TO ' . $dstPath . "\n";
                 $out = fopen(APP_DIR . '/View/logs/router.txt', 'w');
                 fwrite($out, $msg);
@@ -169,6 +174,10 @@ class Assetic extends Router
             preg_match_all('/url\("([^\)]+?\.(woff2|woff|eot|ttf|svg|png|jpg|jpeg|gif))/', $css->dump(), $m);
 
             $srcPathInfo = pathinfo($srcPath);
+
+            if (!defined('APP_DIR')) {
+                throw new AsseticException('Please Define APP_DIR in Main config.php', 500);
+            }
 
             foreach ($m['1'] as $key => $url) {
                 $subPathInfo = pathinfo($pathInfo['dirname'] . '/' . $url);

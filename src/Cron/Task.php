@@ -9,6 +9,7 @@
 
 namespace Dframe\Cron;
 
+use Dframe\Task\Exceptions\TaskException;
 use Dframe\Controller;
 use Exception;
 use InvalidArgumentException;
@@ -31,6 +32,10 @@ abstract class Task extends Controller
      */
     protected function inLock($key, $callback, array $bind = [], $ttl = 3600)
     {
+        if (!defined('APP_DIR')) {
+            throw new TaskException('Please Define APP_DIR in Main config.php', 500);
+        }
+
         $dir = APP_DIR . 'View/cache/logs/';
         $file = $key . '.txt';
         $this->checkDir($dir);
@@ -77,6 +82,10 @@ abstract class Task extends Controller
      */
     protected function lockTime($key, $ttl = 59)
     {
+        if (!defined('APP_DIR')) {
+            throw new TaskException('Please Define APP_DIR in Main config.php', 500);
+        }
+
         $dir = $dirLog = APP_DIR . 'View/cache/logs/';
         $file = $key . '.txt';
         $this->checkDir($dir);
