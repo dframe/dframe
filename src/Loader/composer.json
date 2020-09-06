@@ -1,0 +1,42 @@
+{
+    "name": "dframe/loader",
+    "description": "Loader component Dframe",
+    "keywords": [
+        "php loader",
+        "dframe"
+    ],
+    "homepage": "https://dframeframework.com/en/docs/dframe/master/loader/overview",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sławomir Kaleta",
+            "email": "slaszka@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.3",
+        "ext-json": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Dframe\\Loader\\": ""
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dframe\\Loader\\Tests\\": "tests"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.5",
+    },
+    "scripts": {
+        "test": [
+            "@phpunit"
+        ],
+        "phpunit": "php vendor/bin/phpunit"
+    }
+}
