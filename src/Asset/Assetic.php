@@ -95,7 +95,6 @@ class Assetic extends Router
             }
 
             if (!file_put_contents($dstPath, $js)) {
-
                 if (!defined('APP_DIR')) {
                     throw new AsseticException('Please Define APP_DIR in Main config.php', 500);
                 }
