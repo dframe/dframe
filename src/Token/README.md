@@ -14,12 +14,15 @@ $ composer require dframe/token
 
 ```php
 
-$driver = new \Dframe\Session\Session('sessionName');
+use Dframe\Session\Session;
+use Dframe\Token\Token;
+
+$driver = new Session('sessionName');
 
 /** 
  * $driver Can be any class implements interface \Psr\SimpleCache\CacheInterface 
  */
-$token  = new \Dframe\Token\Token($driver); 
+$token  = new Token($driver); 
 $key = $token->generate('evidenceToken')->get('evidenceToken');  // Generate hash
 $isValid = $token->isValid('evidenceToken', $key);            // Return true/false
 $has = $token->has('evidenceToken');            // Return true/false

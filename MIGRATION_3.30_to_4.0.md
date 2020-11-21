@@ -11,8 +11,9 @@ Add in *app/bootstrap.php*
 #[1530c85](https://github.com/dframe/dframe-demo/commit/1530c8561befa1fb46811aa8960959209445d47f)
 
 ```php
+use Dframe\Router;
 $this->providers['core'] = [
-    'router' => \Dframe\Router::class,
+    'router' => Router::class,
 ];
 
 ```

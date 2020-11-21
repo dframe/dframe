@@ -9,12 +9,14 @@
 
 namespace Dframe\Console;
 
+use Dframe\Loader\Loader;
+
 /**
  * Class Command
  *
  * @package Dframe\Cli
  */
-class Command extends \Dframe\Loader\Loader
+class Command extends Loader
 {
 
     /**
@@ -27,7 +29,7 @@ class Command extends \Dframe\Loader\Loader
         $start = $this->start($args);
 
         $class = '\Command\\' . $start['commands'][0] . 'Command';
-        return call_user_func_array([new $class, $start['commands'][1]], $start['options']);
+        return call_user_func_array([new $class(), $start['commands'][1]], $start['options']);
     }
 
     /**
