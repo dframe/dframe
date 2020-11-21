@@ -13,22 +13,24 @@
  *
  * @return array
  */
-function pathFile($path)
-{
-    $folder = '';
-    $name = $path;
-    if (strpos($path, '/')) {
-        $path = explode('/', $path);
-
-        $pathCount = count($path) - 1;
+if (!function_exists('pathFile')) {
+    function pathFile($path)
+    {
         $folder = '';
-        for ($i = 0; $i < $pathCount; $i++) {
-            $folder .= $path[$i] . '/';
-        }
-        $name = $path[$pathCount];
-    }
+        $name = $path;
+        if (strpos($path, '/')) {
+            $path = explode('/', $path);
 
-    return [$folder, $name];
+            $pathCount = count($path) - 1;
+            $folder = '';
+            for ($i = 0; $i < $pathCount; $i++) {
+                $folder .= $path[$i] . '/';
+            }
+            $name = $path[$pathCount];
+        }
+
+        return [$folder, $name];
+    }
 }
 
 /**
@@ -38,17 +40,19 @@ function pathFile($path)
  *
  * @return string
  */
-function generateRandomString($length = 10)
-{
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
-    $randomString = '';
+if (!function_exists('generateRandomString')) {
+    function generateRandomString($length = 10)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
 
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+
+        return $randomString;
     }
-
-    return $randomString;
 }
 
 /**
@@ -58,21 +62,23 @@ function generateRandomString($length = 10)
  *
  * @return array
  */
-function object_to_array($obj)
-{
-    $obj = is_object($obj) ? (array)$obj : $obj;
+if (!function_exists('object_to_array')) {
+    function object_to_array($obj)
+    {
+        $obj = is_object($obj) ? (array)$obj : $obj;
 
-    if (is_array($obj)) {
-        $new = [];
-        foreach ($obj as $key => $val) {
-            $key2 = str_replace("\0", '', $key);
-            $new[$key2] = object_to_array($val);
+        if (is_array($obj)) {
+            $new = [];
+            foreach ($obj as $key => $val) {
+                $key2 = str_replace("\0", '', $key);
+                $new[$key2] = object_to_array($val);
+            }
+        } else {
+            $new = $obj;
         }
-    } else {
-        $new = $obj;
-    }
 
-    return $new;
+        return $new;
+    }
 }
 
 /**
@@ -84,10 +90,12 @@ function object_to_array($obj)
  *
  * @return false|int
  */
-function stringMatchWithWildcard($source, $pattern)
-{
-    $pattern = preg_quote($pattern, '/');
-    $pattern = str_replace('\*', '.*', $pattern);
+if (!function_exists('stringMatchWithWildcard')) {
+    function stringMatchWithWildcard($source, $pattern)
+    {
+        $pattern = preg_quote($pattern, '/');
+        $pattern = str_replace('\*', '.*', $pattern);
 
-    return preg_match('/^' . $pattern . '$/i', $source);
+        return preg_match('/^' . $pattern . '$/i', $source);
+    }
 }
