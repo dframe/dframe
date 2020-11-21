@@ -648,7 +648,7 @@ class Router
      *
      * @return string
      */
-    protected function parseParams($routing, $params): string
+    protected function parseParams($routing, $params): ?string
     {
         $return = null;
 

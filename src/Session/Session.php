@@ -132,7 +132,7 @@ class Session implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function delete($key): bool
+    public function delete($key): void
     {
         if (isset($_SESSION[$key])) {
             unset($_SESSION[$key]);
@@ -198,7 +198,7 @@ class Session implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function deleteMultiple($keys)
+    public function deleteMultiple($keys) : bool
     {
         foreach ($keys as $key) {
             $this->delete($key);
