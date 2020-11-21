@@ -41,7 +41,7 @@ class DefaultView implements ViewInterface
      *
      * @return void
      */
-    public function assign($name, $value)
+    public function assign($name, $value): void
     {
         $this->$name = $value;
     }

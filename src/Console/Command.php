@@ -35,7 +35,7 @@ class Command extends \Dframe\Loader\Loader
      *
      * @return array
      */
-    public function start($args)
+    public function start($args): array
     {
         array_shift($args);
         $endOfOptions = false;

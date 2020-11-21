@@ -50,7 +50,7 @@ class SmartyView implements ViewInterface
     /**
      * @param $dir
      */
-    public function setTemplateDir($dir)
+    public function setTemplateDir($dir): void
     {
         $this->smarty->setTemplateDir($dir);
     }

@@ -24,7 +24,7 @@ The basic framework to help you build MVC project.
 
 ### Requirements
  
- - PHP >= 7.3
+ - PHP >= 7.4
  - Rewrite Module (Nginx/Apache )
  - Composer
  

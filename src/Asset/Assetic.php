@@ -33,7 +33,7 @@ class Assetic extends Router
      *
      * @return string
      */
-    protected function srcPath($url)
+    protected function srcPath($url): string
     {
         return $this->routeMap['assets']['assetsPath'] . $this->routeMap['assets']['assetsDir'] . '/' . $url;
     }
@@ -45,7 +45,7 @@ class Assetic extends Router
      * @return string
      * @throws AsseticException
      */
-    protected function dstPath($url, $path)
+    protected function dstPath($url, $path): string
     {
         if (is_null($path)) {
             $path = 'assets';
@@ -64,12 +64,12 @@ class Assetic extends Router
     /**
      * @param null|string $url
      * @param null|string $path
-     * @param bool        $compress
+     * @param bool $compress
      *
      * @return null|string
      * @throws AsseticException
      */
-    public function assetJs($url = null, $path = null, $compress = true)
+    public function assetJs($url = null, $path = null, $compress = true): ?string
     {
         // Basic paths
         $srcPath = $this->srcPath($url);
@@ -119,7 +119,7 @@ class Assetic extends Router
      *
      * @throws AsseticException
      */
-    protected function checkDir($path)
+    protected function checkDir($path) : void
     {
         if (!is_dir($path)) {
             if (!mkdir($path, 0777, true)) {
@@ -131,12 +131,12 @@ class Assetic extends Router
     /**
      * @param null|string $url
      * @param null|string $path
-     * @param bool        $compress
+     * @param bool $compress
      *
      * @return null|string
      * @throws AsseticException
      */
-    public function assetCss($url = null, $path = null, $compress = true)
+    public function assetCss($url = null, $path = null, $compress = true): ?string 
     {
         // Basic paths
         $srcPath = $this->srcPath($url);
@@ -188,8 +188,8 @@ class Assetic extends Router
 
                 if (!copy($srcPathInfo['dirname'] . '/' . $url, $pathInfo['dirname'] . '/' . $url)) {
                     $msg = date(
-                        'Y-m-d h:m:s'
-                    ) . ' :: Unable to copy an asset From: ' . $srcPathInfo['dirname'] . '/' . $url . ' TO ' . $pathInfo['dirname'] . '/' . $url . "\n";
+                            'Y-m-d h:m:s'
+                        ) . ' :: Unable to copy an asset From: ' . $srcPathInfo['dirname'] . '/' . $url . ' TO ' . $pathInfo['dirname'] . '/' . $url . "\n";
                     $out = fopen(APP_DIR . 'View/logs/router.txt', 'w');
                     fwrite($out, $msg);
                     fclose($out);

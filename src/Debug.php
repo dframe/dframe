@@ -19,14 +19,14 @@ class Debug
     /**
      * @var array
      */
-    protected $headers = [];
+    protected array $headers = [];
 
     /**
      * @param $headers
      *
      * @return $this
      */
-    public function addHeader($headers)
+    public function addHeader($headers): self
     {
         $this->headers = array_unique(array_merge($this->headers, $headers));
 
@@ -36,7 +36,7 @@ class Debug
     /**
      * @return array
      */
-    public function getHeader()
+    public function getHeader(): array
     {
         return $this->headers;
     }

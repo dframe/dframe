@@ -30,7 +30,7 @@ abstract class Task extends Loader
      * @return array
      * @throws Exception
      */
-    protected function inLock($key, $callback, array $bind = [], $ttl = 3600)
+    protected function inLock($key, $callback, array $bind = [], $ttl = 3600): array
     {
         if (!defined('APP_DIR')) {
             throw new TaskException('Please Define APP_DIR in Main config.php', 500);
@@ -64,7 +64,7 @@ abstract class Task extends Loader
      *
      * @throws Exception
      */
-    protected function checkDir($path)
+    protected function checkDir($path): void
     {
         if (!is_dir($path)) {
             if (!mkdir($path, 0777, true)) {
@@ -80,7 +80,7 @@ abstract class Task extends Loader
      * @return bool
      * @throws Exception
      */
-    protected function lockTime($key, $ttl = 59)
+    protected function lockTime($key, $ttl = 59): bool
     {
         if (!defined('APP_DIR')) {
             throw new TaskException('Please Define APP_DIR in Main config.php', 500);

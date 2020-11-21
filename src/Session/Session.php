@@ -21,17 +21,17 @@ class Session implements CacheInterface
     /**
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var string
      */
-    protected $ipAddress;
+    protected string $ipAddress;
 
     /**
      * @var string
      */
-    protected $userAgent;
+    protected string $userAgent;
 
     /**
      * Session constructor.
@@ -78,7 +78,7 @@ class Session implements CacheInterface
     /**
      * @return bool
      */
-    public function isValidFingerprint()
+    public function isValidFingerprint(): bool
     {
         $_fingerprint = $this->getFingerprint();
         if (isset($_SESSION['_fingerprint']) and $_SESSION['_fingerprint'] === $_fingerprint) {
@@ -91,7 +91,7 @@ class Session implements CacheInterface
     /**
      * @return string
      */
-    protected function getFingerprint()
+    protected function getFingerprint(): string
     {
         return md5($this->ipAddress . $this->userAgent . $this->name);
     }
@@ -101,7 +101,7 @@ class Session implements CacheInterface
      *
      * @param int $time .
      */
-    public function register($time = 60)
+    public function register($time = 60): void
     {
         $_SESSION['sessionId'] = session_id();
         $_SESSION['sessionTime'] = (int)$time;
@@ -112,7 +112,7 @@ class Session implements CacheInterface
      *
      * @return bool
      */
-    public function authLogin()
+    public function authLogin(): bool
     {
         if (!empty($_SESSION['sessionId'])) {
             return true;
@@ -124,7 +124,7 @@ class Session implements CacheInterface
     /**
      * @param $key
      */
-    public function remove($key)
+    public function remove($key): bool
     {
         $this->delete($key);
     }
@@ -132,7 +132,7 @@ class Session implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function delete($key)
+    public function delete($key): bool
     {
         if (isset($_SESSION[$key])) {
             unset($_SESSION[$key]);
@@ -142,7 +142,7 @@ class Session implements CacheInterface
     /**
      *
      */
-    public function end()
+    public function end(): void
     {
         $this->clear();
     }
@@ -150,7 +150,7 @@ class Session implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function clear()
+    public function clear(): void
     {
         session_destroy();
         $_SESSION = [];
@@ -159,7 +159,7 @@ class Session implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function setMultiple($values, $ttl = null)
+    public function setMultiple($values, $ttl = null): void
     {
         foreach ($values as $value) {
             $this->set($value['key'], $value['value'], $ttl);
@@ -169,7 +169,7 @@ class Session implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function set($key, $value, $tll = null)
+    public function set($key, $value, $tll = null): void
     {
         $_SESSION[$key] = $value;
     }
@@ -221,7 +221,7 @@ class Session implements CacheInterface
      *
      * @return bool
      */
-    public function keyExists($key, $in = [])
+    public function keyExists($key, $in = []): bool
     {
         if (empty($in)) {
             $in = $_SESSION;

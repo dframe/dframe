@@ -19,7 +19,7 @@ class Response extends Router
     /**
      * @var array
      */
-    public static $code = [
+    public static array $code = [
         100 => 'Continue',
         101 => 'Switching Protocols',
         102 => 'Processing',
@@ -80,17 +80,17 @@ class Response extends Router
     /**
      * @var int
      */
-    public $status = 200;
+    public int $status = 200;
 
     /**
      * @var null|string
      */
-    protected $body = null;
+    protected ?string $body = null;
 
     /**
      * @var array
      */
-    protected $headers = [];
+    protected array $headers = [];
 
     /**
      * Response constructor.
@@ -111,7 +111,7 @@ class Response extends Router
      *
      * @return Response
      */
-    public static function create($body = null)
+    public static function create($body = null): self
     {
         return new self($body);
     }
@@ -121,18 +121,18 @@ class Response extends Router
      *
      * @return Response
      */
-    public static function render($body = null)
+    public static function render($body = null): self
     {
         return new self($body);
     }
 
     /**
-     * @param mixed    $body
+     * @param mixed $body
      * @param null|int $status
      *
      * @return Response
      */
-    public static function renderJSON($body = null, $status = null)
+    public static function renderJSON($body = null, $status = null): self
     {
         $body = json_encode($body);
         $Response = new self($body);
@@ -149,9 +149,9 @@ class Response extends Router
     /**
      * @param $code
      *
-     * @return $this
+     * @return self
      */
-    public function status($code)
+    public function status($code): self
     {
         $this->status = $code;
 
@@ -161,9 +161,9 @@ class Response extends Router
     /**
      * @param array $headers
      *
-     * @return $this
+     * @return self
      */
-    public function headers($headers = [])
+    public function headers($headers = []): self
     {
         if (!empty($headers)) {
             $this->headers = array_unique(array_merge($this->headers, $headers));
@@ -173,12 +173,12 @@ class Response extends Router
     }
 
     /**
-     * @param mixed    $body
+     * @param mixed $body
      * @param null|int $status
      *
      * @return Response
      */
-    public static function renderJSONP($body = null, $status = null)
+    public static function renderJSONP($body = null, $status = null): Response
     {
         $callback = null;
         if (isset($_GET['callback'])) {
@@ -200,12 +200,12 @@ class Response extends Router
      * Address redirection.
      *
      * @param string $url
-     * @param int    $status
-     * @param array  $headers
+     * @param int $status
+     * @param array $headers
      *
-     * @return Response|object
+     * @return Response
      */
-    public static function redirect($url = '', $status = 301, $headers = [])
+    public static function redirect($url = '', $status = 301, $headers = []): Response
     {
         $Response = new Response();
         $Response->status($status);
@@ -226,9 +226,9 @@ class Response extends Router
     /**
      * @param $json
      *
-     * @return $this
+     * @return self
      */
-    public function json($json)
+    public function json($json): self
     {
         $this->headers(['Content-Type' => 'application/json']);
         $this->body = json_encode($json);
@@ -239,7 +239,7 @@ class Response extends Router
     /**
      * @return int
      */
-    public function getStatus()
+    public function getStatus(): int
     {
         return $this->status;
     }
@@ -247,7 +247,7 @@ class Response extends Router
     /**
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->headers;
     }
@@ -255,9 +255,9 @@ class Response extends Router
     /**
      * @param mixed $body
      *
-     * @return $this
+     * @return self
      */
-    public function body($body = null)
+    public function body($body = null): self
     {
         $this->body = $body;
 
@@ -269,7 +269,7 @@ class Response extends Router
      *
      * @return null|string
      */
-    public function display()
+    public function display(): ?string
     {
         if (!headers_sent()) {
             if (PHP_SAPI !== 'cli') {
@@ -298,7 +298,7 @@ class Response extends Router
     /**
      * @return null|string
      */
-    public function getBody()
+    public function getBody(): ?string
     {
         return $this->body;
     }
@@ -306,7 +306,7 @@ class Response extends Router
     /**
      * @return null|string
      */
-    public function __toString()
+    public function __toString(): ?string
     {
         return $this->body;
     }

@@ -28,12 +28,12 @@ class Token implements CacheInterface
     /**
      * @var array
      */
-    protected $token = [];
+    protected array $token = [];
 
     /**
      * @var array
      */
-    protected $time = [];
+    protected array $time = [];
 
     /**
      * constructor.
@@ -62,7 +62,7 @@ class Token implements CacheInterface
     /**
      * @throws InvalidArgumentException
      */
-    public function clear()
+    public function clear(): void
     {
         $this->token = [];
         $this->time = [];
@@ -116,9 +116,9 @@ class Token implements CacheInterface
      * @param string $key
      * @param        $time
      *
-     * @return $this
+     * @return self
      */
-    public function setTime($key, $time)
+    public function setTime($key, $time): self
     {
         if (isset($this->token[$key])) {
             $this->time[$key] = intval($time);
@@ -131,9 +131,9 @@ class Token implements CacheInterface
     /**
      * @param string $key
      *
-     * @return $this
+     * @return self
      */
-    public function generate($key)
+    public function generate($key): self
     {
         $this->set($key, md5(uniqid(rand(), true)));
         $this->setTime($key, time() + 3600);
@@ -146,9 +146,9 @@ class Token implements CacheInterface
      * @param mixed  $value
      * @param null   $ttl
      *
-     * @return $this
+     * @return self
      */
-    public function set($key, $value, $ttl = null)
+    public function set($key, $value, $ttl = null): self
     {
         $this->token[$key] = $value;
         $this->driver->set('token', $this->token);
@@ -181,7 +181,7 @@ class Token implements CacheInterface
     /**
      * @param string $key
      */
-    public function delete($key)
+    public function delete($key): void
     {
         if (isset($this->token[$key])) {
             unset($this->token[$key]);
@@ -198,7 +198,7 @@ class Token implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function has($key)
+    public function has($key): bool
     {
         if (isset($this->token[$key]) and $this->getTime($key) >= time()) {
             return true;
@@ -214,7 +214,7 @@ class Token implements CacheInterface
      *
      * @return bool
      */
-    public function isValid($key, $token, $delete = false)
+    public function isValid($key, $token, $delete = false): bool
     {
         $getToken = $this->get($key);
 

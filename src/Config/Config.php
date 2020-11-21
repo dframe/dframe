@@ -21,17 +21,17 @@ class Config
     /**
      * @var array
      */
-    protected static $cfg = [];
+    protected static array $cfg = [];
 
     /**
      * @var string
      */
-    public $path;
+    public string $path;
 
     /**
      * @var string
      */
-    protected $file;
+    protected string $file;
 
     /**
      * Config constructor.
@@ -59,9 +59,9 @@ class Config
      * @param      $file
      * @param null $path
      *
-     * @return Config
+     * @return self
      */
-    public static function load($file, $path = null)
+    public static function load($file, $path = null): self
     {
         return new self($file, $path);
     }

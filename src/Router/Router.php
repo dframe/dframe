@@ -19,7 +19,6 @@ use RecursiveRegexIterator;
 use ReflectionClass;
 use ReflectionMethod;
 use RegexIterator;
-
 use function parse_url;
 
 /**
@@ -32,7 +31,7 @@ class Router
     /**
      * @var array
      */
-    public $routeMap = [];
+    public array $routeMap = [];
 
     /**
      * Delay Redirect.
@@ -44,17 +43,17 @@ class Router
     /**
      * @var Config
      */
-    public $routerConfig;
+    public array $routerConfig;
 
     /**
      * @var bool
      */
-    public $https;
+    public bool $https;
 
     /**
      * @var string
      */
-    public $requestPrefix;
+    public string $requestPrefix;
 
     /**
      * @var object
@@ -65,77 +64,77 @@ class Router
     /**
      * @var string
      */
-    public $namespace;
+    public string $namespace;
 
     /**
      * @var string
      */
-    public $controller;
+    public string $controller;
 
     /**
      * @var string
      */
-    public $action;
+    public string $action;
 
     /**
      * @var array
      */
-    protected $routeMapParse = [];
+    protected array $routeMapParse = [];
 
     /**
      * @var string
      */
-    protected $uri;
+    protected string $uri;
 
     /**
      * @var string|null
      */
-    protected $subdomain = null;
+    protected ?string $subdomain = null;
 
     /**
      * @var string
      */
-    protected $routesFile = 'routes.php';
+    protected string $routesFile = 'routes.php';
 
     /**
      * @var string
      */
-    protected $controllersFile = 'controllers.php';
+    protected string $controllersFile = 'controllers.php';
 
     /**
      * @var string[]
      */
-    protected $usedControllers = [];
+    protected array $usedControllers = [];
 
     /**
      * @var array
      */
-    protected $controllerDirs;
+    protected array $controllerDirs;
 
     /**
      * @var string
      */
-    protected $cacheDir;
+    protected string $cacheDir;
 
     /**
      * @var string
      */
-    protected $domain;
+    protected string $domain;
 
     /**
      * @var array
      */
-    private $routesAdd = [];
+    private array $routesAdd = [];
 
     /**
      * Redirect.
      *
      * @param string $url The URI
-     * @param int    $status
+     * @param int $status
      *
-     * @return Response|object
+     * @return Response
      */
-    public static function redirect($url = '', $status = 301)
+    public static function redirect($url = '', $status = 301): Response
     {
         return Response::redirect($url, $status);
     }
@@ -263,7 +262,7 @@ class Router
      *
      * @return $this
      */
-    public function setHttps($option = false)
+    public function setHttps($option = false): self
     {
         if (!in_array($option, [true, false])) {
             throw new InvalidArgumentException('Incorrect option', 403);
@@ -277,8 +276,10 @@ class Router
 
     /**
      * Annotations parser.
+     *
+     * @return void
      */
-    protected function generateRoutes()
+    protected function generateRoutes(): void
     {
         $parsingNeeded = !file_exists($this->cacheDir . $this->routesFile);
         // We look for controller files
@@ -324,8 +325,10 @@ class Router
 
     /**
      * Find all file in controller dir.
+     *
+     * @return array
      */
-    protected function findControllerFiles()
+    protected function findControllerFiles(): array
     {
         $result = [];
         foreach ($this->controllerDirs as $dir) {
@@ -435,8 +438,10 @@ class Router
 
     /**
      * @param $routes
+     *
+     * @return void
      */
-    public function regenerateRouts($routes)
+    public function regenerateRouts($routes): void
     {
         usort(
             $routes,
@@ -453,8 +458,8 @@ class Router
 
         $controllerFiles = [];
         $commonFileContent = '<?php' . "\r\n" . '/**' . "\r\n" . ' * annotations router %s cache file, create ' . date(
-            'c'
-        ) . "\r\n" . ' */' . "\r\n\r\n";
+                'c'
+            ) . "\r\n" . ' */' . "\r\n\r\n";
         $routesFileContent = sprintf($commonFileContent, 'routes');
         $controllersFileContent = sprintf($commonFileContent, 'controllers');
         $routesFileContent .= 'return [';
@@ -471,9 +476,9 @@ class Router
         $routesFileContent .= "\r\n" . "];";
         file_put_contents($this->cacheDir . $this->routesFile, $routesFileContent);
         $usedControllers = (count($controllerFiles) > 0) ? '$this->usedControllers = [\'' . implode(
-            '\',\'',
-            $controllerFiles
-        ) . '\'];' : '';
+                '\',\'',
+                $controllerFiles
+            ) . '\'];' : '';
         file_put_contents($this->cacheDir . $this->controllersFile, $controllersFileContent . $usedControllers);
     }
 
@@ -482,7 +487,7 @@ class Router
      *
      * @return bool
      */
-    public function isAssoc(array $arr)
+    public function isAssoc(array $arr): bool
     {
         if ([] === $arr) {
             return false;
@@ -500,8 +505,10 @@ class Router
 
     /**
      * @param $routes
+     *
+     * @return void
      */
-    public function setRoutes($routes)
+    public function setRoutes($routes): void
     {
         $this->routeMap = array_merge($this->routeMap, $routes);
     }
@@ -513,7 +520,7 @@ class Router
      *
      * @return bool
      */
-    public function isActive(string $url)
+    public function isActive(string $url): bool
     {
         if ($this->makeUrl($url, true) === str_replace($this->uri, '', $_SERVER['REQUEST_URI'])) {
             return true;
@@ -530,7 +537,7 @@ class Router
      *
      * @return null|string
      */
-    public function makeUrl(string $url = null, $onlyExt = false)
+    public function makeUrl(string $url = null, $onlyExt = false): ?string
     {
         $paramsHook = explode('#', $url);
         $params = explode('?', $paramsHook[0]);
@@ -589,7 +596,7 @@ class Router
 
     /**
      * @param string $findKey
-     * @param array  $params
+     * @param array $params
      * @param string $task
      * @param string $action
      *
@@ -637,11 +644,11 @@ class Router
      * Parse url params into a 'request'
      *
      * @param string $routing
-     * @param array  $params
+     * @param array $params
      *
      * @return string
      */
-    protected function parseParams($routing, $params)
+    protected function parseParams($routing, $params): string
     {
         $return = null;
 
@@ -654,7 +661,7 @@ class Router
 
     /**
      * @param string $findKey
-     * @param array  $params
+     * @param array $params
      * @param string $task
      * @param string $action
      *
@@ -700,7 +707,7 @@ class Router
      *
      * @return null|string
      */
-    public function publicWeb($url = null, $path = null)
+    public function publicWeb($url = null, $path = null): ?string
     {
         if (is_null($path)) {
             $path = $this->routeMap['publicWeb'];
@@ -722,7 +729,7 @@ class Router
      *
      * @return array
      */
-    public function parseGets()
+    public function parseGets(): array
     {
         $request = preg_replace('!' . $this->uri . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
         if (defined('MOD_REWRITE') and MOD_REWRITE === true) {
@@ -754,12 +761,12 @@ class Router
     /**
      * Match given request
      *
-     * @param string      $request
+     * @param string $request
      * @param string|null $routingParse
      *
      * @return array
      */
-    protected function parseUrl($request, $routingParse = null)
+    protected function parseUrl($request, $routingParse = null): array
     {
         $vars = null;
         $args = [];
@@ -861,7 +868,7 @@ class Router
      *
      * @return string
      */
-    protected function transformParam($param, $k)
+    protected function transformParam($param, $k): string
     {
         if (isset($this->routeMapParse[$k][$param]) and !is_array($this->routeMapParse[$k][$param])) {
             return $this->routeMapParse[$k][$param];
@@ -875,7 +882,7 @@ class Router
      *
      * @return string
      */
-    public function currentPath()
+    public function currentPath(): string
     {
         $request = preg_replace('!' . $this->uri . '(.*)$!i', '$1', $_SERVER['REQUEST_URI']);
         if (defined('MOD_REWRITE') and MOD_REWRITE === true) {
@@ -897,9 +904,9 @@ class Router
      *
      * @param int $delay time in seconds
      *
-     * @return $this
+     * @return self
      */
-    public function delay(int $delay)
+    public function delay(int $delay): self
     {
         $this->delay = $delay;
 
@@ -911,9 +918,9 @@ class Router
      *
      * @param string $subdomain
      *
-     * @return object
+     * @return self
      */
-    public function subdomain($subdomain)
+    public function subdomain($subdomain): self
     {
         $this->subdomain = $subdomain;
 
@@ -925,9 +932,9 @@ class Router
      *
      * @param string $domain
      *
-     * @return object
+     * @return self
      */
-    public function domain($domain)
+    public function domain($domain): self
     {
         $this->domain = $domain;
 
@@ -938,8 +945,10 @@ class Router
      * Set up new route.
      *
      * @param array $newRoute
+     *
+     * @return void
      */
-    public function addRoute($newRoute)
+    public function addRoute($newRoute): void
     {
         $this->routeMap['routes'] = array_merge($this->routeMap['routes'], $newRoute);
         $this->routeMapParse = array_merge($this->routeMapParse, $newRoute);
@@ -962,12 +971,17 @@ class Router
     /**
      * @return Response
      */
-    public function response()
+    public function response(): Response
     {
         return new Response();
     }
 
-    protected function getRequestPrefix(bool $option)
+    /**
+     * @param bool $option
+     *
+     * @return string
+     */
+    protected function getRequestPrefix(bool $option): string
     {
         if ($option === true) {
             $requestPrefix = 'https://';

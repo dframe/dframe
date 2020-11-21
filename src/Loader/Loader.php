@@ -26,7 +26,7 @@ class Loader
     /**
      * @var Router
      */
-    public $router;
+    public Router $router;
 
     /**
      * @var Bootstrap|null
@@ -36,12 +36,12 @@ class Loader
     /**
      * @var string
      */
-    protected $fileExtension = '.php';
+    protected string $fileExtension = '.php';
 
     /**
      * @var string
      */
-    protected $namespaceSeparator = '\\';
+    protected string $namespaceSeparator = '\\';
 
     /**
      * Loader constructor.
@@ -219,7 +219,7 @@ class Loader
      *
      * @return bool
      */
-    public static function isCamelCaps($string)
+    public static function isCamelCaps($string): bool
     {
         preg_match_all('/^(?\'isCamelCaps\'(([A-Z]|([\\\\|\/\/][A-Z]))[a-zA-Z]+)+)$/', $string, $matches);
 
@@ -300,7 +300,7 @@ class Loader
      * @return string|null
      * @throws Exception
      */
-    protected function processLoadControllerException($e)
+    protected function processLoadControllerException($e): ?string
     {
         if (ini_get('display_errors') === "1") {
             if (PHP_SAPI === 'cli') {

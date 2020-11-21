@@ -25,7 +25,7 @@ abstract class Model extends Loader
      *
      * @return array
      */
-    public function methodFail($errors = null)
+    public function methodFail($errors = null): array
     {
         if ($errors === null) {
             return $this->methodResult(false);
@@ -46,7 +46,7 @@ abstract class Model extends Loader
      *
      * @return array
      */
-    public function methodResult($type, $array = null)
+    public function methodResult($type, $array = null): array
     {
         if (!is_null($array)) {
             return array_merge(['return' => $type], $array);
