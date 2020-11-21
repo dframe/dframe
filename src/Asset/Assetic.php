@@ -136,7 +136,7 @@ class Assetic extends Router
      * @return null|string
      * @throws AsseticException
      */
-    public function assetCss($url = null, $path = null, $compress = true): ?string 
+    public function assetCss($url = null, $path = null, $compress = true): ?string
     {
         // Basic paths
         $srcPath = $this->srcPath($url);
@@ -188,8 +188,8 @@ class Assetic extends Router
 
                 if (!copy($srcPathInfo['dirname'] . '/' . $url, $pathInfo['dirname'] . '/' . $url)) {
                     $msg = date(
-                            'Y-m-d h:m:s'
-                        ) . ' :: Unable to copy an asset From: ' . $srcPathInfo['dirname'] . '/' . $url . ' TO ' . $pathInfo['dirname'] . '/' . $url . "\n";
+                        'Y-m-d h:m:s'
+                    ) . ' :: Unable to copy an asset From: ' . $srcPathInfo['dirname'] . '/' . $url . ' TO ' . $pathInfo['dirname'] . '/' . $url . "\n";
                     $out = fopen(APP_DIR . 'View/logs/router.txt', 'w');
                     fwrite($out, $msg);
                     fclose($out);
