@@ -43,7 +43,7 @@ class Router
     /**
      * @var Config
      */
-    public array $routerConfig;
+    public Config $routerConfig;
 
     /**
      * @var bool

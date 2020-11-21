@@ -124,7 +124,7 @@ class Session implements CacheInterface
     /**
      * @param $key
      */
-    public function remove($key): bool
+    public function remove($key): void
     {
         $this->delete($key);
     }
