@@ -64,7 +64,7 @@ abstract class Task extends Loader
      *
      * @throws Exception
      */
-    private function checkDir($path)
+    protected function checkDir($path)
     {
         if (!is_dir($path)) {
             if (!mkdir($path, 0777, true)) {

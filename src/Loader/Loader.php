@@ -152,7 +152,7 @@ class Loader
      *
      * @return mixed
      */
-    private function loadObject($name, $type, $namespace = null)
+    protected function loadObject($name, $type, $namespace = null)
     {
         try {
             if (!$this->isCamelCaps($name)) {
@@ -300,7 +300,7 @@ class Loader
      * @return string|null
      * @throws Exception
      */
-    private function processLoadControllerException($e)
+    protected function processLoadControllerException($e)
     {
         if (ini_get('display_errors') === "1") {
             if (PHP_SAPI === 'cli') {

@@ -91,7 +91,7 @@ class Session implements CacheInterface
     /**
      * @return string
      */
-    private function getFingerprint()
+    protected function getFingerprint()
     {
         return md5($this->ipAddress . $this->userAgent . $this->name);
     }

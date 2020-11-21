@@ -595,7 +595,7 @@ class Router
      *
      * @return mixed|string
      */
-    private function expressionUrlWithModRewrite($findKey, $params, $task, $action)
+    protected function expressionUrlWithModRewrite($findKey, $params, $task, $action)
     {
         if (isset($this->routeMap['routes'][$findKey])) {
             $expressionUrl = $this->routeMap['routes'][$findKey][0];
@@ -660,7 +660,7 @@ class Router
      *
      * @return mixed|string
      */
-    private function expressionUrlWithoutModRewrite($findKey, $params, $task, $action)
+    protected function expressionUrlWithoutModRewrite($findKey, $params, $task, $action)
     {
         if (empty($task)) {
             $expressionUrl = '';
