@@ -93,32 +93,7 @@ class SmartyView implements ViewInterface
      */
     public function fetch($name, $path = null)
     {
-        $pathFile = pathFile($name);
-        $folder = $pathFile[0];
-        $name = $pathFile[1];
-
-        if ($path === null) {
-            $path = $this->smarty->getTemplateDir(0) . DIRECTORY_SEPARATOR . $folder . $name .
-                $this->smartyConfig->get('fileExtension', '.html.php');
-        }
-
-        try {
-            if (!is_file($path)) {
-                throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
-            }
-
-            // Loading view
-            $fetch = $this->smarty->fetch($path);
-        } catch (Exception $e) {
-            die(
-                $e->getMessage() . '<br />
-         File: ' . $e->getFile() . '<br />
-         Code line: ' . $e->getLine() . '<br />
-         Trace: ' . $e->getTraceAsString()
-            );
-        }
-
-        return $fetch;
+        return $this->renderInclude($name, $path);
     }
 
     /**

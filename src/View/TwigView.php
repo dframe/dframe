@@ -11,8 +11,8 @@ namespace Dframe\View;
 
 use Dframe\Config\Config;
 use Dframe\View\Exceptions\ViewException;
-use Twig_Environment;
-use Twig_Loader_Filesystem;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 /**
  * Twig View.
@@ -22,7 +22,7 @@ use Twig_Loader_Filesystem;
 class TwigView implements ViewInterface
 {
     /**
-     * @var Twig_Environment
+     * @var \Twig\Environment
      */
     public $twig;
 
@@ -37,8 +37,8 @@ class TwigView implements ViewInterface
     public function __construct()
     {
         $twigConfig = Config::load('view/twig');
-        $loader = new Twig_Loader_Filesystem($twigConfig->get('setTemplateDir'));
-        $twig = new Twig_Environment(
+        $loader = new FilesystemLoader($twigConfig->get('setTemplateDir'));
+        $twig = new Environment(
             $loader,
             [
                 'cache' => $twigConfig->get('setCompileDir'),
@@ -85,7 +85,7 @@ class TwigView implements ViewInterface
      */
     public function fetch($name, $path = null)
     {
-        //return throw new \Exception('This module don't have fetch');
+        return $this->renderInclude($name, $path);
     }
 
     /**
@@ -102,9 +102,8 @@ class TwigView implements ViewInterface
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
         $name = $pathFile[1];
-
-        $path = $twigConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name .
-            $twigConfig->get('fileExtension', '.twig');
+        $path = $twigConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR
+            . $folder . $name . $twigConfig->get('fileExtension', '.twig');
 
         try {
             if (!is_file($path)) {
