@@ -34,6 +34,7 @@ abstract class View extends Loader implements ViewInterface
      * @param mixed  $value
      *
      * @return mixed
+     * @throws ViewException
      */
     public function assign($name, $value)
     {
@@ -51,6 +52,7 @@ abstract class View extends Loader implements ViewInterface
      * @param string       $type
      *
      * @return mixed
+     * @throws ViewException
      */
     public function render($data, $type = null)
     {
@@ -70,6 +72,7 @@ abstract class View extends Loader implements ViewInterface
      * @param null|string $path
      *
      * @return mixed
+     * @throws ViewException
      */
     public function renderInclude($name, $path = null)
     {
@@ -125,6 +128,7 @@ abstract class View extends Loader implements ViewInterface
      * @param string $path
      *
      * @return mixed
+     * @throws ViewException
      */
     public function fetch($name, $path = null)
     {

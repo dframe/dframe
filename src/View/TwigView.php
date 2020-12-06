@@ -12,6 +12,9 @@ namespace Dframe\View;
 use Dframe\Config\Config;
 use Dframe\View\Exceptions\ViewException;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use Twig\Loader\FilesystemLoader;
 
 /**
@@ -48,40 +51,38 @@ class TwigView implements ViewInterface
     }
 
     /**
-     * Set the var to the template.
+     * Transfers the code to the twig template.
      *
      * @param string $name
-     * @param string $value
+     * @param string $path
      *
      * @return mixed
+     * @throws ViewException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function assign($name, $value)
     {
-        try {
-            if (isset($this->assign[$name])) {
-                throw new ViewException('You can\'t assign "' . $name . '" in Twig');
-            }
-
-            $assign = $this->assign[$name] = $value;
-        } catch (ViewException $e) {
-            die(
-                $e->getMessage() . '<br />
-         File: ' . $e->getFile() . '<br />
-         Code line: ' . $e->getLine() . '<br />
-         Trace: ' . $e->getTraceAsString()
-            );
+        if (isset($this->assign[$name])) {
+            throw new ViewException('You can\'t assign "' . $name . '" in Twig');
         }
 
+        $assign = $this->assign[$name] = $value;
         return $assign;
     }
 
     /**
      * Return code.
      *
-     * @param string $name Filename
-     * @param string $path Alternative Path
+     * @param string $name
+     * @param string $path
      *
-     * @return void
+     * @return mixed
+     * @throws ViewException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function fetch($name, $path = null)
     {
@@ -95,6 +96,10 @@ class TwigView implements ViewInterface
      * @param string $path
      *
      * @return mixed
+     * @throws ViewException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function renderInclude($name, $path = null)
     {
@@ -105,21 +110,11 @@ class TwigView implements ViewInterface
         $path = $twigConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR
             . $folder . $name . $twigConfig->get('fileExtension', '.twig');
 
-        try {
-            if (!is_file($path)) {
-                throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
-            }
-
-            $renderInclude = $this->twig->render($name, $this->assign);
-        } catch (ViewException $e) {
-            die(
-                $e->getMessage() . '<br />
-              File: ' . $e->getFile() . '<br />
-              Code line: ' . $e->getLine() . '<br />
-              Trace: ' . $e->getTraceAsString()
-            );
+        if (!is_file($path)) {
+            throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
         }
 
+        $renderInclude = $this->twig->render($name, $this->assign);
         return $renderInclude;
     }
 }

@@ -53,6 +53,7 @@ class DefaultView implements ViewInterface
      * @param string $path Alternative Path
      *
      * @return string
+     * @throws ViewException
      */
     public function fetch($name, $path = null)
     {
@@ -65,20 +66,13 @@ class DefaultView implements ViewInterface
                 $this->templateConfig->get('fileExtension', '.html.php');
         }
 
-        try {
-            if (!is_file($path)) {
-                throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
-            }
-            ob_start();
-            include $path;
-        } catch (ViewException $e) {
-            die(
-                $e->getMessage() . '<br />
-         File: ' . $e->getFile() . '<br />
-         Code line: ' . $e->getLine() . '<br />
-         Trace: ' . $e->getTraceAsString()
-            );
+
+        if (!is_file($path)) {
+            throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
         }
+
+        ob_start();
+        include $path;
 
         return ob_get_clean();
     }
@@ -90,6 +84,7 @@ class DefaultView implements ViewInterface
      * @param string $path
      *
      * @return mixed
+     * @throws ViewException
      */
     public function renderInclude($name, $path = null)
     {
@@ -102,20 +97,12 @@ class DefaultView implements ViewInterface
                 $this->templateConfig->get('fileExtension', '.html.php');
         }
 
-        try {
-            if (!is_file($path)) {
-                throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
-            }
-
-            $renderInclude = include $path;
-        } catch (ViewException $e) {
-            die(
-                $e->getMessage() . '<br />
-         File: ' . $e->getFile() . '<br />
-         Code line: ' . $e->getLine() . '<br />
-         Trace: ' . $e->getTraceAsString()
-            );
+        if (!is_file($path)) {
+            throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
         }
+
+        $renderInclude = include $path;
+
 
         return $renderInclude;
     }
