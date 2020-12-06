@@ -42,6 +42,4 @@ class Command extends Loader
 
         return call_user_func_array([new $class(), 'execute'], [$this->input, $this->output]);
     }
-
-
 }

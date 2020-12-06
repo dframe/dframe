@@ -57,9 +57,9 @@ class ArrayArgs implements InputInterface
                 if (strpos($com, '=')) {
                     [$com, $value] = explode("=", $com, 2);
                 } elseif (strpos(
-                        $args[0],
-                        '-'
-                    ) !== 0) { // is the option not followed by another option but by arguments
+                    $args[0],
+                    '-'
+                ) !== 0) { // is the option not followed by another option but by arguments
                     while (strpos($args[0], '-') !== 0) {
                         $value .= array_shift($args) . ' ';
                     }
