@@ -23,7 +23,7 @@ class DefaultView implements ViewInterface
     /**
      * @var Config
      */
-    private $templateConfig;
+    protected $templateConfig;
 
     /**
      * DefaultView constructor.

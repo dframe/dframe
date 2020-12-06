@@ -125,7 +125,7 @@ class Router
     /**
      * @var array
      */
-    private $routesAdd = [];
+    protected $routesAdd = [];
 
     /**
      * Redirect.
