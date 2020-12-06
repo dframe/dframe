@@ -11,8 +11,8 @@ namespace Dframe\View;
 
 use Dframe\Config\Config;
 use Dframe\View\Exceptions\ViewException;
-use Exception;
 use Smarty;
+use SmartyException;
 
 /**
  * Smarty View.
@@ -62,23 +62,16 @@ class SmartyView implements ViewInterface
      * @param string $value
      *
      * @return mixed
+     * @throws ViewException
      */
     public function assign($name, $value)
     {
-        try {
-            if ($this->smarty->getTemplateVars($name) !== null) {
-                throw new ViewException('You can\'t assign "' . $name . '" in Smarty');
-            }
-
-            $assign = $this->smarty->assign($name, $value);
-        } catch (ViewException $e) {
-            die(
-                $e->getMessage() . '<br />
-         File: ' . $e->getFile() . '<br />
-         Code line: ' . $e->getLine() . '<br />
-         Trace: ' . $e->getTraceAsString()
-            );
+        if ($this->smarty->getTemplateVars($name) !== null) {
+            throw new ViewException('You can\'t assign "' . $name . '" in Smarty');
         }
+
+        $assign = $this->smarty->assign($name, $value);
+
 
         return $assign;
     }
@@ -90,35 +83,12 @@ class SmartyView implements ViewInterface
      * @param string $path Alternative Path
      *
      * @return mixed
+     * @throws SmartyException
+     * @throws ViewException
      */
     public function fetch($name, $path = null)
     {
-        $pathFile = pathFile($name);
-        $folder = $pathFile[0];
-        $name = $pathFile[1];
-
-        if ($path === null) {
-            $path = $this->smarty->getTemplateDir(0) . DIRECTORY_SEPARATOR . $folder . $name .
-                $this->smartyConfig->get('fileExtension', '.html.php');
-        }
-
-        try {
-            if (!is_file($path)) {
-                throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
-            }
-
-            // Loading view
-            $fetch = $this->smarty->fetch($path);
-        } catch (Exception $e) {
-            die(
-                $e->getMessage() . '<br />
-         File: ' . $e->getFile() . '<br />
-         Code line: ' . $e->getLine() . '<br />
-         Trace: ' . $e->getTraceAsString()
-            );
-        }
-
-        return $fetch;
+        return $this->renderInclude($name, $path);
     }
 
     /**
@@ -128,6 +98,8 @@ class SmartyView implements ViewInterface
      * @param string $path
      *
      * @return mixed
+     * @throws SmartyException
+     * @throws ViewException
      */
     public function renderInclude($name, $path = null)
     {
@@ -140,19 +112,10 @@ class SmartyView implements ViewInterface
                 $this->smartyConfig->get('fileExtension', '.html.php');
         }
 
-        try {
-            if (!is_file($path)) {
-                throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
-            }
-
-            return $this->smarty->fetch($path); // Loading view
-        } catch (ViewException $e) {
-            die(
-                $e->getMessage() . '<br />
-         File: ' . $e->getFile() . '<br />
-         Code line: ' . $e->getLine() . '<br />
-         Trace: ' . $e->getTraceAsString()
-            );
+        if (!is_file($path)) {
+            throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
         }
+
+        return $this->smarty->fetch($path); // Loading view
     }
 }

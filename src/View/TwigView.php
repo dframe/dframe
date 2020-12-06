@@ -11,8 +11,11 @@ namespace Dframe\View;
 
 use Dframe\Config\Config;
 use Dframe\View\Exceptions\ViewException;
-use Twig_Environment;
-use Twig_Loader_Filesystem;
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Loader\FilesystemLoader;
 
 /**
  * Twig View.
@@ -22,7 +25,7 @@ use Twig_Loader_Filesystem;
 class TwigView implements ViewInterface
 {
     /**
-     * @var Twig_Environment
+     * @var \Twig\Environment
      */
     public $twig;
 
@@ -37,8 +40,8 @@ class TwigView implements ViewInterface
     public function __construct()
     {
         $twigConfig = Config::load('view/twig');
-        $loader = new Twig_Loader_Filesystem($twigConfig->get('setTemplateDir'));
-        $twig = new Twig_Environment(
+        $loader = new FilesystemLoader($twigConfig->get('setTemplateDir'));
+        $twig = new Environment(
             $loader,
             [
                 'cache' => $twigConfig->get('setCompileDir'),
@@ -48,44 +51,42 @@ class TwigView implements ViewInterface
     }
 
     /**
-     * Set the var to the template.
+     * Transfers the code to the twig template.
      *
      * @param string $name
-     * @param string $value
+     * @param string $path
      *
      * @return mixed
+     * @throws ViewException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function assign($name, $value)
     {
-        try {
-            if (isset($this->assign[$name])) {
-                throw new ViewException('You can\'t assign "' . $name . '" in Twig');
-            }
-
-            $assign = $this->assign[$name] = $value;
-        } catch (ViewException $e) {
-            die(
-                $e->getMessage() . '<br />
-         File: ' . $e->getFile() . '<br />
-         Code line: ' . $e->getLine() . '<br />
-         Trace: ' . $e->getTraceAsString()
-            );
+        if (isset($this->assign[$name])) {
+            throw new ViewException('You can\'t assign "' . $name . '" in Twig');
         }
 
+        $assign = $this->assign[$name] = $value;
         return $assign;
     }
 
     /**
      * Return code.
      *
-     * @param string $name Filename
-     * @param string $path Alternative Path
+     * @param string $name
+     * @param string $path
      *
-     * @return void
+     * @return mixed
+     * @throws ViewException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function fetch($name, $path = null)
     {
-        //return throw new \Exception('This module don't have fetch');
+        return $this->renderInclude($name, $path);
     }
 
     /**
@@ -95,6 +96,10 @@ class TwigView implements ViewInterface
      * @param string $path
      *
      * @return mixed
+     * @throws ViewException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function renderInclude($name, $path = null)
     {
@@ -102,25 +107,14 @@ class TwigView implements ViewInterface
         $pathFile = pathFile($name);
         $folder = $pathFile[0];
         $name = $pathFile[1];
+        $path = $twigConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR
+            . $folder . $name . $twigConfig->get('fileExtension', '.twig');
 
-        $path = $twigConfig->get('setTemplateDir') . DIRECTORY_SEPARATOR . $folder . $name .
-            $twigConfig->get('fileExtension', '.twig');
-
-        try {
-            if (!is_file($path)) {
-                throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
-            }
-
-            $renderInclude = $this->twig->render($name, $this->assign);
-        } catch (ViewException $e) {
-            die(
-                $e->getMessage() . '<br />
-              File: ' . $e->getFile() . '<br />
-              Code line: ' . $e->getLine() . '<br />
-              Trace: ' . $e->getTraceAsString()
-            );
+        if (!is_file($path)) {
+            throw new ViewException('Can not open template ' . $name . ' in: ' . $path);
         }
 
+        $renderInclude = $this->twig->render($name, $this->assign);
         return $renderInclude;
     }
 }
