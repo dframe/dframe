@@ -124,7 +124,7 @@ class Router
     /**
      * @var array
      */
-    private array $routesAdd = [];
+    protected array $routesAdd = [];
 
     /**
      * Redirect.
@@ -644,7 +644,7 @@ class Router
      * Parse url params into a 'request'
      *
      * @param string $routing
-     * @param array $params
+     * @param array  $params
      *
      * @return string
      */
@@ -661,7 +661,7 @@ class Router
 
     /**
      * @param string $findKey
-     * @param array $params
+     * @param array  $params
      * @param string $task
      * @param string $action
      *
@@ -761,7 +761,7 @@ class Router
     /**
      * Match given request
      *
-     * @param string $request
+     * @param string      $request
      * @param string|null $routingParse
      *
      * @return array
