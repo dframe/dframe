@@ -117,6 +117,5 @@ class SmartyView implements ViewInterface
         }
 
         return $this->smarty->fetch($path); // Loading view
-
     }
 }
