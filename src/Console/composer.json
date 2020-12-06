@@ -6,7 +6,8 @@
         "dframe",
         "cli",
         "command",
-        "mvc"
+        "mvc",
+        "console"
     ],
     "homepage": "https://dframeframework.com",
     "type": "library",
