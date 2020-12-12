@@ -15,10 +15,10 @@ class FunctionsTest extends TestCase
     public function testGenerateRandomString()
     {
         $randomString = generateRandomString();
-        $this->assertRegExp('/(\d+|\w){10,10}/', $randomString);
+        $this->assertMatchesRegularExpression('/(\d+|\w){10,10}/', $randomString);
 
         $randomString = generateRandomString(5);
-        $this->assertRegExp('/(\d+|\w){5,5}/', $randomString);
+        $this->assertMatchesRegularExpression('/(\d+|\w){5,5}/', $randomString);
     }
 
     public function testObjectToArray()
