@@ -1,6 +1,6 @@
 <?php
 
-namespace Dframe\Tests;
+namespace Dframe\Router\Tests;
 
 use Dframe\Router\Response;
 use PHPUnit\Framework\TestCase;

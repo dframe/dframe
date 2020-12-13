@@ -1,11 +1,10 @@
 <?php
 
-
-namespace Dframe\Tests\Controller;
+namespace Dframe\Loader\Tests\Controller\Sub;
 
 use Dframe\Controller;
 
-class TestController extends Controller
+class SubTestController extends Controller
 {
     /**
      * @return bool

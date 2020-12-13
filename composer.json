@@ -48,11 +48,6 @@
             "src/Functions.php"
         ]
     },
-    "autoload-dev": {
-        "psr-4": {
-            "Dframe\\Tests\\": "tests"
-        }
-    },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
         "smarty/smarty": "^3.1",

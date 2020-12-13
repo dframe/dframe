@@ -1,6 +1,6 @@
 <?php
 
-namespace Dframe\Tests;
+namespace Dframe\Config\Tests;
 
 use Dframe\Config\Config;
 use org\bovigo\vfs\vfsStream;

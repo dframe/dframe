@@ -12,7 +12,7 @@
   </coverage>
   <testsuites>
     <testsuite name="AppTests">
-      <directory suffix="Test.php">./tests/</directory>
+      <directory>./src/*/Tests</directory>
     </testsuite>
   </testsuites>
   <logging>
