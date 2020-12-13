@@ -1,6 +1,6 @@
 <?php
 
-namespace Dframe\tests;
+namespace Dframe\Session\Tests;
 
 use Dframe\Session\Session;
 use PHPUnit\Framework\TestCase;

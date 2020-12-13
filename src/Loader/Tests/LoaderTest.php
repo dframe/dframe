@@ -1,6 +1,6 @@
 <?php
 
-namespace Dframe\Tests;
+namespace Dframe\Loader\Tests;
 
 use Dframe\Loader\Loader;
 use PHPUnit\Framework\TestCase;
@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class ConfigTest
  *
- * @package Dframe\Tests
+ * @package Dframe\Loader\Tests
  */
 class LoaderTest extends TestCase
 {
@@ -41,9 +41,9 @@ class LoaderTest extends TestCase
     {
         $loaderTest = new Loader();
 
-        $this->assertTrue($loaderTest->loadController('TestController', 'Dframe\Tests')->test());
-        $this->assertTrue($loaderTest->loadController('Sub,SubTestController', 'Dframe\Tests')->test());
-        $this->assertTrue($loaderTest->loadController('Sub\SubTestController', 'Dframe\Tests')->test());
-        $this->assertTrue($loaderTest->loadController('Sub/SubTestController', 'Dframe\Tests')->test());
+        $this->assertTrue($loaderTest->loadController('TestController', 'Dframe\Loader\Tests')->test());
+        $this->assertTrue($loaderTest->loadController('Sub,SubTestController', 'Dframe\Loader\Tests')->test());
+        $this->assertTrue($loaderTest->loadController('Sub\SubTestController', 'Dframe\Loader\Tests')->test());
+        $this->assertTrue($loaderTest->loadController('Sub/SubTestController', 'Dframe\Loader\Tests')->test());
     }
 }

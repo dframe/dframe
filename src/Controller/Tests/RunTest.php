@@ -1,8 +1,7 @@
 <?php
 
-namespace Dframe\Tests;
+namespace Dframe\Controller\Tests;
 
-use Dframe\Controller;
 use PHPUnit\Framework\TestCase;
 
 ini_set('session.use_cookies', 0);
@@ -20,21 +19,5 @@ class RunTest extends TestCase
     {
         $testController = new TestController();
         $this->assertEquals('Hello World', $testController->testHelloWorld());
-    }
-}
-
-/**
- * Class TestController
- *
- * @package Dframe\Tests
- */
-class TestController extends Controller
-{
-    /**
-     * @return string
-     */
-    public function testHelloWorld()
-    {
-        return 'Hello World';
     }
 }

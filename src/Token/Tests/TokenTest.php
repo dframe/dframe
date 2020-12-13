@@ -1,6 +1,6 @@
 <?php
 
-namespace Dframe\Tests;
+namespace Dframe\Token\Tests;
 
 use Bootstrap;
 use Dframe\Token\Token;
