@@ -16,7 +16,7 @@ class ConfigTest extends TestCase
     /**
      * @var vfsStream
      */
-    private $fileSystem;
+    protected $fileSystem;
 
     /**
      *
