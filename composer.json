@@ -56,7 +56,8 @@
         "ptachoire/cssembed": "^1.0",
         "natxet/cssmin": "^3.0",
         "twig/twig": "^3.1",
-        "mikey179/vfsstream": "^1.6"
+        "mikey179/vfsstream": "^1.6",
+        "dframe/dframe-demo": "^2.0"
     },
     "scripts": {
         "test": [

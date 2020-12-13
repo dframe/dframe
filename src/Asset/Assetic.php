@@ -28,6 +28,7 @@ set_time_limit(120);
  */
 class Assetic extends Router
 {
+
     /**
      * @param $url
      *
@@ -100,7 +101,7 @@ class Assetic extends Router
                 }
 
                 $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: ' . $srcPath . ' TO ' . $dstPath . "\n";
-                $out = fopen(APP_DIR . '/View/logs/router.txt', 'w');
+                $out = fopen(self::LOG_DIR . self::LOG_FILE_NAME, 'w');
                 fwrite($out, $msg);
                 fclose($out);
             }
@@ -188,9 +189,9 @@ class Assetic extends Router
 
                 if (!copy($srcPathInfo['dirname'] . '/' . $url, $pathInfo['dirname'] . '/' . $url)) {
                     $msg = date(
-                        'Y-m-d h:m:s'
-                    ) . ' :: Unable to copy an asset From: ' . $srcPathInfo['dirname'] . '/' . $url . ' TO ' . $pathInfo['dirname'] . '/' . $url . "\n";
-                    $out = fopen(APP_DIR . 'View/logs/router.txt', 'w');
+                            'Y-m-d h:m:s'
+                        ) . ' :: Unable to copy an asset From: ' . $srcPathInfo['dirname'] . '/' . $url . ' TO ' . $pathInfo['dirname'] . '/' . $url . "\n";
+                    $out = fopen(self::LOG_DIR . self::LOG_FILE_NAME, 'w');
                     fwrite($out, $msg);
                     fclose($out);
                 }
@@ -198,7 +199,7 @@ class Assetic extends Router
 
             if (!file_put_contents($dstPath, $css->dump())) {
                 $msg = date('Y-m-d h:m:s') . ' :: Unable to copy an asset From: ' . $srcPath . ' TO ' . $dstPath . "\n";
-                $out = fopen(APP_DIR . '/View/logs/router.txt', 'w');
+                $out = fopen(self::LOG_DIR . self::LOG_FILE_NAME, 'w');
                 fwrite($out, $msg);
                 fclose($out);
             }

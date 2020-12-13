@@ -9,8 +9,8 @@
 
 namespace Dframe\Cron;
 
-use Dframe\Task\Exceptions\TaskException;
 use Dframe\Loader\Loader;
+use Dframe\Task\Exceptions\TaskException;
 use Exception;
 use InvalidArgumentException;
 
@@ -21,6 +21,7 @@ use InvalidArgumentException;
  */
 abstract class Task extends Loader
 {
+
     /**
      * @param       $key
      * @param       $callback
@@ -36,7 +37,7 @@ abstract class Task extends Loader
             throw new TaskException('Please Define APP_DIR in Main config.php', 500);
         }
 
-        $dir = APP_DIR . 'View/cache/logs/';
+        $dir = self::LOG_DIR;
         $file = $key . '.txt';
         $this->checkDir($dir);
         $dirLog = $dir . $file;
@@ -86,7 +87,7 @@ abstract class Task extends Loader
             throw new TaskException('Please Define APP_DIR in Main config.php', 500);
         }
 
-        $dir = $dirLog = APP_DIR . 'View/cache/logs/';
+        $dir = $dirLog = self::LOG_DIR;
         $file = $key . '.txt';
         $this->checkDir($dir);
         $dirLog = $dir . $file;

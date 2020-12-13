@@ -24,6 +24,11 @@ use Exception;
 class Loader
 {
     /**
+     * Path logs
+     */
+    protected const LOG_DIR = APP_DIR . 'View/cache/logs/';
+    
+    /**
      * @var Router
      */
     public $router;
