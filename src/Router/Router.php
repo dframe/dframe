@@ -29,6 +29,36 @@ use function parse_url;
 class Router
 {
     /**
+     * Path logs
+     */
+    protected const CACHE_DIR = APP_DIR . 'View/cache/';
+
+    /**
+     * Path logs
+     */
+    protected const LOG_DIR = self::CACHE_DIR . '/logs/';
+
+    /**
+     * Path logs
+     */
+    protected const LOG_FILE_NAME = 'router.txt';
+
+    /**
+     * Path Controller
+     */
+    protected const CONTROLLER_DIR = APP_DIR . 'Controller/';
+
+    /**
+     * Path Controller
+     */
+    const APP_DIR = 'web' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . '';
+
+    /**
+     * Path for replaced Controller namespace
+     */
+    const TASK_REPLACE_CONTROLLER_PATH = 'app' . DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR . '';
+
+    /**
      * @var array
      */
     public array $routeMap = [];
@@ -209,7 +239,7 @@ class Router
             throw new RouterException('Please Define APP_DIR in Main config.php', 500);
         }
 
-        $cacheDir = APP_DIR . 'View/cache/';
+        $cacheDir = self::CACHE_DIR;
         $this->cacheDir = rtrim($cacheDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         // We save the cache dir
         if (!is_dir($cacheDir)) {
@@ -225,7 +255,7 @@ class Router
         $annotationRoute = $this->routerConfig->get('annotation', false);
         if ($annotationRoute === true) {
             if (PHP_SAPI !== 'cli') {
-                $controllerDirs = [APP_DIR . 'Controller/'];
+                $controllerDirs = [self::CONTROLLER_DIR];
                 $this->controllerDirs = [];
                 foreach ($controllerDirs as $d) {
                     $realPath = realpath($d);
@@ -238,7 +268,7 @@ class Router
             }
         }
 
-        $routesConfig = Config::load('routes', APP_DIR . 'View/cache/')->get();
+        $routesConfig = Config::load('routes', self::CACHE_DIR)->get();
 
         if (!empty($routesConfig)) {
             if (is_array($routesConfig) and $this->isAssoc($routesConfig) === false) {
@@ -359,11 +389,12 @@ class Router
         }
 
         $appDir = str_replace(
-            'web' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . '',
+            self::APP_DIR,
             '',
             APP_DIR
         );
-        $task = str_replace($appDir . 'app' . DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR . '', '', $file);
+
+        $task = str_replace(self::TASK_REPLACE_CONTROLLER_PATH, '', $file);
         $task = rtrim($task, '.php');
         $task = str_replace(DIRECTORY_SEPARATOR, ',', $task);
         // We load file content
