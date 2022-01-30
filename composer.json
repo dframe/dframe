@@ -20,7 +20,8 @@
     "require": {
         "php": ">=7.3",
         "ext-json": "*",
-        "psr/simple-cache": "^1.0"
+        "psr/simple-cache": "^1.0",
+        "natxet/cssmin": "*"
     },
     "replace": {
         "dframe/config": "self.version",
@@ -54,7 +55,6 @@
         "kriswallsmith/assetic": "^1.4",
         "patchwork/jsqueeze": "^2.0",
         "ptachoire/cssembed": "^1.0",
-        "natxetc/cssmin": "^3.0",
         "twig/twig": "^3.3",
         "mikey179/vfsstream": "^1.6"
     },
