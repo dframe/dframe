@@ -28,7 +28,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Dframe\\Cron\\Tests\\": "tests"
+            "Dframe\\Cron\\Tests\\": "Tests"
         }
     },
     "require-dev": {

@@ -30,7 +30,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Dframe\\View\\Tests\\": "tests"
+            "Dframe\\View\\Tests\\": "Tests"
         }
     },
     "require-dev": {
