@@ -20,7 +20,7 @@ class ArrayArgs implements InputInterface
      * @param $args
      *
      * @return array
-     * @throws \Dframe\Console\Exceptions\ConsoleException
+     * @throws ConsoleException
      */
     public function __construct($args)
     {

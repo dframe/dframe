@@ -23,12 +23,12 @@ class Bootstrap
     public $modules;
 
     /**
-     * @var \Dframe\Session\Session
+     * @var Session
      */
     public $session;
 
     /**
-     * @var \Dframe\Token\Token
+     * @var Token
      */
     public $token;
 

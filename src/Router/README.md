@@ -185,20 +185,8 @@ assign - it's a method of the template engine that assignes value to a variable 
 
 **View/templates/index.html.php**
 
-
 ```php
-
-   <?php include "header.html.php" ?>
-Example site created using the Dframe Framework
-
-Routing:
-   <?php $this->router->makeUrl(':task/:action?task=index&action=page'); ?> <!-- http://example.com/index/page -->
-   <?php $this->router->makeUrl('error/:code?code=404'); ?> <!-- http://example.com/page/404 -->
-   <?php $this->router->publicWeb('css/style.css'); ?> <!-- http://example.com/css/style.css -->
-
-   <?php $this->domain('https://example.com')->makeUrl('error/:code?code=404'); ?> <! -- http://examplephp.com/page/404 -->
-
-   <?php include "footer.html.php" ?>
+https://
 ```
 
 Using only PHP

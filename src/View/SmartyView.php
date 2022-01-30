@@ -59,7 +59,7 @@ class SmartyView implements ViewInterface
      * Set the var to the template.
      *
      * @param string $name
-     * @param string $path
+     * @param        $value
      *
      * @return mixed
      * @throws ViewException

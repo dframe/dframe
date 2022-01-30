@@ -300,7 +300,7 @@ class Loader
     }
 
     /**
-     * @param $e \Exception
+     * @param $e Exception
      *
      * @return string|null
      * @throws Exception
