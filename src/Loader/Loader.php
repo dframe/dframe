@@ -131,7 +131,9 @@ class Loader
                 return require_once $path;
             }
 
-            throw new LoaderException('Couldn\'t locate ' . $args);
+            if (realpath(__DIR__ . '/' . $directory)) {
+                throw new \GentaurWPMainVendor\Dframe\Loader\Exceptions\LoaderException('Couldn\'t locate ' . $args);
+            }
         }
     }
 
