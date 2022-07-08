@@ -800,12 +800,7 @@ class Router
             $routingParse = $this->routeMapParse;
         }
 
-        $pos = strpos($request, '?task=');
-        if ($pos !== false) {
-            $request = substr_replace($request, '/?task=', $pos, strlen('?task='));
-        }
-
-        $request = str_replace('?', '&', $request);
+        $path = trim(explode('?', $request)[0], '/');
 
         foreach ($routingParse as $k => $v) {
             if (!is_array($v)) {
@@ -821,7 +816,7 @@ class Router
                 $v[0]
             );
 
-            if (preg_match_all('!' . $expressionMatch . '!i', $request, $expression__)) {
+            if (preg_match_all('!^' . $expressionMatch . '$!i', $path, $expression__)) {
                 $args = [];
                 $expression = [];
 
@@ -842,6 +837,7 @@ class Router
                         }
                     }
                 }
+
                 unset($expression[0]);
                 $iCount = count($expression__[0]);
 
@@ -854,7 +850,13 @@ class Router
                         }
                     }
                 } else {
-                    $vars = '&' . $v[1];
+                    if (isset($v['methods'][$_SERVER['REQUEST_METHOD']])) {
+                        $vars = '&' . $v['methods'][$_SERVER['REQUEST_METHOD']];
+                    } elseif (isset($v[1])) {
+                        $vars = '&' . $v[1];
+                    } else {
+                        continue;
+                    }
                 }
 
                 foreach ($expression as $v_) {
@@ -866,7 +868,6 @@ class Router
                         foreach ($args as $key => $value) {
                             $args[$key] = str_replace('[' . $v_[0] . ']', $v_[1], $args[$key]);
                         }
-
                         $vars = str_replace('[' . $v_[0] . ']', $v_[1], $vars);
                     } else {
                         $vars = $vars . $this->parseUrl($v_[1], [$v['_' . $v_[0]]])['sVars'];
