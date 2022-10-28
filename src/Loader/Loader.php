@@ -26,7 +26,7 @@ class Loader
     /**
      * Path logs
      */
-    protected const LOG_DIR = APP_DIR . 'View/cache/logs/';
+    protected const LOG_DIR = \APP_DIR . 'View/cache/logs/';
 
     /**
      * @var Router
@@ -124,7 +124,7 @@ class Loader
         $class = array_pop($directory);
         $directory = array_merge($directory, explode('/', str_replace('_', '/', $class)));
         $class = array_pop($directory);
-        $directory = rtrim(APP_DIR . join('/', $directory), '/');
+        $directory = rtrim(\APP_DIR . join('/', $directory), '/');
 
         if (!empty($class)) {
             if (is_file($path = $directory . '/' . $class . '.php')) {

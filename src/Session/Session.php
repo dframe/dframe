@@ -41,7 +41,7 @@ class Session implements CacheInterface
     public function __construct($app = [])
     {
         $options = $this->app->config['session'] ?? [];
-        $this->name = APP_NAME ?? '_sessionName';
+        $this->name = \APP_NAME ?? '_sessionName';
 
         if (!isset($_SESSION)) {
             $cookie = [

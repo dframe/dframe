@@ -32,7 +32,7 @@ class Router
     /**
      * Path logs
      */
-    protected const CACHE_DIR = APP_DIR . 'View/cache/';
+    protected const CACHE_DIR = \APP_DIR . 'View/cache/';
 
     /**
      * Path logs
@@ -47,7 +47,7 @@ class Router
     /**
      * Path Controller
      */
-    protected const CONTROLLER_DIR = APP_DIR . 'Controller/';
+    protected const CONTROLLER_DIR = \APP_DIR . 'Controller/';
 
     /**
      * Path Controller
@@ -411,7 +411,7 @@ class Router
         $appDir = str_replace(
             self::APP_DIR,
             '',
-            APP_DIR
+            \APP_DIR
         );
 
         $task = str_replace(self::TASK_REPLACE_CONTROLLER_PATH, '', $file);
@@ -431,7 +431,7 @@ class Router
             $className = ($namespace !== null) ? $namespace . '\\' . $matches[1] : $matches[1];
             // We find class info's
             $path = str_replace('Controller.php', '.php', $className . '.php');
-            $path = APP_DIR . str_replace('\\', '/', $path);
+            $path = \APP_DIR . str_replace('\\', '/', $path);
 
             if (is_file($path)) {
                 include_once $path;

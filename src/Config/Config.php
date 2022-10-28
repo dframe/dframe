@@ -45,7 +45,7 @@ class Config
             throw new ConfigException('Please Define APP_DIR in Main config.php', 500);
         }
 
-        $this->path = (isset($path) and !empty($path)) ? $path : APP_DIR . $path . 'Config' . DIRECTORY_SEPARATOR;
+        $this->path = (isset($path) and !empty($path)) ? $path : \APP_DIR . $path . 'Config' . DIRECTORY_SEPARATOR;
 
         $this->file = $file;
         if (file_exists($this->path . $this->file . '.php') !== true) {
