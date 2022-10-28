@@ -4,9 +4,9 @@ os:
 - linux
 
 php:
-  - 7.4
+  - 8.1
 
-# We don't want to run linux commands as super user
+# We don't want to run linux commands as superuser
 sudo: false
 
 install:
