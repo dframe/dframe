@@ -74,14 +74,22 @@ defines the way the additional foo=bar parameters should be interpreted.
      ],
  
      'routes' => [
-         'docs/:pageId' => [
-             'docs/[pageId]/', 
-             'task=page&action=[docsId]&type=docs'
+         'docs/:page' => [
+             'docs/[page]/', 
+             'task=Page&action=[page]&type=docs'
+         ],
+         
+         'methods/example/:exampleId' => [
+            'methods/example/[exampleId]',
+            'methods' => [
+                'GET' => 'task=Methods,Example&action=get&exampleid=[exampleId]',
+                'POST' => 'task=Methods,Example&action=post&exampleid=[exampleId]',
+            ]
          ],
          
          'error/:code' => [
              'error/[code]/', 
-             'task=page&action=error&type=[code]',
+             'task=Page&action=error&type=[code]',
              'code' => '([0-9]+)',
              'args' => [
                  'code' => '[code]'
