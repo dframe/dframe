@@ -58,35 +58,6 @@ class Token implements CacheInterface
         }
     }
 
-
-    /**
-     * @throws InvalidArgumentException
-     */
-    public function clear(): void
-    {
-        $this->token = [];
-        $this->time = [];
-
-        $this->driver->set('token', $this->token);
-        $this->driver->set('timeToken', $this->time);
-    }
-
-    /**
-     * @param iterable $keys
-     * @param null     $default
-     *
-     * @return iterable|void
-     */
-    public function getMultiple($keys, $default = null)
-    {
-        $cache = [];
-        foreach ($keys as $key) {
-            $cache[$key] = $this->get($key, $default);
-        }
-
-        return $cache;
-    }
-
     /**
      * @param string      $key
      * @param null|string $default
@@ -154,6 +125,34 @@ class Token implements CacheInterface
         $this->driver->set('token', $this->token);
 
         return $this;
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function clear(): void
+    {
+        $this->token = [];
+        $this->time = [];
+
+        $this->driver->set('token', $this->token);
+        $this->driver->set('timeToken', $this->time);
+    }
+
+    /**
+     * @param iterable $keys
+     * @param null     $default
+     *
+     * @return iterable|void
+     */
+    public function getMultiple($keys, $default = null)
+    {
+        $cache = [];
+        foreach ($keys as $key) {
+            $cache[$key] = $this->get($key, $default);
+        }
+
+        return $cache;
     }
 
     /**

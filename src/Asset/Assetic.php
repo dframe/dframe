@@ -30,42 +30,9 @@ class Assetic extends Router
 {
 
     /**
-     * @param $url
-     *
-     * @return string
-     */
-    protected function srcPath($url): string
-    {
-        return $this->routeMap['assets']['assetsPath'] . $this->routeMap['assets']['assetsDir'] . '/' . $url;
-    }
-
-    /**
-     * @param $url
-     * @param $path
-     *
-     * @return string
-     * @throws AsseticException
-     */
-    protected function dstPath($url, $path): string
-    {
-        if (is_null($path)) {
-            $path = 'assets';
-            if (isset($this->routeMap['assets']['assetsDir']) and !empty($this->routeMap['assets']['assetsDir'])) {
-                $path = $this->routeMap['assets']['assetsDir'];
-                $this->checkDir($path);
-            }
-            $dstPath = $this->routeMap['assets']['cachePath'] . $path . '/' . $url;
-        } else {
-            $dstPath = $this->routeMap['assets']['cachePath'] . $path;
-        }
-
-        return $dstPath;
-    }
-
-    /**
      * @param null|string $url
      * @param null|string $path
-     * @param bool $compress
+     * @param bool        $compress
      *
      * @return null|string
      * @throws AsseticException
@@ -116,11 +83,44 @@ class Assetic extends Router
     }
 
     /**
+     * @param $url
+     *
+     * @return string
+     */
+    protected function srcPath($url): string
+    {
+        return $this->routeMap['assets']['assetsPath'] . $this->routeMap['assets']['assetsDir'] . '/' . $url;
+    }
+
+    /**
+     * @param $url
+     * @param $path
+     *
+     * @return string
+     * @throws AsseticException
+     */
+    protected function dstPath($url, $path): string
+    {
+        if (is_null($path)) {
+            $path = 'assets';
+            if (isset($this->routeMap['assets']['assetsDir']) and !empty($this->routeMap['assets']['assetsDir'])) {
+                $path = $this->routeMap['assets']['assetsDir'];
+                $this->checkDir($path);
+            }
+            $dstPath = $this->routeMap['assets']['cachePath'] . $path . '/' . $url;
+        } else {
+            $dstPath = $this->routeMap['assets']['cachePath'] . $path;
+        }
+
+        return $dstPath;
+    }
+
+    /**
      * @param $path
      *
      * @throws AsseticException
      */
-    protected function checkDir($path) : void
+    protected function checkDir($path): void
     {
         if (!is_dir($path)) {
             if (!mkdir($path, 0777, true)) {
@@ -132,7 +132,7 @@ class Assetic extends Router
     /**
      * @param null|string $url
      * @param null|string $path
-     * @param bool $compress
+     * @param bool        $compress
      *
      * @return null|string
      * @throws AsseticException
@@ -189,8 +189,8 @@ class Assetic extends Router
 
                 if (!copy($srcPathInfo['dirname'] . '/' . $url, $pathInfo['dirname'] . '/' . $url)) {
                     $msg = date(
-                        'Y-m-d h:m:s'
-                    ) . ' :: Unable to copy an asset From: ' . $srcPathInfo['dirname'] . '/' . $url . ' TO ' . $pathInfo['dirname'] . '/' . $url . "\n";
+                            'Y-m-d h:m:s'
+                        ) . ' :: Unable to copy an asset From: ' . $srcPathInfo['dirname'] . '/' . $url . ' TO ' . $pathInfo['dirname'] . '/' . $url . "\n";
                     $out = fopen(self::LOG_DIR . self::LOG_FILE_NAME, 'w');
                     fwrite($out, $msg);
                     fclose($out);

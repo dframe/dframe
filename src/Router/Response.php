@@ -127,7 +127,7 @@ class Response extends Router
     }
 
     /**
-     * @param mixed $body
+     * @param mixed    $body
      * @param null|int $status
      *
      * @return Response
@@ -173,7 +173,7 @@ class Response extends Router
     }
 
     /**
-     * @param mixed $body
+     * @param mixed    $body
      * @param null|int $status
      *
      * @return Response
@@ -200,8 +200,8 @@ class Response extends Router
      * Address redirection.
      *
      * @param string $url
-     * @param int $status
-     * @param array $headers
+     * @param int    $status
+     * @param array  $headers
      *
      * @return Response
      */

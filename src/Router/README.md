@@ -1,4 +1,5 @@
 # Dframe/Router - Component
+
 [![Build Status](https://travis-ci.org/dframe/router.svg?branch=master)](https://travis-ci.org/dframe/router) [![Latest Stable Version](https://poser.pugx.org/dframe/router/v/stable)](https://packagist.org/packages/dframe/router) [![Total Downloads](https://poser.pugx.org/dframe/router/downloads)](https://packagist.org/packages/dframe/router) [![Latest Unstable Version](https://poser.pugx.org/dframe/router/v/unstable)](https://packagist.org/packages/dframe/router) [![License](https://poser.pugx.org/dframe/router/license)](https://packagist.org/packages/dframe/router)
 
 ![php framework dframe logo](https://dframeframework.com/img/logo_full.png)
@@ -11,11 +12,11 @@
 $ composer require dframe/router
 ```
 
-
 Simple PHP Router
 ---------
 
-Creating an application, it's worth taking care of their friendly links. Its has a big part in position in SEO. Link router work in a similar way as network router. It is responsible for calling the method from controller.
+Creating an application, it's worth taking care of their friendly links. Its has a big part in position in SEO. Link
+router work in a similar way as network router. It is responsible for calling the method from controller.
 
 ```php
 
@@ -40,9 +41,11 @@ We define the table with adresses for our application in the configuration file
 - **|publicWeb|** - Main folder from which files will be read (js, css)
 - **|assetsPath|** - Dynamic folder
 
-- **|docs/docsId|** - Example routing with the |docsId| variable, which contains the |docs/[docsId]/| adress definition and the |task| parameters to which it's assigned.
+- **|docs/docsId|** - Example routing with the |docsId| variable, which contains the |docs/[docsId]/| adress definition
+  and the |task| parameters to which it's assigned.
 - **|error/404|** - as above
-- **|default|** - default definition loading the controller/method. |params| defines the possibility of additional parameters appearing, while
+- **|default|** - default definition loading the controller/method. |params| defines the possibility of additional
+  parameters appearing, while
 
 ```php
 '_params' => [
@@ -123,7 +126,9 @@ defines the way the additional foo=bar parameters should be interpreted.
 Controller
 -------------
 
- - makeUrl - is used for generating the full adress. For example |makeurl| - method used for redirections, equivalent of |header| but with a parameter being a key from the Config/router.php table. In case of using docs/:docsld it looks as the following |redirect|
+- makeUrl - is used for generating the full adress. For example |makeurl| - method used for redirections, equivalent of
+  |header| but with a parameter being a key from the Config/router.php table. In case of using docs/:docsld it looks as
+  the following |redirect|
 
 **Controller/Page.php**
 
@@ -185,7 +190,6 @@ Controller
  }
  ```
 
-
 View
 -------------
 
@@ -200,7 +204,6 @@ https://
 Using only PHP
 
 - |router| all already available methods used like in |page/index|
-
 
 **View/index.php**
 
@@ -223,11 +226,11 @@ class IndexView extends \View\View
 }
 ```
 
-
 Dframe\Router\Response;
 ------
 
-Extention of the basic **Dframe\Router** is **Dframe\Router\Response**, adding functionality of setting the response status (404, 500, etc.) and their headers.
+Extention of the basic **Dframe\Router** is **Dframe\Router\Response**, adding functionality of setting the response
+status (404, 500, etc.) and their headers.
 
 ```php
 return Response::create('Hello Word!')

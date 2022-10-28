@@ -1,4 +1,5 @@
 # Dframe/Cron - Component
+
 [![Build Status](https://travis-ci.org/dframe/cron.svg?branch=master)](https://travis-ci.org/dframe/cron) [![Latest Stable Version](https://poser.pugx.org/dframe/cron/v/stable)](https://packagist.org/packages/dframe/cron) [![Total Downloads](https://poser.pugx.org/dframe/cron/downloads)](https://packagist.org/packages/dframe/cron) [![Latest Unstable Version](https://poser.pugx.org/dframe/cron/v/unstable)](https://packagist.org/packages/dframe/cron) [![License](https://poser.pugx.org/dframe/cron/license)](https://packagist.org/packages/dframe/cron)
 
 ![php framework dframe logo](https://dframeframework.com/img/logo_full.png)
@@ -14,7 +15,8 @@ $ composer require dframe/cron
 Cron
 ---------
 
-Cron is a service to perform tasks periodically. It allows you to execute a command at a specified time. Sending emails is such an example.
+Cron is a service to perform tasks periodically. It allows you to execute a command at a specified time. Sending emails
+is such an example.
 
 ```php 
 use Dframe\Cron\Task;
@@ -57,7 +59,6 @@ Methods
 ---------
 
 **lockTime(string $key, $ttl = 3600)**
-
 
 Lock time
 

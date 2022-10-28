@@ -57,9 +57,9 @@ class ArrayArgs implements InputInterface
                 if (strpos($com, '=')) {
                     [$com, $value] = explode("=", $com, 2);
                 } elseif (strpos(
-                    $args[0],
-                    '-'
-                ) !== 0) { // is the option not followed by another option but by arguments
+                        $args[0],
+                        '-'
+                    ) !== 0) { // is the option not followed by another option but by arguments
                     while (strpos($args[0], '-') !== 0) {
                         $value .= array_shift($args) . ' ';
                     }
@@ -102,11 +102,11 @@ class ArrayArgs implements InputInterface
     }
 
     /**
-     * @param string $name
+     * @return array
      */
-    public function setName($name)
+    public function getOptions()
     {
-        $this->name = $name;
+        return $this->options;
     }
 
     /**
@@ -118,18 +118,18 @@ class ArrayArgs implements InputInterface
     }
 
     /**
-     * @return array
-     */
-    public function getOptions()
-    {
-        return $this->options;
-    }
-
-    /**
      * @return string
      */
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 }

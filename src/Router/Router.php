@@ -19,6 +19,7 @@ use RecursiveRegexIterator;
 use ReflectionClass;
 use ReflectionMethod;
 use RegexIterator;
+
 use function parse_url;
 
 /**
@@ -51,12 +52,12 @@ class Router
     /**
      * Path Controller
      */
-    const APP_DIR = 'web' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . '';
+    public const APP_DIR = 'web' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . '';
 
     /**
      * Path for replaced Controller namespace
      */
-    const TASK_REPLACE_CONTROLLER_PATH = 'app' . DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR . '';
+    public const TASK_REPLACE_CONTROLLER_PATH = 'app' . DIRECTORY_SEPARATOR . 'Controller' . DIRECTORY_SEPARATOR . '';
 
     /**
      * @var array
@@ -160,7 +161,7 @@ class Router
      * Redirect.
      *
      * @param string $url The URI
-     * @param int $status
+     * @param int    $status
      *
      * @return Response
      */
@@ -302,6 +303,25 @@ class Router
         $this->https = $option;
 
         return $this;
+    }
+
+    /**
+     * @param bool $option
+     *
+     * @return string
+     */
+    protected function getRequestPrefix(bool $option): string
+    {
+        if ($option === true) {
+            $requestPrefix = 'https://';
+        } else {
+            $requestPrefix = 'http://';
+            if ((isset($_SERVER['REQUEST_SCHEME']) and (!empty($_SERVER['REQUEST_SCHEME']) and ($_SERVER['REQUEST_SCHEME'] === 'https') or !empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] === 'on') or (!empty($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] === '443'))) {
+                $requestPrefix = 'https://';
+            }
+        }
+
+        return $requestPrefix;
     }
 
     /**
@@ -489,8 +509,8 @@ class Router
 
         $controllerFiles = [];
         $commonFileContent = '<?php' . "\r\n" . '/**' . "\r\n" . ' * annotations router %s cache file, create ' . date(
-            'c'
-        ) . "\r\n" . ' */' . "\r\n\r\n";
+                'c'
+            ) . "\r\n" . ' */' . "\r\n\r\n";
         $routesFileContent = sprintf($commonFileContent, 'routes');
         $controllersFileContent = sprintf($commonFileContent, 'controllers');
         $routesFileContent .= 'return [';
@@ -507,9 +527,9 @@ class Router
         $routesFileContent .= "\r\n" . "];";
         file_put_contents($this->cacheDir . $this->routesFile, $routesFileContent);
         $usedControllers = (count($controllerFiles) > 0) ? '$this->usedControllers = [\'' . implode(
-            '\',\'',
-            $controllerFiles
-        ) . '\'];' : '';
+                '\',\'',
+                $controllerFiles
+            ) . '\'];' : '';
         file_put_contents($this->cacheDir . $this->controllersFile, $controllersFileContent . $usedControllers);
     }
 
@@ -627,7 +647,7 @@ class Router
 
     /**
      * @param string $findKey
-     * @param array $params
+     * @param array  $params
      * @param string $task
      * @param string $action
      *
@@ -792,7 +812,7 @@ class Router
     /**
      * Match given request
      *
-     * @param string      $request
+     * @param string $request
      * @param string|null $routingParse
      *
      * @return array
@@ -1006,24 +1026,5 @@ class Router
     public function response(): Response
     {
         return new Response();
-    }
-
-    /**
-     * @param bool $option
-     *
-     * @return string
-     */
-    protected function getRequestPrefix(bool $option): string
-    {
-        if ($option === true) {
-            $requestPrefix = 'https://';
-        } else {
-            $requestPrefix = 'http://';
-            if ((isset($_SERVER['REQUEST_SCHEME']) and (!empty($_SERVER['REQUEST_SCHEME']) and ($_SERVER['REQUEST_SCHEME'] === 'https') or !empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] === 'on') or (!empty($_SERVER['SERVER_PORT']) and $_SERVER['SERVER_PORT'] === '443'))) {
-                $requestPrefix = 'https://';
-            }
-        }
-
-        return $requestPrefix;
     }
 }

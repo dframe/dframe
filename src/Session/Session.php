@@ -198,7 +198,7 @@ class Session implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function deleteMultiple($keys) : bool
+    public function deleteMultiple($keys): bool
     {
         foreach ($keys as $key) {
             $this->delete($key);

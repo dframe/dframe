@@ -27,7 +27,7 @@ class Loader
      * Path logs
      */
     protected const LOG_DIR = APP_DIR . 'View/cache/logs/';
-    
+
     /**
      * @var Router
      */
@@ -234,6 +234,13 @@ class Loader
     }
 
     /**
+     * Method init that works like __construct called at the beginning of the code.
+     */
+    public function init()
+    {
+    }
+
+    /**
      * View Loader
      *
      * @param string      $name
@@ -338,13 +345,6 @@ class Loader
         }
 
         return Response::create()->status(500)->display();
-    }
-
-    /**
-     * Method init that works like __construct called at the beginning of the code.
-     */
-    public function init()
-    {
     }
 
     /**
