@@ -27,7 +27,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Dframe\\Router\\Tests\\": "tests"
+            "Dframe\\Router\\Tests\\": "Tests"
         }
     },
     "require-dev": {

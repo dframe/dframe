@@ -28,7 +28,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Dframe\\Token\\Tests\\": "tests"
+            "Dframe\\Token\\Tests\\": "Tests"
         }
     },
     "require-dev": {

@@ -25,12 +25,12 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "Dframe\\Console\\": "src"
+            "Dframe\\Console\\": ""
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Dframe\\Tests\\": "tests"
+            "Dframe\\Contole\\Tests\\": "Tests"
         }
     },
     "require-dev": {

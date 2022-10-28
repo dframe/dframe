@@ -169,7 +169,7 @@ class Session implements CacheInterface
     /**
      * {@inheritdoc}
      */
-    public function set($key, $value, $tll = null): void
+    public function set($key, $value, $ttl = null): void
     {
         $_SESSION[$key] = $value;
     }

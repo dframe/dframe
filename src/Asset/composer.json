@@ -28,7 +28,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Dframe\\Config\\Tests\\": "tests"
+            "Dframe\\Asset\\\\Tests\\": "Tests"
         }
     },
     "require-dev": {

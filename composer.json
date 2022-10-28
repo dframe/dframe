@@ -54,9 +54,9 @@
         "kriswallsmith/assetic": "^1.4",
         "patchwork/jsqueeze": "^2.0",
         "ptachoire/cssembed": "^1.0",
-        "natxet/cssmin": "^3.0",
-        "twig/twig": "^3.1",
-        "mikey179/vfsstream": "^1.6"
+        "twig/twig": "^3.3",
+        "mikey179/vfsstream": "^1.6",
+        "natxet/cssmin": "^3.0"
     },
     "scripts": {
         "test": [

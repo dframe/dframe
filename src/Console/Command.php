@@ -9,6 +9,7 @@
 
 namespace Dframe\Console;
 
+use Dframe\Console\Exceptions\ConsoleException;
 use Dframe\Loader\Loader;
 
 /**
@@ -32,7 +33,7 @@ class Command extends Loader
      * @param $args
      *
      * @return mixed
-     * @throws \Dframe\Console\Exceptions\ConsoleException
+     * @throws ConsoleException
      */
     public function run($args)
     {

@@ -45,13 +45,3 @@ License
 ----
 
 Open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
-
-
-## Sponsors
-
-Thanks to our sponsors and supporters:
-
-
-| JetBrains |
-|---|
-| <a href="https://www.jetbrains.com" title="JetBrains - Dframe Framework Sponsor" target="_blank"><img src="https://www.jetbrains.com/company/brand/img/jetbrains_logo.png" height="120" /></a> |

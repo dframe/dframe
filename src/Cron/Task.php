@@ -10,7 +10,7 @@
 namespace Dframe\Cron;
 
 use Dframe\Loader\Loader;
-use Dframe\Task\Exceptions\TaskException;
+use Dframe\Cron\Exceptions\TaskException;
 use Exception;
 use InvalidArgumentException;
 

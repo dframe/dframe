@@ -25,7 +25,7 @@ use Twig\Loader\FilesystemLoader;
 class TwigView implements ViewInterface
 {
     /**
-     * @var \Twig\Environment
+     * @var Environment
      */
     public $twig;
 
@@ -54,13 +54,10 @@ class TwigView implements ViewInterface
      * Transfers the code to the twig template.
      *
      * @param string $name
-     * @param string $path
+     * @param        $value
      *
      * @return mixed
      * @throws ViewException
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
      */
     public function assign($name, $value)
     {

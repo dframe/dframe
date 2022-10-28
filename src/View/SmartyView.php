@@ -55,13 +55,12 @@ class SmartyView implements ViewInterface
         $this->smarty->setTemplateDir($dir);
     }
 
+
     /**
-     * Set the var to the template.
+     * @param $name
+     * @param $value
      *
-     * @param string $name
-     * @param string $value
-     *
-     * @return mixed
+     * @return Smarty
      * @throws ViewException
      */
     public function assign($name, $value)

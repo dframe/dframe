@@ -38,7 +38,7 @@ class Token implements CacheInterface
     /**
      * constructor.
      *
-     * @param string $driver
+     * @param CacheInterface $driver
      */
     public function __construct($driver)
     {
