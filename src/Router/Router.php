@@ -657,12 +657,12 @@ class Router
             }
         } else {
             $expressionUrl = $this->routeMap['routes']['default'][0];
-            $expressionUrl = str_replace('[task]', $task, $expressionUrl);
-            $expressionUrl = str_replace('[action]', $action, $expressionUrl);
+            $expressionUrl = str_replace('[task]', $task ?? "", $expressionUrl);
+            $expressionUrl = str_replace('[action]', $action ?? "", $expressionUrl);
             if (isset($params)) {
                 $expressionUrl = str_replace(
                     '[params]',
-                    $this->parseParams($this->routeMap['routes']['default']['_params'][0], $params),
+                    $this->parseParams($this->routeMap['routes']['default']['_params'][0], $params) ?? "",
                     $expressionUrl
                 );
             }
