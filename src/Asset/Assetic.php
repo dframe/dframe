@@ -189,8 +189,8 @@ class Assetic extends Router
 
                 if (!copy($srcPathInfo['dirname'] . '/' . $url, $pathInfo['dirname'] . '/' . $url)) {
                     $msg = date(
-                            'Y-m-d h:m:s'
-                        ) . ' :: Unable to copy an asset From: ' . $srcPathInfo['dirname'] . '/' . $url . ' TO ' . $pathInfo['dirname'] . '/' . $url . "\n";
+                        'Y-m-d h:m:s'
+                    ) . ' :: Unable to copy an asset From: ' . $srcPathInfo['dirname'] . '/' . $url . ' TO ' . $pathInfo['dirname'] . '/' . $url . "\n";
                     $out = fopen(self::LOG_DIR . self::LOG_FILE_NAME, 'w');
                     fwrite($out, $msg);
                     fclose($out);
