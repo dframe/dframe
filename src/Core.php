@@ -19,7 +19,6 @@ use Dframe\Router\Response;
  */
 class Core extends Loader
 {
-
     /**
      * Display Controller result
      *

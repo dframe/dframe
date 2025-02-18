@@ -100,9 +100,9 @@ abstract class View extends Loader implements ViewInterface
         }
 
         exit(
-        Response::Create($callback . '(' . json_encode($data) . ')')->headers(
-            ['Content-Type' => 'application/jsonp']
-        )->display()
+            Response::Create($callback . '(' . json_encode($data) . ')')->headers(
+                ['Content-Type' => 'application/jsonp']
+            )->display()
         );
     }
 
@@ -115,9 +115,9 @@ abstract class View extends Loader implements ViewInterface
     public function renderJSON($data, $status = 200)
     {
         exit(
-        Response::Create(json_encode($data))->status($status)->headers(
-            ['Content-Type' => 'application/json']
-        )->display()
+            Response::Create(json_encode($data))->status($status)->headers(
+                ['Content-Type' => 'application/json']
+            )->display()
         );
     }
 

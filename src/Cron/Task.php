@@ -21,7 +21,6 @@ use InvalidArgumentException;
  */
 abstract class Task extends Loader
 {
-
     /**
      * @param       $key
      * @param       $callback

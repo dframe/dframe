@@ -28,7 +28,6 @@ set_time_limit(120);
  */
 class Assetic extends Router
 {
-
     /**
      * @param null|string $url
      * @param null|string $path
