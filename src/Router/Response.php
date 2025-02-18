@@ -292,7 +292,8 @@ class Response extends Router
             }
         }
 
-        return print $this->getBody() ? $this->getBody() : null;
+        echo $this->getBody() ?: '';
+        return $this;
     }
 
     /**
@@ -308,6 +309,6 @@ class Response extends Router
      */
     public function __toString(): string
     {
-        return $this->body ?? "";
+        return print $this->getBody() ?: '';
     }
 }
